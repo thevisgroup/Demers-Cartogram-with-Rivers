@@ -1,4 +1,4 @@
-# ghrvis
+# GHRVis
 
 ## Project setup
 ```
