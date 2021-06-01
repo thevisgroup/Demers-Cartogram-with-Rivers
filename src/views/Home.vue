@@ -33,29 +33,36 @@ export default {
 
       const path = d3.geoPath();
 
-      const transform = `
-        translate(480 3920) scale(70) scale(1,-1)
+      const transform = (d) => {
+        const [x, y] = path.centroid(d);
+        return `
+          translate(180 300)
+          translate(${x},${y})
+          scale(${Math.random()})
+          translate(${-x},${-y})
       `;
+      };
 
       svg
+        .append("g")
         .append("path")
         .datum(topojson.mesh(data, data.objects.ccg))
         .attr("fill", "none")
         .attr("stroke", "#ccc")
         .attr("d", path)
         .attr("vector-effect", "non-scaling-stroke")
-        .attr("transform", transform);
+        .attr("transform", "translate(180 300)");
 
       svg
         .append("g")
         .attr("stroke", "#000")
-        .attr("transform", transform)
         .selectAll("path")
         .data(topojson.feature(data, data.objects.ccg).features)
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
         .attr("fill", "grey")
+        .attr("transform", transform)
         /* no-unused-var */
         .on("mouseover", function (e, d) {
           d3.select(this).style("fill", "white");
