@@ -20,8 +20,6 @@ export default {
 
       const data = await d3.json(source);
 
-      console.log(data);
-
       d3.selectAll("#map > svg").remove();
 
       const svg = d3
@@ -31,28 +29,9 @@ export default {
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
+      // CCG contour layer
+
       const path = d3.geoPath();
-
-      const transform = (d) => {
-        const [x, y] = path.centroid(d);
-        return `
-          translate(180 300)
-          translate(${x},${y})
-          scale(${Math.random()})
-          translate(${-x},${-y})
-      `;
-      };
-
-      svg
-        .append("g")
-        .append("path")
-        .datum(topojson.mesh(data, data.objects.ccg))
-        .attr("fill", "none")
-        .attr("stroke", "#ccc")
-        .attr("d", path)
-        .attr("vector-effect", "non-scaling-stroke")
-        .attr("transform", "translate(180 300)");
-
       svg
         .append("g")
         .attr("stroke", "#000")
@@ -61,15 +40,43 @@ export default {
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
-        .attr("fill", "grey")
-        .attr("transform", transform)
+        .attr("fill", "white")
+        .attr("transform", "translate(180 300)");
+
+      // centroid rectangle layer
+      const rectConfig = {
+        size: 10,
+        color: "rgb(60, 120, 172)",
+      };
+
+      svg
+        .append("g")
+        .attr("stroke", "#000")
+        .selectAll("rect")
+        .data(topojson.feature(data, data.objects.ccg).features)
+        .enter()
+        .append("rect")
+        .attr("transform", (d) => {
+          const [x, y] = path.centroid(d);
+          return `
+          translate(180 300)
+          translate(${x},${y})
+          translate(${-x - rectConfig.size / 2},${-y - rectConfig.size / 2})
+          `;
+        })
+        .attr("x", (d) => path.centroid(d)[0])
+        .attr("y", (d) => path.centroid(d)[1])
+        .attr("width", rectConfig.size)
+        .attr("height", rectConfig.size)
+        .attr("stroke", "black")
+        .attr("fill", rectConfig.color)
         /* no-unused-var */
         .on("mouseover", function (e, d) {
-          d3.select(this).style("fill", "white");
+          d3.select(this).style("fill", "red");
           d3.select("h2#ccg_name").text(d.properties.ccg18nm);
         })
         .on("mouseout", function () {
-          d3.select(this).style("fill", "grey");
+          d3.select(this).style("fill", rectConfig.color);
           d3.select("h2#ccg_name").text("NHS England CCGs");
         });
     },
