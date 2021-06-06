@@ -15,10 +15,14 @@ export default {
   methods: {
     async init() {
       // const __VM = this;
+      const shapefile = await d3.json(`/data/ccg_2020.json`);
+      const indicators = await d3.json(`/data/cardiovascular_00754.json`);
 
-      const source = `/data/ccg_2021.json`;
-
-      const data = await d3.json(source);
+      const calculateRectSize = (d) => {
+        const current = indicators[d.properties.id].Person.value;
+        const { range, min } = indicators.metadata.Person.value;
+        return (Math.abs(current - min) / range) * 15;
+      };
 
       d3.selectAll("#map > svg").remove();
 
@@ -29,7 +33,7 @@ export default {
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
-      const config = { base_traslate: "scale(0.8 0.8) translate(240 480) " };
+      const config = { base_traslate: "" };
 
       // CCG contour layer
       const path = d3.geoPath();
@@ -37,7 +41,7 @@ export default {
         .append("g")
         .attr("stroke", "#000")
         .selectAll("path")
-        .data(topojson.feature(data, data.objects.ccg).features)
+        .data(topojson.feature(shapefile, shapefile.objects.ccg).features)
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
@@ -54,7 +58,7 @@ export default {
         .append("g")
         .attr("stroke", "#000")
         .selectAll("rect")
-        .data(topojson.feature(data, data.objects.ccg).features)
+        .data(topojson.feature(shapefile, shapefile.objects.ccg).features)
         .enter()
         .append("rect")
         .attr("transform", (d) => {
@@ -62,19 +66,22 @@ export default {
           return `
           ${config.base_traslate}
           translate(${x},${y})
-          translate(${-x - rectConfig.size / 2},${-y - rectConfig.size / 2})
+          translate(${-x - calculateRectSize(d) / 2},${
+            -y - calculateRectSize(d) / 2
+          })
           `;
         })
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
-        .attr("width", rectConfig.size)
-        .attr("height", rectConfig.size)
+        .attr("width", (d) => calculateRectSize(d))
+        .attr("height", (d) => calculateRectSize(d))
         .attr("stroke", "black")
         .attr("fill", rectConfig.color)
         /* no-unused-var */
         .on("mouseover", function (e, d) {
           d3.select(this).style("fill", "red");
-          d3.select("h2#ccg_name").text(d.properties.CCG21NM);
+          d3.select("h2#ccg_name").text(d.properties.name);
+          calculateRectSize(d);
         })
         .on("mouseout", function () {
           d3.select(this).style("fill", rectConfig.color);
