@@ -16,7 +16,7 @@ export default {
     async init() {
       // const __VM = this;
 
-      const source = `/data/ccg.json`;
+      const source = `/data/ccg_2021.json`;
 
       const data = await d3.json(source);
 
@@ -29,8 +29,9 @@ export default {
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
-      // CCG contour layer
+      const config = { base_traslate: "scale(0.8 0.8) translate(240 480) " };
 
+      // CCG contour layer
       const path = d3.geoPath();
       svg
         .append("g")
@@ -41,7 +42,7 @@ export default {
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
         .attr("fill", "white")
-        .attr("transform", "translate(180 300)");
+        .attr("transform", config.base_traslate);
 
       // centroid rectangle layer
       const rectConfig = {
@@ -59,7 +60,7 @@ export default {
         .attr("transform", (d) => {
           const [x, y] = path.centroid(d);
           return `
-          translate(180 300)
+          ${config.base_traslate}
           translate(${x},${y})
           translate(${-x - rectConfig.size / 2},${-y - rectConfig.size / 2})
           `;
@@ -73,7 +74,7 @@ export default {
         /* no-unused-var */
         .on("mouseover", function (e, d) {
           d3.select(this).style("fill", "red");
-          d3.select("h2#ccg_name").text(d.properties.ccg18nm);
+          d3.select("h2#ccg_name").text(d.properties.CCG21NM);
         })
         .on("mouseout", function () {
           d3.select(this).style("fill", rectConfig.color);
