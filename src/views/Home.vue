@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <h2 id="ccg_name">NHS England CCGs</h2>
+    <h2 id="state_name">US County COVID Vaccination Rate</h2>
     <div id="map"></div>
   </b-container>
 </template>
@@ -15,13 +15,20 @@ export default {
   methods: {
     async init() {
       // const __VM = this;
-      const shapefile = await d3.json(`/data/ccg_2020.json`);
-      const indicators = await d3.json(`/data/cardiovascular_00754.json`);
+      const shapefile = await d3.json(`/data/us_state_county.json`);
+      // eslint-disable-next-line no-unused-vars
+      const indicators = (
+        await d3.json(`/data/vaccination_county_condensed_data.json`)
+      ).vaccination_county_condensed_data;
 
       const calculateRectSize = (d) => {
-        const current = indicators[d.properties.id].Person.value;
-        const { range, min } = indicators.metadata.Person.value;
-        return (Math.abs(current - min) / range) * 15;
+        return getVacRate(d) * 0.2;
+      };
+
+      const getVacRate = (d) => {
+        const county = indicators.find((f) => f.FIPS === d.properties.FIPS);
+
+        return county ? county.Series_Complete_Pop_Pct : 0;
       };
 
       d3.selectAll("#map > svg").remove();
@@ -33,40 +40,86 @@ export default {
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
-      const config = { base_traslate: "" };
+      // tooltip
+      const tooltip = d3
+        .select("#map")
+        .append("div")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .attr("class", "tooltip");
 
-      // CCG contour layer
+      // county layer
       const path = d3.geoPath();
+
+      const list = [];
+
+      list.push(
+        ...topojson
+          .feature(shapefile, shapefile.objects.county)
+          .features.filter(
+            // eslint-disable-next-line no-prototype-builtins
+            (e) => e.geometry && e.geometry.hasOwnProperty("type")
+          ),
+        ...topojson.feature(shapefile, shapefile.objects.alaska).features,
+        ...topojson.feature(shapefile, shapefile.objects.alaska2).features
+      );
+
       svg
         .append("g")
         .attr("stroke", "#000")
         .selectAll("path")
-        .data(topojson.feature(shapefile, shapefile.objects.ccg).features)
+        .data(list)
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
-        .attr("fill", "white")
-        .attr("transform", config.base_traslate);
+        .attr("fill", "white");
 
-      // centroid rectangle layer
+      // state layer
+
+      svg
+        .append("path")
+        .datum(topojson.mesh(shapefile, shapefile.objects.state))
+        .attr("fill", "none")
+        .attr("stroke", "red")
+        .attr("d", path);
+
+      // county data layer
       const rectConfig = {
         size: 10,
         color: "rgb(60, 120, 172)",
       };
 
+      // svg
+      //   .append("g")
+      //   .attr("fill", "white")
+      //   .attr("stroke", "none")
+      //   .selectAll("path")
+      //   .data(topojson.feature(shapefile, shapefile.objects.state).features)
+      //   .join("path")
+      //   .attr("vector-effect", "non-scaling-stroke")
+      //   .attr("d", path)
+      //   .on("mouseover", function (e, d) {
+      //     console.log(d);
+      //     d3.select(this).style("fill", "red");
+      //     d3.select("h2#state_name").text(d.properties.NAME);
+      //   })
+      //   .on("mouseout", function () {
+      //     d3.select(this).style("fill", rectConfig.color);
+      //     d3.select("h2#state_name").text("US State & County Map");
+      //   });
+
       svg
         .append("g")
         .attr("stroke", "#000")
         .selectAll("rect")
-        .data(topojson.feature(shapefile, shapefile.objects.ccg).features)
+        .data(list)
         .enter()
         .append("rect")
         .attr("transform", (d) => {
           const [x, y] = path.centroid(d);
           return `
-          ${config.base_traslate}
           translate(${x},${y})
-          translate(${-x - calculateRectSize(d) / 2},${
+           translate(${-x - calculateRectSize(d) / 2},${
             -y - calculateRectSize(d) / 2
           })
           `;
@@ -80,12 +133,20 @@ export default {
         /* no-unused-var */
         .on("mouseover", function (e, d) {
           d3.select(this).style("fill", "red");
-          d3.select("h2#ccg_name").text(d.properties.name);
-          calculateRectSize(d);
+          tooltip
+            .style("visibility", "visible")
+            .html(
+              `${d.properties.NAME} <br/>Vaccination Rate: ${getVacRate(d)}%`
+            );
+        })
+        .on("mousemove", function (e) {
+          return tooltip
+            .style("top", e.pageY - 20 + "px")
+            .style("left", e.pageX + 20 + "px");
         })
         .on("mouseout", function () {
           d3.select(this).style("fill", rectConfig.color);
-          d3.select("h2#ccg_name").text("NHS England CCGs");
+          tooltip.style("visibility", "hidden");
         });
     },
   },
@@ -94,3 +155,13 @@ export default {
   },
 };
 </script>
+<style>
+.tooltip {
+  padding: 7px;
+  background: white;
+  border: 2px;
+  border-style: solid;
+  border-radius: 2px;
+  opacity: 10 !important;
+}
+</style>
