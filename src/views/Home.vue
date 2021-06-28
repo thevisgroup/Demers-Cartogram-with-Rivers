@@ -5,7 +5,6 @@
       <b-col cols="2">
         Overlaps removed: {{ overlapsRemoved }}
         <b-button
-          pill
           variant="primary"
           v-on:click="removeOverlap()"
           v-if="!overlapsRemoved"
@@ -18,6 +17,21 @@
           v-if="overlapsRemoved"
           >Reset overlaps</b-button
         >
+      </b-col>
+      <b-col cols="1">
+        Feature Visibility
+        <b-button-group vertical>
+          <b-button
+            :variant="(rect.visibility ? '' : 'outline-') + rect.color"
+            v-on:click="toggleVisibility('rect')"
+            >Rectangle</b-button
+          >
+          <b-button
+            :variant="(river.visibility ? '' : 'outline-') + river.color"
+            v-on:click="toggleVisibility('river')"
+            >River</b-button
+          >
+        </b-button-group>
       </b-col>
     </b-row>
 
@@ -37,11 +51,13 @@ export default {
     async init() {
       const __VM = this;
       const shapefile = await d3.json(`/data/us_state_county.json`);
+
       // eslint-disable-next-line no-unused-vars
       const indicators = (
         await d3.json(`/data/vaccination_county_condensed_data.json`)
       ).vaccination_county_condensed_data;
 
+      // eslint-disable-next-line no-unused-vars
       const calculateRectSize = (d) => {
         return getVacRate(d) * 0.2;
       };
@@ -63,6 +79,7 @@ export default {
         .attr("stroke-linecap", "round");
 
       // tooltip
+      // eslint-disable-next-line no-unused-vars
       const tooltip = d3
         .select("#map")
         .append("div")
@@ -78,9 +95,7 @@ export default {
       list.push(
         ...topojson
           .feature(shapefile, shapefile.objects.county)
-          .features.filter((e) => e.geometry && e.geometry.type),
-        ...topojson.feature(shapefile, shapefile.objects.alaska).features,
-        ...topojson.feature(shapefile, shapefile.objects.alaska2).features
+          .features.filter((e) => e.geometry && e.geometry.type)
       );
 
       svg
@@ -99,14 +114,10 @@ export default {
         .append("path")
         .datum(topojson.mesh(shapefile, shapefile.objects.state))
         .attr("fill", "none")
-        .attr("stroke", "red")
+        .attr("stroke", __VM.colorVariant[__VM.state.color])
         .attr("d", path);
 
       // county data layer
-      const rectConfig = {
-        size: 10,
-        color: "rgb(60, 120, 172)",
-      };
 
       const rects = svg
         .append("g")
@@ -121,7 +132,7 @@ export default {
         .attr("width", (d) => calculateRectSize(d))
         .attr("height", (d) => calculateRectSize(d))
         .attr("stroke", "black")
-        .attr("fill", rectConfig.color)
+        .attr("fill", __VM.colorVariant[__VM.rect.color])
         /* no-unused-var */
         .on("mouseover", function (e, d) {
           d3.select(this).style("fill", "red");
@@ -137,33 +148,23 @@ export default {
             .style("left", e.pageX + 20 + "px");
         })
         .on("mouseout", function () {
-          d3.select(this).style("fill", rectConfig.color);
+          d3.select(this).style("fill", __VM.colorVariant[__VM.rect.color]);
           tooltip.style("visibility", "hidden");
         });
+
+      // river layer
+      svg
+        .append("path")
+        .attr("id", "river-layer")
+        .datum(topojson.mesh(shapefile, shapefile.objects.mississippi_river))
+        .attr("stroke-width", "5px")
+        .attr("fill", "none")
+        .attr("stroke", __VM.colorVariant[__VM.river.color])
+        .attr("d", path);
 
       __VM.rects = rects._groups[0];
 
       __VM.overlapsRemoved = false;
-      // __VM.removeOverlap();
-
-      // svg
-      //   .append("g")
-      //   .attr("fill", "white")
-      //   .attr("stroke", "none")
-      //   .selectAll("path")
-      //   .data(topojson.feature(shapefile, shapefile.objects.state).features)
-      //   .join("path")
-      //   .attr("vector-effect", "non-scaling-stroke")
-      //   .attr("d", path)
-      //   .on("mouseover", function (e, d) {
-      //     console.log(d);
-      //     d3.select(this).style("fill", "red");
-      //     d3.select("h2#state_name").text(d.properties.NAME);
-      //   })
-      //   .on("mouseout", function () {
-      //     d3.select(this).style("fill", rectConfig.color);
-      //     d3.select("h2#state_name").text("US State & County Map");
-      //   });
     },
     removeOverlap() {
       const __VM = this;
@@ -184,12 +185,20 @@ export default {
       // redraw rects using new coordinates
       __VM.rects.forEach((r, i) => {
         const t = rects[i];
-        d3.select(r).transition().duration(1000).attr("x", t.x).attr("y", t.y);
+        d3.select(r).transition().duration(10000).attr("x", t.x).attr("y", t.y);
       });
 
       __VM.overlapsRemoved = true;
 
       d3.select("#base-layer").attr("viewBox", [0, -100, 1000, 800]);
+    },
+    toggleVisibility(type) {
+      const __VM = this;
+      __VM[type].visibility = !__VM[type].visibility;
+      d3.select(`#${type}-layer`).style(
+        "visibility",
+        __VM[type].visibility ? "visible" : "hidden"
+      );
     },
   },
 
@@ -197,6 +206,17 @@ export default {
     return {
       rects: [],
       overlapsRemoved: false,
+      rect: { visibility: true, color: "success", size: 10 },
+      river: { visibility: true, color: "info" },
+      state: { visibility: true, color: "danger" },
+      county: { visibility: true },
+      colorVariant: {
+        primary: "	rgb(2, 117, 216)",
+        info: "rgb(91, 192, 222)",
+        success: "rgb(92, 184, 92)",
+        warning: "rgb(240, 173, 78)",
+        danger: "rgb(217, 83, 79)",
+      },
     };
   },
   async mounted() {
