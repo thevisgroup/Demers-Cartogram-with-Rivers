@@ -13,14 +13,12 @@
           >
             <thead>
               <tr>
-                <th>Feature</th>
-                <th>Visibility</th>
+                <th>Feature Visibility</th>
                 <th>Option</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th scope="row">Rectangle</th>
                 <td>
                   <b-button
                     block
@@ -44,10 +42,25 @@
                     v-if="overlapsRemoved"
                     >Reset overlaps</b-button
                   >
+
+                  <b-button
+                    pill
+                    variant="primary"
+                    v-on:click="setRectSize(true)"
+                    v-if="!rectSizeUniformed"
+                    >Uniform Size</b-button
+                  >
+
+                  <b-button
+                    pill
+                    variant="danger"
+                    v-on:click="setRectSize(false)"
+                    v-if="rectSizeUniformed"
+                    >Variable Size</b-button
+                  >
                 </td>
               </tr>
               <tr>
-                <th scope="row">River</th>
                 <td>
                   <b-button
                     block
@@ -58,9 +71,9 @@
                     >River</b-button
                   >
                 </td>
+                <td></td>
               </tr>
               <tr>
-                <th scope="row">County</th>
                 <td>
                   <b-button
                     block
@@ -74,7 +87,6 @@
                 <td></td>
               </tr>
               <tr>
-                <th scope="row">State</th>
                 <td>
                   <b-button
                     block
@@ -227,7 +239,9 @@ export default {
         .attr("stroke", __VM.colorVariant[__VM.river.color])
         .attr("d", path);
 
-      __VM.rects = rects._groups[0];
+      __VM.rect.list = rects._groups[0];
+
+      __VM.setRectSize(__VM.rectSizeUniformed);
 
       __VM.overlapsRemoved = false;
     },
@@ -237,18 +251,18 @@ export default {
       let rects = [];
 
       // prepare an array for webcola
-      __VM.rects.forEach((r, i) => {
+      __VM.rect.list.forEach((r, i) => {
         r = d3.select(r);
         var x = Number(r.attr("x")),
           y = Number(r.attr("y")),
-          w = Number(r.attr("width")),
-          h = Number(r.attr("height"));
+          w = Number(__VM.rectSizeUniformed ? 10 : r.attr("width")),
+          h = Number(__VM.rectSizeUniformed ? 10 : r.attr("height"));
         rects[i] = new cola.Rectangle(x, x + w, y, y + h);
       });
       // remove overlaps
       cola.removeOverlaps(rects);
       // redraw rects using new coordinates
-      __VM.rects.forEach((r, i) => {
+      __VM.rect.list.forEach((r, i) => {
         const t = rects[i];
         d3.select(r).transition().duration(10000).attr("x", t.x).attr("y", t.y);
       });
@@ -265,13 +279,25 @@ export default {
         __VM[type].visibility ? "visible" : "hidden"
       );
     },
+    setRectSize(uniform) {
+      const __VM = this;
+      __VM.rectSizeUniformed = uniform;
+      if (uniform) {
+        d3.selectAll("#rect-layer > rect").attr(
+          "style",
+          "width: 10px !important; height: 10px !important;"
+        );
+      } else {
+        d3.selectAll("#rect-layer > rect").attr("style", "");
+      }
+    },
   },
 
   data() {
     return {
-      rects: [],
       overlapsRemoved: false,
-      rect: { visibility: true, color: "success", size: 10 },
+      rectSizeUniformed: false,
+      rect: { list: [], visibility: true, color: "success", size: 10 },
       river: { visibility: true, color: "info" },
       state: { visibility: true, color: "danger" },
       county: { visibility: true, color: "dark" },
