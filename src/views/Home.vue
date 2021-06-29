@@ -1,41 +1,105 @@
 <template>
   <b-container fluid>
     <b-row>
-      <b-col><h2 id="state_name">US County COVID Vaccination Rate</h2></b-col>
-      <b-col cols="2">
-        Overlaps removed: {{ overlapsRemoved }}
-        <b-button
-          variant="primary"
-          v-on:click="removeOverlap()"
-          v-if="!overlapsRemoved"
-          >Remove overlaps</b-button
-        >
-        <b-button
-          pill
-          variant="danger"
-          v-on:click="init()"
-          v-if="overlapsRemoved"
-          >Reset overlaps</b-button
-        >
+      <b-col cols="9">
+        <div id="map"></div>
       </b-col>
-      <b-col cols="1">
-        Feature Visibility
-        <b-button-group vertical>
-          <b-button
-            :variant="(rect.visibility ? '' : 'outline-') + rect.color"
-            v-on:click="toggleVisibility('rect')"
-            >Rectangle</b-button
+      <b-col cols="3">
+        <div class="table-responsive option_table">
+          <table
+            class="
+              table table-bordered table-striped table-hover table-borderless
+            "
           >
-          <b-button
-            :variant="(river.visibility ? '' : 'outline-') + river.color"
-            v-on:click="toggleVisibility('river')"
-            >River</b-button
-          >
-        </b-button-group>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Visibility</th>
+                <th>Option</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Rectangle</th>
+                <td>
+                  <b-button
+                    block
+                    :variant="(rect.visibility ? '' : 'outline-') + rect.color"
+                    v-on:click="toggleFeatureVisibility('rect')"
+                    >Rectangle</b-button
+                  >
+                </td>
+                <td>
+                  <b-button
+                    pill
+                    variant="primary"
+                    v-on:click="removeOverlap()"
+                    v-if="!overlapsRemoved"
+                    >Remove overlaps</b-button
+                  >
+                  <b-button
+                    pill
+                    variant="danger"
+                    v-on:click="init()"
+                    v-if="overlapsRemoved"
+                    >Reset overlaps</b-button
+                  >
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">River</th>
+                <td>
+                  <b-button
+                    block
+                    :variant="
+                      (river.visibility ? '' : 'outline-') + river.color
+                    "
+                    v-on:click="toggleFeatureVisibility('river')"
+                    >River</b-button
+                  >
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">County</th>
+                <td>
+                  <b-button
+                    block
+                    :variant="
+                      (county.visibility ? '' : 'outline-') + county.color
+                    "
+                    v-on:click="toggleFeatureVisibility('county')"
+                    >County</b-button
+                  >
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">State</th>
+                <td>
+                  <b-button
+                    block
+                    :variant="
+                      (state.visibility ? '' : 'outline-') + state.color
+                    "
+                    v-on:click="toggleFeatureVisibility('state')"
+                    >State</b-button
+                  >
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </b-col>
     </b-row>
 
-    <div id="map"></div>
+    <footer class="footer">
+      <div class="container">
+        <span
+          >US County COVID Vaccination Rate. Source: https://www.cdc.gov/.</span
+        >
+      </div>
+    </footer>
   </b-container>
 </template>
 
@@ -74,7 +138,7 @@ export default {
         .select("#map")
         .append("svg")
         .attr("id", "base-layer")
-        .attr("viewBox", [0, 0, 1000, 800])
+        .attr("viewBox", [0, 0, 800, 400])
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
@@ -84,10 +148,10 @@ export default {
         .select("#map")
         .append("div")
         .style("position", "absolute")
+        .style("visibility", "hidden")
         .style("z-index", "10")
         .attr("class", "tooltip");
 
-      // county layer
       const path = d3.geoPath();
 
       const list = [];
@@ -98,8 +162,10 @@ export default {
           .features.filter((e) => e.geometry && e.geometry.type)
       );
 
+      // county layer
       svg
         .append("g")
+        .attr("id", "county-layer")
         .attr("stroke", "#000")
         .selectAll("path")
         .data(list)
@@ -109,16 +175,15 @@ export default {
         .attr("fill", "white");
 
       // state layer
-
       svg
         .append("path")
+        .attr("id", "state-layer")
         .datum(topojson.mesh(shapefile, shapefile.objects.state))
         .attr("fill", "none")
         .attr("stroke", __VM.colorVariant[__VM.state.color])
         .attr("d", path);
 
       // county data layer
-
       const rects = svg
         .append("g")
         .attr("id", "rect-layer")
@@ -190,9 +255,9 @@ export default {
 
       __VM.overlapsRemoved = true;
 
-      d3.select("#base-layer").attr("viewBox", [0, -100, 1000, 800]);
+      d3.select("#base-layer").attr("viewBox", [-100, -100, 1200, 700]);
     },
-    toggleVisibility(type) {
+    toggleFeatureVisibility(type) {
       const __VM = this;
       __VM[type].visibility = !__VM[type].visibility;
       d3.select(`#${type}-layer`).style(
@@ -209,13 +274,14 @@ export default {
       rect: { visibility: true, color: "success", size: 10 },
       river: { visibility: true, color: "info" },
       state: { visibility: true, color: "danger" },
-      county: { visibility: true },
+      county: { visibility: true, color: "dark" },
       colorVariant: {
         primary: "	rgb(2, 117, 216)",
         info: "rgb(91, 192, 222)",
         success: "rgb(92, 184, 92)",
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
+        dark: "rgb(41, 43, 44)",
       },
     };
   },
@@ -232,5 +298,12 @@ export default {
   border-style: solid;
   border-radius: 2px;
   opacity: 10 !important;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  line-height: 60px;
+  background-color: #f5f5f5;
 }
 </style>
