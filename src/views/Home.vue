@@ -251,25 +251,33 @@ export default {
       let rects = [];
 
       // prepare an array for webcola
-      __VM.rect.list.forEach((r, i) => {
+      const prepareColaRect = (r, i) => {
         r = d3.select(r);
         var x = Number(r.attr("x")),
           y = Number(r.attr("y")),
           w = Number(__VM.rectSizeUniformed ? 10 : r.attr("width")),
           h = Number(__VM.rectSizeUniformed ? 10 : r.attr("height"));
         rects[i] = new cola.Rectangle(x, x + w, y, y + h);
+      };
+
+      __VM.rect.list.forEach((r, i) => {
+        prepareColaRect(r, i);
       });
+
       // remove overlaps
       cola.removeOverlaps(rects);
+
       // redraw rects using new coordinates
-      __VM.rect.list.forEach((r, i) => {
+      const redrawD3Rect = (r, i) => {
         const t = rects[i];
-        d3.select(r).transition().duration(10000).attr("x", t.x).attr("y", t.y);
-      });
+        d3.select(r).transition().duration(1000).attr("x", t.x).attr("y", t.y);
+      };
+
+      __VM.rect.list.forEach((r, i) => redrawD3Rect(r, i));
 
       __VM.overlapsRemoved = true;
 
-      d3.select("#base-layer").attr("viewBox", [-100, -100, 1200, 700]);
+      d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
     },
     toggleFeatureVisibility(type) {
       const __VM = this;
@@ -287,6 +295,11 @@ export default {
           "style",
           "width: 10px !important; height: 10px !important;"
         );
+
+        if (__VM.overlapsRemoved) {
+          __VM.removeOverlap();
+          d3.select("#base-layer").attr("viewBox", [-400, -150, 1800, 700]);
+        }
       } else {
         d3.selectAll("#rect-layer > rect").attr("style", "");
       }
