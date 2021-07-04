@@ -14,7 +14,7 @@
             <thead>
               <tr>
                 <th>Feature Visibility</th>
-                <th>Option</th>
+                <th>User Options</th>
               </tr>
             </thead>
             <tbody>
@@ -29,14 +29,12 @@
                 </td>
                 <td>
                   <b-button
-                    pill
                     variant="primary"
                     v-on:click="removeOverlap()"
                     v-if="!overlapsRemoved"
                     >Remove overlaps</b-button
                   >
                   <b-button
-                    pill
                     variant="danger"
                     v-on:click="init()"
                     v-if="overlapsRemoved"
@@ -44,7 +42,6 @@
                   >
 
                   <b-button
-                    pill
                     variant="primary"
                     v-on:click="setRectSize(true)"
                     v-if="!rectSizeUniformed"
@@ -52,12 +49,27 @@
                   >
 
                   <b-button
-                    pill
                     variant="danger"
                     v-on:click="setRectSize(false)"
                     v-if="rectSizeUniformed"
                     >Variable Size</b-button
                   >
+
+                  <b-button
+                    variant="primary"
+                    v-on:click="setRectColor()"
+                    v-if="rectMapToColor"
+                    >Map to Size</b-button
+                  >
+
+                  <b-button
+                    variant="danger"
+                    v-on:click="setRectColor()"
+                    v-if="!rectMapToColor"
+                    >Map to Color</b-button
+                  >
+
+                  {{ rectMapToColor }}
                 </td>
               </tr>
               <tr>
@@ -140,7 +152,6 @@ export default {
 
       const getVacRate = (d) => {
         const county = indicators.find((f) => f.FIPS === d.properties.FIPS);
-
         return county ? county.Series_Complete_Pop_Pct : 0;
       };
 
@@ -195,6 +206,8 @@ export default {
         .attr("stroke", __VM.colorVariant[__VM.state.color])
         .attr("d", path);
 
+      const colormap = d3.scaleSequential(d3.interpolatePRGn);
+
       // county data layer
       const rects = svg
         .append("g")
@@ -204,6 +217,7 @@ export default {
         .data(list)
         .enter()
         .append("rect")
+        .attr("colormap", (d) => colormap(getVacRate(d) / 100))
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
         .attr("width", (d) => calculateRectSize(d))
@@ -212,7 +226,7 @@ export default {
         .attr("fill", __VM.colorVariant[__VM.rect.color])
         /* no-unused-var */
         .on("mouseover", function (e, d) {
-          d3.select(this).style("fill", "red");
+          d3.select(this).attr("fill", "red");
           tooltip
             .style("visibility", "visible")
             .html(
@@ -225,7 +239,7 @@ export default {
             .style("left", e.pageX + 20 + "px");
         })
         .on("mouseout", function () {
-          d3.select(this).style("fill", __VM.colorVariant[__VM.rect.color]);
+          __VM.setRectColor(this);
           tooltip.style("visibility", "hidden");
         });
 
@@ -304,18 +318,49 @@ export default {
         d3.selectAll("#rect-layer > rect").attr("style", "");
       }
     },
+    setRectColor(singleRect) {
+      const __VM = this;
+      const changeColor = (r, color) => {
+        d3.select(r).attr("fill", color);
+      };
+
+      if (__VM.rectMapToColor) {
+        if (singleRect) {
+          changeColor(singleRect, d3.select(singleRect).attr("colormap"));
+        } else {
+          d3.selectAll("#rect-layer > rect")._groups[0].forEach((r) => {
+            changeColor(r, __VM.colorVariant[__VM.rect.color]);
+          });
+
+          __VM.rectMapToColor = false;
+        }
+      } else {
+        if (singleRect) {
+          changeColor(singleRect, __VM.colorVariant[__VM.rect.color]);
+        } else {
+          console.log("map to color now");
+          d3.selectAll("#rect-layer > rect")._groups[0].forEach((r) => {
+            const colormap = d3.select(r).attr("colormap");
+            changeColor(r, colormap);
+          });
+
+          __VM.rectMapToColor = true;
+        }
+      }
+    },
   },
 
   data() {
     return {
       overlapsRemoved: false,
       rectSizeUniformed: false,
+      rectMapToColor: false,
       rect: { list: [], visibility: true, color: "success", size: 10 },
       river: { visibility: true, color: "info" },
       state: { visibility: true, color: "danger" },
       county: { visibility: true, color: "dark" },
       colorVariant: {
-        primary: "	rgb(2, 117, 216)",
+        primary: "rgb(2, 117, 216)",
         info: "rgb(91, 192, 222)",
         success: "rgb(92, 184, 92)",
         warning: "rgb(240, 173, 78)",

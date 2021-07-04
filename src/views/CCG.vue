@@ -9,12 +9,13 @@
 // @ is an alias to /src
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
+import * as cola from "webcola";
 
 export default {
   name: "Home",
   methods: {
     async init() {
-      // const __VM = this;
+      const __VM = this;
       const shapefile = await d3.json(`/data/ccg_2020.json`);
       const indicators = await d3.json(`/data/cardiovascular_00754.json`);
 
@@ -54,23 +55,23 @@ export default {
         color: "rgb(60, 120, 172)",
       };
 
-      svg
+      const rects = svg
         .append("g")
         .attr("stroke", "#000")
         .selectAll("rect")
         .data(topojson.feature(shapefile, shapefile.objects.ccg).features)
         .enter()
         .append("rect")
-        .attr("transform", (d) => {
-          const [x, y] = path.centroid(d);
-          return `
-          ${config.base_traslate}
-          translate(${x},${y})
-          translate(${-x - calculateRectSize(d) / 2},${
-            -y - calculateRectSize(d) / 2
-          })
-          `;
-        })
+        // .attr("transform", (d) => {
+        //   const [x, y] = path.centroid(d);
+        //   return `
+        //   ${config.base_traslate}
+        //   translate(${x},${y})
+        //   translate(${-x - calculateRectSize(d) / 2},${
+        //     -y - calculateRectSize(d) / 2
+        //   })
+        //   `;
+        // })
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
         .attr("width", (d) => calculateRectSize(d))
@@ -87,7 +88,46 @@ export default {
           d3.select(this).style("fill", rectConfig.color);
           d3.select("h2#ccg_name").text("NHS England CCGs");
         });
+
+      __VM.rect.list = rects._groups[0];
+
+      __VM.removeOverlap();
     },
+    removeOverlap() {
+      const __VM = this;
+
+      let rects = [];
+
+      // prepare an array for webcola
+      const prepareColaRect = (r, i) => {
+        r = d3.select(r);
+        var x = Number(r.attr("x")),
+          y = Number(r.attr("y")),
+          w = Number(r.attr("width")),
+          h = Number(r.attr("height"));
+        rects[i] = new cola.Rectangle(x, x + w, y, y + h);
+      };
+
+      __VM.rect.list.forEach((r, i) => {
+        prepareColaRect(r, i);
+      });
+
+      // remove overlaps
+      cola.removeOverlaps(rects);
+
+      // redraw rects using new coordinates
+      const redrawD3Rect = (r, i) => {
+        const t = rects[i];
+        d3.select(r).transition().duration(1000).attr("x", t.x).attr("y", t.y);
+      };
+
+      __VM.rect.list.forEach((r, i) => redrawD3Rect(r, i));
+    },
+  },
+  data() {
+    return {
+      rect: { list: [] },
+    };
   },
   async mounted() {
     this.init();
