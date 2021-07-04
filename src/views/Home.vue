@@ -117,7 +117,7 @@
       </b-col>
     </b-row>
 
-    <footer class="footer">
+    <footer class="footer" style="width: 98%">
       <div class="container">
         <span
           >US County COVID Vaccination Rate. Source: https://www.cdc.gov/.</span

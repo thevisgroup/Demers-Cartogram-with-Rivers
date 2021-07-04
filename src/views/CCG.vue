@@ -2,6 +2,15 @@
   <b-container fluid>
     <h2 id="ccg_name">NHS England CCGs</h2>
     <div id="map"></div>
+
+    <footer class="footer" style="width: 98%">
+      <div class="container">
+        <span
+          >England CCG cardiovascular prevalence in 2020. Source:
+          https://digital.nhs.uk/.</span
+        >
+      </div>
+    </footer>
   </b-container>
 </template>
 
@@ -30,7 +39,7 @@ export default {
       const svg = d3
         .select("#map")
         .append("svg")
-        .attr("viewBox", [0, 0, 800, 600])
+        .attr("viewBox", [0, 0, 900, 400])
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
