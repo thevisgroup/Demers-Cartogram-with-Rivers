@@ -68,8 +68,6 @@
                     v-if="!rectMapToColor"
                     >Map to Color</b-button
                   >
-
-                  {{ rectMapToColor }}
                 </td>
               </tr>
               <tr>
@@ -255,8 +253,7 @@ export default {
 
       __VM.rect.list = rects._groups[0];
 
-      __VM.setRectSize(__VM.rectSizeUniformed);
-
+      __VM.rectSizeUniformed = false;
       __VM.overlapsRemoved = false;
     },
     removeOverlap() {
@@ -301,10 +298,10 @@ export default {
         __VM[type].visibility ? "visible" : "hidden"
       );
     },
-    setRectSize(uniform) {
+    async setRectSize(uniformRectSize) {
       const __VM = this;
-      __VM.rectSizeUniformed = uniform;
-      if (uniform) {
+      __VM.rectSizeUniformed = uniformRectSize;
+      if (uniformRectSize) {
         d3.selectAll("#rect-layer > rect").attr(
           "style",
           "width: 10px !important; height: 10px !important;"
@@ -315,6 +312,11 @@ export default {
           d3.select("#base-layer").attr("viewBox", [-400, -150, 1800, 700]);
         }
       } else {
+        if (__VM.overlapsRemoved) {
+          await __VM.init();
+          __VM.removeOverlap();
+        }
+
         d3.selectAll("#rect-layer > rect").attr("style", "");
       }
     },
