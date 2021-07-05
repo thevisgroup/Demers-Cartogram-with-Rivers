@@ -80,6 +80,17 @@
                     v-on:click="toggleFeatureVisibility('river')"
                     >River</b-button
                   >
+                  <b-button-group size="sm">
+                    <b-button
+                      v-for="river in getRivers"
+                      :key="river.name"
+                      :variant="
+                        (river.visibility ? '' : 'outline-') + river.color
+                      "
+                      v-on:click="toggleFeatureVisibility('river', river.color)"
+                      >{{ river.name }}</b-button
+                    >
+                  </b-button-group>
                 </td>
                 <td></td>
               </tr>
@@ -186,7 +197,7 @@ export default {
       // county layer
       svg
         .append("g")
-        .attr("id", "county-layer")
+        .attr("class", "county-layer")
         .attr("stroke", "#000")
         .selectAll("path")
         .data(list)
@@ -198,7 +209,7 @@ export default {
       // state layer
       svg
         .append("path")
-        .attr("id", "state-layer")
+        .attr("class", "state-layer")
         .datum(topojson.mesh(shapefile, shapefile.objects.state))
         .attr("fill", "none")
         .attr("stroke", __VM.colorVariant[__VM.state.color])
@@ -209,7 +220,7 @@ export default {
       // county data layer
       const rects = svg
         .append("g")
-        .attr("id", "rect-layer")
+        .attr("class", "rect-layer")
         .attr("stroke", "#000")
         .selectAll("rect")
         .data(list)
@@ -241,14 +252,34 @@ export default {
           tooltip.style("visibility", "hidden");
         });
 
-      // river layer
+      // missouri river layer
       svg
         .append("path")
-        .attr("id", "river-layer")
-        .datum(topojson.mesh(shapefile, shapefile.objects.mississippi_river))
+        .attr("class", "river-layer missouri")
+        .datum(topojson.mesh(shapefile, shapefile.objects.missouri))
         .attr("stroke-width", "5px")
         .attr("fill", "none")
-        .attr("stroke", __VM.colorVariant[__VM.river.color])
+        .attr("stroke", __VM.colorVariant[__VM.river.rivers.missouri.color])
+        .attr("d", path);
+
+      // mississippi river layer
+      svg
+        .append("path")
+        .attr("class", "river-layer mississippi")
+        .datum(topojson.mesh(shapefile, shapefile.objects.mississippi))
+        .attr("stroke-width", "5px")
+        .attr("fill", "none")
+        .attr("stroke", __VM.colorVariant[__VM.river.rivers.mississippi.color])
+        .attr("d", path);
+
+      // rio grande river layer
+      svg
+        .append("path")
+        .attr("class", "river-layer rio_grande")
+        .datum(topojson.mesh(shapefile, shapefile.objects.rio_grande))
+        .attr("stroke-width", "5px")
+        .attr("fill", "none")
+        .attr("stroke", __VM.colorVariant[__VM.river.rivers.rio_grande.color])
         .attr("d", path);
 
       __VM.rect.list = rects._groups[0];
@@ -290,13 +321,26 @@ export default {
 
       d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
     },
-    toggleFeatureVisibility(type) {
+    toggleFeatureVisibility(type, name = false) {
       const __VM = this;
-      __VM[type].visibility = !__VM[type].visibility;
-      d3.select(`#${type}-layer`).style(
-        "visibility",
-        __VM[type].visibility ? "visible" : "hidden"
-      );
+      if (name) {
+        __VM[type].rivers[name].visibility =
+          !__VM[type].rivers[name].visibility;
+        d3.select(`.${type}-layer.${name}`).style(
+          "visibility",
+          __VM[type].rivers[name].visibility ? "visible" : "hidden"
+        );
+      } else {
+        __VM[type].visibility = !__VM[type].visibility;
+
+        Object.values(__VM[type].rivers).forEach(
+          (r) => (r.visibility = __VM[type].visibility)
+        );
+        d3.selectAll(`.${type}-layer`).style(
+          "visibility",
+          __VM[type].visibility ? "visible" : "hidden"
+        );
+      }
     },
     async setRectSize(uniformRectSize) {
       const __VM = this;
@@ -340,7 +384,6 @@ export default {
         if (singleRect) {
           changeColor(singleRect, __VM.colorVariant[__VM.rect.color]);
         } else {
-          console.log("map to color now");
           d3.selectAll("#rect-layer > rect")._groups[0].forEach((r) => {
             const colormap = d3.select(r).attr("colormap");
             changeColor(r, colormap);
@@ -351,14 +394,33 @@ export default {
       }
     },
   },
-
   data() {
     return {
       overlapsRemoved: false,
       rectSizeUniformed: false,
       rectMapToColor: false,
       rect: { list: [], visibility: true, color: "success", size: 10 },
-      river: { visibility: true, color: "info" },
+      river: {
+        visibility: true,
+        color: "info",
+        rivers: {
+          missouri: {
+            visibility: true,
+            color: "missouri",
+            name: "Missouri",
+          },
+          mississippi: {
+            visibility: true,
+            color: "mississippi",
+            name: "Mississippi",
+          },
+          rio_grande: {
+            visibility: true,
+            color: "rio_grande",
+            name: "Rio Grande",
+          },
+        },
+      },
       state: { visibility: true, color: "danger" },
       county: { visibility: true, color: "dark" },
       colorVariant: {
@@ -367,9 +429,16 @@ export default {
         success: "rgb(92, 184, 92)",
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
-        dark: "rgb(41, 43, 44)",
+        missouri: "rgb(20, 84, 140)",
+        mississippi: "rgb(159, 185, 200)",
+        rio_grande: "	rgb(132, 196, 224)",
       },
     };
+  },
+  computed: {
+    getRivers: function () {
+      return Object.values(this.river.rivers);
+    },
   },
   async mounted() {
     this.init();
@@ -391,5 +460,32 @@ export default {
   width: 100%;
   line-height: 60px;
   background-color: #f5f5f5;
+}
+
+.btn-missouri {
+  color: #fff !important;
+  background-color: rgb(20, 84, 140) !important;
+  border-color: rgb(20, 84, 140) !important;
+}
+.btn-mississippi {
+  background-color: rgb(159, 185, 200) !important;
+  border-color: rgb(159, 185, 200) !important;
+}
+.btn-rio_grande {
+  background-color: rgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+}
+
+.btn-outline-missouri {
+  color: rgb(20, 84, 140) !important;
+  border-color: rgb(20, 84, 140) !important;
+}
+.btn-outline-mississippi {
+  color: rgb(159, 185, 200) !important;
+  border-color: rgb(159, 185, 200) !important;
+}
+.btn-outline-rio_grande {
+  color: rgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
 }
 </style>
