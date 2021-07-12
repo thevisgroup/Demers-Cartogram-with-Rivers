@@ -92,7 +92,13 @@
                     >
                   </b-button-group>
                 </td>
-                <td></td>
+                <td>
+                  <b-button
+                    :variant="showBorderingCounty ? 'danger' : 'primary'"
+                    v-on:click="highlightBorderingCounty()"
+                    >Show bordering counties</b-button
+                  >
+                </td>
               </tr>
               <tr>
                 <td>
@@ -149,12 +155,10 @@ export default {
       const __VM = this;
       const shapefile = await d3.json(`/data/us_state_county.json`);
 
-      // eslint-disable-next-line no-unused-vars
       const indicators = (
         await d3.json(`/data/vaccination_county_condensed_data.json`)
       ).vaccination_county_condensed_data;
 
-      // eslint-disable-next-line no-unused-vars
       const calculateRectSize = (d) => {
         return getVacRate(d) * 0.2;
       };
@@ -194,64 +198,6 @@ export default {
           .features.filter((e) => e.geometry && e.geometry.type)
       );
 
-      // county layer
-      svg
-        .append("g")
-        .attr("class", "county-layer")
-        .attr("stroke", "#000")
-        .selectAll("path")
-        .data(list)
-        .join("path")
-        .attr("vector-effect", "non-scaling-stroke")
-        .attr("d", path)
-        .attr("fill", "white");
-
-      // state layer
-      svg
-        .append("path")
-        .attr("class", "state-layer")
-        .datum(topojson.mesh(shapefile, shapefile.objects.state))
-        .attr("fill", "none")
-        .attr("stroke", __VM.colorVariant[__VM.state.color])
-        .attr("d", path);
-
-      const colormap = d3.scaleSequential(d3.interpolatePRGn);
-
-      // county data layer
-      const rects = svg
-        .append("g")
-        .attr("class", "rect-layer")
-        .attr("stroke", "#000")
-        .selectAll("rect")
-        .data(list)
-        .enter()
-        .append("rect")
-        .attr("colormap", (d) => colormap(getVacRate(d) / 100))
-        .attr("x", (d) => path.centroid(d)[0])
-        .attr("y", (d) => path.centroid(d)[1])
-        .attr("width", (d) => calculateRectSize(d))
-        .attr("height", (d) => calculateRectSize(d))
-        .attr("stroke", "black")
-        .attr("fill", __VM.colorVariant[__VM.rect.color])
-        /* no-unused-var */
-        .on("mouseover", function (e, d) {
-          d3.select(this).attr("fill", "red");
-          tooltip
-            .style("visibility", "visible")
-            .html(
-              `${d.properties.NAME} <br/>Vaccination Rate: ${getVacRate(d)}%`
-            );
-        })
-        .on("mousemove", function (e) {
-          return tooltip
-            .style("top", e.pageY - 20 + "px")
-            .style("left", e.pageX + 20 + "px");
-        })
-        .on("mouseout", function () {
-          __VM.setRectColor(this);
-          tooltip.style("visibility", "hidden");
-        });
-
       // missouri river layer
       svg
         .append("path")
@@ -281,6 +227,65 @@ export default {
         .attr("fill", "none")
         .attr("stroke", __VM.colorVariant[__VM.river.rivers.rio_grande.color])
         .attr("d", path);
+
+      // county layer
+      svg
+        .append("g")
+        .attr("class", "county-layer")
+        .attr("stroke", "#000")
+        .selectAll("path")
+        .data(list)
+        .join("path")
+        .attr("vector-effect", "non-scaling-stroke")
+        .attr("d", path)
+        .attr("fill", __VM.colorVariant[__VM.rect.color])
+        .attr("fill_pip", (d) => __VM.getPIPColor(d.properties.id))
+        .attr("county_id", (d) => d.properties.id);
+
+      // state layer
+      svg
+        .append("path")
+        .attr("class", "state-layer")
+        .datum(topojson.mesh(shapefile, shapefile.objects.state))
+        .attr("fill", "none")
+        .attr("stroke", __VM.colorVariant[__VM.state.color])
+        .attr("d", path);
+
+      const colormap = d3.scaleSequential(d3.interpolatePRGn);
+
+      // county data layer
+      const rects = svg
+        .append("g")
+        .attr("class", "rect-layer")
+        .attr("stroke", "#000")
+        .selectAll("rect")
+        .data(list)
+        .enter()
+        .append("rect")
+        .attr("colormap", (d) => colormap(getVacRate(d) / 100))
+        .attr("x", (d) => path.centroid(d)[0])
+        .attr("y", (d) => path.centroid(d)[1])
+        .attr("width", (d) => calculateRectSize(d))
+        .attr("height", (d) => calculateRectSize(d))
+        .attr("stroke", "black")
+        .attr("fill", __VM.colorVariant[__VM.rect.color])
+        .on("mouseover", function (e, d) {
+          d3.select(this).attr("fill", "red");
+          tooltip
+            .style("visibility", "visible")
+            .html(
+              `${d.properties.NAME} <br/>Vaccination Rate: ${getVacRate(d)}%`
+            );
+        })
+        .on("mousemove", function (e) {
+          return tooltip
+            .style("top", e.pageY - 20 + "px")
+            .style("left", e.pageX + 20 + "px");
+        })
+        .on("mouseout", function () {
+          __VM.setRectColor(this);
+          tooltip.style("visibility", "hidden");
+        });
 
       __VM.rect.list = rects._groups[0];
 
@@ -324,8 +329,11 @@ export default {
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
       if (name) {
-        __VM[type].rivers[name].visibility =
-          !__VM[type].rivers[name].visibility;
+        if (type === "river") {
+          __VM[type].rivers[name].visibility =
+            !__VM[type].rivers[name].visibility;
+        }
+
         d3.select(`.${type}-layer.${name}`).style(
           "visibility",
           __VM[type].rivers[name].visibility ? "visible" : "hidden"
@@ -333,9 +341,11 @@ export default {
       } else {
         __VM[type].visibility = !__VM[type].visibility;
 
-        Object.values(__VM[type].rivers).forEach(
-          (r) => (r.visibility = __VM[type].visibility)
-        );
+        if (type === "river") {
+          Object.values(__VM[type].rivers).forEach(
+            (r) => (r.visibility = __VM[type].visibility)
+          );
+        }
         d3.selectAll(`.${type}-layer`).style(
           "visibility",
           __VM[type].visibility ? "visible" : "hidden"
@@ -346,7 +356,7 @@ export default {
       const __VM = this;
       __VM.rectSizeUniformed = uniformRectSize;
       if (uniformRectSize) {
-        d3.selectAll("#rect-layer > rect").attr(
+        d3.selectAll(".rect-layer > rect").attr(
           "style",
           "width: 10px !important; height: 10px !important;"
         );
@@ -361,8 +371,20 @@ export default {
           __VM.removeOverlap();
         }
 
-        d3.selectAll("#rect-layer > rect").attr("style", "");
+        d3.selectAll(".rect-layer > rect").attr("style", "");
       }
+    },
+    // if the river passes through the input county, returns the river's color instead
+    getPIPColor(county_id) {
+      const __VM = this;
+
+      for (const [key, value] of Object.entries(__VM.river.pip)) {
+        if (value.includes(county_id)) {
+          return __VM.colorVariant[__VM.river.rivers[key].color];
+        }
+      }
+
+      return __VM.colorVariant[__VM.rect.color];
     },
     setRectColor(singleRect) {
       const __VM = this;
@@ -374,7 +396,7 @@ export default {
         if (singleRect) {
           changeColor(singleRect, d3.select(singleRect).attr("colormap"));
         } else {
-          d3.selectAll("#rect-layer > rect")._groups[0].forEach((r) => {
+          d3.selectAll(".rect-layer > rect")._groups[0].forEach((r) => {
             changeColor(r, __VM.colorVariant[__VM.rect.color]);
           });
 
@@ -384,7 +406,7 @@ export default {
         if (singleRect) {
           changeColor(singleRect, __VM.colorVariant[__VM.rect.color]);
         } else {
-          d3.selectAll("#rect-layer > rect")._groups[0].forEach((r) => {
+          d3.selectAll(".rect-layer > rect")._groups[0].forEach((r) => {
             const colormap = d3.select(r).attr("colormap");
             changeColor(r, colormap);
           });
@@ -393,12 +415,26 @@ export default {
         }
       }
     },
+    highlightBorderingCounty() {
+      const __VM = this;
+
+      __VM.showBorderingCounty = !__VM.showBorderingCounty;
+
+      d3.selectAll(".county-layer > path").each(function (d) {
+        return d3.select(this).attr("fill", (d) => {
+          return __VM.showBorderingCounty
+            ? d3.select(this).attr("fill_pip")
+            : __VM.colorVariant[__VM.rect.color];
+        });
+      });
+    },
   },
   data() {
     return {
       overlapsRemoved: false,
       rectSizeUniformed: false,
       rectMapToColor: false,
+      showBorderingCounty: false,
       rect: { list: [], visibility: true, color: "success", size: 10 },
       river: {
         visibility: true,
@@ -419,6 +455,197 @@ export default {
             color: "rio_grande",
             name: "Rio Grande",
           },
+        },
+        pip: {
+          missouri: [
+            "6668",
+            "6674",
+            "6696",
+            "6713",
+            "7105",
+            "6703",
+            "7081",
+            "6677",
+            "7435",
+            "6695",
+            "7079",
+            "6702",
+            "7083",
+            "7082",
+            "7439",
+            "7095",
+            "7085",
+            "8202",
+            "8197",
+            "5635",
+            "7444",
+            "7450",
+            "6724",
+            "7483",
+            "7456",
+            "7482",
+            "6770",
+            "6730",
+            "6803",
+            "6738",
+            "6742",
+            "7489",
+            "7428",
+            "6727",
+            "5894",
+            "6805",
+            "5929",
+            "6744",
+            "5887",
+            "6782",
+            "6729",
+            "6780",
+            "6547",
+            "6556",
+            "6628",
+            "6589",
+            "6790",
+            "5972",
+            "5953",
+            "6002",
+            "6582",
+            "6621",
+            "6581",
+            "6571",
+            "6562",
+            "6642",
+            "6569",
+            "6599",
+            "6593",
+            "6055",
+            "6590",
+            "6555",
+            "6572",
+            "6637",
+            "5717",
+            "6654",
+            "6682",
+            "7065",
+            "6661",
+            "6689",
+            "7466",
+            "6641",
+            "6685",
+            "6667",
+            "6688",
+          ],
+          mississippi: [
+            "8172",
+            "6623",
+            "7556",
+            "6403",
+            "6381",
+            "6447",
+            "6380",
+            "6405",
+            "6387",
+            "6377",
+            "6425",
+            "6378",
+            "6407",
+            "5193",
+            "6477",
+            "7569",
+            "6480",
+            "5226",
+            "5211",
+            "5181",
+            "6469",
+            "6539",
+            "5696",
+            "6612",
+            "5736",
+            "5748",
+            "5659",
+            "6617",
+            "5219",
+            "6108",
+            "6093",
+            "7513",
+            "5691",
+            "5693",
+            "5738",
+            "5723",
+            "5755",
+            "5658",
+            "5664",
+            "6637",
+            "5717",
+            "5732",
+            "6462",
+            "8158",
+            "8157",
+            "6455",
+            "8116",
+            "8173",
+            "8142",
+            "8132",
+            "5700",
+            "5665",
+            "8122",
+            "6238",
+            "6464",
+            "6223",
+            "6222",
+            "6394",
+            "6535",
+            "6538",
+            "6491",
+            "6193",
+            "6208",
+            "5724",
+            "6059",
+            "7574",
+            "7538",
+            "7539",
+            "6395",
+            "6401",
+            "6474",
+            "6199",
+            "6190",
+            "6229",
+            "6214",
+            "6236",
+            "6201",
+            "6178",
+            "6213",
+            "6211",
+            "6220",
+          ],
+          rio_grande: [
+            "7607",
+            "7807",
+            "7747",
+            "7818",
+            "7825",
+            "7616",
+            "6865",
+            "6886",
+            "6885",
+            "6858",
+            "6881",
+            "5333",
+            "5362",
+            "5359",
+            "5307",
+            "6887",
+            "6879",
+            "5317",
+            "6873",
+            "6890",
+            "5346",
+            "7774",
+            "7700",
+            "7656",
+            "7838",
+            "7799",
+            "7693",
+          ],
         },
       },
       state: { visibility: true, color: "danger" },
