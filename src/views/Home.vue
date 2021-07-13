@@ -178,6 +178,21 @@ export default {
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
+      svg.call(
+        d3
+          .zoom()
+          .extent([
+            [0, 0],
+            [800, 400],
+          ])
+          .scaleExtent([1, 8])
+          .on("zoom", zoomed)
+      );
+
+      function zoomed({ transform }) {
+        svg.attr("transform", transform);
+      }
+
       // tooltip
       // eslint-disable-next-line no-unused-vars
       const tooltip = d3
@@ -241,6 +256,9 @@ export default {
         .attr("fill", __VM.colorVariant[__VM.rect.color])
         .attr("fill_pip", (d) => __VM.getPIPColor(d.properties.id))
         .attr("county_id", (d) => d.properties.id);
+      // .on("mouseover", function (e, d) {
+      //   console.log(d.properties.id);
+      // });
 
       // state layer
       svg
@@ -537,6 +555,12 @@ export default {
           mississippi: [
             "8172",
             "6623",
+            "6602",
+            "6627",
+            "5933",
+            "5874",
+            "5734",
+            "5900",
             "7556",
             "6403",
             "6381",
@@ -616,6 +640,10 @@ export default {
             "6213",
             "6211",
             "6220",
+            "6793",
+            "5916",
+            "7431",
+            "6548",
           ],
           rio_grande: [
             "7607",
