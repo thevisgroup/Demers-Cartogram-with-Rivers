@@ -29,44 +29,27 @@
                 </td>
                 <td>
                   <b-button
-                    variant="primary"
-                    v-on:click="removeOverlap()"
-                    v-if="!overlapsRemoved"
-                    >Remove overlaps</b-button
-                  >
-                  <b-button
-                    variant="danger"
-                    v-on:click="init()"
-                    v-if="overlapsRemoved"
-                    >Reset overlaps</b-button
+                    :variant="overlapsRemoved ? 'danger' : 'primary'"
+                    v-on:click="overlapsRemoved ? init() : removeOverlap()"
+                    >{{
+                      overlapsRemoved ? "Reset" : "Remove"
+                    }}
+                    overlaps</b-button
                   >
 
                   <b-button
-                    variant="primary"
-                    v-on:click="setRectSize(true)"
-                    v-if="!rectSizeUniformed"
-                    >Uniform Size</b-button
+                    :variant="rectSizeUniformed ? 'danger' : 'primary'"
+                    v-on:click="setRectSize()"
+                    >{{
+                      rectSizeUniformed ? "Variable" : "Uniform"
+                    }}
+                    Size</b-button
                   >
 
                   <b-button
-                    variant="danger"
-                    v-on:click="setRectSize(false)"
-                    v-if="rectSizeUniformed"
-                    >Variable Size</b-button
-                  >
-
-                  <b-button
-                    variant="primary"
+                    :variant="rectMapToColor ? 'danger' : 'primary'"
                     v-on:click="setRectColor()"
-                    v-if="rectMapToColor"
-                    >Map to Size</b-button
-                  >
-
-                  <b-button
-                    variant="danger"
-                    v-on:click="setRectColor()"
-                    v-if="!rectMapToColor"
-                    >Map to Color</b-button
+                    >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
                   >
                 </td>
               </tr>
@@ -94,9 +77,19 @@
                 </td>
                 <td>
                   <b-button
-                    :variant="showBorderingCounty ? 'danger' : 'primary'"
+                    :variant="showBordering.county ? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('county')"
                     >Show bordering counties</b-button
+                  >
+
+                  <b-button
+                    :variant="river.simplified ? 'danger' : 'primary'"
+                    v-on:click="simplifyRiver()"
+                    >{{
+                      river.simplified
+                        ? "Show original rivers"
+                        : "Show simplified rivers"
+                    }}</b-button
                   >
                 </td>
               </tr>
@@ -126,7 +119,7 @@
                 </td>
                 <td>
                   <b-button
-                    :variant="showBorderingCounty ? 'danger' : 'primary'"
+                    :variant="showBordering.state ? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('state')"
                     >Show bordering states</b-button
                   >
@@ -153,7 +146,6 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 import * as cola from "webcola";
-import { processPIP, getPathCentroid } from "../helper/point_in_polygon";
 
 export default {
   name: "Home",
@@ -245,6 +237,7 @@ export default {
       //   console.log(d.properties.id);
       // });
 
+      // state layer
       const state_list = topojson.feature(
         shapefile,
         shapefile.objects.state
@@ -329,6 +322,38 @@ export default {
         .attr("stroke", __VM.colorVariant[__VM.river.rivers.mississippi.color])
         .attr("d", path);
 
+      // simplified mississippi river layer
+
+      const line = d3.line();
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        svg
+          .append("path")
+          .attr("class", `simplified-river-layer ${river} `)
+          .attr(
+            "d",
+            line(
+              state_list
+                .filter(
+                  (s) =>
+                    s.properties.river.length > 0 &&
+                    s.properties.river.includes(river)
+                )
+                .map((s) => path.centroid(s))
+                .sort(([a, b], [c, d]) => {
+                  if (river === "missouri") {
+                    return a - c;
+                  } else {
+                    return b - d;
+                  }
+                })
+            )
+          )
+          .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          .attr("stroke-width", "5px")
+          .attr("fill", "none")
+          .style("visibility", "hidden");
+      });
+
       // rio grande river layer
       svg
         .append("path")
@@ -388,28 +413,37 @@ export default {
             !__VM[type].rivers[name].visibility;
         }
 
-        d3.select(`.${type}-layer.${name}`).style(
+        const river_layer = __VM.river.simplified
+          ? `.simplified-${type}-layer.${name}`
+          : `.${type}-layer.${name}`;
+
+        d3.select(river_layer).style(
           "visibility",
           __VM[type].rivers[name].visibility ? "visible" : "hidden"
         );
       } else {
         __VM[type].visibility = !__VM[type].visibility;
 
+        let layer = `.${type}-layer`;
         if (type === "river") {
+          layer = __VM.river.simplified
+            ? `.simplified-${type}-layer`
+            : `.${type}-layer`;
+
           Object.values(__VM[type].rivers).forEach(
             (r) => (r.visibility = __VM[type].visibility)
           );
         }
-        d3.selectAll(`.${type}-layer`).style(
+        d3.selectAll(layer).style(
           "visibility",
           __VM[type].visibility ? "visible" : "hidden"
         );
       }
     },
-    async setRectSize(uniformRectSize) {
+    async setRectSize() {
       const __VM = this;
-      __VM.rectSizeUniformed = uniformRectSize;
-      if (uniformRectSize) {
+      __VM.rectSizeUniformed = !__VM.rectSizeUniformed;
+      if (__VM.rectSizeUniformed) {
         d3.selectAll(".rect-layer > rect").attr(
           "style",
           "width: 10px !important; height: 10px !important;"
@@ -427,18 +461,6 @@ export default {
 
         d3.selectAll(".rect-layer > rect").attr("style", "");
       }
-    },
-    // if the river passes through the input county, returns the river's color instead
-    getPIPColor(county_id) {
-      const __VM = this;
-
-      for (const [key, value] of Object.entries(__VM.river.pip.county)) {
-        if (value.includes(county_id)) {
-          return __VM.colorVariant[__VM.river.rivers[key].color];
-        }
-      }
-
-      return "none";
     },
     setRectColor(singleRect) {
       const __VM = this;
@@ -482,6 +504,21 @@ export default {
         });
       });
     },
+    simplifyRiver() {
+      const __VM = this;
+
+      __VM.river.simplified = !__VM.river.simplified;
+
+      d3.selectAll(".simplified-river-layer").style(
+        "visibility",
+        __VM.river.simplified ? "visible" : "hidden"
+      );
+
+      d3.selectAll(".river-layer").style(
+        "visibility",
+        __VM.river.simplified ? "hidden" : "visible"
+      );
+    },
   },
   data() {
     return {
@@ -492,6 +529,7 @@ export default {
       rect: { list: [], visibility: true, color: "success", size: 10 },
       river: {
         visibility: true,
+        simplified: false,
         color: "info",
         rivers: {
           missouri: {
@@ -508,235 +546,6 @@ export default {
             visibility: true,
             color: "rio_grande",
             name: "Rio Grande",
-          },
-        },
-        pip: {
-          county: {
-            missouri: [
-              "6668",
-              "6674",
-              "6696",
-              "6713",
-              "7105",
-              "6703",
-              "7081",
-              "6677",
-              "7435",
-              "6695",
-              "7079",
-              "6702",
-              "7083",
-              "7082",
-              "7439",
-              "7095",
-              "7085",
-              "8202",
-              "8197",
-              "5635",
-              "7444",
-              "7450",
-              "6724",
-              "7483",
-              "7456",
-              "7482",
-              "6770",
-              "6730",
-              "6803",
-              "6738",
-              "6742",
-              "7489",
-              "7428",
-              "6727",
-              "5894",
-              "6805",
-              "5929",
-              "6744",
-              "5887",
-              "6782",
-              "6729",
-              "6780",
-              "6547",
-              "6556",
-              "6628",
-              "6589",
-              "6790",
-              "5972",
-              "5953",
-              "6002",
-              "6582",
-              "6621",
-              "6581",
-              "6571",
-              "6562",
-              "6642",
-              "6569",
-              "6599",
-              "6593",
-              "6055",
-              "6590",
-              "6555",
-              "6572",
-              "6637",
-              "5717",
-              "6654",
-              "6682",
-              "7065",
-              "6661",
-              "6689",
-              "7466",
-              "6641",
-              "6685",
-              "6667",
-              "6688",
-            ],
-            mississippi: [
-              "8172",
-              "6623",
-              "6602",
-              "6627",
-              "5933",
-              "5874",
-              "5734",
-              "5900",
-              "7556",
-              "6403",
-              "6381",
-              "6447",
-              "6380",
-              "6405",
-              "6387",
-              "6377",
-              "6425",
-              "6378",
-              "6407",
-              "5193",
-              "6477",
-              "7569",
-              "6480",
-              "5226",
-              "5211",
-              "5181",
-              "6469",
-              "6539",
-              "5696",
-              "6612",
-              "5736",
-              "5748",
-              "5659",
-              "6617",
-              "5219",
-              "6108",
-              "6093",
-              "7513",
-              "5691",
-              "5693",
-              "5738",
-              "5723",
-              "5755",
-              "5658",
-              "5664",
-              "6637",
-              "5717",
-              "5732",
-              "6462",
-              "8158",
-              "8157",
-              "6455",
-              "8116",
-              "8173",
-              "8142",
-              "8132",
-              "5700",
-              "5665",
-              "8122",
-              "6238",
-              "6464",
-              "6223",
-              "6222",
-              "6394",
-              "6535",
-              "6538",
-              "6491",
-              "6193",
-              "6208",
-              "5724",
-              "6059",
-              "7574",
-              "7538",
-              "7539",
-              "6395",
-              "6401",
-              "6474",
-              "6199",
-              "6190",
-              "6229",
-              "6214",
-              "6236",
-              "6201",
-              "6178",
-              "6213",
-              "6211",
-              "6220",
-              "6793",
-              "5916",
-              "7431",
-              "6548",
-            ],
-            rio_grande: [
-              "7607",
-              "7807",
-              "7747",
-              "7818",
-              "7825",
-              "7616",
-              "6865",
-              "6886",
-              "6885",
-              "6858",
-              "6881",
-              "5333",
-              "5362",
-              "5359",
-              "5307",
-              "6887",
-              "6879",
-              "5317",
-              "6873",
-              "6890",
-              "5346",
-              "7774",
-              "7700",
-              "7656",
-              "7838",
-              "7799",
-              "7693",
-            ],
-          },
-          state: {
-            missouri: [
-              "4",
-              "24",
-              "56",
-              "58",
-              "71",
-              "74",
-              "75",
-              "80",
-              "92",
-              "112",
-            ],
-            mississippi: [
-              "24",
-              "56",
-              "61",
-              "62",
-              "72",
-              "73",
-              "93",
-              "109",
-              "111",
-            ],
-            rio_grande: ["10", "22", "97"],
           },
         },
       },
