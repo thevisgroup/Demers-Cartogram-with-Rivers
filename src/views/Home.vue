@@ -28,29 +28,31 @@
                   >
                 </td>
                 <td>
-                  <b-button
-                    :variant="overlapsRemoved ? 'danger' : 'primary'"
-                    v-on:click="overlapsRemoved ? init() : removeOverlap()"
-                    >{{
-                      overlapsRemoved ? "Reset" : "Remove"
-                    }}
-                    overlaps</b-button
-                  >
+                  <b-button-group vertical>
+                    <b-button
+                      :variant="overlapsRemoved ? 'danger' : 'primary'"
+                      v-on:click="overlapsRemoved ? init() : removeOverlap()"
+                      >{{
+                        overlapsRemoved ? "Reset" : "Remove"
+                      }}
+                      overlaps</b-button
+                    >
 
-                  <b-button
-                    :variant="rectSizeUniformed ? 'danger' : 'primary'"
-                    v-on:click="setRectSize()"
-                    >{{
-                      rectSizeUniformed ? "Variable" : "Uniform"
-                    }}
-                    Size</b-button
-                  >
+                    <b-button
+                      :variant="rectSizeUniformed ? 'danger' : 'primary'"
+                      v-on:click="setRectSize()"
+                      >{{
+                        rectSizeUniformed ? "Variable" : "Uniform"
+                      }}
+                      Size</b-button
+                    >
 
-                  <b-button
-                    :variant="rectMapToColor ? 'danger' : 'primary'"
-                    v-on:click="setRectColor()"
-                    >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
-                  >
+                    <b-button
+                      :variant="rectMapToColor ? 'danger' : 'primary'"
+                      v-on:click="setRectColor()"
+                      >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
+                    >
+                  </b-button-group>
                 </td>
               </tr>
               <tr>
@@ -77,12 +79,6 @@
                 </td>
                 <td>
                   <b-button
-                    :variant="showBordering.county ? 'danger' : 'primary'"
-                    v-on:click="highlightBorderingRegion('county')"
-                    >Show bordering counties</b-button
-                  >
-
-                  <b-button
                     :variant="river.simplified ? 'danger' : 'primary'"
                     v-on:click="simplifyRiver()"
                     >{{
@@ -104,7 +100,13 @@
                     >County</b-button
                   >
                 </td>
-                <td></td>
+                <td>
+                  <b-button
+                    :variant="showBordering.county ? 'danger' : 'primary'"
+                    v-on:click="highlightBorderingRegion('county')"
+                    >Show bordering counties</b-button
+                  >
+                </td>
               </tr>
               <tr>
                 <td>
@@ -121,7 +123,8 @@
                   <b-button
                     :variant="showBordering.state ? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('state')"
-                    >Show bordering states</b-button
+                    >{{ showBordering.state ? "Hide" : "Show" }} bordering
+                    states</b-button
                   >
                 </td>
               </tr>
@@ -184,7 +187,7 @@ export default {
             [0, 0],
             [800, 400],
           ])
-          .scaleExtent([1, 8])
+          .scaleExtent([1, 6])
           .on("zoom", zoomed)
       );
 
@@ -615,5 +618,13 @@ export default {
 .btn-outline-rio_grande {
   color: rgb(132, 196, 224) !important;
   border-color: rgb(132, 196, 224) !important;
+}
+
+.btn-group-vertical .btn:not(:last-child) {
+  border-bottom: 2px solid white;
+}
+
+.btn-group .btn:not(:last-child) {
+  border-right: 2px solid white !important;
 }
 </style>
