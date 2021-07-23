@@ -78,15 +78,28 @@
                   </b-button-group>
                 </td>
                 <td>
-                  <b-button
-                    :variant="river.simplified ? 'danger' : 'primary'"
-                    v-on:click="simplifyRiver()"
-                    >{{
-                      river.simplified
-                        ? "Show original rivers"
-                        : "Show simplified rivers"
-                    }}</b-button
-                  >
+                  <b-button-group vertical>
+                    <b-button
+                      :variant="river.simplified ? 'danger' : 'primary'"
+                      v-on:click="simplifyRiver()"
+                      >{{
+                        river.simplified
+                          ? "Show original rivers"
+                          : "Show simplified rivers"
+                      }}</b-button
+                    >
+                    <span class="btn btn-light">
+                      <label for="river-width"> Set river thickness </label>
+                      <b-form-input
+                        id="river-width"
+                        v-model="river.width"
+                        type="range"
+                        min="1"
+                        max="10"
+                        @change="setRiverWidth()"
+                      ></b-form-input>
+                    </span>
+                  </b-button-group>
                 </td>
               </tr>
               <tr>
@@ -305,33 +318,13 @@ export default {
           tooltip.style("visibility", "hidden");
         });
 
-      // missouri river layer
-      svg
-        .append("path")
-        .attr("class", "river-layer missouri")
-        .datum(topojson.mesh(shapefile, shapefile.objects.missouri))
-        .attr("stroke-width", "5px")
-        .attr("fill", "none")
-        .attr("stroke", __VM.colorVariant[__VM.river.rivers.missouri.color])
-        .attr("d", path);
-
-      // mississippi river layer
-      svg
-        .append("path")
-        .attr("class", "river-layer mississippi")
-        .datum(topojson.mesh(shapefile, shapefile.objects.mississippi))
-        .attr("stroke-width", "5px")
-        .attr("fill", "none")
-        .attr("stroke", __VM.colorVariant[__VM.river.rivers.mississippi.color])
-        .attr("d", path);
-
       // simplified mississippi river layer
 
       const line = d3.line();
       Object.keys(__VM.river.rivers).forEach((river) => {
         svg
           .append("path")
-          .attr("class", `simplified-river-layer ${river} `)
+          .attr("class", `river simplified-river-layer ${river} `)
           .attr(
             "d",
             line(
@@ -357,22 +350,22 @@ export default {
           .style("visibility", "hidden");
       });
 
-      // rio grande river layer
-      svg
-        .append("path")
-        .attr("class", "river-layer rio_grande")
-        .datum(topojson.mesh(shapefile, shapefile.objects.rio_grande))
-        .attr("stroke-width", "5px")
-        .attr("fill", "none")
-        .attr("stroke", __VM.colorVariant[__VM.river.rivers.rio_grande.color])
-        .attr("d", path);
+      // original river layer
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        svg
+          .append("path")
+          .attr("class", `river river-layer ${river}`)
+          .datum(topojson.mesh(shapefile, shapefile.objects[river]))
+          .attr("stroke-width", "5px")
+          .attr("fill", "none")
+          .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          .attr("d", path);
+      });
 
       __VM.rect.list = rects._groups[0];
 
       __VM.rectSizeUniformed = false;
       __VM.overlapsRemoved = false;
-
-      // getPathCentroid(__VM.river.pip.state);
     },
     removeOverlap() {
       const __VM = this;
@@ -522,6 +515,10 @@ export default {
         __VM.river.simplified ? "hidden" : "visible"
       );
     },
+    setRiverWidth() {
+      const __VM = this;
+      d3.selectAll(".river").style("stroke-width", `${__VM.river.width}px`);
+    },
   },
   data() {
     return {
@@ -533,6 +530,7 @@ export default {
       river: {
         visibility: true,
         simplified: false,
+        width: 5,
         color: "info",
         rivers: {
           missouri: {
