@@ -1,10 +1,10 @@
 <template>
   <b-container fluid>
     <b-row>
-      <b-col cols="9">
+      <b-col cols="8">
         <div id="map"></div>
       </b-col>
-      <b-col cols="3">
+      <b-col cols="4">
         <div class="table-responsive option_table">
           <table
             class="
@@ -78,28 +78,34 @@
                   </b-button-group>
                 </td>
                 <td>
-                  <b-button-group vertical>
+                  <b-button-group size="sm">
                     <b-button
-                      :variant="river.simplified ? 'danger' : 'primary'"
-                      v-on:click="simplifyRiver()"
+                      v-for="type in ['state', 'county']"
+                      :key="type"
+                      :variant="
+                        river.simplified === type ? 'danger' : 'primary'
+                      "
+                      v-on:click="
+                        simplifyRiver(river.simplified === type ? null : type)
+                      "
                       >{{
-                        river.simplified
+                        river.simplified === type
                           ? "Show original rivers"
-                          : "Show simplified rivers"
+                          : `Simplify rivers by ${type}`
                       }}</b-button
                     >
-                    <span class="btn btn-light">
-                      <label for="river-width"> Set river thickness </label>
-                      <b-form-input
-                        id="river-width"
-                        v-model="river.width"
-                        type="range"
-                        min="1"
-                        max="10"
-                        @change="setRiverWidth()"
-                      ></b-form-input>
-                    </span>
                   </b-button-group>
+                  <span class="btn btn-dark">
+                    <label for="river-width"> Set river thickness </label>
+                    <b-form-input
+                      id="river-width"
+                      v-model="river.width"
+                      type="range"
+                      min="1"
+                      max="10"
+                      @change="setRiverWidth()"
+                    ></b-form-input>
+                  </span>
                 </td>
               </tr>
               <tr>
@@ -220,9 +226,9 @@ export default {
 
       const path = d3.geoPath();
 
-      const list = [];
+      const county_list = [];
 
-      list.push(
+      county_list.push(
         ...topojson
           .feature(shapefile, shapefile.objects.county)
           .features.filter((e) => e.geometry && e.geometry.type)
@@ -234,7 +240,7 @@ export default {
         .attr("class", "county-layer")
         .attr("stroke", "#000")
         .selectAll("path")
-        .data(list)
+        .data(county_list)
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
@@ -290,7 +296,7 @@ export default {
         .attr("class", "rect-layer")
         .attr("stroke", "#000")
         .selectAll("rect")
-        .data(list)
+        .data(county_list)
         .enter()
         .append("rect")
         .attr("colormap", (d) => colormap(getVacRate(d) / 100))
@@ -318,13 +324,15 @@ export default {
           tooltip.style("visibility", "hidden");
         });
 
-      // simplified mississippi river layer
-
       const line = d3.line();
+      // state-simplified river layer
       Object.keys(__VM.river.rivers).forEach((river) => {
         svg
           .append("path")
-          .attr("class", `river simplified-river-layer ${river} `)
+          .attr(
+            "class",
+            `state-simplified simplified-river-layer ${river} river-layer`
+          )
           .attr(
             "d",
             line(
@@ -350,11 +358,44 @@ export default {
           .style("visibility", "hidden");
       });
 
+      // county-simplified river layer
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        svg
+          .append("path")
+          .attr(
+            "class",
+            `county-simplified simplified-river-layer ${river} river-layer`
+          )
+          .attr(
+            "d",
+            line(
+              county_list
+                .filter(
+                  (s) =>
+                    s.properties.river.length > 0 &&
+                    s.properties.river.includes(river)
+                )
+                .map((s) => path.centroid(s))
+                .sort(([a, b], [c, d]) => {
+                  if (river === "missouri") {
+                    return a - c;
+                  } else {
+                    return b - d;
+                  }
+                })
+            )
+          )
+          .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          .attr("stroke-width", "5px")
+          .attr("fill", "none")
+          .style("visibility", "hidden");
+      });
+
       // original river layer
       Object.keys(__VM.river.rivers).forEach((river) => {
         svg
           .append("path")
-          .attr("class", `river river-layer ${river}`)
+          .attr("class", `original-river-layer ${river} river-layer `)
           .datum(topojson.mesh(shapefile, shapefile.objects[river]))
           .attr("stroke-width", "5px")
           .attr("fill", "none")
@@ -403,38 +444,39 @@ export default {
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
-      if (name) {
-        if (type === "river") {
+
+      __VM[type].visibility = !__VM[type].visibility;
+      let layer = `.${type}-layer`;
+      if (type === "river") {
+        // toggle the specific river
+        if (name) {
+          layer = __VM.river.simplified
+            ? `.${__VM.river.simplified}-simplified.${name}`
+            : `.original-${type}-layer.${name}`;
+
           __VM[type].rivers[name].visibility =
             !__VM[type].rivers[name].visibility;
+
+          d3.select(layer).style(
+            "visibility",
+            __VM[type].rivers[name].visibility ? "visible" : "hidden"
+          );
         }
-
-        const river_layer = __VM.river.simplified
-          ? `.simplified-${type}-layer.${name}`
-          : `.${type}-layer.${name}`;
-
-        d3.select(river_layer).style(
-          "visibility",
-          __VM[type].rivers[name].visibility ? "visible" : "hidden"
-        );
-      } else {
-        __VM[type].visibility = !__VM[type].visibility;
-
-        let layer = `.${type}-layer`;
-        if (type === "river") {
+        // toggle all rivers
+        else {
           layer = __VM.river.simplified
-            ? `.simplified-${type}-layer`
-            : `.${type}-layer`;
+            ? `.${__VM.river.simplified}-simplified`
+            : `.original-${type}-layer`;
 
           Object.values(__VM[type].rivers).forEach(
             (r) => (r.visibility = __VM[type].visibility)
           );
         }
-        d3.selectAll(layer).style(
-          "visibility",
-          __VM[type].visibility ? "visible" : "hidden"
-        );
       }
+      d3.selectAll(layer).style(
+        "visibility",
+        __VM[type].visibility ? "visible" : "hidden"
+      );
     },
     async setRectSize() {
       const __VM = this;
@@ -500,24 +542,38 @@ export default {
         });
       });
     },
-    simplifyRiver() {
+    simplifyRiver(type) {
       const __VM = this;
 
-      __VM.river.simplified = !__VM.river.simplified;
+      __VM.river.simplified = type;
 
-      d3.selectAll(".simplified-river-layer").style(
-        "visibility",
-        __VM.river.simplified ? "visible" : "hidden"
-      );
+      // hide all rivers first
+      d3.selectAll(".river-layer").style("visibility", "hidden");
 
-      d3.selectAll(".river-layer").style(
-        "visibility",
-        __VM.river.simplified ? "hidden" : "visible"
-      );
+      // process hidden rivers
+      const hidden_rivers = __VM.getRivers
+        .filter((r) => !r.visibility)
+        .map((n) => `:not(.${n.color})`);
+
+      if (type) {
+        d3.selectAll(`.${type}-simplified${hidden_rivers}`).style(
+          "visibility",
+          "visible"
+        );
+      } else {
+        d3.selectAll(`.original-river-layer${hidden_rivers}`).style(
+          "visibility",
+          "visible"
+        );
+        __VM.river.simplified = false;
+      }
     },
     setRiverWidth() {
       const __VM = this;
-      d3.selectAll(".river").style("stroke-width", `${__VM.river.width}px`);
+      d3.selectAll(".river-layer").style(
+        "stroke-width",
+        `${__VM.river.width}px`
+      );
     },
   },
   data() {
@@ -619,7 +675,7 @@ export default {
 }
 
 .btn-group-vertical .btn:not(:last-child) {
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid white !important;
 }
 
 .btn-group .btn:not(:last-child) {
