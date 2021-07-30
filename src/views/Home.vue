@@ -234,6 +234,16 @@ export default {
           .features.filter((e) => e.geometry && e.geometry.type)
       );
 
+      const getBorderingColor = (d) => {
+        if (d.properties.river.length > 0) {
+          return __VM.colorVariant[
+            __VM.river.rivers[d.properties.river[0]].color
+          ];
+        } else {
+          return "none";
+        }
+      };
+
       // county layer
       svg
         .append("g")
@@ -245,15 +255,7 @@ export default {
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
         .attr("fill", "none")
-        .attr("fill_pip", (d) => {
-          if (d.properties.river.length > 0) {
-            return __VM.colorVariant[
-              __VM.river.rivers[d.properties.river[0]].color
-            ];
-          } else {
-            return "none";
-          }
-        })
+        .attr("fill_pip", (d) => getBorderingColor(d))
         .attr("county_id", (d) => d.properties.id);
       // .on("mouseover", function (e, d) {
       //   console.log(d.properties.id);
@@ -275,18 +277,9 @@ export default {
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
         .attr("fill", "none")
-        .attr("fill_pip", (d) => {
-          if (d.properties.river.length > 0) {
-            return __VM.colorVariant[
-              __VM.river.rivers[d.properties.river[0]].color
-            ];
-          } else {
-            return "none";
-          }
-        })
+        .attr("fill_pip", (d) => getBorderingColor(d))
         .attr("stroke", __VM.colorVariant[__VM.state.color])
-        .attr("state_id", (d) => d.properties.fid)
-        .attr("state_name", (d) => d.properties.NAME);
+        .attr("state_id", (d) => d.properties.fid);
 
       const colormap = d3.scaleSequential(d3.interpolatePRGn);
 
