@@ -287,6 +287,7 @@ export default {
       const rects = svg
         .append("g")
         .attr("class", "rect-layer")
+        .style("visibility", "hidden")
         .attr("stroke", "#000")
         .selectAll("rect")
         .data(county_list)
@@ -575,7 +576,7 @@ export default {
       rectSizeUniformed: false,
       rectMapToColor: false,
       showBordering: { county: false, state: false },
-      rect: { list: [], visibility: true, color: "success", size: 10 },
+      rect: { list: [], visibility: false, color: "success", size: 10 },
       river: {
         visibility: true,
         simplified: false,
