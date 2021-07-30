@@ -30,11 +30,20 @@
                 <td>
                   <b-button-group vertical>
                     <b-button
-                      :variant="overlapsRemoved ? 'danger' : 'primary'"
-                      v-on:click="overlapsRemoved ? init() : removeOverlap()"
-                      >{{
-                        overlapsRemoved ? "Reset" : "Remove"
-                      }}
+                      :variant="rectOverlapsRemoved ? 'danger' : 'primary'"
+                      v-on:click="
+                        rectOverlapsRemoved ? init() : removeOverlap('rect')
+                      "
+                      >{{ rectOverlapsRemoved ? "Reset" : "Remove" }} rect
+                      overlaps</b-button
+                    >
+
+                    <b-button
+                      :variant="circleOverlapsRemoved ? 'danger' : 'primary'"
+                      v-on:click="
+                        circleOverlapsRemoved ? init() : removeOverlap('circle')
+                      "
+                      >{{ circleOverlapsRemoved ? "Reset" : "Remove" }} circle
                       overlaps</b-button
                     >
 
@@ -397,44 +406,98 @@ export default {
           .attr("d", path);
       });
 
-      __VM.rect.list = rects._groups[0];
+      // River bordering county layer
+      const bordering_county_list = county_list.filter(
+        (c) => c.properties.river.length > 0
+      );
 
+      const circles = svg
+        .append("g")
+        .attr("class", "river-bordering-county-layer")
+        .attr("stroke", "none")
+        .selectAll("circle")
+        .data(bordering_county_list)
+        .enter()
+        .append("circle")
+        .attr("cx", (d) => path.centroid(d)[0])
+        .attr("cy", (d) => path.centroid(d)[1])
+        .attr("r", __VM.circle.size)
+        .attr("fill", (d) => getBorderingColor(d));
+
+      __VM.rect.list = rects._groups[0];
       __VM.rectSizeUniformed = false;
-      __VM.overlapsRemoved = false;
+      __VM.rectOverlapsRemoved = false;
+
+      __VM.circle.list = circles._groups[0];
+      __VM.circleOverlapsRemoved = false;
     },
-    removeOverlap() {
+    removeOverlap(type) {
       const __VM = this;
 
-      let rects = [];
+      let data = [];
+
+      let isCircle = type === "circle";
 
       // prepare an array for webcola
       const prepareColaRect = (r, i) => {
         r = d3.select(r);
-        var x = Number(r.attr("x")),
-          y = Number(r.attr("y")),
-          w = Number(__VM.rectSizeUniformed ? 10 : r.attr("width")),
-          h = Number(__VM.rectSizeUniformed ? 10 : r.attr("height"));
-        rects[i] = new cola.Rectangle(x, x + w, y, y + h);
+        var x = Number(isCircle ? r.attr("cx") : r.attr("x")),
+          y = Number(isCircle ? r.attr("cy") : r.attr("y")),
+          w = Number(
+            isCircle
+              ? r.attr("r")
+              : __VM.rectSizeUniformed
+              ? 10
+              : r.attr("width")
+          ),
+          h = Number(
+            isCircle
+              ? r.attr("r")
+              : __VM.rectSizeUniformed
+              ? 10
+              : r.attr("height")
+          );
+
+        if (isCircle) {
+          data[i] = new cola.Rectangle(x - w, x + w, y - h, y + h);
+        } else {
+          data[i] = new cola.Rectangle(x, x + w, y, y + h);
+        }
       };
 
-      __VM.rect.list.forEach((r, i) => {
+      __VM[type].list.forEach((r, i) => {
         prepareColaRect(r, i);
       });
 
       // remove overlaps
-      cola.removeOverlaps(rects);
+      cola.removeOverlaps(data);
 
       // redraw rects using new coordinates
       const redrawD3Rect = (r, i) => {
-        const t = rects[i];
-        d3.select(r).transition().duration(1000).attr("x", t.x).attr("y", t.y);
+        const t = data[i];
+        if (isCircle) {
+          d3.select(r)
+            .transition()
+            .duration(10000)
+            .attr("cx", t.x)
+            .attr("cy", t.y);
+        } else {
+          d3.select(r)
+            .transition()
+            .duration(1000)
+            .attr("x", t.x)
+            .attr("y", t.y);
+        }
       };
 
-      __VM.rect.list.forEach((r, i) => redrawD3Rect(r, i));
+      __VM[type].list.forEach((r, i) => redrawD3Rect(r, i));
 
-      __VM.overlapsRemoved = true;
-
-      d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
+      if (isCircle) {
+        __VM.circleOverlapsRemoved = true;
+      } else {
+        d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
+        __VM.rectOverlapsRemoved = true;
+      }
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
@@ -481,14 +544,14 @@ export default {
           "width: 10px !important; height: 10px !important;"
         );
 
-        if (__VM.overlapsRemoved) {
-          __VM.removeOverlap();
+        if (__VM.rectOverlapsRemoved) {
+          __VM.removeOverlap("rect");
           d3.select("#base-layer").attr("viewBox", [-400, -150, 1800, 700]);
         }
       } else {
-        if (__VM.overlapsRemoved) {
+        if (__VM.rectOverlapsRemoved) {
           await __VM.init();
-          __VM.removeOverlap();
+          __VM.removeOverlap("rect");
         }
 
         d3.selectAll(".rect-layer > rect").attr("style", "");
@@ -572,11 +635,13 @@ export default {
   },
   data() {
     return {
-      overlapsRemoved: false,
+      rectOverlapsRemoved: false,
       rectSizeUniformed: false,
       rectMapToColor: false,
+      circleOverlapsRemoved: false,
       showBordering: { county: false, state: false },
       rect: { list: [], visibility: false, color: "success", size: 10 },
+      circle: { list: [], visibility: false, color: "success", size: 5 },
       river: {
         visibility: true,
         simplified: false,
