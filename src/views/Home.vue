@@ -32,9 +32,11 @@
                     <b-button
                       :variant="rectOverlapsRemoved ? 'danger' : 'primary'"
                       v-on:click="
-                        rectOverlapsRemoved ? init() : removeOverlap('rect')
+                        rectOverlapsRemoved ? init() : removeOverlap('all')
                       "
-                      >{{ rectOverlapsRemoved ? "Reset" : "Remove" }} rect
+                      >{{
+                        rectOverlapsRemoved ? "Reset" : "Remove"
+                      }}
                       overlaps</b-button
                     >
 
@@ -436,12 +438,13 @@ export default {
 
       let data = [];
 
-      let isCircle = type === "circle";
-
       // prepare an array for webcola
       const prepareColaRect = (r, i) => {
         r = d3.select(r);
-        var x = Number(isCircle ? r.attr("cx") : r.attr("x")),
+
+        let isCircle = r.attr("cx") !== null;
+
+        let x = Number(isCircle ? r.attr("cx") : r.attr("x")),
           y = Number(isCircle ? r.attr("cy") : r.attr("y")),
           w = Number(
             isCircle
@@ -465,9 +468,19 @@ export default {
         }
       };
 
-      __VM[type].list.forEach((r, i) => {
-        prepareColaRect(r, i);
-      });
+      if (type === "all") {
+        __VM["rect"].list.forEach((r, i) => {
+          prepareColaRect(r, i);
+        });
+
+        __VM["circle"].list.forEach((r, i) => {
+          prepareColaRect(r, i);
+        });
+      } else {
+        __VM[type].list.forEach((r, i) => {
+          prepareColaRect(r, i);
+        });
+      }
 
       // remove overlaps
       cola.removeOverlaps(data);
@@ -475,10 +488,10 @@ export default {
       // redraw rects using new coordinates
       const redrawD3Rect = (r, i) => {
         const t = data[i];
-        if (isCircle) {
+        if (d3.select(r).attr("cx") !== null) {
           d3.select(r)
             .transition()
-            .duration(10000)
+            .duration(1000)
             .attr("cx", t.x)
             .attr("cy", t.y);
         } else {
@@ -490,9 +503,18 @@ export default {
         }
       };
 
-      __VM[type].list.forEach((r, i) => redrawD3Rect(r, i));
+      if (type === "all") {
+        __VM["rect"].list.forEach((r, i) => redrawD3Rect(r, i));
+        __VM["circle"].list.forEach((r, i) => redrawD3Rect(r, i));
+      } else {
+        __VM[type].list.forEach((r, i) => redrawD3Rect(r, i));
+      }
 
-      if (isCircle) {
+      if (type === "all") {
+        d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
+        __VM.rectOverlapsRemoved = true;
+        __VM.circleOverlapsRemoved = true;
+      } else if (type === "circle") {
         __VM.circleOverlapsRemoved = true;
       } else {
         d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
