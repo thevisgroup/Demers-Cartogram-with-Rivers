@@ -197,24 +197,23 @@ export default {
   methods: {
     async init() {
       const __VM = this;
-      const shapefile = await d3.json(`/data/us_state_county.json`);
 
-      const indicators = (
-        await d3.json(`/data/vaccination_county_condensed_data.json`)
-      ).vaccination_county_condensed_data;
+      __VM.circle.list = [];
 
       const calculateRectSize = (d) => {
         return getVacRate(d) * 0.2;
       };
 
       const getVacRate = (d) => {
-        const county = indicators.find((f) => f.FIPS === d.properties.FIPS);
+        const county = __VM.indicators.find(
+          (f) => f.FIPS === d.properties.FIPS
+        );
         return county ? county.Series_Complete_Pop_Pct : 0;
       };
 
       d3.selectAll("#map > svg").remove();
 
-      const svg = d3
+      __VM.svg = d3
         .select("#map")
         .append("svg")
         .attr("id", "base-layer")
@@ -222,6 +221,7 @@ export default {
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
+      let svg = __VM.svg;
       svg.call(
         d3
           .zoom()
@@ -249,14 +249,6 @@ export default {
 
       const path = d3.geoPath();
 
-      const county_list = [];
-
-      county_list.push(
-        ...topojson
-          .feature(shapefile, shapefile.objects.county)
-          .features.filter((e) => e.geometry && e.geometry.type)
-      );
-
       const getBorderingColor = (d) => {
         if (d.properties.river.length > 0) {
           return __VM.colorVariant[
@@ -273,7 +265,7 @@ export default {
         .attr("class", "county-layer")
         .attr("stroke", "#000")
         .selectAll("path")
-        .data(county_list)
+        .data(__VM.county_list)
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
@@ -285,17 +277,13 @@ export default {
       // });
 
       // state layer
-      const state_list = topojson.feature(
-        shapefile,
-        shapefile.objects.state
-      ).features;
 
       svg
         .append("g")
         .attr("class", "state-layer")
         .attr("stroke", "#000")
         .selectAll("path")
-        .data(state_list)
+        .data(__VM.state_list)
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
@@ -313,7 +301,7 @@ export default {
         .style("visibility", "hidden")
         .attr("stroke", "#000")
         .selectAll("rect")
-        .data(county_list)
+        .data(__VM.county_list)
         .enter()
         .append("rect")
         .attr("colormap", (d) => colormap(getVacRate(d) / 100))
@@ -371,7 +359,7 @@ export default {
           .attr(
             "d",
             line(
-              state_list
+              __VM.state_list
                 .filter(
                   (s) =>
                     s.properties.river.length > 0 &&
@@ -404,7 +392,7 @@ export default {
           .attr(
             "d",
             line(
-              county_list
+              __VM.county_list
                 .filter(
                   (s) =>
                     s.properties.river.length > 0 &&
@@ -431,7 +419,7 @@ export default {
         svg
           .append("path")
           .attr("class", `original-river-layer ${river} river-layer `)
-          .datum(topojson.mesh(shapefile, shapefile.objects[river]))
+          .datum(topojson.mesh(__VM.shapefile, __VM.shapefile.objects[river]))
           .attr("stroke-width", "5px")
           .attr("fill", "none")
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
@@ -439,28 +427,71 @@ export default {
       });
 
       // River bordering county layer
-      const bordering_county_list = county_list.filter(
-        (c) => c.properties.river.length > 0
-      );
-
       const circles = svg
         .append("g")
         .attr("class", "circle-layer")
         .attr("stroke", "none")
-        .selectAll("circle")
-        .data(bordering_county_list)
-        .enter()
-        .append("circle")
-        .attr("cx", (d) => path.centroid(d)[0])
-        .attr("cy", (d) => path.centroid(d)[1])
-        .attr("r", __VM.circle.size)
-        .attr("fill", (d) => getBorderingColor(d));
+        .style("visibility", "hidden")
+        .selectAll("circle");
+
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        const bordering_county_list = __VM.county_list
+          .filter(
+            (c) =>
+              c.properties.river.length > 0 &&
+              c.properties.river.includes(river)
+          )
+          .map((s) => path.centroid(s))
+          .sort(([a, b], [c, d]) => {
+            console.log([a, b], [c, d]);
+            if (river === "missouri") {
+              return a - c;
+            } else {
+              return b - d;
+            }
+          });
+
+        const riverCircles = circles
+          .data(bordering_county_list)
+          .enter()
+          .append("circle")
+          .attr("cx", (d) => d[0])
+          .attr("cy", (d) => d[1])
+          .attr("r", __VM.circle.size)
+          .attr("fill", __VM.colorVariant[river]);
+
+        let links = [];
+
+        __VM.circle.list.push(...riverCircles._groups[0]);
+
+        for (let index = 0; index < bordering_county_list.length - 1; index++) {
+          const start = bordering_county_list[index];
+          const end = bordering_county_list[index + 1];
+
+          links.push(
+            d3.linkHorizontal()({
+              source: start,
+              target: end,
+            })
+          );
+        }
+
+        svg
+          .append("g")
+          .attr("class", "river-edge")
+          .selectAll("path")
+          .data(links)
+          .enter()
+          .append("path")
+          .attr("d", (d) => d)
+          .attr("stroke", "black");
+      });
 
       __VM.rect.list = rects._groups[0];
       __VM.rectSizeUniformed = false;
       __VM.rectOverlapsRemoved = false;
 
-      __VM.circle.list = circles._groups[0];
+      // __VM.circle.list = circles._groups[0];
       __VM.circleOverlapsRemoved = false;
     },
     removeOverlap(type) {
@@ -737,6 +768,26 @@ export default {
     },
   },
   async mounted() {
+    const __VM = this;
+
+    __VM.indicators = (
+      await d3.json(`/data/vaccination_county_condensed_data.json`)
+    ).vaccination_county_condensed_data;
+
+    __VM.shapefile = await d3.json(`/data/us_state_county.json`);
+
+    __VM.state_list = topojson.feature(
+      __VM.shapefile,
+      __VM.shapefile.objects.state
+    ).features;
+
+    __VM.county_list = [];
+    __VM.county_list.push(
+      ...topojson
+        .feature(__VM.shapefile, __VM.shapefile.objects.county)
+        .features.filter((e) => e.geometry && e.geometry.type)
+    );
+
     this.init();
   },
 };
