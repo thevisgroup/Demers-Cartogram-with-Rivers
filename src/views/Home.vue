@@ -20,12 +20,24 @@
             <tbody>
               <tr>
                 <td>
-                  <b-button
-                    block
-                    :variant="(rect.visibility ? '' : 'outline-') + rect.color"
-                    v-on:click="toggleFeatureVisibility('rect')"
-                    >Rectangle</b-button
-                  >
+                  <b-button-group vertical>
+                    <b-button
+                      block
+                      :variant="
+                        (rect.visibility ? '' : 'outline-') + rect.color
+                      "
+                      v-on:click="toggleFeatureVisibility('rect')"
+                      >Rectangle</b-button
+                    >
+                    <b-button
+                      block
+                      :variant="
+                        (circle.visibility ? '' : 'outline-') + rect.color
+                      "
+                      v-on:click="toggleFeatureVisibility('circle')"
+                      >Circle</b-button
+                    >
+                  </b-button-group>
                 </td>
                 <td>
                   <b-button-group vertical>
@@ -310,7 +322,25 @@ export default {
         .attr("width", (d) => calculateRectSize(d))
         .attr("height", (d) => calculateRectSize(d))
         .attr("stroke", "black")
-        .attr("fill", __VM.colorVariant[__VM.rect.color])
+        .attr("fill", (d) => {
+          let state;
+
+          let temp = d.properties.NAME.split(",");
+
+          if (temp.length > 1) {
+            state = temp[1].trim();
+          } else {
+            state = temp[0].trim();
+          }
+
+          if (state.includes("Oregon")) {
+            return "rgb(2, 117, 216)";
+          } else if (state.includes("Washington")) {
+            return "rgb(217, 83, 79)";
+          } else {
+            return __VM.colorVariant[__VM.rect.color];
+          }
+        })
         .on("mouseover", function (e, d) {
           d3.select(this).attr("fill", "red");
           tooltip
@@ -415,7 +445,7 @@ export default {
 
       const circles = svg
         .append("g")
-        .attr("class", "river-bordering-county-layer")
+        .attr("class", "circle-layer")
         .attr("stroke", "none")
         .selectAll("circle")
         .data(bordering_county_list)
@@ -491,13 +521,13 @@ export default {
         if (d3.select(r).attr("cx") !== null) {
           d3.select(r)
             .transition()
-            .duration(1000)
+            .duration(10000)
             .attr("cx", t.x)
             .attr("cy", t.y);
         } else {
           d3.select(r)
             .transition()
-            .duration(1000)
+            .duration(10000)
             .attr("x", t.x)
             .attr("y", t.y);
         }
