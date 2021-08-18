@@ -443,7 +443,6 @@ export default {
           )
           .map((s) => path.centroid(s))
           .sort(([a, b], [c, d]) => {
-            console.log([a, b], [c, d]);
             if (river === "missouri") {
               return a - c;
             } else {
@@ -455,6 +454,7 @@ export default {
           .data(bordering_county_list)
           .enter()
           .append("circle")
+          .attr("class", `${river}-circle-layer`)
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
           .attr("r", __VM.circle.size)
@@ -546,19 +546,20 @@ export default {
       // remove overlaps
       cola.removeOverlaps(data);
 
+      const timer = 1000;
       // redraw rects using new coordinates
       const redrawD3Rect = (r, i) => {
         const t = data[i];
         if (d3.select(r).attr("cx") !== null) {
           d3.select(r)
             .transition()
-            .duration(10000)
+            .duration(timer)
             .attr("cx", t.x)
             .attr("cy", t.y);
         } else {
           d3.select(r)
             .transition()
-            .duration(10000)
+            .duration(timer)
             .attr("x", t.x)
             .attr("y", t.y);
         }
@@ -571,6 +572,10 @@ export default {
         __VM[type].list.forEach((r, i) => redrawD3Rect(r, i));
       }
 
+      setTimeout(() => {
+        __VM.redrawEdge();
+      }, timer);
+
       if (type === "all") {
         d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
         __VM.rectOverlapsRemoved = true;
@@ -581,6 +586,48 @@ export default {
         d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
         __VM.rectOverlapsRemoved = true;
       }
+    },
+    redrawEdge() {
+      const __VM = this;
+
+      d3.selectAll(".river-edge").remove();
+
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        const circles = d3.selectAll(`circle.${river}-circle-layer`)._groups[0];
+        let links = [];
+
+        let sort = Array.from(circles)
+          .map((c) => {
+            const circle = d3.select(c);
+            return [circle.attr("cx"), circle.attr("cy")];
+          })
+          .sort(([a, b], [c, d]) => {
+            if (river === "missouri") {
+              return a - c;
+            } else {
+              return b - d;
+            }
+          });
+
+        for (let index = 0; index < sort.length - 1; index++) {
+          links.push(
+            d3.linkHorizontal()({
+              source: sort[index],
+              target: sort[index + 1],
+            })
+          );
+        }
+
+        __VM.svg
+          .append("g")
+          .attr("class", "river-edge")
+          .selectAll("path")
+          .data(links)
+          .enter()
+          .append("path")
+          .attr("d", (d) => d)
+          .attr("stroke", "black");
+      });
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
