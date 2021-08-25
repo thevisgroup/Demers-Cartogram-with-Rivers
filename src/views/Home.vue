@@ -38,6 +38,18 @@
                       >Circle</b-button
                     >
                   </b-button-group>
+
+                  <span class="btn btn-dark">
+                    <label for="river-space"> Set river spacing </label>
+                    <b-form-input
+                      id="river-space"
+                      v-model="river.spacing"
+                      type="range"
+                      min="1"
+                      max="100"
+                      @change="setRiverSpacing()"
+                    ></b-form-input>
+                  </span>
                 </td>
                 <td>
                   <b-button-group vertical>
@@ -416,10 +428,15 @@ export default {
 
       // original river layer
       Object.keys(__VM.river.rivers).forEach((river) => {
+        const data = topojson.mesh(
+          __VM.shapefile,
+          __VM.shapefile.objects[river]
+        );
+
         svg
           .append("path")
           .attr("class", `original-river-layer ${river} river-layer `)
-          .datum(topojson.mesh(__VM.shapefile, __VM.shapefile.objects[river]))
+          .datum(data)
           .attr("stroke-width", "5px")
           .attr("fill", "none")
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
@@ -476,15 +493,15 @@ export default {
           );
         }
 
-        svg
-          .append("g")
-          .attr("class", "river-edge")
-          .selectAll("path")
-          .data(links)
-          .enter()
-          .append("path")
-          .attr("d", (d) => d)
-          .attr("stroke", "black");
+        // svg
+        //   .append("g")
+        //   .attr("class", "river-edge")
+        //   .selectAll("path")
+        //   .data(links)
+        //   .enter()
+        //   .append("path")
+        //   .attr("d", (d) => d)
+        //   .attr("stroke", "black");
       });
 
       __VM.rect.list = rects._groups[0];
@@ -546,7 +563,7 @@ export default {
       // remove overlaps
       cola.removeOverlaps(data);
 
-      const timer = 1000;
+      const timer = 50000;
       // redraw rects using new coordinates
       const redrawD3Rect = (r, i) => {
         const t = data[i];
@@ -762,6 +779,61 @@ export default {
         `${__VM.river.width}px`
       );
     },
+    setRiverSpacing() {
+      const __VM = this;
+
+      d3.selectAll(".river-spacing").remove();
+
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        const points = topojson.mesh(
+          __VM.shapefile,
+          __VM.shapefile.objects[river]
+        ).coordinates[0];
+
+        let spacing = Number(__VM.river.spacing);
+        let spacedPoints = [];
+
+        for (let i = 0; i < points.length; i += spacing) {
+          if (points[i]) {
+            spacedPoints.push(points[i]);
+          }
+
+          if (i + spacing >= points.length - 1) {
+            spacedPoints.push(points[points.length - 1]);
+          }
+        }
+
+        spacedPoints = spacedPoints.sort(([a, b], [c, d]) => {
+          if (river === "missouri") {
+            return a - c;
+          } else {
+            return b - d;
+          }
+        });
+
+        const svg = __VM.svg;
+
+        svg
+          .append("path")
+          .attr("class", "river-spacing")
+          .attr("d", d3.line()(spacedPoints))
+          .attr("stroke", "red")
+          .attr("stroke-width", "4px")
+          .attr("fill", "none");
+
+        svg
+          .append("g")
+          .attr("class", "river-spacing")
+          .selectAll("circle")
+          .data(spacedPoints)
+          .enter()
+          .append("circle")
+          .attr("fill", __VM.colorVariant[__VM.river.rivers[river].color])
+          .attr("cx", (d) => d[0])
+          .attr("cy", (d) => d[1])
+          .attr("r", 4);
+      });
+    },
   },
   data() {
     return {
@@ -776,6 +848,7 @@ export default {
         visibility: true,
         simplified: false,
         width: 5,
+        spacing: 5,
         color: "info",
         rivers: {
           missouri: {
