@@ -359,7 +359,6 @@ export default {
           tooltip.style("visibility", "hidden");
         });
 
-      const line = d3.line();
       // state-simplified river layer
       Object.keys(__VM.river.rivers).forEach((river) => {
         svg
@@ -370,21 +369,16 @@ export default {
           )
           .attr(
             "d",
-            line(
-              __VM.state_list
-                .filter(
+            d3.line()(
+              __VM.sortRiverNodes(
+                __VM.state_list.filter(
                   (s) =>
                     s.properties.river.length > 0 &&
                     s.properties.river.includes(river)
-                )
-                .map((s) => path.centroid(s))
-                .sort(([a, b], [c, d]) => {
-                  if (river === "missouri") {
-                    return a - c;
-                  } else {
-                    return b - d;
-                  }
-                })
+                ),
+                river,
+                "state"
+              )
             )
           )
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
@@ -395,31 +389,23 @@ export default {
 
       // county-simplified river layer
       Object.keys(__VM.river.rivers).forEach((river) => {
+        const data = __VM.sortRiverNodes(
+          __VM.county_list.filter(
+            (s) =>
+              s.properties.river.length > 0 &&
+              s.properties.river.includes(river)
+          ),
+          river,
+          "county"
+        );
+
         svg
           .append("path")
           .attr(
             "class",
             `county-simplified simplified-river-layer ${river} river-layer`
           )
-          .attr(
-            "d",
-            line(
-              __VM.county_list
-                .filter(
-                  (s) =>
-                    s.properties.river.length > 0 &&
-                    s.properties.river.includes(river)
-                )
-                .map((s) => path.centroid(s))
-                .sort(([a, b], [c, d]) => {
-                  if (river === "missouri") {
-                    return a - c;
-                  } else {
-                    return b - d;
-                  }
-                })
-            )
-          )
+          .attr("d", d3.line()(data))
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           .attr("stroke-width", "5px")
           .attr("fill", "none")
@@ -458,14 +444,7 @@ export default {
               c.properties.river.length > 0 &&
               c.properties.river.includes(river)
           )
-          .map((s) => path.centroid(s))
-          .sort(([a, b], [c, d]) => {
-            if (river === "missouri") {
-              return a - c;
-            } else {
-              return b - d;
-            }
-          });
+          .map((s) => path.centroid(s));
 
         const riverCircles = circles
           .data(bordering_county_list)
@@ -604,6 +583,121 @@ export default {
         __VM.rectOverlapsRemoved = true;
       }
     },
+    sortRiverNodes(nodes, river, type) {
+      const __VM = this;
+
+      let start, index;
+
+      // moving the starting node to the front
+      if (type === "state") {
+        start = __VM.river.rivers[river].startingState;
+        index = nodes.map((s) => s.properties.fid).indexOf(start);
+      } else if (type === "county") {
+        start = __VM.river.rivers[river].startingCounty;
+        index = nodes.map((s) => Number(s.properties.id)).indexOf(start);
+      }
+
+      const startingNode = nodes[index];
+      nodes.splice(index, 1);
+      nodes.unshift(startingNode);
+
+      let nodes_coordinates = JSON.parse(
+        JSON.stringify(nodes.map((s) => d3.geoPath().centroid(s)))
+      );
+
+      // nodes_coordinates = nodes_coordinates.sort(([a, b], [c, d]) => {
+      //   if (river === "missouri") {
+      //     return a - c;
+      //   } else {
+      //     return b - d;
+      //   }
+      // });
+
+      let res = [nodes_coordinates[0]];
+      // if (type === "state") {
+      //   __VM.svg
+      //     .append("circle")
+      //     .attr("cx", nodes_coordinates[0][0])
+      //     .attr("cy", nodes_coordinates[0][1])
+      //     .attr("r", 5)
+      //     .attr("fill", "red");
+      // }
+
+      let compareNodes = JSON.parse(JSON.stringify(nodes_coordinates));
+
+      // loop through each node in the list
+      for (let i = 0; i < nodes_coordinates.length; i++) {
+        // set the currentNode
+        let currentNode = res[res.length - 1];
+
+        if (compareNodes.length > 1) {
+          let closest;
+          let distance = 999999;
+
+          for (let j = 0; j < compareNodes.length; j++) {
+            let compareNode = compareNodes[j];
+
+            // if the node is already in the result array, do not calculate
+            if (
+              JSON.stringify(currentNode) !== JSON.stringify(compareNode) &&
+              res.filter(
+                (r) => r[0] === compareNode[0] && r[1] === compareNode[1]
+              ).length === 0
+            ) {
+              // calculate distance
+              const d = Math.sqrt(
+                Math.abs(currentNode[0] - compareNode[0]) *
+                  Math.abs(currentNode[0] - compareNode[0]) +
+                  Math.abs(currentNode[1] - compareNode[1]) *
+                    Math.abs(currentNode[1] - compareNode[1])
+              );
+              if (d < distance) {
+                distance = d;
+                closest = compareNode;
+              }
+            }
+          }
+          res.push(closest);
+
+          if (river !== "rio_grande" && type === "state") {
+            const sign = __VM.svg.append("g");
+
+            sign
+              .append("circle")
+              .attr("cx", closest[0])
+              .attr("cy", closest[1])
+              .attr("r", 10)
+              .attr("fill", river === "missouri" ? "red" : "green");
+
+            sign
+              .append("text")
+              .attr("dx", closest[0] - 5)
+              .attr("dy", closest[1] + 7)
+              .attr("fill", "white")
+              .text(res.length);
+          }
+
+          // remove the closest node from compareNodes
+          const index = compareNodes.findIndex(
+            (r) => r[0] === closest[0] && r[1] === closest[1]
+          );
+          compareNodes.splice(index, 1);
+
+          distance = 999999;
+          closest = null;
+        }
+      }
+
+      // if (river === "rio_grande" && type === "state") {
+      //   __VM.svg
+      //     .append("path")
+      //     .attr("d", d3.line()(res))
+      //     .attr("stroke", "red")
+      //     .attr("stroke-width", "5px")
+      //     .attr("fill", "none");
+      // }
+      return res;
+    },
     redrawEdge() {
       const __VM = this;
 
@@ -613,18 +707,10 @@ export default {
         const circles = d3.selectAll(`circle.${river}-circle-layer`)._groups[0];
         let links = [];
 
-        let sort = Array.from(circles)
-          .map((c) => {
-            const circle = d3.select(c);
-            return [circle.attr("cx"), circle.attr("cy")];
-          })
-          .sort(([a, b], [c, d]) => {
-            if (river === "missouri") {
-              return a - c;
-            } else {
-              return b - d;
-            }
-          });
+        let sort = Array.from(circles).map((c) => {
+          const circle = d3.select(c);
+          return [circle.attr("cx"), circle.attr("cy")];
+        });
 
         for (let index = 0; index < sort.length - 1; index++) {
           links.push(
@@ -648,6 +734,8 @@ export default {
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
+
+      console.log(type, name);
 
       __VM[type].visibility = !__VM[type].visibility;
       let layer = `.${type}-layer`;
@@ -749,6 +837,8 @@ export default {
     simplifyRiver(type) {
       const __VM = this;
 
+      console.log(type);
+
       __VM.river.simplified = type;
 
       // hide all rivers first
@@ -803,25 +893,9 @@ export default {
           }
         }
 
-        spacedPoints = spacedPoints.sort(([a, b], [c, d]) => {
-          if (river === "missouri") {
-            return a - c;
-          } else {
-            return b - d;
-          }
-        });
+        // spacedPoints = __VM.sortRiverNodes(spacedPoints);
 
-        const svg = __VM.svg;
-
-        svg
-          .append("path")
-          .attr("class", "river-spacing")
-          .attr("d", d3.line()(spacedPoints))
-          .attr("stroke", "red")
-          .attr("stroke-width", "4px")
-          .attr("fill", "none");
-
-        svg
+        __VM.svg
           .append("g")
           .attr("class", "river-spacing")
           .selectAll("circle")
@@ -832,6 +906,14 @@ export default {
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
           .attr("r", 4);
+
+        __VM.svg
+          .append("path")
+          .attr("class", "river-spacing")
+          .attr("d", d3.line()(spacedPoints))
+          .attr("stroke", "red")
+          .attr("stroke-width", "4px")
+          .attr("fill", "none");
       });
     },
   },
@@ -855,16 +937,22 @@ export default {
             visibility: true,
             color: "missouri",
             name: "Missouri",
+            startingCounty: 8197,
+            startingState: 4,
           },
           mississippi: {
             visibility: true,
             color: "mississippi",
             name: "Mississippi",
+            startingCounty: 6405,
+            startingState: 72,
           },
           rio_grande: {
             visibility: true,
             color: "rio_grande",
             name: "Rio Grande",
+            startingCounty: 5362,
+            startingState: 10,
           },
         },
       },
