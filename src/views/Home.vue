@@ -40,7 +40,7 @@
                   </b-button-group>
 
                   <span class="btn btn-dark">
-                    <label for="river-space"> Set river spacing </label>
+                    <label for="river-space"> Set river resolution </label>
                     <b-form-input
                       id="river-space"
                       v-model="river.spacing"
@@ -100,7 +100,7 @@
                     v-on:click="toggleFeatureVisibility('river')"
                     >River</b-button
                   >
-                  <b-button-group size="sm">
+                  <b-button-group size="md">
                     <b-button
                       v-for="river in getRivers"
                       :key="river.name"
@@ -654,6 +654,11 @@ export default {
       const __VM = this;
 
       d3.selectAll(".river-spacing").remove();
+
+      // hide rivers
+      __VM.river.visibility = false;
+      Object.values(__VM.river.rivers).forEach((r) => (r.visibility = false));
+      d3.selectAll(`.original-river-layer`).style("visibility", "hidden");
 
       Object.keys(__VM.river.rivers).forEach((river) => {
         const points = topojson.mesh(
