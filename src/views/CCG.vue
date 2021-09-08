@@ -21,7 +21,7 @@ import * as topojson from "topojson-client";
 import * as cola from "webcola";
 
 export default {
-  name: "Home",
+  name: "CCG",
   methods: {
     async init() {
       const __VM = this;

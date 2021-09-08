@@ -200,10 +200,10 @@ export default {
       };
 
       const getVacRate = (d) => {
-        const county = __VM.indicators.find(
-          (f) => f.FIPS === d.properties.FIPS
+        return (
+          this.indicators.find((f) => f.FIPS === d.properties.FIPS)
+            .Series_Complete_Pop_Pct || 0
         );
-        return county ? county.Series_Complete_Pop_Pct : 0;
       };
 
       d3.selectAll("#map > svg").remove();
@@ -401,16 +401,6 @@ export default {
             })
           );
         }
-
-        // svg
-        //   .append("g")
-        //   .attr("class", "river-edge")
-        //   .selectAll("path")
-        //   .data(links)
-        //   .enter()
-        //   .append("path")
-        //   .attr("d", (d) => d)
-        //   .attr("stroke", "black");
       });
 
       __VM.rect.list = rects._groups[0];
