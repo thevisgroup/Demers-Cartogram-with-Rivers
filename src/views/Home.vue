@@ -224,12 +224,14 @@ export default {
             [0, 0],
             [800, 400],
           ])
-          .scaleExtent([1, 6])
+          .scaleExtent([1, 15])
           .on("zoom", zoomed)
       );
 
-      function zoomed({ transform }) {
-        svg.attr("transform", transform);
+      function zoomed(event) {
+        const { transform } = event;
+        d3.select("#map > svg").attr("transform", transform);
+        d3.select("#map > svg").attr("stroke-width", 1 / transform.k);
       }
 
       // tooltip
@@ -302,8 +304,11 @@ export default {
         .attr("colormap", (d) => colormap(getVacRate(d) / 100))
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
-        .attr("width", (d) => calculateRectSize(d))
-        .attr("height", (d) => calculateRectSize(d))
+        // .attr("width", (d) => calculateRectSize(d))
+        // .attr("height", (d) => calculateRectSize(d))
+
+        .attr("width", __VM.rect.size)
+        .attr("height", __VM.rect.size)
         .attr("stroke", "black")
         .attr("fill", (d) => {
           let state;
@@ -419,89 +424,34 @@ export default {
       const prepareColaRect = (r, i) => {
         r = d3.select(r);
 
-        let isCircle = r.attr("cx") !== null;
+        let x = Number(r.attr("x")),
+          y = Number(r.attr("y")),
+          w = Number(__VM.rect.size),
+          h = Number(__VM.rect.size);
 
-        let x = Number(isCircle ? r.attr("cx") : r.attr("x")),
-          y = Number(isCircle ? r.attr("cy") : r.attr("y")),
-          w = Number(
-            isCircle
-              ? r.attr("r")
-              : __VM.rectSizeUniformed
-              ? 10
-              : r.attr("width")
-          ),
-          h = Number(
-            isCircle
-              ? r.attr("r")
-              : __VM.rectSizeUniformed
-              ? 10
-              : r.attr("height")
-          );
-
-        if (isCircle) {
-          data[i] = new cola.Rectangle(x - w, x + w, y - h, y + h);
-        } else {
-          data[i] = new cola.Rectangle(x, x + w, y, y + h);
-        }
+        data[i] = new cola.Rectangle(x, x + w, y, y + h);
       };
 
-      if (type === "all") {
-        __VM["rect"].list.forEach((r, i) => {
-          prepareColaRect(r, i);
-        });
-
-        __VM["circle"].list.forEach((r, i) => {
-          prepareColaRect(r, i);
-        });
-      } else {
-        __VM[type].list.forEach((r, i) => {
-          prepareColaRect(r, i);
-        });
-      }
+      __VM.rect.list.forEach((r, i) => {
+        prepareColaRect(r, i);
+      });
 
       // remove overlaps
       cola.removeOverlaps(data);
 
-      const timer = 50000;
+      const timer = 5000;
       // redraw rects using new coordinates
       const redrawD3Rect = (r, i) => {
         const t = data[i];
-        if (d3.select(r).attr("cx") !== null) {
-          d3.select(r)
-            .transition()
-            .duration(timer)
-            .attr("cx", t.x)
-            .attr("cy", t.y);
-        } else {
-          d3.select(r)
-            .transition()
-            .duration(timer)
-            .attr("x", t.x)
-            .attr("y", t.y);
-        }
+
+        d3.select(r).transition().duration(timer).attr("x", t.x).attr("y", t.y);
       };
 
-      if (type === "all") {
-        __VM["rect"].list.forEach((r, i) => redrawD3Rect(r, i));
-        __VM["circle"].list.forEach((r, i) => redrawD3Rect(r, i));
-      } else {
-        __VM[type].list.forEach((r, i) => redrawD3Rect(r, i));
-      }
+      d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
 
-      setTimeout(() => {
-        __VM.redrawEdge();
-      }, timer);
+      __VM.rect.list.forEach((r, i) => redrawD3Rect(r, i));
 
-      if (type === "all") {
-        d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
-        __VM.rectOverlapsRemoved = true;
-        __VM.circleOverlapsRemoved = true;
-      } else if (type === "circle") {
-        __VM.circleOverlapsRemoved = true;
-      } else {
-        d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
-        __VM.rectOverlapsRemoved = true;
-      }
+      __VM.rectOverlapsRemoved = true;
     },
     redrawEdge() {
       const __VM = this;
@@ -698,7 +648,7 @@ export default {
       rectMapToColor: false,
       circleOverlapsRemoved: false,
       showBordering: { county: false, state: false },
-      rect: { list: [], visibility: false, color: "success", size: 10 },
+      rect: { list: [], visibility: false, color: "success", size: 6 },
       circle: { list: [], visibility: false, color: "success", size: 5 },
       river: {
         visibility: true,
