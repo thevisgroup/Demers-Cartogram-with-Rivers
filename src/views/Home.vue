@@ -64,14 +64,14 @@
                       overlaps</b-button
                     >
 
-                    <b-button
+                    <!-- <b-button
                       :variant="circleOverlapsRemoved ? 'danger' : 'primary'"
                       v-on:click="
                         circleOverlapsRemoved ? init() : removeOverlap('circle')
                       "
                       >{{ circleOverlapsRemoved ? "Reset" : "Remove" }} circle
                       overlaps</b-button
-                    >
+                    > -->
 
                     <b-button
                       :variant="rectSizeUniformed ? 'danger' : 'primary'"
@@ -194,6 +194,7 @@ export default {
       const __VM = this;
 
       __VM.circle.list = [];
+      __VM.rect.list = [];
 
       const calculateRectSize = (d) => {
         return getVacRate(d) * 0.2;
@@ -311,23 +312,31 @@ export default {
         .attr("height", __VM.rect.size)
         .attr("stroke", "black")
         .attr("fill", (d) => {
-          let state;
+          // let state;
 
-          let temp = d.properties.NAME.split(",");
+          // let temp = d.properties.NAME.split(",");
 
-          if (temp.length > 1) {
-            state = temp[1].trim();
-          } else {
-            state = temp[0].trim();
-          }
+          // if (temp.length > 1) {
+          //   state = temp[1].trim();
+          // } else {
+          //   state = temp[0].trim();
+          // }
 
-          if (state.includes("Oregon")) {
-            return "rgb(2, 117, 216)";
-          } else if (state.includes("Washington")) {
-            return "rgb(217, 83, 79)";
-          } else {
-            return __VM.colorVariant[__VM.rect.color];
-          }
+          // if (state.includes("Oregon")) {
+          //   return "rgb(2, 117, 216)";
+          // } else if (state.includes("Washington")) {
+          //   return "rgb(217, 83, 79)";
+          // } else if (state.includes("Illinois")) {
+          //   return "rgb(17, 83, 79)";
+          // } else if (state.includes("Pennsylvania")) {
+          //   return "rgb(117, 83, 79)";
+          // } else if (state.includes("Massa")) {
+          //   return "rgb(117, 83, 179)";
+          // } else {
+          //   return __VM.colorVariant[__VM.rect.color];
+          // }
+
+          return __VM.colorVariant[__VM.rect.color];
         })
         .on("mouseover", function (e, d) {
           d3.select(this).attr("fill", "red");
@@ -391,6 +400,23 @@ export default {
           .attr("r", __VM.circle.size)
           .attr("fill", __VM.colorVariant[river]);
 
+        const river_rects = svg
+          .append("g")
+          .attr("class", "rect-layer")
+          .attr("stroke", "none")
+          .selectAll("rect")
+          .data(bordering_county_list)
+          .enter()
+          .append("rect")
+          .attr("class", `${river}-rect-layer`)
+          .attr("x", (d) => d[0] - __VM.rect.size / 2)
+          .attr("y", (d) => d[1] - __VM.rect.size / 2)
+          .attr("width", __VM.rect.size)
+          .attr("height", __VM.rect.size)
+          .attr("fill", __VM.colorVariant[river]);
+
+        __VM.rect.list.push(...river_rects._groups[0]);
+
         let links = [];
 
         __VM.circle.list.push(...riverCircles._groups[0]);
@@ -408,7 +434,7 @@ export default {
         }
       });
 
-      __VM.rect.list = rects._groups[0];
+      __VM.rect.list.push(...rects._groups[0]);
       __VM.rectSizeUniformed = false;
       __VM.rectOverlapsRemoved = false;
 
@@ -439,7 +465,7 @@ export default {
       // remove overlaps
       cola.removeOverlaps(data);
 
-      const timer = 5000;
+      const timer = 10000;
       // redraw rects using new coordinates
       const redrawD3Rect = (r, i) => {
         const t = data[i];
