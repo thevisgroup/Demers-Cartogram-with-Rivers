@@ -281,10 +281,10 @@ export default {
         .attr("d", path)
         .attr("fill", "none")
         .attr("fill_pip", (d) => getBorderingColor(d))
-        .attr("county_id", (d) => d.properties.id);
-      // .on("mouseover", function (e, d) {
-      //   console.log(d.properties.id);
-      // });
+        .attr("county_id", (d) => d.properties.id)
+        .on("click", function (e, d) {
+          console.log(d.properties.id);
+        });
 
       // state layer
 
@@ -382,7 +382,8 @@ export default {
           .attr("stroke-width", "5px")
           .attr("fill", "none")
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          .attr("d", path);
+          .attr("d", path)
+          .attr("visibility", "hidden");
       });
 
       // River bordering county layer
@@ -394,16 +395,24 @@ export default {
         .selectAll("circle");
 
       Object.keys(__VM.river.rivers).forEach((river) => {
-        const bordering_county_list = __VM.county_list
+        const countyListOrdered = __VM.river.rivers[river].countyList;
+
+        const countyCentroidOrdered = __VM.county_list
           .filter(
             (c) =>
               c.properties.river.length > 0 &&
               c.properties.river.includes(river)
           )
+          .sort((a, b) => {
+            return countyListOrdered.indexOf(a.properties.id) >
+              countyListOrdered.indexOf(b.properties.id)
+              ? 1
+              : -1;
+          })
           .map((s) => path.centroid(s));
 
         const riverCircles = circles
-          .data(bordering_county_list)
+          .data(countyCentroidOrdered)
           .enter()
           .append("circle")
           .attr("class", `${river}-circle-layer`)
@@ -417,7 +426,7 @@ export default {
           .attr("class", "rect-layer")
           .attr("stroke", "none")
           .selectAll("rect")
-          .data(bordering_county_list)
+          .data(countyCentroidOrdered)
           .enter()
           .append("rect")
           .attr("class", `${river}-rect-layer`)
@@ -426,24 +435,29 @@ export default {
           .attr("width", __VM.rect.size)
           .attr("height", __VM.rect.size)
           .attr("fill", __VM.colorVariant[river]);
-
-        __VM.rect.list.push(...river_rects._groups[0]);
-
         let links = [];
-
-        __VM.circle.list.push(...riverCircles._groups[0]);
-
-        for (let index = 0; index < bordering_county_list.length - 1; index++) {
-          const start = bordering_county_list[index];
-          const end = bordering_county_list[index + 1];
-
+        for (let index = 0; index < countyCentroidOrdered.length - 1; index++) {
           links.push(
             d3.linkHorizontal()({
-              source: start,
-              target: end,
+              source: countyCentroidOrdered[index],
+              target: countyCentroidOrdered[index + 1],
             })
           );
         }
+
+        __VM.svg
+          .append("g")
+          .attr("class", "river-edge")
+          .selectAll("path")
+          .data(links)
+          .enter()
+          .append("path")
+          .attr("d", (d) => d)
+          .attr("stroke", "black");
+
+        // __VM.rect.list.push(...river_rects._groups[0]);
+
+        __VM.circle.list.push(...riverCircles._groups[0]);
       });
 
       __VM.rect.list.push(...rects._groups[0]);
@@ -681,6 +695,7 @@ export default {
   },
   data() {
     return {
+      countyList: [],
       rectOverlapsRemoved: false,
       rectSizeUniformed: false,
       rectMapToColor: false,
@@ -689,31 +704,233 @@ export default {
       rect: { list: [], visibility: false, color: "success", size: 6 },
       circle: { list: [], visibility: false, color: "success", size: 5 },
       river: {
-        visibility: true,
+        visibility: false,
         width: 5,
         spacing: 5,
         color: "info",
         rivers: {
           missouri: {
-            visibility: true,
+            visibility: false,
             color: "missouri",
             name: "Missouri",
             startingCounty: 8197,
             startingState: 4,
+            countyList: [
+              "8197",
+              "8202",
+              "5635",
+              "6661",
+              "6689",
+              "6682",
+              "6685",
+              "6667",
+              "6668",
+              "6674",
+              "6695",
+              "6696",
+              "6677",
+              "6713",
+              "6688",
+              "6703",
+              "6702",
+              "7105",
+              "7079",
+              "7083",
+              "7065",
+              "7081",
+              "7085",
+              "7082",
+              "7095",
+              "7439",
+              "7444",
+              "7483",
+              "7482",
+              "7456",
+              "7466",
+              "7431",
+              "7450",
+              "7435",
+              "6724",
+              "7428",
+              "7489",
+              "6770",
+              "6730",
+              "6742",
+              "6738",
+              "6803",
+              "6727",
+              "5894",
+              "6805",
+              "6744",
+              "5929",
+              "6793",
+              "6729",
+              "5916",
+              "5887",
+              "6782",
+              "6780",
+              "6548",
+              "6790",
+              "6589",
+              "6547",
+              "5972",
+              "6556",
+              "5953",
+              "6002",
+              "6628",
+              "6055",
+              "6569",
+              "6593",
+              "6599",
+              "6562",
+              "6642",
+              "6572",
+              "6590",
+              "6555",
+              "6571",
+              "6621",
+              "6582",
+              "6654",
+              "6581",
+              "6637",
+              "6641",
+              "5717",
+            ],
           },
           mississippi: {
-            visibility: true,
+            visibility: false,
             color: "mississippi",
             name: "Mississippi",
             startingCounty: 6405,
             startingState: 72,
+            countyList: [
+              "6380",
+              "6407",
+              "6405",
+              "6387",
+              "6377",
+              "6394",
+              "6425",
+              "6381",
+              "6447",
+              "6462",
+              "6378",
+              "6403",
+              "6395",
+              "8158",
+              "6401",
+              "6455",
+              "8157",
+              "8116",
+              "8172",
+              "8142",
+              "8173",
+              "8122",
+              "8132",
+              "5700",
+              "5900",
+              "5665",
+              "5874",
+              "5755",
+              "5933",
+              "5738",
+              "5723",
+              "5693",
+              "5691",
+              "5658",
+              "5732",
+              "6627",
+              "5664",
+              "6602",
+              "6637",
+              "6641",
+              "5717",
+              "5724",
+              "5736",
+              "5696",
+              "5748",
+              "5659",
+              "5734",
+              "6059",
+              "6612",
+              "6108",
+              "6093",
+              "6617",
+              "6623",
+              "7538",
+              "7556",
+              "7513",
+              "7539",
+              "5219",
+              "7574",
+              "7569",
+              "6480",
+              "6535",
+              "5211",
+              "5226",
+              "6477",
+              "6469",
+              "5193",
+              "5181",
+              "6539",
+              "6491",
+              "6193",
+              "6208",
+              "6538",
+              "6474",
+              "6229",
+              "6190",
+              "6190",
+              "6464",
+              "6238",
+              "6214",
+              "6236",
+              "6199",
+              "6178",
+              "6222",
+              "6223",
+              "6220",
+              "6201",
+              "6211",
+              "6213",
+            ],
           },
           rio_grande: {
-            visibility: true,
+            visibility: false,
             color: "rio_grande",
             name: "Rio Grande",
             startingCounty: 5362,
             startingState: 10,
+            countyList: [
+              "5503",
+              "5362",
+              "5333",
+              "5346",
+              "5359",
+              "5307",
+              "5317",
+              "6887",
+              "6879",
+              "6873",
+              "6881",
+              "6858",
+              "6890",
+              "6886",
+              "6885",
+              "6865",
+              "7656",
+              "7700",
+              "7774",
+              "7607",
+              "7807",
+              "7818",
+              "7747",
+              "7825",
+              "7838",
+              "7799",
+              "7693",
+              "7616",
+            ],
           },
         },
       },
