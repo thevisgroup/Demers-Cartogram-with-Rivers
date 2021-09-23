@@ -2,7 +2,22 @@
   <b-container fluid>
     <b-row>
       <b-col cols="8">
-        <div id="map"></div>
+        <div>
+          <svg
+            id="base-layer"
+            viewBox="0,0,800,400"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          >
+            <rect
+              width="100%"
+              height="100%"
+              fill="none"
+              pointer-events="all"
+            ></rect>
+            <g id="map"></g>
+          </svg>
+        </div>
       </b-col>
       <b-col cols="4">
         <div class="table-responsive option_table">
@@ -207,32 +222,29 @@ export default {
         );
       };
 
-      d3.selectAll("#map > svg").remove();
+      d3.selectAll("#map").remove();
 
-      __VM.svg = d3
-        .select("#map")
-        .append("svg")
-        .attr("id", "base-layer")
-        .attr("viewBox", [0, 0, 800, 400])
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round");
+      __VM.svg = d3.select("#base-layer").append("g").attr("id", "map");
 
-      let svg = __VM.svg;
-      svg.call(
+      d3.select("#base-layer").call(
         d3
           .zoom()
           .extent([
             [0, 0],
-            [800, 400],
+            [1000, 800],
           ])
           .scaleExtent([1, 15])
           .on("zoom", zoomed)
       );
 
+      let svg = __VM.svg;
+
       function zoomed(event) {
         const { transform } = event;
-        d3.select("#map > svg").attr("transform", transform);
-        d3.select("#map > svg").attr("stroke-width", 1 / transform.k);
+        console.log(transform);
+
+        d3.select("#map").attr("transform", transform);
+        d3.select("#map").attr("stroke-width", 1 / transform.k);
       }
 
       // tooltip
