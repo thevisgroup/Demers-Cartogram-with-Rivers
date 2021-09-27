@@ -43,18 +43,6 @@
                       >Rectangle</b-button
                     >
                   </b-button-group>
-
-                  <span class="btn btn-dark">
-                    <label for="river-space"> Set river resolution </label>
-                    <b-form-input
-                      id="river-space"
-                      v-model="river.spacing"
-                      type="range"
-                      min="1"
-                      max="100"
-                      @change="setRiverSpacing()"
-                    ></b-form-input>
-                  </span>
                 </td>
                 <td>
                   <b-button-group vertical>
@@ -96,6 +84,7 @@
                     v-on:click="toggleFeatureVisibility('river')"
                     >River</b-button
                   >
+
                   <b-button-group size="md">
                     <b-button
                       v-for="river in getRivers"
@@ -118,6 +107,18 @@
                       min="1"
                       max="10"
                       @change="setRiverWidth()"
+                    ></b-form-input>
+                  </span>
+
+                  <span class="btn btn-info">
+                    <label for="river-space"> Set river resolution </label>
+                    <b-form-input
+                      id="river-space"
+                      v-model="river.spacing"
+                      type="range"
+                      min="1"
+                      max="100"
+                      @change="setRiverResolution()"
                     ></b-form-input>
                   </span>
                 </td>
@@ -348,96 +349,9 @@ export default {
         });
 
       // original river layer
-      Object.keys(__VM.river.rivers).forEach((river) => {
-        const data = topojson.mesh(
-          __VM.shapefile,
-          __VM.shapefile.objects[river]
-        );
-
-        svg
-          .append("path")
-          .attr("class", `original-river-layer ${river} river-layer `)
-          .datum(data)
-          .attr("stroke-width", "5px")
-          .attr("fill", "none")
-          .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          .attr("d", path)
-          .attr("visibility", "hidden");
-      });
-
-      // River bordering county layer
-      const circles = svg
-        .append("g")
-        .attr("class", "circle-layer")
-        .attr("stroke", "none")
-        .style("visibility", "hidden")
-        .selectAll("circle");
-
-      Object.keys(__VM.river.rivers).forEach((river) => {
-        const countyListOrdered = __VM.river.rivers[river].countyList;
-
-        const countyCentroidOrdered = __VM.county_list
-          .filter(
-            (c) =>
-              c.properties.river.length > 0 &&
-              c.properties.river.includes(river)
-          )
-          .sort((a, b) => {
-            return countyListOrdered.indexOf(a.properties.id) >
-              countyListOrdered.indexOf(b.properties.id)
-              ? 1
-              : -1;
-          })
-          .map((s) => path.centroid(s));
-
-        __VM.river.rivers[river].links = [];
-        for (let index = 0; index < countyCentroidOrdered.length - 1; index++) {
-          __VM.river.rivers[river].links.push(
-            d3.linkHorizontal()({
-              source: countyCentroidOrdered[index],
-              target: countyCentroidOrdered[index + 1],
-            })
-          );
-        }
-
-        const river_rects = svg
-          .append("g")
-          .attr("stroke", "none")
-          .selectAll("rect")
-          .data(countyCentroidOrdered)
-          .enter()
-          .append("rect")
-          .attr("class", `${river}-rect-layer`)
-          .attr("x", (d) => d[0] - __VM.rect.size / 2)
-          .attr("y", (d) => d[1] - __VM.rect.size / 2)
-          .attr("width", __VM.rect.size)
-          .attr("height", __VM.rect.size)
-          .attr("fill", __VM.colorVariant[river]);
-
-        __VM.svg
-          .append("g")
-          .attr("class", "river-edge")
-          .selectAll("path")
-          .data(__VM.river.rivers[river].links)
-          .enter()
-          .append("path")
-          .attr("d", (d) => d)
-          .attr("stroke", "black")
-          .attr("stroke-width", "2");
-
-        // comment out so they stay static
-        // __VM.rect.list.push(...river_rects._groups[0]);
-      });
+      __VM.setRiverResolution();
 
       __VM.rect.list.push(...rects._groups[0]);
-      __VM.rectSizeUniformed = false;
-      __VM.rectOverlapsRemoved = false;
-
-      // const allRiverPath = d3.selectAll(".river-edge path")._groups[0];
-
-      // allRiverPath.forEach((path) => {
-      //   console.log(path);
-      // });
     },
     removeOverlap() {
       const __VM = this;
@@ -469,11 +383,10 @@ export default {
       // remove overlaps
       cola.removeOverlaps(data);
 
-      const timer = 10000;
+      const timer = 20000;
       // redraw rects using new coordinates
       const redrawD3Rect = (r, t) => {
         d3.select(r).transition().duration(timer).attr("x", t.x).attr("y", t.y);
-        console.log("rd3");
       };
 
       // d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
@@ -502,7 +415,6 @@ export default {
             );
 
             if (intersectPoints > 0) {
-              console.log("1");
               d3.select(".rect-edge")
                 .append("path")
                 .attr("d", line)
@@ -528,7 +440,7 @@ export default {
       if (type === "river") {
         // toggle the specific river
         if (name) {
-          layer = `.original-${type}-layer.${name}`;
+          layer = `.${type}-layer.${name}`;
 
           __VM[type].rivers[name].visibility = !__VM[type].rivers[name]
             .visibility;
@@ -540,7 +452,7 @@ export default {
         }
         // toggle all rivers
         else {
-          layer = `.original-${type}-layer`;
+          layer = ".river-layer";
 
           Object.values(__VM[type].rivers).forEach(
             (r) => (r.visibility = __VM[type].visibility)
@@ -623,15 +535,10 @@ export default {
         `${__VM.river.width}px`
       );
     },
-    setRiverSpacing() {
+    setRiverResolution() {
       const __VM = this;
 
-      d3.selectAll(".river-spacing").remove();
-
-      // hide rivers
-      __VM.river.visibility = false;
-      Object.values(__VM.river.rivers).forEach((r) => (r.visibility = false));
-      d3.selectAll(`.original-river-layer`).style("visibility", "hidden");
+      d3.selectAll(".river-layer").remove();
 
       Object.keys(__VM.river.rivers).forEach((river) => {
         const points = topojson.mesh(
@@ -640,33 +547,34 @@ export default {
         ).coordinates[0];
 
         let spacing = Number(__VM.river.spacing);
-        let spacedPoints = [];
+        __VM.river.resolution = [];
 
         for (let i = 0; i < points.length; i += spacing) {
           if (points[i]) {
-            spacedPoints.push(points[i]);
+            __VM.river.resolution.push(points[i]);
           }
 
           if (i + spacing >= points.length - 1) {
-            spacedPoints.push(points[points.length - 1]);
+            __VM.river.resolution.push(points[points.length - 1]);
           }
         }
+
         __VM.svg
           .append("path")
-          .attr("class", "river-spacing")
-          .attr("d", d3.line()(spacedPoints))
-          .attr("stroke", "red")
+          .attr("class", `${river} river-layer`)
+          .attr("d", d3.line()(__VM.river.resolution))
+          .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           .attr("stroke-width", "4px")
           .attr("fill", "none");
 
         __VM.svg
           .append("g")
-          .attr("class", "river-spacing")
+          .attr("class", `${river} river-layer`)
           .selectAll("circle")
-          .data(spacedPoints)
+          .data(__VM.river.resolution)
           .enter()
           .append("circle")
-          .attr("fill", __VM.colorVariant[__VM.river.rivers[river].color])
+          .attr("fill", "red")
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
           .attr("r", 4);
@@ -679,235 +587,27 @@ export default {
       rectSizeUniformed: false,
       rectMapToColor: false,
       showBordering: { county: false, state: false },
-      rect: { list: [], visibility: false, color: "success", size: 6 },
+      rect: { list: [], visibility: false, color: "success", size: 4 },
       river: {
-        visibility: false,
+        visibility: true,
         width: 5,
-        spacing: 5,
+        spacing: 10,
         color: "info",
         rivers: {
           missouri: {
-            visibility: false,
+            visibility: true,
             color: "missouri",
             name: "Missouri",
-            startingCounty: 8197,
-            startingState: 4,
-            countyList: [
-              "8197",
-              "8202",
-              "5635",
-              "6661",
-              "6689",
-              "6682",
-              "6685",
-              "6667",
-              "6668",
-              "6674",
-              "6695",
-              "6696",
-              "6677",
-              "6713",
-              "6688",
-              "6703",
-              "6702",
-              "7105",
-              "7079",
-              "7083",
-              "7065",
-              "7081",
-              "7085",
-              "7082",
-              "7095",
-              "7439",
-              "7444",
-              "7483",
-              "7482",
-              "7456",
-              "7466",
-              "7431",
-              "7450",
-              "7435",
-              "6724",
-              "7428",
-              "7489",
-              "6770",
-              "6730",
-              "6742",
-              "6738",
-              "6803",
-              "6727",
-              "5894",
-              "6805",
-              "6744",
-              "5929",
-              "6793",
-              "6729",
-              "5916",
-              "5887",
-              "6782",
-              "6780",
-              "6548",
-              "6790",
-              "6589",
-              "6547",
-              "5972",
-              "6556",
-              "5953",
-              "6002",
-              "6628",
-              "6055",
-              "6569",
-              "6593",
-              "6599",
-              "6562",
-              "6642",
-              "6572",
-              "6590",
-              "6555",
-              "6571",
-              "6621",
-              "6582",
-              "6654",
-              "6581",
-              "6637",
-              "6641",
-              "5717",
-            ],
           },
           mississippi: {
-            visibility: false,
+            visibility: true,
             color: "mississippi",
             name: "Mississippi",
-            startingCounty: 6405,
-            startingState: 72,
-            countyList: [
-              "6380",
-              "6407",
-              "6405",
-              "6387",
-              "6377",
-              "6394",
-              "6425",
-              "6381",
-              "6447",
-              "6462",
-              "6378",
-              "6403",
-              "6395",
-              "8158",
-              "6401",
-              "6455",
-              "8157",
-              "8116",
-              "8172",
-              "8142",
-              "8173",
-              "8122",
-              "8132",
-              "5700",
-              "5900",
-              "5665",
-              "5874",
-              "5755",
-              "5933",
-              "5738",
-              "5723",
-              "5693",
-              "5691",
-              "5658",
-              "5732",
-              "6627",
-              "5664",
-              "6602",
-              "6637",
-              "6641",
-              "5717",
-              "5724",
-              "5736",
-              "5696",
-              "5748",
-              "5659",
-              "5734",
-              "6059",
-              "6612",
-              "6108",
-              "6093",
-              "6617",
-              "6623",
-              "7538",
-              "7556",
-              "7513",
-              "7539",
-              "5219",
-              "7574",
-              "7569",
-              "6480",
-              "6535",
-              "5211",
-              "5226",
-              "6477",
-              "6469",
-              "5193",
-              "5181",
-              "6539",
-              "6491",
-              "6193",
-              "6208",
-              "6538",
-              "6474",
-              "6229",
-              "6190",
-              "6190",
-              "6464",
-              "6238",
-              "6214",
-              "6236",
-              "6199",
-              "6178",
-              "6222",
-              "6223",
-              "6220",
-              "6201",
-              "6211",
-              "6213",
-            ],
           },
           rio_grande: {
-            visibility: false,
+            visibility: true,
             color: "rio_grande",
             name: "Rio Grande",
-            startingCounty: 5362,
-            startingState: 10,
-            countyList: [
-              "5503",
-              "5362",
-              "5333",
-              "5346",
-              "5359",
-              "5307",
-              "5317",
-              "6887",
-              "6879",
-              "6873",
-              "6881",
-              "6858",
-              "6890",
-              "6886",
-              "6885",
-              "6865",
-              "7656",
-              "7700",
-              "7774",
-              "7607",
-              "7807",
-              "7818",
-              "7747",
-              "7825",
-              "7838",
-              "7799",
-              "7693",
-              "7616",
-            ],
           },
         },
       },
@@ -952,6 +652,8 @@ export default {
     );
 
     this.init();
+    this.rectSizeUniformed = false;
+    this.rectOverlapsRemoved = false;
   },
 };
 </script>
