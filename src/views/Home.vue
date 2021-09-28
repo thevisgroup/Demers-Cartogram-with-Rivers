@@ -46,20 +46,23 @@
                 </td>
                 <td>
                   <b-button-group vertical>
-                    <b-button
+                    <!-- <b-button
                       :variant="rectOverlapsRemoved ? 'danger' : 'primary'"
                       v-on:click="
-                        rectOverlapsRemoved ? init() : removeOverlap('all')
+                        rectOverlapsRemoved ? init() : removeOverlap()
                       "
                       >{{
                         rectOverlapsRemoved ? "Reset" : "Remove"
                       }}
                       overlaps</b-button
+                    > -->
+                    <b-button variant="primary" v-on:click="removeOverlap()"
+                      >Remove overlaps</b-button
                     >
 
                     <b-button
                       :variant="rectSizeUniformed ? 'danger' : 'primary'"
-                      v-on:click="setRectSize()"
+                      v-on:click="setRectSize(!rectSizeUniformed)"
                       >{{
                         rectSizeUniformed ? "Variable" : "Uniform"
                       }}
@@ -72,6 +75,17 @@
                       >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
                     >
                   </b-button-group>
+                  <span class="btn btn-info">
+                    <label for="river-space"> Set rect size </label>
+                    <b-form-input
+                      id="river-space"
+                      v-model="rect.size"
+                      type="range"
+                      min="1"
+                      max="10"
+                      @change="setRectSize()"
+                    ></b-form-input>
+                  </span>
                 </td>
               </tr>
               <tr>
@@ -221,6 +235,21 @@ export default {
 
       let svg = __VM.svg;
 
+      // generate an arrow
+      svg
+        .append("svg:defs")
+        .append("svg:marker")
+        .attr("id", "arrow")
+        .attr("refX", 1.5)
+        .attr("refY", 1.5)
+        .attr("markerWidth", 3)
+        .attr("markerHeight", 3)
+        .attr("orient", "auto-reverse-start")
+        .append("svg:path")
+        .attr("d", "M0,0 L0,3 L3,1.5")
+        .attr("stroke", "red")
+        .attr("fill", "black");
+
       function zoomed(event) {
         const { transform } = event;
         d3.select("#map").attr("transform", transform);
@@ -353,10 +382,14 @@ export default {
 
       __VM.rect.list.push(...rects._groups[0]);
     },
-    removeOverlap() {
+    async removeOverlap() {
       const __VM = this;
 
-      let data = [];
+      const data = [];
+
+      if (!__VM.rect.visibility) {
+        __VM.toggleFeatureVisibility("rect");
+      }
 
       // prepare an array for webcola
       const prepareColaRect = (r, i) => {
@@ -374,7 +407,13 @@ export default {
 
         data[i] = newRect;
       };
-      // create new layer for rect edges
+
+      // prepration before removing overlaps
+      __VM.rect.size += 1;
+      __VM.setRectSize();
+
+      // preparation before redrawing rects and edges
+      d3.selectAll(".rect-edge > path").remove();
       __VM.svg.append("g").attr("class", "rect-edge");
       __VM.rect.list.forEach((r, i) => {
         prepareColaRect(r, i);
@@ -383,21 +422,23 @@ export default {
       // remove overlaps
       cola.removeOverlaps(data);
 
-      const timer = 20000;
+      const timer = 2000 * __VM.rect.size;
       // redraw rects using new coordinates
-      const redrawD3Rect = (r, t) => {
-        d3.select(r).transition().duration(timer).attr("x", t.x).attr("y", t.y);
-      };
+      for (const [i, rect] of __VM.rect.list.entries()) {
+        d3.select(rect)
+          .transition()
+          .duration(timer)
+          .attr("x", data[i].x)
+          .attr("y", data[i].y);
+      }
 
-      // d3.select("#base-layer").attr("viewBox", [-150, -100, 1200, 700]);
-
-      __VM.rect.list.forEach((r, i) => redrawD3Rect(r, data[i]));
-
-      __VM.rect.list.forEach((r, i) => __VM.connectNewOldRect(data[i]));
+      for (const i in __VM.rect.list) {
+        await __VM.connectNewOldRiverRect(data[i]);
+      }
 
       __VM.rectOverlapsRemoved = true;
     },
-    connectNewOldRect(rect) {
+    async connectNewOldRiverRect(rect) {
       const __VM = this;
 
       if (rect.x !== rect.ox && rect.y !== rect.oy) {
@@ -406,31 +447,43 @@ export default {
           [rect.ox, rect.oy],
         ]);
 
-        const checkIntersect = (line) => {
-          for (const path of d3.selectAll(".river-edge path")._groups[0]) {
-            const intersectPoints = findPathIntersections(
-              d3.select(path).attr("d"),
-              line,
-              true
-            );
+        const checkIntersect = async (line) => {
+          for (const river of Object.keys(__VM.river.rivers)) {
+            const points = __VM.river.rivers[river].resolution;
 
-            if (intersectPoints > 0) {
-              d3.select(".rect-edge")
-                .append("path")
-                .attr("d", line)
-                .attr("stroke", "red")
-                .attr("stroke-width", "1px")
-                .attr("fill", "none");
+            for (let i = 0; i < points.length - 1; i++) {
+              const pointA = points[i];
+              const pointB = points[i + 1];
+              const path = d3.line()([pointA, pointB]);
 
-              return true;
+              const intersectPoints = await __VM.findPathIntersectionsAsync(
+                path,
+                line,
+                true
+              );
+
+              if (intersectPoints > 0) {
+                d3.select(".rect-edge")
+                  .append("path")
+                  .attr("d", line)
+                  .attr("stroke", "black")
+                  .attr("stroke-width", "1px")
+                  .attr("fill", "none")
+                  .attr("marker-start", "url(#arrow)");
+              }
             }
           }
         };
 
-        checkIntersect(line);
+        return await checkIntersect(line);
       }
-
-      return true;
+      return Promise.resolve();
+    },
+    findPathIntersectionsAsync(path, line, justCount) {
+      return new Promise((resolve, reject) => {
+        const intersectPoints = findPathIntersections(path, line, justCount);
+        return resolve(intersectPoints);
+      });
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
@@ -464,27 +517,17 @@ export default {
         __VM[type].visibility ? "visible" : "hidden"
       );
     },
-    async setRectSize() {
+    setRectSize(uniformed = false) {
       const __VM = this;
-      __VM.rectSizeUniformed = !__VM.rectSizeUniformed;
+      __VM.rectSizeUniformed = uniformed;
+      let size = __VM.rect.size;
       if (__VM.rectSizeUniformed) {
-        d3.selectAll(".rect-layer > rect").attr(
-          "style",
-          "width: 10px !important; height: 10px !important;"
-        );
-
-        if (__VM.rectOverlapsRemoved) {
-          __VM.removeOverlap("rect");
-          d3.select("#base-layer").attr("viewBox", [-400, -150, 1800, 700]);
-        }
-      } else {
-        if (__VM.rectOverlapsRemoved) {
-          await __VM.init();
-          __VM.removeOverlap("rect");
-        }
-
-        d3.selectAll(".rect-layer > rect").attr("style", "");
+        size = 10;
       }
+      d3.selectAll(".rect-layer > rect").attr(
+        "style",
+        `width: ${size}px !important; height: ${size}px !important;`
+      );
     },
     setRectColor(singleRect) {
       const __VM = this;
@@ -547,22 +590,25 @@ export default {
         ).coordinates[0];
 
         let spacing = Number(__VM.river.spacing);
-        __VM.river.resolution = [];
+
+        const resolution = [];
 
         for (let i = 0; i < points.length; i += spacing) {
           if (points[i]) {
-            __VM.river.resolution.push(points[i]);
+            resolution.push(points[i]);
           }
 
           if (i + spacing >= points.length - 1) {
-            __VM.river.resolution.push(points[points.length - 1]);
+            resolution.push(points[points.length - 1]);
           }
         }
+
+        __VM.river.rivers[river].resolution = resolution;
 
         __VM.svg
           .append("path")
           .attr("class", `${river} river-layer`)
-          .attr("d", d3.line()(__VM.river.resolution))
+          .attr("d", d3.line()(resolution))
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           .attr("stroke-width", "4px")
           .attr("fill", "none");
@@ -571,7 +617,7 @@ export default {
           .append("g")
           .attr("class", `${river} river-layer`)
           .selectAll("circle")
-          .data(__VM.river.resolution)
+          .data(resolution)
           .enter()
           .append("circle")
           .attr("fill", "red")
@@ -587,7 +633,7 @@ export default {
       rectSizeUniformed: false,
       rectMapToColor: false,
       showBordering: { county: false, state: false },
-      rect: { list: [], visibility: false, color: "success", size: 4 },
+      rect: { list: [], visibility: false, color: "success", size: 1 },
       river: {
         visibility: true,
         width: 5,
