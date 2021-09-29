@@ -76,7 +76,9 @@
                     >
                   </b-button-group>
                   <span class="btn btn-info">
-                    <label for="river-space"> Set rect size </label>
+                    <label for="river-space">
+                      Set rect size: {{ rect.size }}
+                    </label>
                     <b-form-input
                       id="river-space"
                       v-model="rect.size"
@@ -113,7 +115,9 @@
                 </td>
                 <td>
                   <span class="btn btn-dark">
-                    <label for="river-width"> Set river thickness </label>
+                    <label for="river-width">
+                      Set river thickness: {{ river.width }}
+                    </label>
                     <b-form-input
                       id="river-width"
                       v-model="river.width"
@@ -125,7 +129,9 @@
                   </span>
 
                   <span class="btn btn-info">
-                    <label for="river-space"> Set river resolution </label>
+                    <label for="river-space">
+                      Set river resolution: {{ river.spacing }}
+                    </label>
                     <b-form-input
                       id="river-space"
                       v-model="river.spacing"
@@ -413,7 +419,7 @@ export default {
       __VM.setRectSize();
 
       // preparation before redrawing rects and edges
-      d3.selectAll(".rect-edge > path").remove();
+      d3.selectAll(".rect-edge").remove();
       __VM.svg.append("g").attr("class", "rect-edge");
       __VM.rect.list.forEach((r, i) => {
         prepareColaRect(r, i);
@@ -436,6 +442,8 @@ export default {
         await __VM.connectNewOldRiverRect(data[i]);
       }
 
+      __VM.setRiverTranslation();
+
       __VM.rectOverlapsRemoved = true;
     },
     async connectNewOldRiverRect(rect) {
@@ -452,9 +460,9 @@ export default {
             const points = __VM.river.rivers[river].resolution;
 
             for (let i = 0; i < points.length - 1; i++) {
-              const pointA = points[i];
-              const pointB = points[i + 1];
-              const path = d3.line()([pointA, pointB]);
+              const p1 = points[i];
+              const p2 = points[i + 1];
+              const path = d3.line()([p1, p2]);
 
               const intersectPoints = await __VM.findPathIntersectionsAsync(
                 path,
@@ -463,6 +471,8 @@ export default {
               );
 
               if (intersectPoints > 0) {
+                __VM.river.rivers[river].translate.x += p2[0] - p1[0];
+                __VM.river.rivers[river].translate.y += p2[1] - p1[1];
                 d3.select(".rect-edge")
                   .append("path")
                   .attr("d", line)
@@ -605,17 +615,23 @@ export default {
 
         __VM.river.rivers[river].resolution = resolution;
 
-        __VM.svg
+        const river_layer = __VM.svg
+          .append("g")
+          .attr("class", `${river} river-layer`);
+
+        river_layer
           .append("path")
-          .attr("class", `${river} river-layer`)
           .attr("d", d3.line()(resolution))
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           .attr("stroke-width", "4px")
-          .attr("fill", "none");
+          .attr("fill", "none")
+          .attr(
+            "transform",
+            `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
+          );
 
-        __VM.svg
+        river_layer
           .append("g")
-          .attr("class", `${river} river-layer`)
           .selectAll("circle")
           .data(resolution)
           .enter()
@@ -623,8 +639,32 @@ export default {
           .attr("fill", "red")
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
-          .attr("r", 4);
+          .attr("r", 4)
+          .attr(
+            "transform",
+            `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
+          );
       });
+    },
+    setRiverTranslation() {
+      const __VM = this;
+      for (const river of Object.keys(__VM.river.rivers)) {
+        const x = __VM.river.rivers[river].translate.x;
+        const y = __VM.river.rivers[river].translate.y;
+
+        if (x > 0) {
+          __VM.river.rivers[river].translate.finalX += __VM.rect.size;
+        }
+
+        if (y > 0) {
+          __VM.river.rivers[river].translate.finalY += __VM.rect.size;
+        }
+
+        __VM.river.rivers[river].translate.x = 0;
+        __VM.river.rivers[river].translate.y = 0;
+      }
+
+      __VM.setRiverResolution();
     },
   },
   data() {
@@ -644,16 +684,34 @@ export default {
             visibility: true,
             color: "missouri",
             name: "Missouri",
+            translate: {
+              x: 0,
+              y: 0,
+              finalX: 0,
+              finalY: 0,
+            },
           },
           mississippi: {
             visibility: true,
             color: "mississippi",
             name: "Mississippi",
+            translate: {
+              x: 0,
+              y: 0,
+              finalX: 0,
+              finalY: 0,
+            },
           },
           rio_grande: {
             visibility: true,
             color: "rio_grande",
             name: "Rio Grande",
+            translate: {
+              x: 0,
+              y: 0,
+              finalX: 0,
+              finalY: 0,
+            },
           },
         },
       },
