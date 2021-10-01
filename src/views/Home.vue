@@ -211,8 +211,6 @@ export default {
     async init() {
       const __VM = this;
 
-      __VM.rect.list = [];
-
       const calculateRectSize = (d) => {
         return getVacRate(d) * 0.2;
       };
@@ -323,7 +321,7 @@ export default {
       const rects = svg
         .append("g")
         .attr("class", "rect-layer")
-        .style("visibility", "hidden")
+        // .style("visibility", "hidden")
         .attr("stroke", "#000")
         .selectAll("rect")
         .data(__VM.county_list)
@@ -393,7 +391,7 @@ export default {
 
       __VM.setRiverResolution();
 
-      __VM.rect.list.push(...rects._groups[0]);
+      d3.selectAll(".rect-layer > rect")._groups[0] = rects._groups[0];
     },
     async removeOverlap() {
       const __VM = this;
@@ -422,12 +420,13 @@ export default {
       };
 
       // prepration before removing overlaps
-      __VM.rect.size += 1;
+      __VM.rect.size = Number(__VM.rect.size) + 1;
       __VM.setRectSize();
 
       // preparation before redrawing rects and edges
       d3.selectAll(".river-edge > path").remove();
-      __VM.rect.list.forEach((r, i) => {
+
+      d3.selectAll(".rect-layer > rect")._groups[0].forEach((r, i) => {
         prepareColaRect(r, i);
       });
 
@@ -435,16 +434,22 @@ export default {
       cola.removeOverlaps(data);
 
       const timer = 2000 * __VM.rect.size;
+
       // redraw rects using new coordinates
-      for (const [i, rect] of __VM.rect.list.entries()) {
+      for (const [i, rect] of d3
+        .selectAll(".rect-layer > rect")
+        ._groups[0].entries()) {
         d3.select(rect)
           .transition()
           .duration(timer)
           .attr("x", data[i].x)
           .attr("y", data[i].y);
       }
+
       // draw river crossing edges
-      for (const i in __VM.rect.list) {
+      for (const i in Array.from(
+        d3.selectAll(".rect-layer > rect")._groups[0]
+      )) {
         await __VM.connectNewOldRiverRect(data[i]);
       }
 
@@ -492,6 +497,8 @@ export default {
               }
             }
           }
+
+          return Promise.resolve();
         };
 
         return await checkIntersect(line);
@@ -544,8 +551,8 @@ export default {
         size = 10;
       }
       d3.selectAll(".rect-layer > rect")
-        .attr("width", __VM.rect.size)
-        .attr("height", __VM.rect.size);
+        .attr("width", size)
+        .attr("height", size);
     },
     setRectColor(singleRect) {
       const __VM = this;
@@ -592,7 +599,6 @@ export default {
     setRiverWidth() {
       const __VM = this;
 
-      //TODO fix layer class
       d3.selectAll(".river > path").style(
         "stroke-width",
         `${__VM.river.width}px`
@@ -678,7 +684,7 @@ export default {
       rectSizeUniformed: false,
       rectMapToColor: false,
       showBordering: { county: false, state: false },
-      rect: { list: [], visibility: false, color: "success", size: 1 },
+      rect: { visibility: true, color: "success", size: 1 },
       river: {
         visibility: true,
         width: 5,
