@@ -250,7 +250,7 @@ export default {
         .attr("refY", 1.5)
         .attr("markerWidth", 3)
         .attr("markerHeight", 3)
-        .attr("orient", "auto-reverse-start")
+        .attr("orient", "auto-start-reverse")
         .append("svg:path")
         .attr("d", "M0,0 L0,3 L3,1.5")
         .attr("stroke", "red")
@@ -384,6 +384,13 @@ export default {
         });
 
       // original river layer
+      const river_layer = svg.append("g").attr("class", "river-layer");
+      for (const river of Object.keys(__VM.river.rivers)) {
+        const r = river_layer.append("g").attr("class", `${river}`);
+        r.append("g").attr("class", "river");
+        r.append("g").attr("class", "river-edge");
+      }
+
       __VM.setRiverResolution();
 
       __VM.rect.list.push(...rects._groups[0]);
@@ -419,8 +426,7 @@ export default {
       __VM.setRectSize();
 
       // preparation before redrawing rects and edges
-      d3.selectAll(".rect-edge").remove();
-      __VM.svg.append("g").attr("class", "rect-edge");
+      d3.selectAll(".river-edge > path").remove();
       __VM.rect.list.forEach((r, i) => {
         prepareColaRect(r, i);
       });
@@ -437,7 +443,7 @@ export default {
           .attr("x", data[i].x)
           .attr("y", data[i].y);
       }
-
+      // draw river crossing edges
       for (const i in __VM.rect.list) {
         await __VM.connectNewOldRiverRect(data[i]);
       }
@@ -459,6 +465,8 @@ export default {
           for (const river of Object.keys(__VM.river.rivers)) {
             const points = __VM.river.rivers[river].resolution;
 
+            const river_edge_layer = d3.select(`.${river} .river-edge`);
+
             for (let i = 0; i < points.length - 1; i++) {
               const p1 = points[i];
               const p2 = points[i + 1];
@@ -473,7 +481,8 @@ export default {
               if (intersectPoints > 0) {
                 __VM.river.rivers[river].translate.x += p2[0] - p1[0];
                 __VM.river.rivers[river].translate.y += p2[1] - p1[1];
-                d3.select(".rect-edge")
+
+                river_edge_layer
                   .append("path")
                   .attr("d", line)
                   .attr("stroke", "black")
@@ -534,10 +543,9 @@ export default {
       if (__VM.rectSizeUniformed) {
         size = 10;
       }
-      d3.selectAll(".rect-layer > rect").attr(
-        "style",
-        `width: ${size}px !important; height: ${size}px !important;`
-      );
+      d3.selectAll(".rect-layer > rect")
+        .attr("width", __VM.rect.size)
+        .attr("height", __VM.rect.size);
     },
     setRectColor(singleRect) {
       const __VM = this;
@@ -583,6 +591,8 @@ export default {
     },
     setRiverWidth() {
       const __VM = this;
+
+      //TODO fix layer class
       d3.selectAll(".river-layer").style(
         "stroke-width",
         `${__VM.river.width}px`
@@ -590,8 +600,6 @@ export default {
     },
     setRiverResolution() {
       const __VM = this;
-
-      d3.selectAll(".river-layer").remove();
 
       Object.keys(__VM.river.rivers).forEach((river) => {
         const points = topojson.mesh(
@@ -615,23 +623,19 @@ export default {
 
         __VM.river.rivers[river].resolution = resolution;
 
-        const river_layer = __VM.svg
-          .append("g")
-          .attr("class", `${river} river-layer`);
+        d3.selectAll(`.${river} .river *`).remove();
+
+        const river_layer = d3.select(`.${river} .river`);
 
         river_layer
           .append("path")
+          .attr("id", `${river}`)
           .attr("d", d3.line()(resolution))
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           .attr("stroke-width", "4px")
-          .attr("fill", "none")
-          .attr(
-            "transform",
-            `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
-          );
+          .attr("fill", "none");
 
         river_layer
-          .append("g")
           .selectAll("circle")
           .data(resolution)
           .enter()
@@ -639,11 +643,12 @@ export default {
           .attr("fill", "red")
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
-          .attr("r", 4)
-          .attr(
-            "transform",
-            `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
-          );
+          .attr("r", 4);
+
+        d3.select(`.${river}`).attr(
+          "transform",
+          `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
+        );
       });
     },
     setRiverTranslation() {
@@ -724,7 +729,7 @@ export default {
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
         missouri: "rgb(20, 84, 140)",
-        mississippi: "rgb(159, 185, 200)",
+        mississippi: "rgb(240, 173, 78)",
         rio_grande: "	rgb(132, 196, 224)",
       },
     };
@@ -784,8 +789,8 @@ export default {
   border-color: rgb(20, 84, 140) !important;
 }
 .btn-mississippi {
-  background-color: rgb(159, 185, 200) !important;
-  border-color: rgb(159, 185, 200) !important;
+  background-color: rgb(240, 173, 78) !important;
+  border-color: rgb(240, 173, 78) !important;
 }
 .btn-rio_grande {
   background-color: rgb(132, 196, 224) !important;
@@ -797,8 +802,8 @@ export default {
   border-color: rgb(20, 84, 140) !important;
 }
 .btn-outline-mississippi {
-  color: rgb(159, 185, 200) !important;
-  border-color: rgb(159, 185, 200) !important;
+  color: rgb(240, 173, 78) !important;
+  border-color: rgb(240, 173, 78) !important;
 }
 .btn-outline-rio_grande {
   color: rgb(132, 196, 224) !important;
