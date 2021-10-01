@@ -593,7 +593,7 @@ export default {
       const __VM = this;
 
       //TODO fix layer class
-      d3.selectAll(".river-layer").style(
+      d3.selectAll(".river > path").style(
         "stroke-width",
         `${__VM.river.width}px`
       );
