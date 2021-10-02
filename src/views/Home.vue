@@ -56,6 +56,12 @@
                       }}
                       overlaps</b-button
                     > -->
+                    <b-button
+                      v-if="rectOverlapsRemoved"
+                      variant="danger"
+                      v-on:click="init()"
+                      >Reset overlaps</b-button
+                    >
                     <b-button variant="primary" v-on:click="removeOverlap()"
                       >Remove overlaps</b-button
                     >
@@ -364,7 +370,7 @@ export default {
           return __VM.colorVariant[__VM.rect.color];
         })
         .on("mouseover", function (e, d) {
-          d3.select(this).attr("fill", "red");
+          // d3.select(this).attr("fill", "red");
           tooltip
             .style("visibility", "visible")
             .html(
@@ -377,7 +383,7 @@ export default {
             .style("left", e.pageX + 20 + "px");
         })
         .on("mouseout", function () {
-          __VM.setRectColor(this);
+          // __VM.setRectColor(this);
           tooltip.style("visibility", "hidden");
         });
 
@@ -391,7 +397,7 @@ export default {
 
       __VM.setRiverResolution();
 
-      d3.selectAll(".rect-layer > rect")._groups[0] = rects._groups[0];
+      __VM.rectOverlapsRemoved = false;
     },
     async removeOverlap() {
       const __VM = this;
@@ -435,22 +441,21 @@ export default {
 
       const timer = 2000 * __VM.rect.size;
 
-      // redraw rects using new coordinates
+      // draw river crossing edges
       for (const [i, rect] of d3
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
-        d3.select(rect)
-          .transition()
-          .duration(timer)
-          .attr("x", data[i].x)
-          .attr("y", data[i].y);
-      }
-
-      // draw river crossing edges
-      for (const i in Array.from(
-        d3.selectAll(".rect-layer > rect")._groups[0]
-      )) {
-        await __VM.connectNewOldRiverRect(data[i]);
+        // if node didn't cross a river, redraw rects using new coordinates
+        if (!(await __VM.connectNewOldRiverRect(data[i]))) {
+          d3.select(rect)
+            .transition()
+            .duration(timer)
+            .attr("x", data[i].x)
+            .attr("y", data[i].y)
+            .attr("fill", __VM.colorVariant[__VM.rect.color]);
+        } else {
+          d3.select(rect).attr("fill", "black");
+        }
       }
 
       __VM.setRiverTranslation();
@@ -467,6 +472,7 @@ export default {
         ]);
 
         const checkIntersect = async (line) => {
+          let intersected = false;
           for (const river of Object.keys(__VM.river.rivers)) {
             const points = __VM.river.rivers[river].resolution;
 
@@ -484,6 +490,7 @@ export default {
               );
 
               if (intersectPoints > 0) {
+                intersected = true;
                 __VM.river.rivers[river].translate.x += p2[0] - p1[0];
                 __VM.river.rivers[river].translate.y += p2[1] - p1[1];
 
@@ -498,12 +505,12 @@ export default {
             }
           }
 
-          return Promise.resolve();
+          return Promise.resolve(intersected);
         };
 
         return await checkIntersect(line);
       }
-      return Promise.resolve();
+      return Promise.resolve(false);
     },
     findPathIntersectionsAsync(path, line, justCount) {
       return new Promise((resolve, reject) => {
