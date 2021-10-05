@@ -1,0 +1,164 @@
+% ---------------------------------------------------------------------------
+% Author guideline and sample document for EG publication using LaTeX2e input
+% D.Fellner, v1.15, Dec 14, 2018
+
+\documentclass{egpubl}
+\usepackage{eurovis2021}
+
+% --- for  Annual CONFERENCE
+% \ConferenceSubmission   % uncomment for Conference submission
+% \ConferencePaper        % uncomment for (final) Conference Paper
+% \STAR                   % uncomment for STAR contribution
+% \Tutorial               % uncomment for Tutorial contribution
+% \ShortPresentation      % uncomment for (final) Short Conference Presentation
+% \Areas                  % uncomment for Areas contribution
+% \MedicalPrize           % uncomment for Medical Prize contribution
+% \Education              % uncomment for Education contribution
+% \Poster                 % uncomment for Poster contribution
+% \DC                     % uncomment for Doctoral Consortium
+%
+% --- for  CGF Journal
+% \JournalSubmission    % uncomment for submission to Computer Graphics Forum
+% \JournalPaper         % uncomment for final version of Journal Paper
+%
+% --- for  CGF Journal: special issue
+% \SpecialIssueSubmission    % uncomment for submission to , special issue
+\SpecialIssuePaper         % uncomment for final version of Computer Graphics Forum, special issue
+%                          % EuroVis, SGP, Rendering, PG
+% --- for  EG Workshop Proceedings
+% \WsSubmission      % uncomment for submission to EG Workshop
+% \WsPaper           % uncomment for final version of EG Workshop contribution
+% \WsSubmissionJoint % for joint events, for example ICAT-EGVE
+% \WsPaperJoint      % for joint events, for example ICAT-EGVE
+% \Expressive        % for SBIM, CAe, NPAR
+% \DigitalHeritagePaper
+% \PaperL2P          % for events EG only asks for License to Publish
+
+% --- for EuroVis 
+% for full papers use \SpecialIssuePaper
+% \STAREurovis   % for EuroVis additional material 
+% \EuroVisPoster % for EuroVis additional material 
+% \EuroVisShort  % for EuroVis additional material
+
+% !! *please* don't change anything above
+% !! unless you REALLY know what you are doing
+% ------------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{dfadobe}
+
+% \usepackage{cite}  % comment out for biblatex with backend=biber
+% ---------------------------
+\biberVersion
+\BibtexOrBiblatex
+\usepackage[backend=biber,bibstyle=EG,citestyle=alphabetic,backref=true]{biblatex}
+%\addbibresource{egbibsample.bib}
+% ---------------------------  
+\electronicVersion
+\PrintedOrElectronic
+% for including postscript figures
+% mind: package option 'draft' will replace PS figure by a filename within a frame
+\ifpdf \usepackage[pdftex]{graphicx} \pdfcompresslevel=9
+\else \usepackage[dvips]{graphicx} \fi
+
+\usepackage{egweblnk}
+% end of prologue
+
+\addbibresource{LetterVis.bib}
+
+\usepackage{float,hhline,hyperref,array,tabulary,tabularx,etoolbox,multirow}
+
+\usepackage{dblfloatfix}
+
+\usepackage{enumitem}
+
+\usepackage[table, dvipsnames]{xcolor}
+
+% \author[Q. Wang \& R. S. Laramee]
+% {\parbox{\textwidth}{\centering Q. Wang
+%   and R. S. Laramee
+%     }
+%     \\
+% \parbox{\textwidth}{\centering School of Computer Science, University of Nottingham, UK}
+% }
+
+% \author[Q. Wang \& R. S. Laramee \& A. S. Lacey \& W. O. Pickrell]
+% {\parbox{\textwidth}
+%   {\centering Q. Wang$^{1}$, R. S. Laramee$^{1}$, A. Lacey$^{2,3}$ \& W. O. Pickrell$^{2,4}$}
+%   \\
+%   {\parbox{\textwidth}
+%     {\centering $^1$School of Computer Science, University of Nottingham, UK\\
+%         $^2$Neurology and Molecular Neuroscience Group, Institute of Life Science, Swansea University, UK\\
+%         $^3$Population Data Science, Swansea University Medical School, Swansea University, UK\\
+%         $^4$Neurology Department, Morriston Hospital, Swansea Bay University Healthboard, UK
+%     }
+%   }
+% }
+ 
+\title{GHRVis:}
+
+\begin{document}
+
+\pagestyle{plain}
+
+% auto labeling of sections
+\let\origsection=\section
+\renewcommand\section[1]{\origsection{#1}\label{sec:{#1}}}
+
+\let\origsubsection=\subsection
+\renewcommand\subsection[1]{\origsubsection{#1}\label{subsec:{#1}}}
+
+\let\origsubsubsection=\subsubsection
+\renewcommand\subsubsection[1]{\origsubsubsection{#1}\label{subsubsec:{#1}}}
+
+\newcommand{\figureref}[1]{Figure \ref{#1}}
+\newcommand{\tableref}[1]{Table \ref{#1}}
+\newcommand{\phantomref}[1]{$\hyperref[#1]{\ref{#1}}$}
+
+% Bob's dream paragraph style
+\newcommand{\bobgraph}[1]{ \noindent\textbf{#1} \phantomsection \label{bobgraph:{#1}}}
+
+\definecolor{Mycolor1}{HTML}{4C5866} %#4C5866
+\definecolor{Mycolor2}{HTML}{A6B6D2} %#A6B6D2
+\definecolor{Mycolor3}{HTML}{C1D4E8} %#C1D4E8
+\definecolor{Mycolor4}{HTML}{F7F7FE} %#F7F7FE
+\definecolor{Mycolor5}{HTML}{d8f3dc} %#d8f3dc
+\definecolor{Mycolor6}{HTML}{EC6A5C} %#EC6A5C
+\newcommand{\mycolorbox}[2]{\begingroup\setlength{\fboxsep}{2pt}\colorbox{#1}{#2}\endgroup}
+
+\newcommand{\note}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\expertcomment}[1]{\textit{``#1''}}
+
+\newcommand{\task}[1]{\textbf{T#1}}
+\newcommand{\req}[1]{\textbf{R#1}}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introduction and Motivation}
+
+\section{Related Work}
+
+\section{Data Description}
+
+\section{GHRVis}
+
+\section{Evaluation}
+
+\section{Limitations and Future Work}
+
+\section{Conclusions}
+
+
+\section{Acknowledgments}
+This work is funded by the grant EP/S010238/2 from the Engineering and Physical Sciences Research Council (EPSRC). EPSRC is a British Research Council that provides government funding for grants to undertake research and postgraduate degrees in engineering and the physical sciences. 
+
+% reset \section command for section title "References"
+\let\section=\origsection
+\printbibliography
+
+\end{document}
+
