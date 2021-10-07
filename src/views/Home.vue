@@ -109,14 +109,22 @@
 
                   <b-button-group size="md">
                     <b-button
-                      v-for="river in getRivers"
-                      :key="river.name"
-                      :variant="
-                        (river.visibility ? '' : 'outline-') + river.color
-                      "
-                      v-on:click="toggleFeatureVisibility('river', river.color)"
-                      >{{ river.name }}</b-button
-                    >
+                      v-for="r in getRivers"
+                      :key="r.name"
+                      :variant="(river.visibility ? '' : 'outline-') + r.color"
+                      v-on:click="toggleFeatureVisibility('river', r.color)"
+                      >{{ r.name }}
+                      {{
+                        getRiverTranslation(r.color)[0] +
+                        "," +
+                        getRiverTranslation(r.color)[1]
+                      }}
+                      <br />
+                      <span
+                        class="arrow"
+                        v-html="getRiverTranslation(r.color)[2]"
+                      ></span>
+                    </b-button>
                   </b-button-group>
                 </td>
                 <td>
@@ -426,7 +434,7 @@ export default {
       };
 
       // prepration before removing overlaps
-      __VM.rect.size = Number(__VM.rect.size) + 1;
+      __VM.rect.size = Number(__VM.rect.size) + 0.5;
       __VM.setRectSize();
 
       // preparation before redrawing rects and edges
@@ -526,8 +534,8 @@ export default {
       if (type === "river") {
         // toggle the specific river
         if (name) {
-          layer = `.${type}-layer.${name}`;
-
+          layer = `.${type}-layer > .${name}`;
+          console.log(layer);
           __VM[type].rivers[name].visibility = !__VM[type].rivers[name]
             .visibility;
 
@@ -535,6 +543,7 @@ export default {
             "visibility",
             __VM[type].rivers[name].visibility ? "visible" : "hidden"
           );
+          return;
         }
         // toggle all rivers
         else {
@@ -543,8 +552,18 @@ export default {
           Object.values(__VM[type].rivers).forEach(
             (r) => (r.visibility = __VM[type].visibility)
           );
+
+          Object.keys(__VM.river.rivers).forEach((river) => {
+            __VM.river.rivers[river].visibility = __VM[type].visibility;
+
+            d3.select(`.river-layer > .${river}`).style(
+              "visibility",
+              __VM[type].visibility ? "visible" : "hidden"
+            );
+          });
         }
       }
+
       d3.selectAll(layer).style(
         "visibility",
         __VM[type].visibility ? "visible" : "hidden"
@@ -658,10 +677,13 @@ export default {
           .attr("cy", (d) => d[1])
           .attr("r", 4);
 
-        d3.select(`.${river}`).attr(
-          "transform",
-          `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
-        );
+        d3.select(`.${river}`)
+          .transition()
+          .duration(10000)
+          .attr(
+            "transform",
+            `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
+          );
       });
     },
     setRiverTranslation() {
@@ -674,8 +696,16 @@ export default {
           __VM.river.rivers[river].translate.finalX += __VM.rect.size;
         }
 
+        if (x < 0) {
+          __VM.river.rivers[river].translate.finalX -= __VM.rect.size;
+        }
+
         if (y > 0) {
           __VM.river.rivers[river].translate.finalY += __VM.rect.size;
+        }
+
+        if (y < 0) {
+          __VM.river.rivers[river].translate.finalY -= __VM.rect.size;
         }
 
         __VM.river.rivers[river].translate.x = 0;
@@ -683,6 +713,81 @@ export default {
       }
 
       __VM.setRiverResolution();
+    },
+
+    getRiverTranslation(name) {
+      const t = this.river.rivers[name].translate;
+
+      let left = false;
+      let right = false;
+      let up = false;
+      let down = false;
+
+      if (t.finalX > 0) {
+        right = true;
+      } else if (t.finalX < 0) {
+        left = true;
+      }
+
+      if (t.finalY > 0) {
+        down = true;
+      } else if (t.finalY < 0) {
+        up = true;
+      }
+
+      let arrow;
+
+      if (!(left || right || up || down)) {
+        arrow = "&#183;";
+      } else {
+        arrow = "0";
+
+        if (up) {
+          arrow = "1";
+        } else if (down) {
+          arrow = "2";
+        }
+
+        if (left) {
+          arrow += "1";
+        } else if (right) {
+          arrow += "2";
+        }
+      }
+
+      if (arrow === "01") {
+        arrow = "&#129044;";
+      }
+
+      if (arrow === "02") {
+        arrow = "&#10132;";
+      }
+
+      if (arrow === "10") {
+        arrow = "&#129045;";
+      }
+
+      if (arrow === "20") {
+        arrow = "&#10133;";
+      }
+
+      if (arrow === "11") {
+        arrow = "&#11017;";
+      }
+
+      if (arrow === "12") {
+        arrow = "&#11016;";
+      }
+
+      if (arrow === "21") {
+        arrow = "&#11019;";
+      }
+
+      if (arrow === "22") {
+        arrow = "&#11018;";
+      }
+
+      return [t.finalX, t.finalY, arrow];
     },
   },
   data() {
@@ -829,5 +934,9 @@ export default {
 
 .btn-group .btn:not(:last-child) {
   border-right: 2px solid white !important;
+}
+
+.arrow {
+  font-size: 30px;
 }
 </style>
