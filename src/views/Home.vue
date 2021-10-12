@@ -26,7 +26,7 @@
           >
             <thead>
               <tr>
-                <th>Feature Visibility</th>
+                <th>Features</th>
                 <th>User Options</th>
               </tr>
             </thead>
@@ -42,6 +42,19 @@
                       v-on:click="toggleFeatureVisibility('rect')"
                       >Rectangle</b-button
                     >
+
+                    <b-button block variant="info">
+                      Rect size: {{ rect.size
+                      }}<b-form-input
+                        id="river-space"
+                        v-model="rect.size"
+                        type="range"
+                        min="1"
+                        max="10"
+                        step="0.5"
+                        @change="setRectSize()"
+                      ></b-form-input
+                    ></b-button>
                   </b-button-group>
                 </td>
                 <td>
@@ -57,16 +70,21 @@
                       overlaps</b-button
                     > -->
                     <b-button
+                      block
                       v-if="rectOverlapsRemoved"
                       variant="danger"
                       v-on:click="init()"
                       >Reset overlaps</b-button
                     >
-                    <b-button variant="primary" v-on:click="removeOverlap()"
+                    <b-button
+                      block
+                      variant="primary"
+                      v-on:click="removeOverlap()"
                       >Remove overlaps</b-button
                     >
 
                     <b-button
+                      block
                       :variant="rectSizeUniformed ? 'danger' : 'primary'"
                       v-on:click="setRectSize(!rectSizeUniformed)"
                       >{{
@@ -76,24 +94,24 @@
                     >
 
                     <b-button
+                      block
                       :variant="rectMapToColor ? 'danger' : 'primary'"
                       v-on:click="setRectColor()"
                       >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
                     >
+
+                    <b-button block variant="info">
+                      Rect Increment: {{ rect.sizeStep
+                      }}<b-form-input
+                        id="river-space"
+                        v-model="rect.sizeStep"
+                        type="range"
+                        min="1"
+                        max="10"
+                        step="0.5"
+                      ></b-form-input
+                    ></b-button>
                   </b-button-group>
-                  <span class="btn btn-info">
-                    <label for="river-space">
-                      Set rect size: {{ rect.size }}
-                    </label>
-                    <b-form-input
-                      id="river-space"
-                      v-model="rect.size"
-                      type="range"
-                      min="1"
-                      max="10"
-                      @change="setRectSize()"
-                    ></b-form-input>
-                  </span>
                 </td>
               </tr>
               <tr>
@@ -170,6 +188,7 @@
                 </td>
                 <td>
                   <b-button
+                    block
                     :variant="showBordering.county ? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('county')"
                     >Show bordering counties</b-button
@@ -189,6 +208,7 @@
                 </td>
                 <td>
                   <b-button
+                    block
                     :variant="showBordering.state ? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('state')"
                     >{{ showBordering.state ? "Hide" : "Show" }} bordering
@@ -434,7 +454,7 @@ export default {
       };
 
       // prepration before removing overlaps
-      __VM.rect.size = Number(__VM.rect.size) + 0.5;
+      __VM.rect.size = Number(__VM.rect.size) + Number(__VM.rect.sizeStep);
       __VM.setRectSize();
 
       // preparation before redrawing rects and edges
@@ -796,7 +816,7 @@ export default {
       rectSizeUniformed: false,
       rectMapToColor: false,
       showBordering: { county: false, state: false },
-      rect: { visibility: true, color: "success", size: 1 },
+      rect: { visibility: true, color: "success", size: 1, sizeStep: 0.5 },
       river: {
         visibility: true,
         width: 5,
