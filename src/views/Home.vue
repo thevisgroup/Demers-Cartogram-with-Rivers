@@ -33,33 +33,28 @@
             <tbody>
               <tr>
                 <td>
-                  <b-button-group vertical>
-                    <b-button
-                      block
-                      :variant="
-                        (rect.visibility ? '' : 'outline-') + rect.color
-                      "
-                      v-on:click="toggleFeatureVisibility('rect')"
-                      >Rectangle</b-button
-                    >
+                  <b-button
+                    block
+                    :variant="(rect.visibility ? '' : 'outline-') + rect.color"
+                    v-on:click="toggleFeatureVisibility('rect')"
+                    >Rectangle</b-button
+                  >
 
-                    <b-button block variant="info">
-                      Rect size: {{ rect.size
-                      }}<b-form-input
-                        id="river-space"
-                        v-model="rect.size"
-                        type="range"
-                        min="1"
-                        max="10"
-                        step="0.5"
-                        @change="setRectSize()"
-                      ></b-form-input
-                    ></b-button>
-                  </b-button-group>
+                  <b-button block variant="info">
+                    Rect size: {{ rect.size
+                    }}<b-form-input
+                      id="river-space"
+                      v-model="rect.size"
+                      type="range"
+                      min="1"
+                      max="10"
+                      step="0.5"
+                      @change="setRectSize()"
+                    ></b-form-input
+                  ></b-button>
                 </td>
                 <td>
-                  <b-button-group vertical>
-                    <!-- <b-button
+                  <!-- <b-button
                       :variant="rectOverlapsRemoved ? 'danger' : 'primary'"
                       v-on:click="
                         rectOverlapsRemoved ? init() : removeOverlap()
@@ -69,49 +64,45 @@
                       }}
                       overlaps</b-button
                     > -->
-                    <b-button
-                      block
-                      v-if="rectOverlapsRemoved"
-                      variant="danger"
-                      v-on:click="init()"
-                      >Reset overlaps</b-button
-                    >
-                    <b-button
-                      block
-                      variant="primary"
-                      v-on:click="removeOverlap()"
-                      >Remove overlaps</b-button
-                    >
+                  <b-button
+                    block
+                    v-if="rectOverlapsRemoved"
+                    variant="danger"
+                    v-on:click="init()"
+                    >Reset overlaps</b-button
+                  >
+                  <b-button block variant="primary" v-on:click="removeOverlap()"
+                    >Remove overlaps</b-button
+                  >
 
-                    <b-button
-                      block
-                      :variant="rectSizeUniformed ? 'danger' : 'primary'"
-                      v-on:click="setRectSize(!rectSizeUniformed)"
-                      >{{
-                        rectSizeUniformed ? "Variable" : "Uniform"
-                      }}
-                      Size</b-button
-                    >
+                  <b-button
+                    block
+                    :variant="rectSizeUniformed ? 'danger' : 'primary'"
+                    v-on:click="setRectSize(!rectSizeUniformed)"
+                    >{{
+                      rectSizeUniformed ? "Variable" : "Uniform"
+                    }}
+                    Size</b-button
+                  >
 
-                    <b-button
-                      block
-                      :variant="rectMapToColor ? 'danger' : 'primary'"
-                      v-on:click="setRectColor()"
-                      >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
-                    >
+                  <b-button
+                    block
+                    :variant="rectMapToColor ? 'danger' : 'primary'"
+                    v-on:click="setRectColor()"
+                    >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
+                  >
 
-                    <b-button block variant="info">
-                      Rect Increment: {{ rect.sizeStep
-                      }}<b-form-input
-                        id="river-space"
-                        v-model="rect.sizeStep"
-                        type="range"
-                        min="1"
-                        max="10"
-                        step="0.5"
-                      ></b-form-input
-                    ></b-button>
-                  </b-button-group>
+                  <b-button block variant="info">
+                    Rect Increment: {{ rect.sizeStep
+                    }}<b-form-input
+                      id="river-space"
+                      v-model="rect.sizeStep"
+                      type="range"
+                      min="1"
+                      max="10"
+                      step="0.25"
+                    ></b-form-input
+                  ></b-button>
                 </td>
               </tr>
               <tr>
@@ -124,8 +115,7 @@
                     v-on:click="toggleFeatureVisibility('river')"
                     >River</b-button
                   >
-
-                  <b-button-group size="md">
+                  <b-button-group class="d-flex mt-2">
                     <b-button
                       v-for="r in getRivers"
                       :key="r.name"
@@ -146,7 +136,7 @@
                   </b-button-group>
                 </td>
                 <td>
-                  <span class="btn btn-dark">
+                  <span class="btn btn-dark btn-block">
                     <label for="river-width">
                       Set river thickness: {{ river.width }}
                     </label>
@@ -160,7 +150,7 @@
                     ></b-form-input>
                   </span>
 
-                  <span class="btn btn-info">
+                  <span class="btn btn-info btn-block">
                     <label for="river-space">
                       Set river resolution: {{ river.spacing }}
                     </label>
@@ -697,7 +687,7 @@ export default {
           .attr("cy", (d) => d[1])
           .attr("r", 4);
 
-        d3.select(`.${river}`)
+        d3.select(`.${river} > .river`)
           .transition()
           .duration(10000)
           .attr(
