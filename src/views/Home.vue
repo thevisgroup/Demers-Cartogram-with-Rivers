@@ -492,34 +492,27 @@ export default {
         const checkIntersect = async (line) => {
           let intersected = false;
           for (const river of Object.keys(__VM.river.rivers)) {
-            const points = __VM.river.rivers[river].resolution;
-
+            const river_path = d3.select(`g.${river} .river path`).attr("d");
             const river_edge_layer = d3.select(`.${river} .river-edge`);
 
-            for (let i = 0; i < points.length - 1; i++) {
-              const p1 = points[i];
-              const p2 = points[i + 1];
-              const path = d3.line()([p1, p2]);
+            const intersectPoints = await __VM.findPathIntersectionsAsync(
+              river_path,
+              line,
+              true
+            );
 
-              const intersectPoints = await __VM.findPathIntersectionsAsync(
-                path,
-                line,
-                true
-              );
+            if (intersectPoints > 0) {
+              intersected = true;
+              __VM.river.rivers[river].translate.x += rect.x - rect.ox;
+              __VM.river.rivers[river].translate.y += rect.y - rect.oy;
 
-              if (intersectPoints > 0) {
-                intersected = true;
-                __VM.river.rivers[river].translate.x += p2[0] - p1[0];
-                __VM.river.rivers[river].translate.y += p2[1] - p1[1];
-
-                river_edge_layer
-                  .append("path")
-                  .attr("d", line)
-                  .attr("stroke", "black")
-                  .attr("stroke-width", "1px")
-                  .attr("fill", "none")
-                  .attr("marker-start", "url(#arrow)");
-              }
+              river_edge_layer
+                .append("path")
+                .attr("d", line)
+                .attr("stroke", "black")
+                .attr("stroke-width", "1px")
+                .attr("fill", "none")
+                .attr("marker-start", "url(#arrow)");
             }
           }
 
@@ -703,19 +696,19 @@ export default {
         const y = __VM.river.rivers[river].translate.y;
 
         if (x > 0) {
-          __VM.river.rivers[river].translate.finalX += __VM.rect.size;
-        }
-
-        if (x < 0) {
           __VM.river.rivers[river].translate.finalX -= __VM.rect.size;
         }
 
+        if (x < 0) {
+          __VM.river.rivers[river].translate.finalX += __VM.rect.size;
+        }
+
         if (y > 0) {
-          __VM.river.rivers[river].translate.finalY += __VM.rect.size;
+          __VM.river.rivers[river].translate.finalY -= __VM.rect.size;
         }
 
         if (y < 0) {
-          __VM.river.rivers[river].translate.finalY -= __VM.rect.size;
+          __VM.river.rivers[river].translate.finalY += __VM.rect.size;
         }
 
         __VM.river.rivers[river].translate.x = 0;
