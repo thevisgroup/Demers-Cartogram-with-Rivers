@@ -408,6 +408,8 @@ export default {
       // original river layer
       const river_layer = svg.append("g").attr("class", "river-layer");
       for (const river of Object.keys(__VM.river.rivers)) {
+        __VM.river.rivers[river].translate.finalX = 0;
+        __VM.river.rivers[river].translate.finalY = 0;
         const r = river_layer.append("g").attr("class", `${river}`);
         r.append("g").attr("class", "river");
         r.append("g").attr("class", "river-edge");
