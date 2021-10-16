@@ -40,13 +40,28 @@
                     >Rectangle</b-button
                   >
 
+                  <b-button
+                    block
+                    :variant="rectSizeUniformed ? 'danger' : 'primary'"
+                    v-on:click="setRectSize(!rectSizeUniformed)"
+                    >{{ rectSizeUniformed ? "Variable" : "Uniform" }} Rect
+                    Size</b-button
+                  >
+
+                  <b-button
+                    block
+                    :variant="rectMapToColor ? 'danger' : 'primary'"
+                    v-on:click="setRectColor()"
+                    >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
+                  >
+
                   <b-button block variant="info">
                     Rect size: {{ rect.size
                     }}<b-form-input
                       id="river-space"
                       v-model="rect.size"
                       type="range"
-                      min="1"
+                      min="0.5"
                       max="10"
                       step="0.5"
                       @change="setRectSize()"
@@ -64,32 +79,17 @@
                       }}
                       overlaps</b-button
                     > -->
-                  <b-button
-                    block
-                    v-if="rectOverlapsRemoved"
-                    variant="danger"
-                    v-on:click="init()"
-                    >Reset overlaps</b-button
-                  >
+
                   <b-button block variant="primary" v-on:click="removeOverlap()"
                     >Remove overlaps</b-button
                   >
 
                   <b-button
                     block
-                    :variant="rectSizeUniformed ? 'danger' : 'primary'"
-                    v-on:click="setRectSize(!rectSizeUniformed)"
-                    >{{
-                      rectSizeUniformed ? "Variable" : "Uniform"
-                    }}
-                    Size</b-button
-                  >
-
-                  <b-button
-                    block
-                    :variant="rectMapToColor ? 'danger' : 'primary'"
-                    v-on:click="setRectColor()"
-                    >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
+                    v-if="rectOverlapsRemoved"
+                    variant="danger"
+                    v-on:click="init()"
+                    >Reset overlaps</b-button
                   >
 
                   <b-button block variant="info">
@@ -98,7 +98,7 @@
                       id="river-space"
                       v-model="rect.sizeStep"
                       type="range"
-                      min="1"
+                      min="0.25"
                       max="10"
                       step="0.25"
                     ></b-form-input
@@ -227,6 +227,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 import * as cola from "webcola";
+import * as flattener from "../helper/flattener";
 import findPathIntersections from "path-intersection";
 
 export default {
@@ -419,7 +420,7 @@ export default {
 
       __VM.rectOverlapsRemoved = false;
     },
-    async removeOverlap() {
+    async removeOverlap(repeat = false) {
       const __VM = this;
 
       const data = [];
@@ -428,8 +429,17 @@ export default {
         __VM.toggleFeatureVisibility("rect");
       }
 
+      // prepration before removing overlaps
+      if (!repeat) {
+        __VM.rect.size = Number(__VM.rect.size) + Number(__VM.rect.sizeStep);
+        __VM.setRectSize();
+      }
+
+      // preparation before redrawing rects and edges
+      d3.selectAll(".river-edge > path").remove();
+
       // prepare an array for webcola
-      const prepareColaRect = (r, i) => {
+      d3.selectAll(".rect-layer > rect")._groups[0].forEach((r, i) => {
         r = d3.select(r);
 
         const x = Number(r.attr("x")),
@@ -443,17 +453,6 @@ export default {
         newRect.oy = y;
 
         data[i] = newRect;
-      };
-
-      // prepration before removing overlaps
-      __VM.rect.size = Number(__VM.rect.size) + Number(__VM.rect.sizeStep);
-      __VM.setRectSize();
-
-      // preparation before redrawing rects and edges
-      d3.selectAll(".river-edge > path").remove();
-
-      d3.selectAll(".rect-layer > rect")._groups[0].forEach((r, i) => {
-        prepareColaRect(r, i);
       });
 
       // remove overlaps
@@ -466,7 +465,7 @@ export default {
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
         // if node didn't cross a river, redraw rects using new coordinates
-        if (!(await __VM.connectNewOldRiverRect(data[i]))) {
+        if (!__VM.connectNewOldRiverRect(data[i])) {
           d3.select(rect)
             .transition()
             .duration(timer)
@@ -481,8 +480,35 @@ export default {
       __VM.setRiverTranslation();
 
       __VM.rectOverlapsRemoved = true;
+
+      setTimeout(() => {
+        __VM.repeatOverlapRemoval();
+      }, timer);
+
+      // __VM.repeatOverlapRemoval();
     },
-    async connectNewOldRiverRect(rect) {
+    repeatOverlapRemoval() {
+      const __VM = this;
+      const numEdges = d3.selectAll(".river-edge > path")._groups[0].length;
+
+      if (numEdges > 0) {
+        __VM.iteration++;
+
+        console.log(
+          `Overlap removal iteration: ${__VM.iteration} finished with ${numEdges} crossing nodes`
+        );
+
+        __VM.flattenRiverLayers();
+        __VM.removeOverlap(true);
+      } else {
+        console.log(
+          `Overlap removal iteration: ${__VM.iteration} finished, no more crossing nodes`
+        );
+
+        __VM.iteration = 0;
+      }
+    },
+    connectNewOldRiverRect(rect) {
       const __VM = this;
 
       if (rect.x !== rect.ox && rect.y !== rect.oy) {
@@ -491,13 +517,13 @@ export default {
           [rect.ox, rect.oy],
         ]);
 
-        const checkIntersect = async (line) => {
+        const checkIntersect = (line) => {
           let intersected = false;
           for (const river of Object.keys(__VM.river.rivers)) {
             const river_path = d3.select(`g.${river} .river path`).attr("d");
             const river_edge_layer = d3.select(`.${river} .river-edge`);
 
-            const intersectPoints = await __VM.findPathIntersectionsAsync(
+            const intersectPoints = findPathIntersections(
               river_path,
               line,
               true
@@ -518,18 +544,11 @@ export default {
             }
           }
 
-          return Promise.resolve(intersected);
+          return intersected;
         };
 
-        return await checkIntersect(line);
+        return checkIntersect(line);
       }
-      return Promise.resolve(false);
-    },
-    findPathIntersectionsAsync(path, line, justCount) {
-      return new Promise((resolve, reject) => {
-        const intersectPoints = findPathIntersections(path, line, justCount);
-        return resolve(intersectPoints);
-      });
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
@@ -540,7 +559,6 @@ export default {
         // toggle the specific river
         if (name) {
           layer = `.${type}-layer > .${name}`;
-          console.log(layer);
           __VM[type].rivers[name].visibility = !__VM[type].rivers[name]
             .visibility;
 
@@ -682,7 +700,7 @@ export default {
           .attr("cy", (d) => d[1])
           .attr("r", 4);
 
-        d3.select(`.${river} > .river`)
+        river_layer
           .transition()
           .duration(10000)
           .attr(
@@ -691,6 +709,27 @@ export default {
           );
       });
     },
+    flattenRiverLayers() {
+      const __VM = this;
+      for (const river of Object.keys(__VM.river.rivers)) {
+        // d3.select(`.${river} > .river`).attr("transform", "");
+
+        d3.selectAll(`.${river} > .river > circle`)
+          .attr("cx", (c) => c[0] + __VM.river.rivers[river].translate.finalX)
+          .attr("cy", (c) => c[1] + __VM.river.rivers[river].translate.finalY);
+
+        d3.select(`#${river}`).attr(
+          "d",
+          flattener.flatten_path(
+            document.querySelector(`#${river}`).getPathData(),
+            [
+              __VM.river.rivers[river].translate.finalX,
+              __VM.river.rivers[river].translate.finalY,
+            ]
+          )
+        );
+      }
+    },
     setRiverTranslation() {
       const __VM = this;
       for (const river of Object.keys(__VM.river.rivers)) {
@@ -698,19 +737,19 @@ export default {
         const y = __VM.river.rivers[river].translate.y;
 
         if (x > 0) {
-          __VM.river.rivers[river].translate.finalX -= __VM.rect.size;
-        }
-
-        if (x < 0) {
           __VM.river.rivers[river].translate.finalX += __VM.rect.size;
         }
 
+        if (x < 0) {
+          __VM.river.rivers[river].translate.finalX -= __VM.rect.size;
+        }
+
         if (y > 0) {
-          __VM.river.rivers[river].translate.finalY -= __VM.rect.size;
+          __VM.river.rivers[river].translate.finalY += __VM.rect.size;
         }
 
         if (y < 0) {
-          __VM.river.rivers[river].translate.finalY += __VM.rect.size;
+          __VM.river.rivers[river].translate.finalY -= __VM.rect.size;
         }
 
         __VM.river.rivers[river].translate.x = 0;
@@ -797,6 +836,7 @@ export default {
   },
   data() {
     return {
+      iteration: 0,
       rectOverlapsRemoved: false,
       rectSizeUniformed: false,
       rectMapToColor: false,
