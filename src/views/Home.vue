@@ -479,9 +479,15 @@ export default {
             .duration(timer)
             .attr("x", data[i].x)
             .attr("y", data[i].y)
+            .attr("stroke", () => {
+              if (d3.select(rect).attr("crossed")) {
+                d3.select(rect).attr("stroke-width", 1);
+                return "blue";
+              }
+            })
             .attr("fill", __VM.colorVariant[__VM.rect.color]);
         } else {
-          d3.select(rect).attr("fill", "black");
+          d3.select(rect).attr("fill", "blue").attr("crossed", true);
         }
       }
 
