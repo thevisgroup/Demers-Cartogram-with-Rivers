@@ -492,8 +492,6 @@ export default {
       setTimeout(() => {
         __VM.repeatOverlapRemoval();
       }, timer);
-
-      // __VM.repeatOverlapRemoval();
     },
     repeatOverlapRemoval() {
       const __VM = this;
@@ -506,7 +504,6 @@ export default {
           `Overlap removal iteration: ${__VM.iteration} finished with ${numEdges} crossing nodes`
         );
 
-        __VM.flattenRiverLayers();
         __VM.removeOverlap(true);
       } else {
         console.log(
@@ -528,7 +525,16 @@ export default {
         const checkIntersect = (line) => {
           let intersected = false;
           for (const river of Object.keys(__VM.river.rivers)) {
-            const river_path = d3.select(`g.${river} .river path`).attr("d");
+            // const river_path = d3.select(`g.${river} .river path`).attr("d");
+
+            const river_path = flattener.flatten_path(
+              document.querySelector(`#${river}`).getPathData(),
+              [
+                __VM.river.rivers[river].translate.finalX,
+                __VM.river.rivers[river].translate.finalY,
+              ]
+            );
+
             const river_edge_layer = d3.select(`.${river} .river-edge`);
 
             const intersectPoints = findPathIntersections(
@@ -539,13 +545,15 @@ export default {
 
             if (intersectPoints > 0) {
               intersected = true;
-              __VM.river.rivers[river].translate.x += rect.x - rect.ox;
-              __VM.river.rivers[river].translate.y += rect.y - rect.oy;
+              __VM.river.rivers[river].translate.x +=
+                Number(rect.x) - Number(rect.ox);
+              __VM.river.rivers[river].translate.y +=
+                Number(rect.y) - Number(rect.oy);
 
               river_edge_layer
                 .append("path")
                 .attr("d", line)
-                .attr("stroke", "black")
+                .attr("stroke", "blue")
                 .attr("stroke-width", "1px")
                 .attr("fill", "none")
                 .attr("marker-start", "url(#arrow)");
@@ -717,47 +725,28 @@ export default {
           );
       });
     },
-    flattenRiverLayers() {
-      const __VM = this;
-      for (const river of Object.keys(__VM.river.rivers)) {
-        // d3.select(`.${river} > .river`).attr("transform", "");
-
-        d3.selectAll(`.${river} > .river > circle`)
-          .attr("cx", (c) => c[0] + __VM.river.rivers[river].translate.finalX)
-          .attr("cy", (c) => c[1] + __VM.river.rivers[river].translate.finalY);
-
-        d3.select(`#${river}`).attr(
-          "d",
-          flattener.flatten_path(
-            document.querySelector(`#${river}`).getPathData(),
-            [
-              __VM.river.rivers[river].translate.finalX,
-              __VM.river.rivers[river].translate.finalY,
-            ]
-          )
-        );
-      }
-    },
     setRiverTranslation() {
       const __VM = this;
       for (const river of Object.keys(__VM.river.rivers)) {
         const x = __VM.river.rivers[river].translate.x;
         const y = __VM.river.rivers[river].translate.y;
 
+        const size = __VM.rect.size;
+
         if (x > 0) {
-          __VM.river.rivers[river].translate.finalX += __VM.rect.size;
+          __VM.river.rivers[river].translate.finalX += size;
         }
 
         if (x < 0) {
-          __VM.river.rivers[river].translate.finalX -= __VM.rect.size;
+          __VM.river.rivers[river].translate.finalX -= size;
         }
 
         if (y > 0) {
-          __VM.river.rivers[river].translate.finalY += __VM.rect.size;
+          __VM.river.rivers[river].translate.finalY += size;
         }
 
         if (y < 0) {
-          __VM.river.rivers[river].translate.finalY -= __VM.rect.size;
+          __VM.river.rivers[river].translate.finalY -= size;
         }
 
         __VM.river.rivers[river].translate.x = 0;
