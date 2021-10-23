@@ -283,6 +283,14 @@ export default {
         const { transform } = event;
         d3.select("#map").attr("transform", transform);
         d3.select("#map").attr("stroke-width", 1 / transform.k);
+
+        __VM.zoom = transform;
+      }
+
+      // avoid resetting zoom level
+      if (__VM.zoom) {
+        d3.select("#map").attr("transform", __VM.zoom);
+        d3.select("#map").attr("stroke-width", 1 / __VM.zoom.k);
       }
 
       // tooltip
