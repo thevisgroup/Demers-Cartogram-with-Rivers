@@ -220,9 +220,10 @@
           <b-form-textarea
             id="ta_log"
             v-model="log"
-            rows="5"
             placeholder="Logs will appear here"
+            rows="5"
             max-rows="5"
+            disabled="true"
           ></b-form-textarea>
         </div>
       </b-col>
@@ -514,7 +515,6 @@ export default {
 
               return res;
             })
-            .attr("stroke-width", "1")
             .attr("fill", __VM.colorVariant[__VM.rect.color]);
         } else {
           d3.select(rect).attr("fill", "blue").attr("nodeX", true);
@@ -537,11 +537,11 @@ export default {
       if (numEdges > 0) {
         __VM.iteration++;
 
-        __VM.log += `Overlap removal iteration: ${__VM.iteration}, finished with ${numEdges} crossing nodes \n\n`;
+        __VM.log += `Overlap removal iteration: ${__VM.iteration}, finished with ${numEdges} nodeX \n`;
 
         __VM.removeOverlap(true);
       } else {
-        __VM.log += `Overlap removal iteration: ${__VM.iteration} finished, no more crossing nodes \n`;
+        __VM.log += `Overlap removal iteration: ${__VM.iteration} finished, no more nodeX \n`;
 
         __VM.iteration = 0;
       }
@@ -1085,5 +1085,22 @@ export default {
 
 .arrow {
   font-size: 30px;
+}
+
+rect[nodeX="true"],
+rect[riverX="true"] {
+  stroke-width: 0.8;
+}
+
+rect[nodeX="true"] {
+  stroke: "blue";
+}
+
+rect[riverX="true"] {
+  stroke: "red";
+}
+
+rect[nodeX="true"] rect[riverX="true"] {
+  stroke: "purple";
 }
 </style>
