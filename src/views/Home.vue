@@ -42,17 +42,18 @@
 
                   <b-button
                     block
-                    :variant="rectSizeUniformed ? 'danger' : 'primary'"
-                    v-on:click="setRectSize(!rectSizeUniformed)"
-                    >{{ rectSizeUniformed ? "Variable" : "Uniform" }} Rect
+                    :variant="rect.rectSizeUniformed ? 'danger' : 'primary'"
+                    v-on:click="setRectSize(!rect.rectSizeUniformed)"
+                    >{{ rect.rectSizeUniformed ? "Variable" : "Uniform" }} Rect
                     Size</b-button
                   >
 
                   <b-button
                     block
-                    :variant="rectMapToColor ? 'danger' : 'primary'"
+                    :variant="rect.rectMapToColor ? 'danger' : 'primary'"
                     v-on:click="setRectColor()"
-                    >Map to {{ rectMapToColor ? "Size" : "Color" }}</b-button
+                    >Map to
+                    {{ rect.rectMapToColor ? "Size" : "Color" }}</b-button
                   >
 
                   <b-button block variant="info">
@@ -70,12 +71,12 @@
                 </td>
                 <td>
                   <!-- <b-button
-                      :variant="rectOverlapsRemoved ? 'danger' : 'primary'"
+                      :variant="rect.rectOverlapsRemoved ? 'danger' : 'primary'"
                       v-on:click="
-                        rectOverlapsRemoved ? init() : removeOverlap()
+                        rect.rectOverlapsRemoved ? init() : removeOverlap()
                       "
                       >{{
-                        rectOverlapsRemoved ? "Reset" : "Remove"
+                        rect.rectOverlapsRemoved ? "Reset" : "Remove"
                       }}
                       overlaps</b-button
                     > -->
@@ -86,7 +87,7 @@
 
                   <b-button
                     block
-                    v-if="rectOverlapsRemoved"
+                    v-if="rect.rectOverlapsRemoved"
                     variant="danger"
                     v-on:click="init()"
                     >Reset overlaps</b-button
@@ -103,6 +104,14 @@
                       step="0.25"
                     ></b-form-input
                   ></b-button>
+
+                  <b-form-checkbox
+                    v-model="river.repeatTranslation"
+                    value="true"
+                    unchecked-value="false"
+                  >
+                    Repeat River Translation
+                  </b-form-checkbox>
                 </td>
               </tr>
               <tr>
@@ -208,6 +217,13 @@
               </tr>
             </tbody>
           </table>
+          <b-form-textarea
+            id="ta_log"
+            v-model="log"
+            rows="5"
+            placeholder="Logs will appear here"
+            max-rows="5"
+          ></b-form-textarea>
         </div>
       </b-col>
     </b-row>
@@ -367,7 +383,7 @@ export default {
 
         .attr("width", __VM.rect.size)
         .attr("height", __VM.rect.size)
-        // .attr("stroke", "black")
+        .attr("stroke", "black")
         .attr("fill", (d) => {
           // let state;
 
@@ -425,7 +441,7 @@ export default {
 
       __VM.translateRiver();
 
-      __VM.rectOverlapsRemoved = false;
+      __VM.rect.rectOverlapsRemoved = false;
     },
     async removeOverlap(repeat = false) {
       const __VM = this;
@@ -479,7 +495,7 @@ export default {
             .attr("x", data[i].x)
             .attr("y", data[i].y)
             .attr("stroke", () => {
-              let res = "none";
+              let res = "black";
 
               if (d3.select(rect).attr("nodeX")) {
                 res = "blue";
@@ -505,30 +521,32 @@ export default {
         }
       }
 
-      __VM.calculateRiverTranslation();
+      if (!repeat || __VM.river.repeatTranslation === "true") {
+        __VM.calculateRiverTranslation();
+      }
 
-      __VM.rectOverlapsRemoved = true;
+      __VM.rect.rectOverlapsRemoved = true;
       __VM.delay(timer).then(() => __VM.repeatOverlapRemoval());
     },
     repeatOverlapRemoval() {
       const __VM = this;
       const numEdges = d3.selectAll(".river-edge > path")._groups[0].length;
 
+      const ta_log = document.querySelector("#ta_log");
+
       if (numEdges > 0) {
         __VM.iteration++;
 
-        console.log(
-          `Overlap removal iteration: ${__VM.iteration} finished with ${numEdges} crossing nodes`
-        );
+        __VM.log += `Overlap removal iteration: ${__VM.iteration}, finished with ${numEdges} crossing nodes \n\n`;
 
         __VM.removeOverlap(true);
       } else {
-        console.log(
-          `Overlap removal iteration: ${__VM.iteration} finished, no more crossing nodes`
-        );
+        __VM.log += `Overlap removal iteration: ${__VM.iteration} finished, no more crossing nodes \n`;
 
         __VM.iteration = 0;
       }
+
+      ta_log.scrollTop = ta_log.scrollHeight;
     },
     connectNewOldRiverRect(rect) {
       const __VM = this;
@@ -627,9 +645,9 @@ export default {
     },
     setRectSize(uniformed = false) {
       const __VM = this;
-      __VM.rectSizeUniformed = uniformed;
+      __VM.rect.rectSizeUniformed = uniformed;
       let size = __VM.rect.size;
-      if (__VM.rectSizeUniformed) {
+      if (__VM.rect.rectSizeUniformed) {
         size = 10;
       }
       d3.selectAll(".rect-layer > rect")
@@ -642,7 +660,7 @@ export default {
         d3.select(r).attr("fill", color);
       };
 
-      if (__VM.rectMapToColor) {
+      if (__VM.rect.rectMapToColor) {
         if (singleRect) {
           changeColor(singleRect, d3.select(singleRect).attr("colormap"));
         } else {
@@ -650,7 +668,7 @@ export default {
             changeColor(r, __VM.colorVariant[__VM.rect.color]);
           });
 
-          __VM.rectMapToColor = false;
+          __VM.rect.rectMapToColor = false;
         }
       } else {
         if (singleRect) {
@@ -661,7 +679,7 @@ export default {
             changeColor(r, colormap);
           });
 
-          __VM.rectMapToColor = true;
+          __VM.rect.rectMapToColor = true;
         }
       }
     },
@@ -908,12 +926,19 @@ export default {
   data() {
     return {
       iteration: 0,
-      rectOverlapsRemoved: false,
-      rectSizeUniformed: false,
-      rectMapToColor: false,
+      log: "",
       showBordering: { county: false, state: false },
-      rect: { visibility: true, color: "success", size: 1, sizeStep: 0.5 },
+      rect: {
+        rectOverlapsRemoved: false,
+        rectSizeUniformed: false,
+        rectMapToColor: false,
+        visibility: true,
+        color: "success",
+        size: 1,
+        sizeStep: 0.5,
+      },
       river: {
+        repeatTranslation: false,
         visibility: true,
         width: 5,
         spacing: 10,
@@ -1001,8 +1026,8 @@ export default {
     );
 
     this.init();
-    this.rectSizeUniformed = false;
-    this.rectOverlapsRemoved = false;
+    this.rect.rectSizeUniformed = false;
+    this.rect.rectOverlapsRemoved = false;
   },
 };
 </script>
