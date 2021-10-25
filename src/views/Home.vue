@@ -225,6 +225,7 @@
 <script>
 // @ is an alias to /src
 import * as d3 from "d3";
+import * as d3p from "d3-polygon";
 import * as topojson from "topojson-client";
 import * as cola from "webcola";
 import * as flattener from "../helper/flattener";
@@ -494,10 +495,7 @@ export default {
       __VM.setRiverTranslation();
 
       __VM.rectOverlapsRemoved = true;
-
-      setTimeout(() => {
-        __VM.repeatOverlapRemoval();
-      }, timer);
+      __VM.delay(timer).then(() => __VM.repeatOverlapRemoval());
     },
     repeatOverlapRemoval() {
       const __VM = this;
@@ -678,6 +676,8 @@ export default {
     setRiverResolution() {
       const __VM = this;
 
+      d3.selectAll(".hull").remove();
+
       Object.keys(__VM.river.rivers).forEach((river) => {
         const points = topojson.mesh(
           __VM.shapefile,
@@ -722,13 +722,17 @@ export default {
           .attr("cy", (d) => d[1])
           .attr("r", 4);
 
+        const timer = 10000;
+
         river_layer
           .transition()
-          .duration(10000)
+          .duration(timer)
           .attr(
             "transform",
             `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
           );
+
+        __VM.delay(timer).then();
       });
     },
     setRiverTranslation() {
@@ -761,7 +765,6 @@ export default {
 
       __VM.setRiverResolution();
     },
-
     getRiverTranslation(name) {
       const t = this.river.rivers[name].translate;
 
@@ -835,6 +838,9 @@ export default {
       }
 
       return [t.finalX, t.finalY, arrow];
+    },
+    delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
     },
   },
   data() {
