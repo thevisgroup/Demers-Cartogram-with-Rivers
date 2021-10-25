@@ -160,7 +160,7 @@
                       type="range"
                       min="1"
                       max="100"
-                      @change="setRiverResolution()"
+                      @change="translateRiver()"
                     ></b-form-input>
                   </span>
                 </td>
@@ -225,7 +225,7 @@
 <script>
 // @ is an alias to /src
 import * as d3 from "d3";
-import * as d3p from "d3-polygon";
+import * as pip from "point-in-svg-polygon";
 import * as topojson from "topojson-client";
 import * as cola from "webcola";
 import * as flattener from "../helper/flattener";
@@ -334,7 +334,6 @@ export default {
         });
 
       // state layer
-
       svg
         .append("g")
         .attr("class", "state-layer")
@@ -356,7 +355,6 @@ export default {
         .append("g")
         .attr("class", "rect-layer")
         // .style("visibility", "hidden")
-        .attr("stroke", "#000")
         .selectAll("rect")
         .data(__VM.county_list)
         .enter()
@@ -369,7 +367,7 @@ export default {
 
         .attr("width", __VM.rect.size)
         .attr("height", __VM.rect.size)
-        .attr("stroke", "black")
+        // .attr("stroke", "black")
         .attr("fill", (d) => {
           // let state;
 
@@ -425,7 +423,7 @@ export default {
         r.append("g").attr("class", "river-edge");
       }
 
-      __VM.setRiverResolution();
+      __VM.translateRiver();
 
       __VM.rectOverlapsRemoved = false;
     },
@@ -481,18 +479,33 @@ export default {
             .attr("x", data[i].x)
             .attr("y", data[i].y)
             .attr("stroke", () => {
-              if (d3.select(rect).attr("crossed")) {
-                d3.select(rect).attr("stroke-width", 1);
-                return "blue";
+              let res = "none";
+
+              if (d3.select(rect).attr("nodeX")) {
+                res = "blue";
               }
+
+              if (d3.select(rect).attr("riverX")) {
+                res = "red";
+              }
+
+              if (
+                d3.select(rect).attr("nodeX") &&
+                d3.select(rect).attr("riverX")
+              ) {
+                res = "purple";
+              }
+
+              return res;
             })
+            .attr("stroke-width", "1")
             .attr("fill", __VM.colorVariant[__VM.rect.color]);
         } else {
-          d3.select(rect).attr("fill", "blue").attr("crossed", true);
+          d3.select(rect).attr("fill", "blue").attr("nodeX", true);
         }
       }
 
-      __VM.setRiverTranslation();
+      __VM.calculateRiverTranslation();
 
       __VM.rectOverlapsRemoved = true;
       __VM.delay(timer).then(() => __VM.repeatOverlapRemoval());
@@ -673,10 +686,8 @@ export default {
         `${__VM.river.width}px`
       );
     },
-    setRiverResolution() {
+    translateRiver() {
       const __VM = this;
-
-      d3.selectAll(".hull").remove();
 
       Object.keys(__VM.river.rivers).forEach((river) => {
         const points = topojson.mesh(
@@ -732,14 +743,20 @@ export default {
             `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
           );
 
-        __VM.delay(timer).then();
+        __VM.delay(timer).then(() => __VM.detectRiverXNodes());
       });
     },
-    setRiverTranslation() {
+    calculateRiverTranslation() {
       const __VM = this;
       for (const river of Object.keys(__VM.river.rivers)) {
         const x = __VM.river.rivers[river].translate.x;
         const y = __VM.river.rivers[river].translate.y;
+
+        __VM.river.rivers[river].translate.finalXOld =
+          __VM.river.rivers[river].translate.finalX;
+
+        __VM.river.rivers[river].translate.finalYOld =
+          __VM.river.rivers[river].translate.finalY;
 
         const size = __VM.rect.size;
 
@@ -763,7 +780,52 @@ export default {
         __VM.river.rivers[river].translate.y = 0;
       }
 
-      __VM.setRiverResolution();
+      __VM.translateRiver();
+    },
+    detectRiverXNodes() {
+      const __VM = this;
+
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        const { resolution, translate } = __VM.river.rivers[river];
+        const resCurrent = [];
+        const resOld = [];
+
+        resolution.forEach((r) => {
+          resCurrent.push([r[0] + translate.finalX, r[1] + translate.finalY]);
+          resOld.push([r[0] + translate.finalXOld, r[1] + translate.finalYOld]);
+        });
+
+        // draw river crossed areas
+        if (JSON.stringify(resCurrent) !== JSON.stringify(resOld)) {
+          d3.selectAll(`.${river}.crossedArea`).remove();
+
+          const crossedRegion = d3.line()([
+            ...resCurrent,
+            ...resOld.reverse(),
+            resCurrent[0],
+          ]);
+
+          d3.select("#map")
+            .append("path")
+            .attr("class", `${river} crossedArea`)
+            .attr("d", crossedRegion)
+            .attr("stroke", "black")
+            .attr("stroke-width", "1px")
+            .attr("fill", "none");
+
+          for (const [i, rect] of d3
+            .selectAll(".rect-layer > rect")
+            ._groups[0].entries()) {
+            const inside = pip.isInside(
+              [d3.select(rect).attr("x"), d3.select(rect).attr("y")],
+              crossedRegion
+            );
+            if (inside) {
+              d3.select(rect).attr("fill", "red").attr("riverX", true);
+            }
+          }
+        }
+      });
     },
     getRiverTranslation(name) {
       const t = this.river.rivers[name].translate;
@@ -865,7 +927,9 @@ export default {
               x: 0,
               y: 0,
               finalX: 0,
+              finalXOld: 0,
               finalY: 0,
+              finalYOld: 0,
             },
           },
           mississippi: {
@@ -876,7 +940,9 @@ export default {
               x: 0,
               y: 0,
               finalX: 0,
+              finalXOld: 0,
               finalY: 0,
+              finalYOld: 0,
             },
           },
           rio_grande: {
@@ -887,7 +953,9 @@ export default {
               x: 0,
               y: 0,
               finalX: 0,
+              finalXOld: 0,
               finalY: 0,
+              finalYOld: 0,
             },
           },
         },
