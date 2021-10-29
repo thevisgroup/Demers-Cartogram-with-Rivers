@@ -491,10 +491,6 @@ export default {
         // redraw rects using new coordinates
 
         d3.select(rect)
-          .transition()
-          .duration(timer)
-          .attr("x", data[i].x)
-          .attr("y", data[i].y)
           .attr("stroke", () => {
             let res = "black";
 
@@ -515,18 +511,30 @@ export default {
 
             return res;
           })
-          .attr("fill", __VM.colorVariant[__VM.rect.color]);
-        // move back nodeX
-        if (__VM.connectNewOldRiverRect(data[i])) {
-          d3.select(rect)
-            .transition()
-            .duration(timer)
-            .attr("x", data[i].ox)
-            .attr("y", data[i].oy)
-            .attr("fill", "blue")
-            .attr("nodeX", true);
-        }
+          .attr("fill", __VM.colorVariant[__VM.rect.color])
+          .transition()
+          .duration(timer)
+          .attr("x", data[i].x)
+          .attr("y", data[i].y);
       }
+
+      __VM.delay(timer).then(() => {
+        for (const [i, rect] of d3
+          .selectAll(".rect-layer > rect")
+          ._groups[0].entries()) {
+          // move back nodeX
+          if (__VM.connectNewOldRiverRect(data[i])) {
+            d3.select(rect)
+              .attr("fill", "blue")
+              .attr("nodeX", true)
+              .transition()
+              .duration(timer)
+              .attr("x", data[i].ox)
+              .attr("y", data[i].oy);
+          }
+        }
+      });
+
       let translate = false;
 
       if (!__VM.getRiverTranslationStatic) {
@@ -548,7 +556,9 @@ export default {
       }
 
       __VM.rect.rectOverlapsRemoved = true;
-      __VM.delay(timer).then(() => __VM.repeatOverlapRemoval());
+      __VM.delay(timer * 1.5).then(() => {
+        __VM.repeatOverlapRemoval();
+      });
     },
     repeatOverlapRemoval() {
       const __VM = this;
