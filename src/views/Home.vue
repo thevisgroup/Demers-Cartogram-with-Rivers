@@ -105,13 +105,13 @@
                     ></b-form-input
                   ></b-button>
 
-                  <b-form-checkbox
-                    v-model="river.repeatTranslation"
-                    value="true"
-                    unchecked-value="false"
-                  >
-                    Repeat River Translation
-                  </b-form-checkbox>
+                  <b-form-group>
+                    <b-form-checkbox-group
+                      v-model="river.translation.checked"
+                      :options="river.translation.options"
+                      stacked
+                    ></b-form-checkbox-group>
+                  </b-form-group>
                 </td>
               </tr>
               <tr>
@@ -223,7 +223,7 @@
             placeholder="Logs will appear here"
             rows="5"
             max-rows="5"
-            disabled="true"
+            disabled
           ></b-form-textarea>
         </div>
       </b-col>
@@ -520,8 +520,28 @@ export default {
           d3.select(rect).attr("fill", "blue").attr("nodeX", true);
         }
       }
+      let translate = false;
 
-      if (!repeat || __VM.river.repeatTranslation === "true") {
+      if (!__VM.getRiverTranslationStatic) {
+        //non-repeating ORA
+        translate = !repeat;
+
+        //repeating ORA
+        if (repeat) {
+          //not first iteration
+          if (__VM.iteration > 1) {
+            //if repeat ORA is allowed
+            translate = __VM.getRiverTranslationRepeat;
+            console.log("repeat, iter>1", translate);
+          }
+          //first iteration
+          else {
+            translate = __VM.iteration === 1;
+          }
+        }
+      }
+
+      if (translate) {
         __VM.calculateRiverTranslation();
       }
 
@@ -751,16 +771,18 @@ export default {
           .attr("cy", (d) => d[1])
           .attr("r", 4);
 
-        const timer = 10000;
+        let timer = 0;
 
-        river_layer
-          .transition()
-          .duration(timer)
-          .attr(
-            "transform",
-            `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
-          );
-
+        if (!__VM.getRiverTranslationStatic) {
+          timer = 10000;
+          river_layer
+            .transition()
+            .duration(timer)
+            .attr(
+              "transform",
+              `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
+            );
+        }
         __VM.delay(timer).then(() => __VM.detectRiverXNodes());
       });
     },
@@ -886,7 +908,7 @@ export default {
       }
 
       if (arrow === "01") {
-        arrow = "&#129044;";
+        arrow = "&#8592;";
       }
 
       if (arrow === "02") {
@@ -894,11 +916,11 @@ export default {
       }
 
       if (arrow === "10") {
-        arrow = "&#129045;";
+        arrow = "&#8593;";
       }
 
       if (arrow === "20") {
-        arrow = "&#10133;";
+        arrow = "&#10142;";
       }
 
       if (arrow === "11") {
@@ -916,6 +938,7 @@ export default {
       if (arrow === "22") {
         arrow = "&#11018;";
       }
+      console.log(name, arrow);
 
       return [t.finalX, t.finalY, arrow];
     },
@@ -934,11 +957,25 @@ export default {
         rectMapToColor: false,
         visibility: true,
         color: "success",
-        size: 1,
+        size: 3,
         sizeStep: 0.5,
       },
       river: {
-        repeatTranslation: false,
+        translation: {
+          checked: [],
+          options: [
+            {
+              text: "Disable River Translation",
+              value: "static",
+              disabled: false,
+            },
+            {
+              text: "Repeat River Translation",
+              value: "repeat",
+              disabled: false,
+            },
+          ],
+        },
         visibility: true,
         width: 5,
         spacing: 10,
@@ -1002,6 +1039,20 @@ export default {
   computed: {
     getRivers: function () {
       return Object.values(this.river.rivers);
+    },
+    getRiverTranslationStatic: function () {
+      return this.river.translation.checked.includes("static");
+    },
+    getRiverTranslationRepeat: function () {
+      return this.river.translation.checked.includes("repeat");
+    },
+  },
+  watch: {
+    "river.translation.checked": {
+      deep: true,
+      handler(val) {
+        this.river.translation.options[1].disabled = val.includes("static");
+      },
     },
   },
   async mounted() {
