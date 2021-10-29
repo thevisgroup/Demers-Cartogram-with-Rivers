@@ -488,36 +488,43 @@ export default {
       for (const [i, rect] of d3
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
-        // if node didn't cross a river, redraw rects using new coordinates
-        if (!__VM.connectNewOldRiverRect(data[i])) {
+        // redraw rects using new coordinates
+
+        d3.select(rect)
+          .transition()
+          .duration(timer)
+          .attr("x", data[i].x)
+          .attr("y", data[i].y)
+          .attr("stroke", () => {
+            let res = "black";
+
+            if (d3.select(rect).attr("nodeX")) {
+              res = "blue";
+            }
+
+            if (d3.select(rect).attr("riverX")) {
+              res = "red";
+            }
+
+            if (
+              d3.select(rect).attr("nodeX") &&
+              d3.select(rect).attr("riverX")
+            ) {
+              res = "purple";
+            }
+
+            return res;
+          })
+          .attr("fill", __VM.colorVariant[__VM.rect.color]);
+        // move back nodeX
+        if (__VM.connectNewOldRiverRect(data[i])) {
           d3.select(rect)
             .transition()
             .duration(timer)
-            .attr("x", data[i].x)
-            .attr("y", data[i].y)
-            .attr("stroke", () => {
-              let res = "black";
-
-              if (d3.select(rect).attr("nodeX")) {
-                res = "blue";
-              }
-
-              if (d3.select(rect).attr("riverX")) {
-                res = "red";
-              }
-
-              if (
-                d3.select(rect).attr("nodeX") &&
-                d3.select(rect).attr("riverX")
-              ) {
-                res = "purple";
-              }
-
-              return res;
-            })
-            .attr("fill", __VM.colorVariant[__VM.rect.color]);
-        } else {
-          d3.select(rect).attr("fill", "blue").attr("nodeX", true);
+            .attr("x", data[i].ox)
+            .attr("y", data[i].oy)
+            .attr("fill", "blue")
+            .attr("nodeX", true);
         }
       }
       let translate = false;
@@ -529,14 +536,9 @@ export default {
         //repeating ORA
         if (repeat) {
           //not first iteration
-          if (__VM.iteration > 1) {
+          if (__VM.iteration > 0) {
             //if repeat ORA is allowed
             translate = __VM.getRiverTranslationRepeat;
-            console.log("repeat, iter>1", translate);
-          }
-          //first iteration
-          else {
-            translate = __VM.iteration === 1;
           }
         }
       }
@@ -938,8 +940,6 @@ export default {
       if (arrow === "22") {
         arrow = "&#11018;";
       }
-      console.log(name, arrow);
-
       return [t.finalX, t.finalY, arrow];
     },
     delay(ms) {
