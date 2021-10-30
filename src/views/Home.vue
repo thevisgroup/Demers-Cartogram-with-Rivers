@@ -9,6 +9,45 @@
             stroke-linejoin="round"
             stroke-linecap="round"
           >
+            <g class="legend">
+              <rect
+                fill="green"
+                stroke="black"
+                stroke-width="2"
+                x="2"
+                y="5"
+              ></rect>
+              <text x="22" y="18">node</text>
+
+              <rect
+                fill="green"
+                stroke="red"
+                stroke-width="2"
+                x="2"
+                y="22"
+              ></rect>
+              <text x="22" y="35">riverX</text>
+
+              <rect
+                fill="green"
+                stroke="blue"
+                stroke-width="2"
+                x="2"
+                y="39"
+              ></rect>
+              <text x="22" y="52">nodeX</text>
+
+              <rect
+                fill="green"
+                stroke="purple"
+                stroke-width="2"
+                x="2"
+                y="56"
+              ></rect>
+              <text x="22" y="69">riverX + nodeX</text>
+
+              <!-- rect y= last rect y + 17, text y = rect y +13 -->
+            </g>
             <rect
               width="100%"
               height="100%"
@@ -174,7 +213,7 @@
                   </span>
                 </td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td>
                   <b-button
                     block
@@ -214,7 +253,7 @@
                     states</b-button
                   >
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
           <b-form-textarea
@@ -385,6 +424,7 @@ export default {
         .attr("width", __VM.rect.size)
         .attr("height", __VM.rect.size)
         .attr("stroke", "black")
+        .attr("stroke-width", "0.3")
         .attr("fill", (d) => {
           // let state;
 
@@ -511,6 +551,12 @@ export default {
 
             return res;
           })
+          .attr("stroke-width", () => {
+            return d3.select(rect).attr("nodeX") ||
+              d3.select(rect).attr("riverX")
+              ? "1"
+              : "0.3";
+          })
           .attr("fill", __VM.colorVariant[__VM.rect.color])
           .transition()
           .duration(timer)
@@ -526,6 +572,7 @@ export default {
           if (__VM.connectNewOldRiverRect(data[i])) {
             d3.select(rect)
               .attr("fill", "blue")
+              .attr("stroke", "blue")
               .attr("nodeX", true)
               .transition()
               .duration(timer)
@@ -873,7 +920,10 @@ export default {
               crossedRegion
             );
             if (inside) {
-              d3.select(rect).attr("fill", "red").attr("riverX", true);
+              d3.select(rect)
+                .attr("stroke", "red")
+                .attr("stroke-width", "1px")
+                .attr("riverX", true);
             }
           }
         }
@@ -1148,20 +1198,8 @@ export default {
   font-size: 30px;
 }
 
-rect[nodeX="true"],
-rect[riverX="true"] {
-  stroke-width: 0.8;
-}
-
-rect[nodeX="true"] {
-  stroke: "blue";
-}
-
-rect[riverX="true"] {
-  stroke: "red";
-}
-
-rect[nodeX="true"] rect[riverX="true"] {
-  stroke: "purple";
+g.legend > rect {
+  width: 15px;
+  height: 15px;
 }
 </style>
