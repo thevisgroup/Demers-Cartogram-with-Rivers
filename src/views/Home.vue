@@ -623,6 +623,13 @@ export default {
     },
     repeatOverlapRemoval() {
       const __VM = this;
+
+      if (__VM.iteration > 50) {
+        __VM.log += `Overlap removal iteration: ${__VM.iteration} stopped, 50 iteration limit hit. \n`;
+
+        __VM.iteration = 0;
+      }
+
       const numEdges = d3.selectAll(".river-edge > path")._groups[0].length;
 
       const ta_log = document.querySelector("#ta_log");
