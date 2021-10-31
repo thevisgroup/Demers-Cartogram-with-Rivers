@@ -511,10 +511,24 @@ export default {
           w = Number(__VM.rect.size),
           h = Number(__VM.rect.size);
 
+        if (!r.attr("x_history")) {
+          r.attr("x_history", JSON.stringify([]));
+        }
+        const x_history = JSON.parse(r.attr("x_history"));
+        x_history.unshift(x);
+        r.attr("x_history", JSON.stringify(x_history));
+
+        if (!r.attr("y_history")) {
+          r.attr("y_history", JSON.stringify([]));
+        }
+        const y_history = JSON.parse(r.attr("y_history"));
+        y_history.unshift(y);
+        r.attr("y_history", JSON.stringify(y_history));
+
         const newRect = new cola.Rectangle(x, x + w, y, y + h);
 
-        newRect.ox = x;
-        newRect.oy = y;
+        newRect.x_history = x_history;
+        newRect.y_history = y_history;
 
         data[i] = newRect;
       });
@@ -576,8 +590,8 @@ export default {
               .attr("nodeX", true)
               .transition()
               .duration(timer)
-              .attr("x", data[i].ox)
-              .attr("y", data[i].oy);
+              .attr("x", data[i].x_history[0])
+              .attr("y", data[i].y_history[0]);
           }
         }
       });
@@ -630,10 +644,10 @@ export default {
     connectNewOldRiverRect(rect) {
       const __VM = this;
 
-      if (rect.x !== rect.ox && rect.y !== rect.oy) {
+      if (rect.x !== rect.x_history[0] && rect.y !== rect.y_history[0]) {
         const line = d3.line()([
           [rect.x + __VM.rect.size / 2, rect.y + __VM.rect.size / 2],
-          [rect.ox, rect.oy],
+          [rect.x_history[0], rect.y_history[0]],
         ]);
 
         const checkIntersect = (line) => {
@@ -660,9 +674,9 @@ export default {
             if (intersectPoints > 0) {
               intersected = true;
               __VM.river.rivers[river].translate.x +=
-                Number(rect.x) - Number(rect.ox);
+                Number(rect.x) - Number(rect.x_history[0]);
               __VM.river.rivers[river].translate.y +=
-                Number(rect.y) - Number(rect.oy);
+                Number(rect.y) - Number(rect.y_history[0]);
 
               river_edge_layer
                 .append("path")
