@@ -124,6 +124,17 @@
                     >Remove overlaps</b-button
                   >
 
+                  <b-button block variant="info">
+                    Iteration limit: {{ iteration.limit
+                    }}<b-form-input
+                      v-model="iteration.limit"
+                      type="range"
+                      min="1"
+                      max="30"
+                      step="1"
+                    ></b-form-input
+                  ></b-button>
+
                   <b-button
                     block
                     v-if="rect.rectOverlapsRemoved"
@@ -227,7 +238,7 @@
                 <td>
                   <b-button
                     block
-                    :variant="showBordering.county ? 'danger' : 'primary'"
+                    :variant="county.border? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('county')"
                     >Show bordering counties</b-button
                   >
@@ -247,9 +258,9 @@
                 <td>
                   <b-button
                     block
-                    :variant="showBordering.state ? 'danger' : 'primary'"
+                    :variant="state.border? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('state')"
-                    >{{ showBordering.state ? "Hide" : "Show" }} bordering
+                    >{{ state.border? "Hide" : "Show" }} bordering
                     states</b-button
                   >
                 </td>
@@ -605,7 +616,7 @@ export default {
         //repeating ORA
         if (repeat) {
           //not first iteration
-          if (__VM.iteration > 0) {
+          if (__VM.iteration.current > 0) {
             //if repeat ORA is allowed
             translate = __VM.getRiverTranslationRepeat;
           }
@@ -624,29 +635,28 @@ export default {
     repeatOverlapRemoval() {
       const __VM = this;
 
-      if (__VM.iteration > 50) {
-        __VM.log += `Overlap removal iteration: ${__VM.iteration} stopped, 50 iteration limit hit. \n`;
+      if (__VM.iteration.current >= __VM.iteration.limit) {
+        __VM.log += `Overlap removal iteration: ${__VM.iteration.current} stopped, iteration limit of ${__VM.iteration.limit} reached. \n`;
 
-        __VM.iteration = 0;
-      }
-
-      const numEdges = d3.selectAll(".river-edge > path")._groups[0].length;
-
-      const ta_log = document.querySelector("#ta_log");
-
-      if (numEdges > 0) {
-        __VM.iteration++;
-
-        __VM.log += `Overlap removal iteration: ${__VM.iteration}, finished with ${numEdges} nodeX \n`;
-
-        __VM.removeOverlap(true);
+        __VM.iteration.current = 0;
       } else {
-        __VM.log += `Overlap removal iteration: ${__VM.iteration} finished, no more nodeX \n`;
+        const numEdges = d3.selectAll(".river-edge > path")._groups[0].length;
 
-        __VM.iteration = 0;
+        if (numEdges > 0) {
+          __VM.iteration.current++;
+
+          __VM.log += `Overlap removal iteration: ${__VM.iteration.current}, finished with ${numEdges} nodeX \n`;
+
+          __VM.removeOverlap(true);
+        } else {
+          __VM.log += `Overlap removal iteration: ${__VM.iteration.current} finished, no more nodeX \n`;
+
+          __VM.iteration.current = 0;
+        }
+
+        const ta_log = document.querySelector("#ta_log");
+        ta_log.scrollTop = ta_log.scrollHeight;
       }
-
-      ta_log.scrollTop = ta_log.scrollHeight;
     },
     connectNewOldRiverRect(rect) {
       const __VM = this;
@@ -786,13 +796,11 @@ export default {
     highlightBorderingRegion(type) {
       const __VM = this;
 
-      __VM.showBordering[type] = !__VM.showBordering[type];
+      __VM[type].border = !__VM[type].border;
 
       d3.selectAll(`.${type}-layer > path`).each(function (d) {
         return d3.select(this).attr("fill", (d) => {
-          return __VM.showBordering[type]
-            ? d3.select(this).attr("fill_pip")
-            : "none";
+          return __VM[type].border ? d3.select(this).attr("fill_pip") : "none";
         });
       });
     },
@@ -1034,9 +1042,8 @@ export default {
   },
   data() {
     return {
-      iteration: 0,
+      iteration: { current: 0, limit: 10 },
       log: "",
-      showBordering: { county: false, state: false },
       rect: {
         rectOverlapsRemoved: false,
         rectSizeUniformed: false,
@@ -1108,8 +1115,8 @@ export default {
           },
         },
       },
-      state: { visibility: true, color: "danger" },
-      county: { visibility: true, color: "dark" },
+      state: { border: false, visibility: true, color: "danger" },
+      county: { border: false, visibility: true, color: "dark" },
       colorVariant: {
         primary: "rgb(2, 117, 216)",
         info: "rgb(91, 192, 222)",
