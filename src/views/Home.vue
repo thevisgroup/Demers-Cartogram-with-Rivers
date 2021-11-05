@@ -803,6 +803,11 @@ export default {
         "stroke-width",
         `${__VM.river.width}px`
       );
+
+      d3.selectAll(".river > circle").attr(
+        "r",
+        `${__VM.river.width > 4 ? 4 : __VM.river.width}`
+      );
     },
     translateRiver() {
       const __VM = this;
@@ -838,7 +843,7 @@ export default {
           .attr("id", `${river}`)
           .attr("d", d3.line()(resolution))
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          .attr("stroke-width", "4px")
+          .attr("stroke-width", `${__VM.river.width}px`)
           .attr("fill", "none");
 
         river_layer
@@ -849,7 +854,7 @@ export default {
           .attr("fill", "red")
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
-          .attr("r", 4);
+          .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
 
         let timer = 0;
 
@@ -1058,7 +1063,7 @@ export default {
           ],
         },
         visibility: true,
-        width: 5,
+        width: 2,
         spacing: 10,
         color: "info",
         rivers: {
