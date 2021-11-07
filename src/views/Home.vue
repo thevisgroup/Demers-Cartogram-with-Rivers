@@ -98,7 +98,7 @@
                   <b-button block variant="info">
                     Rect size: {{ rect.size
                     }}<b-form-input
-                      id="river-space"
+                      id="slider-rect-size"
                       v-model="rect.size"
                       type="range"
                       min="0.5"
@@ -127,10 +127,11 @@
                   <b-button block variant="info">
                     Iteration limit: {{ iteration.limit
                     }}<b-form-input
+                      id="slider-iteration-limit"
                       v-model="iteration.limit"
                       type="range"
                       min="1"
-                      max="30"
+                      max="10"
                       step="1"
                     ></b-form-input
                   ></b-button>
@@ -146,7 +147,7 @@
                   <b-button block variant="info">
                     Rect Increment: {{ rect.sizeStep
                     }}<b-form-input
-                      id="river-space"
+                      id="slider-rect-size"
                       v-model="rect.sizeStep"
                       type="range"
                       min="0.25"
@@ -195,33 +196,40 @@
                   </b-button-group>
                 </td>
                 <td>
-                  <span class="btn btn-dark btn-block">
-                    <label for="river-width">
-                      Set river thickness: {{ river.width }}
-                    </label>
+                  <b-button block variant="primary">
+                    Corridor length: {{ corridor.length }}
                     <b-form-input
-                      id="river-width"
+                      id="slider-corridor-length"
+                      v-model="corridor.length"
+                      type="range"
+                      min="5"
+                      max="20"
+                    ></b-form-input>
+                  </b-button>
+
+                  <b-button block variant="info">
+                    River thickness: {{ river.width }}
+                    <b-form-input
+                      id="slider-river-width"
                       v-model="river.width"
                       type="range"
                       min="1"
                       max="10"
                       @change="setRiverWidth()"
                     ></b-form-input>
-                  </span>
+                  </b-button>
 
-                  <span class="btn btn-info btn-block">
-                    <label for="river-space">
-                      Set river resolution: {{ river.spacing }}
-                    </label>
-                    <b-form-input
-                      id="river-space"
+                  <b-button block variant="info">
+                    River resolution: {{ river.spacing
+                    }}<b-form-input
+                      id="slider-river-space"
                       v-model="river.spacing"
                       type="range"
                       min="1"
                       max="100"
                       @change="translateRiver()"
-                    ></b-form-input>
-                  </span>
+                    ></b-form-input
+                  ></b-button>
                 </td>
               </tr>
               <!-- <tr>
@@ -279,13 +287,13 @@
       </b-col>
     </b-row>
 
-    <footer class="footer" style="width: 98%">
+    <!-- <footer class="footer" style="width: 98%">
       <div class="container">
         <span
           >US County COVID Vaccination Rate. Source: https://www.cdc.gov/.</span
         >
       </div>
-    </footer>
+    </footer> -->
   </b-container>
 </template>
 
@@ -506,7 +514,7 @@ export default {
 
       // prepration before removing overlaps
       if (!repeat) {
-        __VM.rect.size = Number(__VM.rect.size) + Number(__VM.rect.sizeStep);
+        __VM.rect.size = __VM.rect.size + __VM.rect.sizeStep;
         __VM.setRectSize();
       }
 
@@ -519,27 +527,19 @@ export default {
 
         const x = Number(r.attr("x")),
           y = Number(r.attr("y")),
-          w = Number(__VM.rect.size),
-          h = Number(__VM.rect.size);
+          w = __VM.rect.size,
+          h = __VM.rect.size;
 
-        if (!r.attr("x_history")) {
-          r.attr("x_history", JSON.stringify([]));
+        if (!r.attr("history")) {
+          r.attr("history", JSON.stringify([]));
         }
-        const x_history = JSON.parse(r.attr("x_history"));
-        x_history.unshift(x);
-        r.attr("x_history", JSON.stringify(x_history));
-
-        if (!r.attr("y_history")) {
-          r.attr("y_history", JSON.stringify([]));
-        }
-        const y_history = JSON.parse(r.attr("y_history"));
-        y_history.unshift(y);
-        r.attr("y_history", JSON.stringify(y_history));
+        const history = JSON.parse(r.attr("history"));
+        history.unshift([x, y]);
+        r.attr("history", JSON.stringify(history));
 
         const newRect = new cola.Rectangle(x, x + w, y, y + h);
 
-        newRect.x_history = x_history;
-        newRect.y_history = y_history;
+        newRect.history = history;
 
         data[i] = newRect;
       });
@@ -547,7 +547,7 @@ export default {
       // remove overlaps
       cola.removeOverlaps(data);
 
-      const timer = 2000 * __VM.rect.size;
+      const timer = 20 * __VM.timer * __VM.rect.size;
 
       // draw river crossing edges
       for (const [i, rect] of d3
@@ -589,7 +589,7 @@ export default {
           .attr("y", data[i].y);
       }
 
-      __VM.delay(timer).then(() => {
+      __VM.delay(timer * 1.2).then(() => {
         for (const [i, rect] of d3
           .selectAll(".rect-layer > rect")
           ._groups[0].entries()) {
@@ -599,10 +599,25 @@ export default {
               .attr("fill", "blue")
               .attr("stroke", "blue")
               .attr("nodeX", true)
+              .attr("moveHistory", () => {
+                const move = d3.select(rect).attr("moveHistory");
+
+                let res = 1;
+
+                if (move) {
+                  res = Number(move) + res;
+                }
+
+                if (res > __VM.rect.maxMoveHistory) {
+                  __VM.rect.maxMoveHistory = res;
+                }
+
+                return res;
+              })
               .transition()
               .duration(timer)
-              .attr("x", data[i].x_history[0])
-              .attr("y", data[i].y_history[0]);
+              .attr("x", data[i].history[0][0])
+              .attr("y", data[i].history[0][1]);
           }
         }
       });
@@ -638,6 +653,11 @@ export default {
       if (__VM.iteration.current >= __VM.iteration.limit) {
         __VM.log += `Overlap removal iteration: ${__VM.iteration.current} stopped, iteration limit of ${__VM.iteration.limit} reached. \n`;
 
+        __VM.delay(20 * __VM.timer * __VM.rect.size).then(() => {
+          __VM.drawCorridor();
+        });
+
+        d3.selectAll(".river-edge > path").remove();
         __VM.iteration.current = 0;
       } else {
         const numEdges = d3.selectAll(".river-edge > path")._groups[0].length;
@@ -658,13 +678,156 @@ export default {
         ta_log.scrollTop = ta_log.scrollHeight;
       }
     },
+    drawCorridor() {
+      const __VM = this;
+
+      let quadrant, corridor;
+      const size = __VM.rect.size;
+
+      const halfSize = size / 2;
+
+      const pointAtX = (a, b, x) => {
+        const interpolator = d3.scaleLinear();
+        interpolator.domain([a[0], b[0]]).range([a[1], b[1]]);
+        return interpolator(x);
+      };
+
+      let rect = d3.selectAll(`rect[moveHistory="${__VM.rect.maxMoveHistory}"`);
+
+      const history = JSON.parse(rect.attr("history"))[1];
+
+      const x = Number(rect.attr("x"));
+      const y = Number(rect.attr("y"));
+
+      const previous = [history[0], history[1]];
+      const current = [x, y];
+
+      // 4 edges of previous rect position
+      const p_p1 = [previous[0] + size, previous[1]];
+      const p_p2 = [previous[0], previous[1]];
+      const p_p3 = [previous[0], previous[1] + size];
+      const p_p4 = [previous[0] + size + halfSize, previous[1] + size];
+
+      // 4 edges of current rect position
+      const c_p1 = [current[0] + size, current[1]];
+      const c_p2 = [current[0], current[1]];
+      const c_p3 = [current[0], current[1] + size];
+      const c_p4 = [current[0] + size + halfSize, current[1] + size];
+
+      // the extended points of two lines
+      let f_p1, f_p2;
+
+      // x increases, quadrant 1 or 4
+      if (previous[0] >= current[0] + halfSize) {
+        // y increases, quadrant 4
+        if (previous[1] >= current[1] + halfSize) {
+          quadrant = 4;
+
+          let x_extended = c_p1[0] - __VM.corridor.length;
+          let y_extended = pointAtX(p_p1, c_p1, x_extended);
+          f_p1 = [x_extended, y_extended];
+
+          x_extended = c_p3[0] - __VM.corridor.length;
+          y_extended = pointAtX(p_p3, c_p3, x_extended);
+          f_p2 = [x_extended, y_extended];
+
+          corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
+        }
+        // y decreases, quadrant 1
+        else {
+          quadrant = 1;
+
+          let x_extended = c_p2[0] + __VM.corridor.length;
+          let y_extended = pointAtX(p_p2, c_p2, x_extended);
+          f_p1 = [x_extended, y_extended];
+
+          x_extended = c_p3[0] + __VM.corridor.length;
+          y_extended = pointAtX(p_p4, c_p4, x_extended);
+          f_p2 = [x_extended, y_extended];
+
+          corridor = d3.line()([p_p2, p_p4, f_p2, f_p1, p_p2]);
+        }
+      }
+      // x decreases, quadrant 2 or 3
+      else if (previous[0] < current[0] + halfSize) {
+        // y increases, quadrant 3
+        if (previous[1] >= current[1] + halfSize) {
+          quadrant = 3;
+
+          let x_extended = c_p2[0] + __VM.corridor.length;
+          let y_extended = pointAtX(p_p2, c_p2, x_extended);
+          f_p1 = [x_extended, y_extended];
+
+          x_extended = c_p4[0] + __VM.corridor.length;
+          y_extended = pointAtX(p_p4, c_p4, x_extended);
+          f_p2 = [x_extended, y_extended];
+
+          corridor = d3.line()([p_p2, p_p4, f_p2, f_p1, p_p2]);
+        }
+        // y decreases, quadrant 2
+        else {
+          quadrant = 2;
+
+          let x_extended = c_p1[0] - __VM.corridor.length;
+          let y_extended = pointAtX(p_p1, c_p1, x_extended);
+          f_p1 = [x_extended, y_extended];
+
+          x_extended = c_p3[0] - __VM.corridor.length;
+          y_extended = pointAtX(p_p3, c_p3, x_extended);
+          f_p2 = [x_extended, y_extended];
+
+          corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
+        }
+      }
+
+      rect.attr("fill", "pink");
+
+      __VM.svg
+        .append("path")
+        .attr("d", corridor)
+        .attr("class", "corridor")
+        .attr("stroke", "blue")
+        .attr("stroke-width", "0.5")
+        .attr("fill", "none");
+
+      const timer = 100 * __VM.timer;
+
+      for (let [i, rect] of d3
+        .selectAll(".rect-layer > rect")
+        ._groups[0].entries()) {
+        rect = d3.select(rect);
+        const x_in = Number(rect.attr("x"));
+        const y_in = Number(rect.attr("y"));
+
+        if (x_in !== x && y_in !== y) {
+          if (pip.isInside([x_in + halfSize, y_in + halfSize], corridor)) {
+            rect
+              .transition()
+              .duration(timer)
+              .attr(
+                "x",
+                quadrant === 1 || quadrant === 4
+                  ? x_in + halfSize
+                  : x_in - halfSize
+              )
+              .attr(
+                "y",
+                quadrant === 3 || quadrant === 4
+                  ? y_in + halfSize
+                  : y_in - halfSize
+              )
+              .attr("fill", "pink");
+          }
+        }
+      }
+    },
     connectNewOldRiverRect(rect) {
       const __VM = this;
 
-      if (rect.x !== rect.x_history[0] && rect.y !== rect.y_history[0]) {
+      if (rect.x !== rect.history[0][0] && rect.y !== rect.history[0][1]) {
         const line = d3.line()([
           [rect.x + __VM.rect.size / 2, rect.y + __VM.rect.size / 2],
-          [rect.x_history[0], rect.y_history[0]],
+          [rect.history[0][0], rect.history[0][1]],
         ]);
 
         const checkIntersect = (line) => {
@@ -688,12 +851,12 @@ export default {
               true
             );
 
-            if (intersectPoints > 0) {
+            if (intersectPoints) {
               intersected = true;
               __VM.river.rivers[river].translate.x +=
-                Number(rect.x) - Number(rect.x_history[0]);
+                Number(rect.x) - Number(rect.history[0][0]);
               __VM.river.rivers[river].translate.y +=
-                Number(rect.y) - Number(rect.y_history[0]);
+                Number(rect.y) - Number(rect.history[0][1]);
 
               river_edge_layer
                 .append("path")
@@ -701,7 +864,7 @@ export default {
                 .attr("stroke", "blue")
                 .attr("stroke-width", "1px")
                 .attr("fill", "none")
-                .attr("marker-start", "url(#arrow)");
+                .attr("marker-end", "url(#arrow)");
             }
           }
 
@@ -826,7 +989,7 @@ export default {
           __VM.shapefile.objects[river]
         ).coordinates[0];
 
-        let spacing = Number(__VM.river.spacing);
+        let spacing = __VM.river.spacing;
 
         const resolution = [];
 
@@ -867,7 +1030,7 @@ export default {
         let timer = 0;
 
         if (!__VM.getRiverTranslationStatic) {
-          timer = 10000;
+          timer = 100 * __VM.timer;
           river_layer
             .transition()
             .duration(timer)
@@ -1042,8 +1205,12 @@ export default {
   },
   data() {
     return {
-      iteration: { current: 0, limit: 10 },
+      iteration: { current: 0, limit: 1 },
+      timer: 30,
       log: "",
+      corridor: {
+        length: 30,
+      },
       rect: {
         rectOverlapsRemoved: false,
         rectSizeUniformed: false,
@@ -1052,6 +1219,7 @@ export default {
         color: "success",
         size: 3,
         sizeStep: 0.5,
+        maxMoveHistory: 0,
       },
       river: {
         translation: {

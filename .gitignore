@@ -15,7 +15,7 @@ pnpm-debug.log*
 # Editor directories and files
 .vscode
 
-tempCodeRunnerFile\.js
+tempCodeRunnerFile.*
 
 # latex build files
 *.aux
