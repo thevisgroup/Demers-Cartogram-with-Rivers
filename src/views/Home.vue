@@ -653,12 +653,12 @@ export default {
       if (__VM.iteration.current >= __VM.iteration.limit) {
         __VM.log += `Overlap removal iteration: ${__VM.iteration.current} stopped, iteration limit of ${__VM.iteration.limit} reached. \n`;
 
+        d3.selectAll(".river-edge > path").remove();
+        __VM.iteration.current = 0;
+
         __VM.delay(20 * __VM.timer * __VM.rect.size).then(() => {
           __VM.drawCorridor();
         });
-
-        d3.selectAll(".river-edge > path").remove();
-        __VM.iteration.current = 0;
       } else {
         const numEdges = d3.selectAll(".river-edge > path")._groups[0].length;
 
@@ -828,6 +828,11 @@ export default {
           }
         }
       }
+
+      __VM.delay(timer).then(() => {
+        d3.select(".corridor").remove();
+        __VM.removeOverlap(true);
+      });
     },
     connectNewOldRiverRect(rect) {
       const __VM = this;
