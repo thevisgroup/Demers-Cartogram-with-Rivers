@@ -681,15 +681,10 @@ export default {
     drawCorridor() {
       const __VM = this;
 
-      let slope, quadrant, corridor;
+      let quadrant, corridor, hyp, hyp_extend, adj_extend, oppo_extend;
       const size = __VM.rect.size;
 
       const halfSize = size / 2;
-
-      // https://stackoverflow.com/questions/21168599/extend-line-with-given-points
-      const pointAtX = (a, x) => a[1] + (x - a[0]) * slope;
-
-      const getSlope = (a, b) => (b[1] - a[1]) / (b[0] - a[0]);
 
       let rect = d3.select(`rect[moveHistory="${__VM.rect.maxMoveHistory}"`);
 
@@ -705,31 +700,34 @@ export default {
       const p_p1 = [previous[0] + size, previous[1]];
       const p_p2 = [previous[0], previous[1]];
       const p_p3 = [previous[0], previous[1] + size];
-      const p_p4 = [previous[0] + size + halfSize, previous[1] + size];
+      const p_p4 = [previous[0] + size, previous[1] + size];
 
       // 4 edges of current rect position
       const c_p1 = [current[0] + size, current[1]];
       const c_p2 = [current[0], current[1]];
       const c_p3 = [current[0], current[1] + size];
-      const c_p4 = [current[0] + size + halfSize, current[1] + size];
+      const c_p4 = [current[0] + size, current[1] + size];
 
       // the extended points of two lines
       let f_p1, f_p2;
 
       // x increases, quadrant 1 or 4
-      if (previous[0] >= current[0] + halfSize) {
+      if (previous[0] <= current[0]) {
         // y increases, quadrant 4
-        if (previous[1] >= current[1] + halfSize) {
+        if (previous[1] <= current[1]) {
           quadrant = 4;
 
-          let x_extended = c_p1[0] + __VM.corridor.length;
-          slope = getSlope(p_p1, c_p1);
-          let y_extended = pointAtX(p_p1, x_extended);
-          f_p1 = [x_extended, y_extended];
+          hyp = Math.sqrt(
+            Math.pow(c_p1[0] - p_p1[0], 2) + Math.pow(c_p1[1] - p_p1[1], 2)
+          );
+          hyp_extend = hyp + __VM.corridor.length;
+          adj_extend = (hyp_extend * Math.abs(c_p1[1] - p_p1[1])) / hyp;
+          oppo_extend = Math.sqrt(
+            Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
+          );
 
-          x_extended = c_p3[0] + __VM.corridor.length;
-          y_extended = pointAtX(p_p3, x_extended);
-          f_p2 = [x_extended, y_extended];
+          f_p1 = [p_p1[0] + oppo_extend, p_p1[1] + adj_extend];
+          f_p2 = [f_p1[0] - size, f_p1[1] + size];
 
           corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
         }
@@ -737,32 +735,38 @@ export default {
         else {
           quadrant = 1;
 
-          let x_extended = c_p2[0] - __VM.corridor.length;
-          slope = getSlope(p_p2, c_p2);
-          let y_extended = pointAtX(p_p2, x_extended);
-          f_p1 = [x_extended, y_extended];
+          hyp = Math.sqrt(
+            Math.pow(c_p2[0] - p_p2[0], 2) + Math.pow(c_p2[1] - p_p2[1], 2)
+          );
+          hyp_extend = hyp + __VM.corridor.length;
+          adj_extend = (hyp_extend * Math.abs(c_p2[1] - p_p2[1])) / hyp;
+          oppo_extend = Math.sqrt(
+            Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
+          );
 
-          x_extended = c_p3[0] - __VM.corridor.length;
-          y_extended = pointAtX(p_p4, x_extended);
-          f_p2 = [x_extended, y_extended];
+          f_p1 = [p_p2[0] + oppo_extend, p_p2[1] - adj_extend];
+          f_p2 = [f_p1[0] + size, f_p1[1] + size];
 
           corridor = d3.line()([p_p2, p_p4, f_p2, f_p1, p_p2]);
         }
       }
       // x decreases, quadrant 2 or 3
-      else if (previous[0] < current[0] + halfSize) {
+      else if (previous[0] > current[0]) {
         // y increases, quadrant 3
-        if (previous[1] >= current[1] + halfSize) {
+        if (previous[1] <= current[1]) {
           quadrant = 3;
 
-          let x_extended = c_p2[0] - __VM.corridor.length;
-          slope = getSlope(p_p2, c_p2);
-          let y_extended = pointAtX(p_p2, x_extended);
-          f_p1 = [x_extended, y_extended];
+          hyp = Math.sqrt(
+            Math.pow(c_p2[0] - p_p2[0], 2) + Math.pow(c_p2[1] - p_p2[1], 2)
+          );
+          hyp_extend = hyp + __VM.corridor.length;
+          adj_extend = (hyp_extend * Math.abs(c_p2[1] - p_p2[1])) / hyp;
+          oppo_extend = Math.sqrt(
+            Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
+          );
 
-          x_extended = c_p4[0] - __VM.corridor.length;
-          y_extended = pointAtX(p_p4, x_extended);
-          f_p2 = [x_extended, y_extended];
+          f_p1 = [p_p2[0] - oppo_extend, p_p2[1] + adj_extend];
+          f_p2 = [f_p1[0] + size, f_p1[1] + size];
 
           corridor = d3.line()([p_p2, p_p4, f_p2, f_p1, p_p2]);
         }
@@ -770,14 +774,17 @@ export default {
         else {
           quadrant = 2;
 
-          let x_extended = c_p1[0] + __VM.corridor.length;
-          slope = getSlope(p_p1, c_p1);
-          let y_extended = pointAtX(p_p1, x_extended);
-          f_p1 = [x_extended, y_extended];
+          hyp = Math.sqrt(
+            Math.pow(c_p1[0] - p_p1[0], 2) + Math.pow(c_p1[1] - p_p1[1], 2)
+          );
+          hyp_extend = hyp + __VM.corridor.length;
+          adj_extend = (hyp_extend * Math.abs(c_p1[1] - p_p1[1])) / hyp;
+          oppo_extend = Math.sqrt(
+            Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
+          );
 
-          x_extended = c_p3[0] + __VM.corridor.length;
-          y_extended = pointAtX(p_p3, x_extended);
-          f_p2 = [x_extended, y_extended];
+          f_p1 = [p_p1[0] - oppo_extend, p_p1[1] - adj_extend];
+          f_p2 = [f_p1[0] - size, f_p1[1] + size];
 
           corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
         }
@@ -793,23 +800,15 @@ export default {
 
       const timer = 100 * __VM.timer;
 
-      // use the slope to calculate the distance of rect movement
-      // https://math.stackexchange.com/a/656511
-      const x_rect_move = size * Math.cos(Math.atan(slope));
-      const y_rect_move = size * Math.sin(Math.atan(slope));
+      console.log(quadrant, previous, current);
 
       rect
         .transition()
         .duration(timer)
-        .attr(
-          "x",
-          quadrant === 1 || quadrant === 4 ? x - x_rect_move : x + x_rect_move
-        )
-        .attr(
-          "y",
-          quadrant === 3 || quadrant === 4 ? y - y_rect_move : y + y_rect_move
-        )
+        .attr("x", quadrant === 1 || quadrant === 4 ? x + size : x - size)
+        .attr("y", quadrant === 1 || quadrant === 2 ? y - size : y + size)
         .attr("fill", "pink");
+
       for (let [i, rect] of d3
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
@@ -824,15 +823,11 @@ export default {
               .duration(timer)
               .attr(
                 "x",
-                quadrant === 1 || quadrant === 4
-                  ? x_in - x_rect_move
-                  : x_in + x_rect_move
+                quadrant === 1 || quadrant === 4 ? x_in + size : x_in - size
               )
               .attr(
                 "y",
-                quadrant === 3 || quadrant === 4
-                  ? y_in - y_rect_move
-                  : y_in + y_rect_move
+                quadrant === 1 || quadrant === 2 ? y_in - size : y_in + size
               )
               .attr("fill", "pink");
           }
@@ -1229,7 +1224,7 @@ export default {
   data() {
     return {
       iteration: { current: 0, limit: 1 },
-      timer: 30,
+      timer: 40,
       log: "",
       corridor: {
         length: 30,
