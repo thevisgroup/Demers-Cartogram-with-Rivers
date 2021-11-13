@@ -691,7 +691,7 @@ export default {
 
       const getSlope = (a, b) => (b[1] - a[1]) / (b[0] - a[0]);
 
-      let rect = d3.selectAll(`rect[moveHistory="${__VM.rect.maxMoveHistory}"`);
+      let rect = d3.select(`rect[moveHistory="${__VM.rect.maxMoveHistory}"`);
 
       const history = JSON.parse(rect.attr("history"))[1];
 
@@ -783,8 +783,6 @@ export default {
         }
       }
 
-      rect.attr("fill", "pink");
-
       __VM.svg
         .append("path")
         .attr("d", corridor)
@@ -800,6 +798,18 @@ export default {
       const x_rect_move = size * Math.cos(Math.atan(slope));
       const y_rect_move = size * Math.sin(Math.atan(slope));
 
+      rect
+        .transition()
+        .duration(timer)
+        .attr(
+          "x",
+          quadrant === 1 || quadrant === 4 ? x - x_rect_move : x + x_rect_move
+        )
+        .attr(
+          "y",
+          quadrant === 3 || quadrant === 4 ? y - y_rect_move : y + y_rect_move
+        )
+        .attr("fill", "pink");
       for (let [i, rect] of d3
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
