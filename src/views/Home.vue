@@ -37,6 +37,9 @@
               ></rect>
               <text x="22" y="52">nodeX</text>
 
+              <rect fill="blue" x="82" y="39"></rect>
+              <text x="102" y="52">nodeX stalemate</text>
+
               <rect
                 fill="green"
                 stroke="purple"
@@ -352,8 +355,8 @@ export default {
         .attr("orient", "auto-start-reverse")
         .append("svg:path")
         .attr("d", "M0,0 L0,3 L3,1.5")
-        .attr("stroke", "red")
-        .attr("fill", "black");
+        .attr("stroke", "none")
+        .attr("fill", "blue");
 
       function zoomed(event) {
         const { transform } = event;
@@ -514,7 +517,7 @@ export default {
 
       // prepration before removing overlaps
       if (!repeat) {
-        __VM.rect.size = __VM.rect.size + __VM.rect.sizeStep;
+        __VM.rect.size = Number(__VM.rect.size) + Number(__VM.rect.sizeStep);
         __VM.setRectSize();
       }
 
@@ -530,14 +533,17 @@ export default {
           w = __VM.rect.size,
           h = __VM.rect.size;
 
+        const newRect = new cola.Rectangle(x, x + w, y, y + h);
+        // add historical x,y
         if (!r.attr("history")) {
           r.attr("history", JSON.stringify([]));
         }
-        const history = JSON.parse(r.attr("history"));
-        history.unshift([x, y]);
-        r.attr("history", JSON.stringify(history));
 
-        const newRect = new cola.Rectangle(x, x + w, y, y + h);
+        let history = JSON.parse(r.attr("history"));
+
+        history.unshift([x, y]);
+
+        r.attr("history", JSON.stringify(history));
 
         newRect.history = history;
 
@@ -587,40 +593,22 @@ export default {
           .duration(timer)
           .attr("x", data[i].x)
           .attr("y", data[i].y);
-      }
 
-      __VM.delay(timer * 1.2).then(() => {
-        for (const [i, rect] of d3
-          .selectAll(".rect-layer > rect")
-          ._groups[0].entries()) {
-          // move back nodeX
+        if (
+          data[i].history[0][0] !== d3.select(rect).attr("x") &&
+          data[i].history[0][1] !== d3.select(rect).attr("y")
+        ) {
           if (__VM.connectNewOldRiverRect(data[i])) {
             d3.select(rect)
               .attr("fill", "blue")
               .attr("stroke", "blue")
               .attr("nodeX", true)
-              .attr("moveHistory", () => {
-                const move = d3.select(rect).attr("moveHistory");
-
-                let res = 1;
-
-                if (move) {
-                  res = Number(move) + res;
-                }
-
-                if (res > __VM.rect.maxMoveHistory) {
-                  __VM.rect.maxMoveHistory = res;
-                }
-
-                return res;
-              })
               .transition()
-              .duration(timer)
               .attr("x", data[i].history[0][0])
               .attr("y", data[i].history[0][1]);
           }
         }
-      });
+      }
 
       let translate = false;
 
@@ -686,16 +674,17 @@ export default {
 
       const halfSize = size / 2;
 
-      let rect = d3.select(`rect[moveHistory="${__VM.rect.maxMoveHistory}"`);
-
+      let rect = d3.select(`rect[fill="blue"`);
       const history = JSON.parse(rect.attr("history"))[1];
-
       const x = Number(rect.attr("x"));
       const y = Number(rect.attr("y"));
 
       const previous = [history[0], history[1]];
       const current = [x, y];
 
+      if (history[0] === x) {
+        console.log(rect, history);
+      }
       // 4 edges of previous rect position
       const p_p1 = [previous[0] + size, previous[1]];
       const p_p2 = [previous[0], previous[1]];
@@ -712,15 +701,16 @@ export default {
       let f_p1, f_p2;
 
       // x increases, quadrant 1 or 4
-      if (previous[0] <= current[0]) {
+      if (previous[0] < current[0]) {
         // y increases, quadrant 4
-        if (previous[1] <= current[1]) {
+        if (previous[1] < current[1]) {
           quadrant = 4;
 
           hyp = Math.sqrt(
             Math.pow(c_p1[0] - p_p1[0], 2) + Math.pow(c_p1[1] - p_p1[1], 2)
           );
           hyp_extend = hyp + __VM.corridor.length;
+
           adj_extend = (hyp_extend * Math.abs(c_p1[1] - p_p1[1])) / hyp;
           oppo_extend = Math.sqrt(
             Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
@@ -789,7 +779,6 @@ export default {
           corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
         }
       }
-
       __VM.svg
         .append("path")
         .attr("d", corridor)
@@ -800,35 +789,82 @@ export default {
 
       const timer = 100 * __VM.timer;
 
-      console.log(quadrant, previous, current);
+      // rect
+      //   .transition()
+      //   .duration(timer)
+      //   .attr("x", quadrant === 1 || quadrant === 4 ? x + size : x - size)
+      //   .attr("y", quadrant === 1 || quadrant === 2 ? y - size : y + size)
+      //   .attr("fill", "pink");
 
       rect
         .transition()
         .duration(timer)
-        .attr("x", quadrant === 1 || quadrant === 4 ? x + size : x - size)
-        .attr("y", quadrant === 1 || quadrant === 2 ? y - size : y + size)
+        .attr("x", () => {
+          if (Math.abs(x - previous[0]) < halfSize) {
+            return quadrant === 1 || quadrant === 4
+              ? x + halfSize
+              : x - halfSize;
+          }
+          return previous[0];
+        })
+        .attr("y", () => {
+          if (Math.abs(y - previous[1]) < halfSize) {
+            return quadrant === 1 || quadrant === 2
+              ? y + halfSize
+              : y - halfSize;
+          }
+          return previous[1];
+        })
         .attr("fill", "pink");
 
       for (let [i, rect] of d3
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
         rect = d3.select(rect);
+
+        const history = JSON.parse(rect.attr("history"))[1];
+
         const x_in = Number(rect.attr("x"));
         const y_in = Number(rect.attr("y"));
 
         if (x_in !== x && y_in !== y) {
           if (pip.isInside([x_in + halfSize, y_in + halfSize], corridor)) {
+            // rect
+            //   .transition()
+            //   .duration(timer)
+            //   .attr(
+            //     "x",
+            //     quadrant === 1 || quadrant === 4
+            //       ? x_in + halfSize
+            //       : x_in - halfSize
+            //   )
+            //   .attr(
+            //     "y",
+            //     quadrant === 1 || quadrant === 2
+            //       ? y_in - halfSize
+            //       : y_in + halfSize
+            //   )
+            //   .attr("fill", "pink");
+
             rect
               .transition()
               .duration(timer)
-              .attr(
-                "x",
-                quadrant === 1 || quadrant === 4 ? x_in + size : x_in - size
-              )
-              .attr(
-                "y",
-                quadrant === 1 || quadrant === 2 ? y_in - size : y_in + size
-              )
+              .attr("x", () => {
+                if (Math.abs(x_in - history[0]) < halfSize) {
+                  return quadrant === 1 || quadrant === 4
+                    ? x_in + halfSize
+                    : x_in - halfSize;
+                }
+                return history[0];
+              })
+              .attr("y", () => {
+                if (Math.abs(y_in - history[1]) < halfSize) {
+                  return quadrant === 1 || quadrant === 2
+                    ? y_in + halfSize
+                    : y_in - halfSize;
+                }
+                return history[1];
+              })
               .attr("fill", "pink");
           }
         }
@@ -1224,7 +1260,7 @@ export default {
   data() {
     return {
       iteration: { current: 0, limit: 1 },
-      timer: 40,
+      timer: 30,
       log: "",
       corridor: {
         length: 30,
@@ -1236,12 +1272,11 @@ export default {
         visibility: true,
         color: "success",
         size: 3,
-        sizeStep: 0.5,
-        maxMoveHistory: 0,
+        sizeStep: 0.25,
       },
       river: {
         translation: {
-          checked: [],
+          checked: ["static"],
           options: [
             {
               text: "Disable River Translation",
@@ -1251,7 +1286,7 @@ export default {
             {
               text: "Repeat River Translation",
               value: "repeat",
-              disabled: false,
+              disabled: true,
             },
           ],
         },
@@ -1414,7 +1449,7 @@ export default {
 }
 
 .arrow {
-  font-size: 30px;
+  font-size: 20px;
 }
 
 g.legend > rect {
