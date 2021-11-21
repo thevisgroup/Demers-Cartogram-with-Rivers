@@ -535,15 +535,18 @@ export default {
 
         const newRect = new cola.Rectangle(x, x + w, y, y + h);
         // add historical x,y
+        let history = [];
         if (!r.attr("history")) {
-          r.attr("history", JSON.stringify([]));
+          history.unshift([x, y]);
+          r.attr("history", JSON.stringify(history));
+        } else {
+          history = JSON.parse(r.attr("history"));
+
+          if (history[0][0] !== x && history[0][1] !== y) {
+            history.unshift([x, y]);
+            r.attr("history", JSON.stringify(history));
+          }
         }
-
-        let history = JSON.parse(r.attr("history"));
-
-        history.unshift([x, y]);
-
-        r.attr("history", JSON.stringify(history));
 
         newRect.history = history;
 
@@ -561,32 +564,27 @@ export default {
         ._groups[0].entries()) {
         // redraw rects using new coordinates
 
-        d3.select(rect)
-          .attr("stroke", () => {
-            let res = "black";
+        const r = d3.select(rect);
 
-            if (d3.select(rect).attr("nodeX")) {
-              res = "blue";
-            }
+        r.attr("stroke", () => {
+          let res = "black";
 
-            if (d3.select(rect).attr("riverX")) {
-              res = "red";
-            }
+          if (r.attr("nodeX")) {
+            res = "blue";
+          }
 
-            if (
-              d3.select(rect).attr("nodeX") &&
-              d3.select(rect).attr("riverX")
-            ) {
-              res = "purple";
-            }
+          if (r.attr("riverX")) {
+            res = "red";
+          }
 
-            return res;
-          })
+          if (r.attr("nodeX") && r.attr("riverX")) {
+            res = "purple";
+          }
+
+          return res;
+        })
           .attr("stroke-width", () => {
-            return d3.select(rect).attr("nodeX") ||
-              d3.select(rect).attr("riverX")
-              ? "1"
-              : "0.3";
+            return r.attr("nodeX") || r.attr("riverX") ? "1" : "0.3";
           })
           .attr("fill", __VM.colorVariant[__VM.rect.color])
           .transition()
@@ -595,12 +593,16 @@ export default {
           .attr("y", data[i].y);
 
         if (
-          data[i].history[0][0] !== d3.select(rect).attr("x") &&
-          data[i].history[0][1] !== d3.select(rect).attr("y")
+          data[i].history[0][0] !== data[i].x &&
+          data[i].history[0][1] !== data[i].y
         ) {
+          // add ORAed x,y into the history
+          let history = JSON.parse(r.attr("history"));
+          history.unshift([data[i].x, data[i].y]);
+          r.attr("history", JSON.stringify(history));
+
           if (__VM.connectNewOldRiverRect(data[i])) {
-            d3.select(rect)
-              .attr("fill", "blue")
+            r.attr("fill", "blue")
               .attr("stroke", "blue")
               .attr("nodeX", true)
               .transition()
@@ -674,17 +676,15 @@ export default {
 
       const halfSize = size / 2;
 
-      let rect = d3.select(`rect[fill="blue"`);
-      const history = JSON.parse(rect.attr("history"))[1];
+      let rect = d3.select(`#map rect[fill="blue"]`);
+
+      const history = JSON.parse(rect.attr("history"))[0];
+
       const x = Number(rect.attr("x"));
       const y = Number(rect.attr("y"));
 
       const previous = [history[0], history[1]];
       const current = [x, y];
-
-      if (history[0] === x) {
-        console.log(rect, history);
-      }
       // 4 edges of previous rect position
       const p_p1 = [previous[0] + size, previous[1]];
       const p_p2 = [previous[0], previous[1]];
@@ -822,7 +822,7 @@ export default {
         ._groups[0].entries()) {
         rect = d3.select(rect);
 
-        const history = JSON.parse(rect.attr("history"))[1];
+        const history = JSON.parse(rect.attr("history"))[0];
 
         const x_in = Number(rect.attr("x"));
         const y_in = Number(rect.attr("y"));
@@ -877,7 +877,6 @@ export default {
     },
     connectNewOldRiverRect(rect) {
       const __VM = this;
-
       if (rect.x !== rect.history[0][0] && rect.y !== rect.history[0][1]) {
         const line = d3.line()([
           [rect.x + __VM.rect.size / 2, rect.y + __VM.rect.size / 2],
