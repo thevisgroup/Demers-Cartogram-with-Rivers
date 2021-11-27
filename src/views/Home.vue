@@ -123,7 +123,7 @@
                       overlaps</b-button
                     > -->
 
-                  <b-button block variant="primary" v-on:click="removeOverlap()"
+                  <b-button block variant="primary" v-on:click="triggerStep()"
                     >Remove overlaps</b-button
                   >
 
@@ -235,7 +235,7 @@
                   ></b-button>
                 </td>
               </tr>
-              <!-- <tr>
+              <tr>
                 <td>
                   <b-button
                     block
@@ -249,7 +249,7 @@
                 <td>
                   <b-button
                     block
-                    :variant="county.border? 'danger' : 'primary'"
+                    :variant="county.border ? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('county')"
                     >Show bordering counties</b-button
                   >
@@ -269,13 +269,13 @@
                 <td>
                   <b-button
                     block
-                    :variant="state.border? 'danger' : 'primary'"
+                    :variant="state.border ? 'danger' : 'primary'"
                     v-on:click="highlightBorderingRegion('state')"
-                    >{{ state.border? "Hide" : "Show" }} bordering
+                    >{{ state.border ? "Hide" : "Show" }} bordering
                     states</b-button
                   >
                 </td>
-              </tr> -->
+              </tr>
             </tbody>
           </table>
           <b-form-textarea
@@ -609,6 +609,14 @@ export default {
               .attr("x", data[i].history[0][0])
               .attr("y", data[i].history[0][1]);
           }
+          // else {
+          //   // un-nodeX
+          //   if (r.attr("nodeX") === true) {
+          //     r.attr("fill", __VM.colorVariant[__VM.rect.color])
+          //       .attr("stroke", "black")
+          //       .attr("nodeX", null);
+          //   }
+          // }
         }
       }
 
@@ -633,11 +641,13 @@ export default {
       }
 
       __VM.rect.rectOverlapsRemoved = true;
-      __VM.delay(timer * 1.5).then(() => {
-        __VM.repeatOverlapRemoval();
-      });
+
+      __VM.step.step_index = 1;
+      // __VM.delay(timer * 1.5).then(() => {
+      // __VM.checkORAIteration();
+      // });
     },
-    repeatOverlapRemoval() {
+    checkORAIteration() {
       const __VM = this;
 
       if (__VM.iteration.current >= __VM.iteration.limit) {
@@ -662,6 +672,8 @@ export default {
           __VM.log += `Overlap removal iteration: ${__VM.iteration.current} finished, no more nodeX \n`;
 
           __VM.iteration.current = 0;
+
+          __VM.step.step_index = 0;
         }
 
         const ta_log = document.querySelector("#ta_log");
@@ -870,9 +882,10 @@ export default {
         }
       }
 
+      __VM.step.step_index = 2;
       __VM.delay(timer).then(() => {
         d3.select(".corridor").remove();
-        __VM.removeOverlap(true);
+        // __VM.removeOverlap(true);
       });
     },
     connectNewOldRiverRect(rect) {
@@ -1042,7 +1055,7 @@ export default {
           __VM.shapefile.objects[river]
         ).coordinates[0];
 
-        let spacing = __VM.river.spacing;
+        let spacing = Number(__VM.river.spacing);
 
         const resolution = [];
 
@@ -1252,12 +1265,38 @@ export default {
       }
       return [t.finalX, t.finalY, arrow];
     },
+    triggerStep() {
+      const __VM = this;
+
+      const step = __VM.step.step_index;
+
+      switch (__VM.step.step_list[step]) {
+        case "ORA":
+          __VM.removeOverlap();
+          break;
+        case "ORA Repeat":
+          __VM.removeOverlap(true);
+          break;
+        case "Check ORA":
+          __VM.checkORAIteration();
+          break;
+        case "Corridor":
+          __VM.drawCorridor();
+          break;
+        default:
+          break;
+      }
+    },
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
   },
   data() {
     return {
+      step: {
+        step_index: 0,
+        step_list: ["ORA", "Check ORA", "ORA Repeat", "Corridor"],
+      },
       iteration: { current: 0, limit: 1 },
       timer: 30,
       log: "",
