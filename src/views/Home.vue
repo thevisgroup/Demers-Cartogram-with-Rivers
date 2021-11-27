@@ -504,6 +504,8 @@ export default {
 
       __VM.translateRiver();
 
+      __VM.mapNodeColorToRegion();
+
       __VM.rect.rectOverlapsRemoved = false;
     },
     async removeOverlap(repeat = false) {
@@ -586,7 +588,7 @@ export default {
           .attr("stroke-width", () => {
             return r.attr("nodeX") || r.attr("riverX") ? "1" : "0.3";
           })
-          .attr("fill", __VM.colorVariant[__VM.rect.color])
+          //.attr("fill", __VM.colorVariant[__VM.rect.color])
           .transition()
           .duration(timer)
           .attr("x", data[i].x)
@@ -600,6 +602,10 @@ export default {
           let history = JSON.parse(r.attr("history"));
           history.unshift([data[i].x, data[i].y]);
           r.attr("history", JSON.stringify(history));
+
+          if (data[i].x === 415.61896767452663) {
+            console.log(data[i]);
+          }
 
           if (__VM.connectNewOldRiverRect(data[i])) {
             r.attr("fill", "blue")
@@ -1285,6 +1291,66 @@ export default {
           break;
         default:
           break;
+      }
+    },
+    mapNodeColorToRegion() {
+      const __VM = this;
+      let regionYellow = [];
+
+      let regionBlue = [];
+
+      let yellowFirst, blueFirst;
+
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        const res = __VM.river.rivers[river].resolution;
+
+        if (river === "missouri") {
+          regionYellow.push(...res);
+          yellowFirst = res[0];
+        }
+
+        if (river === "mississippi") {
+          regionYellow.push(...res.slice(12));
+          regionBlue.push(...res);
+          blueFirst = res[0];
+        }
+
+        if (river === "rio_grande") {
+          regionYellow.push(...res.reverse());
+        }
+      });
+
+      regionYellow.push(yellowFirst);
+
+      regionBlue.push([508, 320]);
+      regionBlue.push([625, 320]);
+      regionBlue.push([625, 107]);
+      regionBlue.push([370, 60]);
+      regionBlue.push(blueFirst);
+
+      // __VM.svg
+      //   .append("path")
+      //   .attr("d", d3.line()(regionBlue))
+      //   .attr("stroke", "black")
+      //   .attr("stroke-width", "2px")
+      //   .attr("fill", "none");
+
+      for (let [i, rect] of d3
+        .selectAll(".rect-layer > rect")
+        ._groups[0].entries()) {
+        rect = d3.select(rect);
+        if (
+          pip.isInside(
+            [rect.attr("x"), rect.attr("y")],
+            d3.line()(regionYellow)
+          )
+        ) {
+          rect.attr("fill", __VM.colorVariant.mississippi);
+        } else if (
+          pip.isInside([rect.attr("x"), rect.attr("y")], d3.line()(regionBlue))
+        ) {
+          rect.attr("fill", __VM.colorVariant.rio_grande);
+        }
       }
     },
     delay(ms) {
