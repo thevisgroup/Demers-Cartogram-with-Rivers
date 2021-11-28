@@ -440,6 +440,7 @@ export default {
         .attr("colormap", (d) => colormap(getVacRate(d) / 100))
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
+        .attr("id", (d) => d.properties.NAME)
         // .attr("width", (d) => calculateRectSize(d))
         // .attr("height", (d) => calculateRectSize(d))
 
@@ -508,7 +509,7 @@ export default {
 
       __VM.rect.rectOverlapsRemoved = false;
     },
-    async removeOverlap(repeat = false) {
+    removeOverlap(repeat = false) {
       const __VM = this;
 
       const data = [];
@@ -595,17 +596,13 @@ export default {
           .attr("y", data[i].y);
 
         if (
-          data[i].history[0][0] !== data[i].x &&
+          data[i].history[0][0] !== data[i].x ||
           data[i].history[0][1] !== data[i].y
         ) {
           // add ORAed x,y into the history
           let history = JSON.parse(r.attr("history"));
           history.unshift([data[i].x, data[i].y]);
           r.attr("history", JSON.stringify(history));
-
-          if (data[i].x === 415.61896767452663) {
-            console.log(data[i]);
-          }
 
           if (__VM.connectNewOldRiverRect(data[i])) {
             r.attr("fill", "blue")
@@ -797,6 +794,7 @@ export default {
           corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
         }
       }
+
       __VM.svg
         .append("path")
         .attr("d", corridor)
@@ -846,7 +844,7 @@ export default {
         const y_in = Number(rect.attr("y"));
 
         if (x_in !== x && y_in !== y) {
-          if (pip.isInside([x_in + halfSize, y_in + halfSize], corridor)) {
+          if (pip.isInside([x_in, y_in], corridor)) {
             // rect
             //   .transition()
             //   .duration(timer)
@@ -896,55 +894,50 @@ export default {
     },
     connectNewOldRiverRect(rect) {
       const __VM = this;
-      if (rect.x !== rect.history[0][0] && rect.y !== rect.history[0][1]) {
-        const line = d3.line()([
-          [rect.x + __VM.rect.size / 2, rect.y + __VM.rect.size / 2],
-          [rect.history[0][0], rect.history[0][1]],
-        ]);
 
-        const checkIntersect = (line) => {
-          let intersected = false;
-          for (const river of Object.keys(__VM.river.rivers)) {
-            // const river_path = d3.select(`g.${river} .river path`).attr("d");
+      const line = d3.line()([
+        [Number(rect.x), Number(rect.y)],
+        [Number(rect.history[0][0]), Number(rect.history[0][1])],
+      ]);
 
-            const river_path = flattener.flatten_path(
-              document.querySelector(`#${river}`).getPathData(),
-              [
-                __VM.river.rivers[river].translate.finalX,
-                __VM.river.rivers[river].translate.finalY,
-              ]
-            );
+      const checkIntersect = (line) => {
+        let intersected = false;
+        for (const river of Object.keys(__VM.river.rivers)) {
+          // const river_path = d3.select(`g.${river} .river path`).attr("d");
 
-            const river_edge_layer = d3.select(`.${river} .river-edge`);
+          const river_path = flattener.flatten_path(
+            document.querySelector(`#${river}`).getPathData(),
+            [
+              __VM.river.rivers[river].translate.finalX,
+              __VM.river.rivers[river].translate.finalY,
+            ]
+          );
 
-            const intersectPoints = findPathIntersections(
-              river_path,
-              line,
-              true
-            );
+          const river_edge_layer = d3.select(`.${river} .river-edge`);
 
-            if (intersectPoints) {
-              intersected = true;
-              __VM.river.rivers[river].translate.x +=
-                Number(rect.x) - Number(rect.history[0][0]);
-              __VM.river.rivers[river].translate.y +=
-                Number(rect.y) - Number(rect.history[0][1]);
+          const intersectPoints = findPathIntersections(river_path, line, true);
 
-              river_edge_layer
-                .append("path")
-                .attr("d", line)
-                .attr("stroke", "blue")
-                .attr("stroke-width", "1px")
-                .attr("fill", "none")
-                .attr("marker-end", "url(#arrow)");
-            }
+          if (intersectPoints) {
+            intersected = true;
+            __VM.river.rivers[river].translate.x +=
+              Number(rect.x) - Number(rect.history[0][0]);
+            __VM.river.rivers[river].translate.y +=
+              Number(rect.y) - Number(rect.history[0][1]);
+
+            river_edge_layer
+              .append("path")
+              .attr("d", line)
+              .attr("stroke", "blue")
+              .attr("stroke-width", "1px")
+              .attr("fill", "none")
+              .attr("marker-end", "url(#arrow)");
           }
+        }
 
-          return intersected;
-        };
+        return intersected;
+      };
 
-        return checkIntersect(line);
-      }
+      return checkIntersect(line);
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
@@ -1341,13 +1334,16 @@ export default {
         rect = d3.select(rect);
         if (
           pip.isInside(
-            [rect.attr("x"), rect.attr("y")],
+            [Number(rect.attr("x")), Number(rect.attr("y"))],
             d3.line()(regionYellow)
           )
         ) {
           rect.attr("fill", __VM.colorVariant.mississippi);
         } else if (
-          pip.isInside([rect.attr("x"), rect.attr("y")], d3.line()(regionBlue))
+          pip.isInside(
+            [Number(rect.attr("x")), Number(rect.attr("y"))],
+            d3.line()(regionBlue)
+          )
         ) {
           rect.attr("fill", __VM.colorVariant.rio_grande);
         }
