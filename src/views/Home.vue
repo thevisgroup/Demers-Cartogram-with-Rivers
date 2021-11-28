@@ -693,13 +693,14 @@ export default {
 
       let rect = d3.select(`#map rect[fill="blue"]`);
 
-      const history = JSON.parse(rect.attr("history"))[0];
+      const history = JSON.parse(rect.attr("history"))[1];
 
       const x = Number(rect.attr("x"));
       const y = Number(rect.attr("y"));
 
       const previous = [history[0], history[1]];
       const current = [x, y];
+
       // 4 edges of previous rect position
       const p_p1 = [previous[0] + size, previous[1]];
       const p_p2 = [previous[0], previous[1]];
@@ -715,85 +716,153 @@ export default {
       // the extended points of two lines
       let f_p1, f_p2;
 
-      // x increases, quadrant 1 or 4
-      if (previous[0] < current[0]) {
-        // y increases, quadrant 4
+      const getquadrantY = (previous, current, quadrantX) => {
+        // y increases
         if (previous[1] < current[1]) {
-          quadrant = 4;
+          switch (quadrantX) {
+            case "+":
+              quadrant = 4;
+              hyp = Math.sqrt(
+                Math.pow(c_p1[0] - p_p1[0], 2) + Math.pow(c_p1[1] - p_p1[1], 2)
+              );
+              hyp_extend = hyp + __VM.corridor.length;
 
-          hyp = Math.sqrt(
-            Math.pow(c_p1[0] - p_p1[0], 2) + Math.pow(c_p1[1] - p_p1[1], 2)
-          );
-          hyp_extend = hyp + __VM.corridor.length;
+              adj_extend = (hyp_extend * Math.abs(c_p1[1] - p_p1[1])) / hyp;
+              oppo_extend = Math.sqrt(
+                Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
+              );
 
-          adj_extend = (hyp_extend * Math.abs(c_p1[1] - p_p1[1])) / hyp;
-          oppo_extend = Math.sqrt(
-            Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
-          );
+              f_p1 = [p_p1[0] + oppo_extend, p_p1[1] + adj_extend];
+              f_p2 = [f_p1[0] - size, f_p1[1] + size];
 
-          f_p1 = [p_p1[0] + oppo_extend, p_p1[1] + adj_extend];
-          f_p2 = [f_p1[0] - size, f_p1[1] + size];
+              corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
+              return 4;
+            case "-":
+              quadrant = 3;
 
-          corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
+              hyp = Math.sqrt(
+                Math.pow(c_p2[0] - p_p2[0], 2) + Math.pow(c_p2[1] - p_p2[1], 2)
+              );
+              hyp_extend = hyp + __VM.corridor.length;
+              adj_extend = (hyp_extend * Math.abs(c_p2[1] - p_p2[1])) / hyp;
+              oppo_extend = Math.sqrt(
+                Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
+              );
+
+              f_p1 = [p_p2[0] - oppo_extend, p_p2[1] + adj_extend];
+              f_p2 = [f_p1[0] + size, f_p1[1] + size];
+
+              corridor = d3.line()([p_p2, p_p4, f_p2, f_p1, p_p2]);
+
+              return 3;
+            case "=":
+              f_p1 = [p_p3[0], p_p3[1] + __VM.corridor.length];
+              f_p2 = [p_p4[0], p_p4[1] + __VM.corridor.length];
+
+              corridor = d3.line()([p_p3, f_p1, f_p2, p_p4, p_p3]);
+
+              return 7;
+            default:
+              break;
+          }
+        } else if (previous[1] > current[1]) {
+          switch (quadrantX) {
+            case "+":
+              quadrant = 1;
+
+              hyp = Math.sqrt(
+                Math.pow(c_p2[0] - p_p2[0], 2) + Math.pow(c_p2[1] - p_p2[1], 2)
+              );
+              hyp_extend = hyp + __VM.corridor.length;
+              adj_extend = (hyp_extend * Math.abs(c_p2[1] - p_p2[1])) / hyp;
+              oppo_extend = Math.sqrt(
+                Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
+              );
+
+              f_p1 = [p_p2[0] + oppo_extend, p_p2[1] - adj_extend];
+              f_p2 = [f_p1[0] + size, f_p1[1] + size];
+
+              corridor = d3.line()([p_p2, p_p4, f_p2, f_p1, p_p2]);
+              return 1;
+            case "-":
+              quadrant = 2;
+
+              hyp = Math.sqrt(
+                Math.pow(c_p1[0] - p_p1[0], 2) + Math.pow(c_p1[1] - p_p1[1], 2)
+              );
+              hyp_extend = hyp + __VM.corridor.length;
+              adj_extend = (hyp_extend * Math.abs(c_p1[1] - p_p1[1])) / hyp;
+              oppo_extend = Math.sqrt(
+                Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
+              );
+
+              f_p1 = [p_p1[0] - oppo_extend, p_p1[1] - adj_extend];
+              f_p2 = [f_p1[0] - size, f_p1[1] + size];
+
+              corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
+              return 2;
+            case "=":
+              quadrant = 5;
+
+              f_p1 = [p_p1[0], p_p1[1] - __VM.corridor.length];
+              f_p2 = [p_p2[0], p_p2[1] - __VM.corridor.length];
+
+              corridor = d3.line()([p_p1, f_p1, f_p2, p_p2, p_p1]);
+              return 5;
+            default:
+              break;
+          }
+        } else if (previous[1] === current[1]) {
+          switch (quadrantX) {
+            case "+":
+              quadrant = 8;
+
+              f_p1 = [p_p1[0] + __VM.corridor.length, p_p1[1]];
+              f_p2 = [p_p4[0] + __VM.corridor.length, p_p4[1]];
+
+              corridor = d3.line()([p_p1, f_p1, f_p2, p_p4, p_p1]);
+
+              return 8;
+            case "-":
+              quadrant = 6;
+
+              f_p1 = [p_p2[0] - __VM.corridor.length, p_p2[1]];
+              f_p2 = [p_p3[0] - __VM.corridor.length, p_p3[1]];
+
+              corridor = d3.line()([p_p2, f_p1, f_p2, p_p3, p_p2]);
+
+              return 6;
+            case "=":
+              return "impossible";
+            default:
+              break;
+          }
         }
-        // y decreases, quadrant 1
-        else {
-          quadrant = 1;
+      };
 
-          hyp = Math.sqrt(
-            Math.pow(c_p2[0] - p_p2[0], 2) + Math.pow(c_p2[1] - p_p2[1], 2)
-          );
-          hyp_extend = hyp + __VM.corridor.length;
-          adj_extend = (hyp_extend * Math.abs(c_p2[1] - p_p2[1])) / hyp;
-          oppo_extend = Math.sqrt(
-            Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
-          );
+      // quadrant
+      //   5
+      //  2|1
+      //6--|--8
+      //  3|4
+      //   7
 
-          f_p1 = [p_p2[0] + oppo_extend, p_p2[1] - adj_extend];
-          f_p2 = [f_p1[0] + size, f_p1[1] + size];
-
-          corridor = d3.line()([p_p2, p_p4, f_p2, f_p1, p_p2]);
+      const getquadrantX = (previous, current) => {
+        // x increases
+        if (previous[0] < current[0]) {
+          return getquadrantY(previous, current, "+");
         }
-      }
-      // x decreases, quadrant 2 or 3
-      else if (previous[0] > current[0]) {
-        // y increases, quadrant 3
-        if (previous[1] <= current[1]) {
-          quadrant = 3;
-
-          hyp = Math.sqrt(
-            Math.pow(c_p2[0] - p_p2[0], 2) + Math.pow(c_p2[1] - p_p2[1], 2)
-          );
-          hyp_extend = hyp + __VM.corridor.length;
-          adj_extend = (hyp_extend * Math.abs(c_p2[1] - p_p2[1])) / hyp;
-          oppo_extend = Math.sqrt(
-            Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
-          );
-
-          f_p1 = [p_p2[0] - oppo_extend, p_p2[1] + adj_extend];
-          f_p2 = [f_p1[0] + size, f_p1[1] + size];
-
-          corridor = d3.line()([p_p2, p_p4, f_p2, f_p1, p_p2]);
+        // x decreases
+        else if (previous[0] > current[0]) {
+          return getquadrantY(previous, current, "-");
         }
-        // y decreases, quadrant 2
-        else {
-          quadrant = 2;
-
-          hyp = Math.sqrt(
-            Math.pow(c_p1[0] - p_p1[0], 2) + Math.pow(c_p1[1] - p_p1[1], 2)
-          );
-          hyp_extend = hyp + __VM.corridor.length;
-          adj_extend = (hyp_extend * Math.abs(c_p1[1] - p_p1[1])) / hyp;
-          oppo_extend = Math.sqrt(
-            Math.pow(hyp_extend, 2) - Math.pow(adj_extend, 2)
-          );
-
-          f_p1 = [p_p1[0] - oppo_extend, p_p1[1] - adj_extend];
-          f_p2 = [f_p1[0] - size, f_p1[1] + size];
-
-          corridor = d3.line()([p_p1, p_p3, f_p2, f_p1, p_p1]);
+        // x unchanged
+        else if (previous[0] === current[0]) {
+          return getquadrantY(previous, current, "+");
         }
-      }
+      };
+
+      getquadrantX(previous, current);
 
       __VM.svg
         .append("path")
@@ -812,26 +881,30 @@ export default {
       //   .attr("y", quadrant === 1 || quadrant === 2 ? y - size : y + size)
       //   .attr("fill", "pink");
 
-      rect
-        .transition()
-        .duration(timer)
-        .attr("x", () => {
-          if (Math.abs(x - previous[0]) < halfSize) {
-            return quadrant === 1 || quadrant === 4
-              ? x + halfSize
-              : x - halfSize;
-          }
-          return previous[0];
-        })
-        .attr("y", () => {
-          if (Math.abs(y - previous[1]) < halfSize) {
-            return quadrant === 1 || quadrant === 2
-              ? y + halfSize
-              : y - halfSize;
-          }
-          return previous[1];
-        })
-        .attr("fill", "pink");
+      const moveRectC = (rect, previous) => {
+        rect
+          .transition()
+          .duration(timer)
+          .attr("x", () => {
+            if (Math.abs(x - previous[0]) < halfSize) {
+              return quadrant === 1 || quadrant === 4 || quadrant === 8
+                ? x + halfSize
+                : x - halfSize;
+            }
+            return previous[0];
+          })
+          .attr("y", () => {
+            if (Math.abs(y - previous[1]) < halfSize) {
+              return quadrant === 1 || quadrant === 2 || quadrant === 5
+                ? y + halfSize
+                : y - halfSize;
+            }
+            return previous[1];
+          })
+          .attr("fill", "pink");
+      };
+
+      moveRectC(rect, previous);
 
       for (let [i, rect] of d3
         .selectAll(".rect-layer > rect")
@@ -845,43 +918,7 @@ export default {
 
         if (x_in !== x && y_in !== y) {
           if (pip.isInside([x_in, y_in], corridor)) {
-            // rect
-            //   .transition()
-            //   .duration(timer)
-            //   .attr(
-            //     "x",
-            //     quadrant === 1 || quadrant === 4
-            //       ? x_in + halfSize
-            //       : x_in - halfSize
-            //   )
-            //   .attr(
-            //     "y",
-            //     quadrant === 1 || quadrant === 2
-            //       ? y_in - halfSize
-            //       : y_in + halfSize
-            //   )
-            //   .attr("fill", "pink");
-
-            rect
-              .transition()
-              .duration(timer)
-              .attr("x", () => {
-                if (Math.abs(x_in - history[0]) < halfSize) {
-                  return quadrant === 1 || quadrant === 4
-                    ? x_in + halfSize
-                    : x_in - halfSize;
-                }
-                return history[0];
-              })
-              .attr("y", () => {
-                if (Math.abs(y_in - history[1]) < halfSize) {
-                  return quadrant === 1 || quadrant === 2
-                    ? y_in + halfSize
-                    : y_in - halfSize;
-                }
-                return history[1];
-              })
-              .attr("fill", "pink");
+            moveRectC(rect, history);
           }
         }
       }
@@ -1360,7 +1397,7 @@ export default {
         step_list: ["ORA", "Check ORA", "ORA Repeat", "Corridor"],
       },
       iteration: { current: 0, limit: 1 },
-      timer: 30,
+      timer: 50,
       log: "",
       corridor: {
         length: 30,
