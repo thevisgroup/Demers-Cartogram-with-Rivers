@@ -901,7 +901,9 @@ export default {
             }
             return previous[1];
           })
-          .attr("fill", "pink");
+          .attr("fill", "pink")
+          .attr("stroke", "pink")
+          .attr("stroke-width", "1px");
       };
 
       moveRectC(rect, previous);
@@ -919,6 +921,10 @@ export default {
         if (x_in !== x && y_in !== y) {
           if (pip.isInside([x_in, y_in], corridor)) {
             moveRectC(rect, history);
+
+            __VM.delay(__VM.timer).then(() => {
+              __VM.runPIP(rect);
+            });
           }
         }
       }
@@ -932,9 +938,14 @@ export default {
     connectNewOldRiverRect(rect) {
       const __VM = this;
 
+      const nodeWidth = __VM.rect.size / 2;
+
       const line = d3.line()([
-        [Number(rect.x), Number(rect.y)],
-        [Number(rect.history[0][0]), Number(rect.history[0][1])],
+        [Number(rect.x) + nodeWidth, Number(rect.y) + nodeWidth],
+        [
+          Number(rect.history[0][0]) + nodeWidth,
+          Number(rect.history[0][1]) + nodeWidth,
+        ],
       ]);
 
       const checkIntersect = (line) => {
@@ -1325,9 +1336,8 @@ export default {
     },
     mapNodeColorToRegion() {
       const __VM = this;
-      let regionYellow = [];
-
-      let regionBlue = [];
+      __VM.region.yellow = [];
+      __VM.region.blue = [];
 
       let yellowFirst, blueFirst;
 
@@ -1335,55 +1345,72 @@ export default {
         const res = __VM.river.rivers[river].resolution;
 
         if (river === "missouri") {
-          regionYellow.push(...res);
+          __VM.region.yellow.push(...res);
           yellowFirst = res[0];
         }
 
         if (river === "mississippi") {
-          regionYellow.push(...res.slice(12));
-          regionBlue.push(...res);
+          __VM.region.yellow.push(...res.slice(12));
+          __VM.region.blue.push(...res);
           blueFirst = res[0];
         }
 
         if (river === "rio_grande") {
-          regionYellow.push(...res.reverse());
+          __VM.region.yellow.push(...res.reverse());
         }
       });
 
-      regionYellow.push(yellowFirst);
+      __VM.region.yellow.push(yellowFirst);
 
-      regionBlue.push([508, 320]);
-      regionBlue.push([625, 320]);
-      regionBlue.push([625, 107]);
-      regionBlue.push([370, 60]);
-      regionBlue.push(blueFirst);
+      __VM.region.blue.push([508, 320]);
+      __VM.region.blue.push([625, 320]);
+      __VM.region.blue.push([625, 107]);
+      __VM.region.blue.push([370, 60]);
+      __VM.region.blue.push(blueFirst);
 
-      // __VM.svg
-      //   .append("path")
-      //   .attr("d", d3.line()(regionBlue))
-      //   .attr("stroke", "black")
-      //   .attr("stroke-width", "2px")
-      //   .attr("fill", "none");
+      __VM.svg
+        .append("path")
+        .attr("d", d3.line()(__VM.region.blue))
+        .attr("stroke", "black")
+        .attr("stroke-width", "2px")
+        .attr("fill", "none");
+
+      __VM.svg
+        .append("path")
+        .attr("d", d3.line()(__VM.region.yellow))
+        .attr("stroke", "black")
+        .attr("stroke-width", "2px")
+        .attr("fill", "none");
 
       for (let [i, rect] of d3
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
-        rect = d3.select(rect);
-        if (
-          pip.isInside(
-            [Number(rect.attr("x")), Number(rect.attr("y"))],
-            d3.line()(regionYellow)
-          )
-        ) {
-          rect.attr("fill", __VM.colorVariant.mississippi);
-        } else if (
-          pip.isInside(
-            [Number(rect.attr("x")), Number(rect.attr("y"))],
-            d3.line()(regionBlue)
-          )
-        ) {
-          rect.attr("fill", __VM.colorVariant.rio_grande);
-        }
+        __VM.runPIP(d3.select(rect));
+      }
+    },
+    runPIP(rect) {
+      const __VM = this;
+      const nodeWidth = __VM.rect.size / 2;
+      if (
+        pip.isInside(
+          [
+            Number(rect.attr("x")) + nodeWidth,
+            Number(rect.attr("y")) + nodeWidth,
+          ],
+          d3.line()(__VM.region.yellow)
+        )
+      ) {
+        rect.attr("fill", __VM.colorVariant.mississippi);
+      } else if (
+        pip.isInside(
+          [
+            Number(rect.attr("x")) + nodeWidth,
+            Number(rect.attr("y")) + nodeWidth,
+          ],
+          d3.line()(__VM.region.blue)
+        )
+      ) {
+        rect.attr("fill", __VM.colorVariant.rio_grande);
       }
     },
     delay(ms) {
@@ -1475,6 +1502,7 @@ export default {
       },
       state: { border: false, visibility: true, color: "danger" },
       county: { border: false, visibility: true, color: "dark" },
+      region: { blue: [], yellow: [] },
       colorVariant: {
         primary: "rgb(2, 117, 216)",
         info: "rgb(91, 192, 222)",
