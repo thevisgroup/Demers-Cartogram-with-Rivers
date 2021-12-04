@@ -590,7 +590,7 @@ export default {
           return res;
         })
           .attr("stroke-width", () => {
-            return r.attr("nodeX") || r.attr("riverX") ? "1" : "0.3";
+            return r.attr("nodeX") || r.attr("riverX") ? "0.5" : "0.3";
           })
           //.attr("fill", __VM.colorVariant[__VM.rect.color])
           .transition()
@@ -603,17 +603,43 @@ export default {
           data[i].history[0][1] !== data[i].y
         ) {
           // add ORAed x,y into the history
-          let history = JSON.parse(r.attr("history"));
-          history.unshift([data[i].x, data[i].y]);
-          r.attr("history", JSON.stringify(history));
+          const writeHistory = (x, y) => {
+            let history = JSON.parse(r.attr("history"));
+            history.unshift([x, y]);
+            r.attr("history", JSON.stringify(history));
+          };
 
-          if (__VM.connectNewOldRiverRect(data[i])) {
+          writeHistory(data[i].x, data[i].y);
+
+          if (__VM.connectNewOldRiverRect(data[i], r)) {
             r.attr("fill", "blue")
               .attr("stroke", "blue")
               .attr("nodeX", true)
               .transition()
+              .duration(timer)
               .attr("x", data[i].history[0][0])
               .attr("y", data[i].history[0][1]);
+
+            writeHistory(data[i].history[0][0], data[i].history[0][1]);
+
+            __VM.delay(timer).then(() => {
+              let history = JSON.parse(r.attr("history"));
+
+              if (history.length > 3) {
+                if (
+                  history[0][0] === history[2][0] &&
+                  history[0][1] === history[2][1]
+                ) {
+                  // a stalemate nodeX
+                  r.attr("fill", "blue");
+                } else {
+                  // reset fill color for non-stalemate nodeX
+                  r.attr("fill", r.attr("original_fill"));
+                }
+              } else {
+                r.attr("fill", r.attr("original_fill"));
+              }
+            });
           }
           // else {
           //   // un-nodeX
@@ -872,7 +898,7 @@ export default {
         .attr("d", corridor)
         .attr("class", "corridor")
         .attr("stroke", "blue")
-        .attr("stroke-width", "0.5")
+        .attr("stroke-width", "1")
         .attr("fill", "none");
 
       const timer = 100 * __VM.timer;
@@ -885,8 +911,6 @@ export default {
       //   .attr("fill", "pink");
 
       const moveRectC = (rect, previous) => {
-        console.log(rect.attr("id"));
-
         rect
           .transition()
           .duration(timer)
@@ -905,10 +929,7 @@ export default {
                 : y - halfSize;
             }
             return previous[1];
-          })
-          .attr("fill", "pink")
-          .attr("stroke", "pink")
-          .attr("stroke-width", "0.5px");
+          });
 
         __VM.delay(timer).then(() => {
           // __VM.runPIP(rect);
@@ -916,8 +937,10 @@ export default {
           if (rect.attr("nodeX")) {
             rect.attr("stroke", "blue");
           } else {
-            rect.attr("fill", rect.attr("original_fill"));
+            rect.attr("stroke", "pink");
           }
+
+          rect.attr("fill", rect.attr("original_fill"));
         });
       };
 
@@ -952,7 +975,7 @@ export default {
         // __VM.removeOverlap(true);
       });
     },
-    connectNewOldRiverRect(rect) {
+    connectNewOldRiverRect(rect, r) {
       const __VM = this;
 
       const nodeWidth = __VM.rect.size / 2;
@@ -1249,7 +1272,7 @@ export default {
             if (inside) {
               d3.select(rect)
                 .attr("stroke", "red")
-                .attr("stroke-width", "1px")
+                .attr("stroke-width", "0.5")
                 .attr("riverX", true);
             }
           }
@@ -1381,7 +1404,7 @@ export default {
 
       __VM.region.blue.push([508, 320]);
       __VM.region.blue.push([625, 320]);
-      __VM.region.blue.push([625, 107]);
+      __VM.region.blue.push([625, 60]);
       __VM.region.blue.push([370, 60]);
       __VM.region.blue.push(blueFirst);
 
