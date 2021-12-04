@@ -475,6 +475,9 @@ export default {
 
           return __VM.colorVariant[__VM.rect.color];
         })
+        .attr("original_fill", (d) => {
+          return __VM.colorVariant[__VM.rect.color];
+        })
         .on("mouseover", function (e, d) {
           // d3.select(this).attr("fill", "red");
           tooltip
@@ -882,6 +885,8 @@ export default {
       //   .attr("fill", "pink");
 
       const moveRectC = (rect, previous) => {
+        console.log(rect.attr("id"));
+
         rect
           .transition()
           .duration(timer)
@@ -903,7 +908,17 @@ export default {
           })
           .attr("fill", "pink")
           .attr("stroke", "pink")
-          .attr("stroke-width", "1px");
+          .attr("stroke-width", "0.5px");
+
+        __VM.delay(timer).then(() => {
+          // __VM.runPIP(rect);
+          // reset fill color for nodeC
+          if (rect.attr("nodeX")) {
+            rect.attr("stroke", "blue");
+          } else {
+            rect.attr("fill", rect.attr("original_fill"));
+          }
+        });
       };
 
       moveRectC(rect, previous);
@@ -922,9 +937,11 @@ export default {
           if (pip.isInside([x_in, y_in], corridor)) {
             moveRectC(rect, history);
 
-            __VM.delay(__VM.timer).then(() => {
-              __VM.runPIP(rect);
-            });
+            // __VM.delay(__VM.timer).then(() => {
+            //   __VM.runPIP(rect);
+            //   // reset fill color for nodeC
+            //   rect.attr("fill", rect.attr("original_fill"));
+            // });
           }
         }
       }
@@ -1401,6 +1418,7 @@ export default {
         )
       ) {
         rect.attr("fill", __VM.colorVariant.mississippi);
+        rect.attr("original_fill", __VM.colorVariant.mississippi);
       } else if (
         pip.isInside(
           [
@@ -1411,6 +1429,7 @@ export default {
         )
       ) {
         rect.attr("fill", __VM.colorVariant.rio_grande);
+        rect.attr("original_fill", __VM.colorVariant.rio_grande);
       }
     },
     delay(ms) {
