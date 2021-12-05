@@ -603,44 +603,10 @@ export default {
           data[i].history[0][1] !== data[i].y
         ) {
           // add ORAed x,y into the history
-          const writeHistory = (x, y) => {
-            let history = JSON.parse(r.attr("history"));
-            history.unshift([x, y]);
-            r.attr("history", JSON.stringify(history));
-          };
 
-          writeHistory(data[i].x, data[i].y);
+          __VM.writeRectHistory(r, data[i].x, data[i].y);
 
-          if (__VM.connectNewOldRiverRect(data[i], r)) {
-            r.attr("fill", "blue")
-              .attr("stroke", "blue")
-              .attr("nodeX", true)
-              .transition()
-              .duration(timer)
-              .attr("x", data[i].history[0][0])
-              .attr("y", data[i].history[0][1]);
-
-            writeHistory(data[i].history[0][0], data[i].history[0][1]);
-
-            __VM.delay(timer).then(() => {
-              let history = JSON.parse(r.attr("history"));
-
-              if (history.length > 3) {
-                if (
-                  history[0][0] === history[2][0] &&
-                  history[0][1] === history[2][1]
-                ) {
-                  // a stalemate nodeX
-                  r.attr("fill", "blue");
-                } else {
-                  // reset fill color for non-stalemate nodeX
-                  r.attr("fill", r.attr("original_fill"));
-                }
-              } else {
-                r.attr("fill", r.attr("original_fill"));
-              }
-            });
-          }
+          __VM.checkNodeX(data[i], r);
           // else {
           //   // un-nodeX
           //   if (r.attr("nodeX") === true) {
@@ -911,28 +877,45 @@ export default {
       //   .attr("fill", "pink");
 
       const moveRectC = (rect, previous) => {
+        const x_new =
+          quadrant === 1 || quadrant === 4 || quadrant === 8
+            ? x + halfSize
+            : x - halfSize;
+
+        const y_new =
+          quadrant === 1 || quadrant === 2 || quadrant === 5
+            ? y + halfSize
+            : y - halfSize;
+
         rect
           .transition()
           .duration(timer)
           .attr("x", () => {
             if (Math.abs(x - previous[0]) < halfSize) {
-              return quadrant === 1 || quadrant === 4 || quadrant === 8
-                ? x + halfSize
-                : x - halfSize;
+              return x_new;
             }
             return previous[0];
           })
           .attr("y", () => {
             if (Math.abs(y - previous[1]) < halfSize) {
-              return quadrant === 1 || quadrant === 2 || quadrant === 5
-                ? y + halfSize
-                : y - halfSize;
+              return y_new;
             }
             return previous[1];
           });
 
         __VM.delay(timer).then(() => {
           // __VM.runPIP(rect);
+
+          const rectObj = {
+            x: rect.attr("x"),
+            y: rect.attr("y"),
+            history: JSON.parse(rect.attr("history")),
+          };
+
+          __VM.writeRectHistory(rect, x_new, y_new);
+
+          __VM.checkNodeX(rectObj, rect);
+
           // reset fill color for nodeC
           if (rect.attr("nodeX")) {
             rect.attr("stroke", "blue");
@@ -953,12 +936,29 @@ export default {
 
         const history = JSON.parse(rect.attr("history"))[0];
 
-        const x_in = Number(rect.attr("x"));
-        const y_in = Number(rect.attr("y"));
+        const x_in = Number(rect.attr("x")) + halfSize;
+        const y_in = Number(rect.attr("y")) + halfSize;
 
         if (x_in !== x && y_in !== y) {
           if (pip.isInside([x_in, y_in], corridor)) {
             moveRectC(rect, history);
+
+            // check river crossing
+            // __VM.delay(timer).then(() => {
+            //   const rectObj = {
+            //     x: x_in,
+            //     y: y_in,
+            //     history: history,
+            //   };
+
+            //   if (rect.attr("id") === "Douglas County, Nebraska") {
+            //     console.log("checkNodeX");
+            //     console.log(rect, history);
+            //   }
+
+            //   __VM.checkNodeX(rectObj, rect);
+            //   // __VM.removeOverlap(true);
+            // });
 
             // __VM.delay(__VM.timer).then(() => {
             //   __VM.runPIP(rect);
@@ -975,7 +975,7 @@ export default {
         // __VM.removeOverlap(true);
       });
     },
-    connectNewOldRiverRect(rect, r) {
+    checkNodeX(rect, d3Rect) {
       const __VM = this;
 
       const nodeWidth = __VM.rect.size / 2;
@@ -1024,8 +1024,37 @@ export default {
 
         return intersected;
       };
+      if (checkIntersect(line)) {
+        d3Rect
+          .attr("fill", "blue")
+          .attr("stroke", "blue")
+          .attr("nodeX", true)
+          .transition()
+          .duration(__VM.timer * 100)
+          .attr("x", rect.history[0][0])
+          .attr("y", rect.history[0][1]);
 
-      return checkIntersect(line);
+        __VM.writeRectHistory(d3Rect, rect.history[0][0], rect.history[0][1]);
+
+        __VM.delay(__VM.timer * 100).then(() => {
+          let history = JSON.parse(d3Rect.attr("history"));
+
+          if (history.length > 3) {
+            if (
+              history[0][0] === history[2][0] &&
+              history[0][1] === history[2][1]
+            ) {
+              // a stalemate nodeX
+              d3Rect.attr("fill", "blue");
+            } else {
+              // reset fill color for non-stalemate nodeX
+              d3Rect.attr("fill", d3Rect.attr("original_fill").trim());
+            }
+          } else {
+            d3Rect.attr("fill", d3Rect.attr("original_fill").trim());
+          }
+        });
+      }
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
@@ -1454,6 +1483,11 @@ export default {
         rect.attr("fill", __VM.colorVariant.rio_grande);
         rect.attr("original_fill", __VM.colorVariant.rio_grande);
       }
+    },
+    writeRectHistory(rect, x, y) {
+      let history = JSON.parse(rect.attr("history"));
+      history.unshift([x, y]);
+      rect.attr("history", JSON.stringify(history));
     },
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
