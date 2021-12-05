@@ -52,6 +52,11 @@
 \BibtexOrBiblatex
 \usepackage[backend=biber,bibstyle=EG,citestyle=alphabetic,backref=true]{biblatex}
 %\addbibresource{egbibsample.bib}
+
+\addbibresource{GeoVis.bib}
+
+\newcommand{\citetitlea}[1]{\citefield{#1}{title}}
+
 % ---------------------------  
 \electronicVersion
 \PrintedOrElectronic
@@ -63,37 +68,21 @@
 \usepackage{egweblnk}
 % end of prologue
 
-\addbibresource{LetterVis.bib}
-
 \usepackage{float,hhline,hyperref,array,tabulary,tabularx,etoolbox,multirow}
 
 \usepackage{dblfloatfix}
 
-\usepackage{enumitem}
-
 \usepackage[table, dvipsnames]{xcolor}
 
-% \author[Q. Wang \& R. S. Laramee]
-% {\parbox{\textwidth}{\centering Q. Wang
-%   and R. S. Laramee
-%     }
-%     \\
-% \parbox{\textwidth}{\centering School of Computer Science, University of Nottingham, UK}
-% }
 
-% \author[Q. Wang \& R. S. Laramee \& A. S. Lacey \& W. O. Pickrell]
-% {\parbox{\textwidth}
-%   {\centering Q. Wang$^{1}$, R. S. Laramee$^{1}$, A. Lacey$^{2,3}$ \& W. O. Pickrell$^{2,4}$}
-%   \\
-%   {\parbox{\textwidth}
-%     {\centering $^1$School of Computer Science, University of Nottingham, UK\\
-%         $^2$Neurology and Molecular Neuroscience Group, Institute of Life Science, Swansea University, UK\\
-%         $^3$Population Data Science, Swansea University Medical School, Swansea University, UK\\
-%         $^4$Neurology Department, Morriston Hospital, Swansea Bay University Healthboard, UK
-%     }
-%   }
-% }
- 
+\author[Q. Wang \& R. S. Laramee]
+{\parbox{\textwidth}{\centering Q. Wang
+  and R. S. Laramee
+    }
+    \\
+\parbox{\textwidth}{\centering School of Computer Science, University of Nottingham, UK}
+}
+
 \title{GHRVis:}
 
 \begin{document}
@@ -125,6 +114,13 @@
 \definecolor{Mycolor6}{HTML}{EC6A5C} %#EC6A5C
 \newcommand{\mycolorbox}[2]{\begingroup\setlength{\fboxsep}{2pt}\colorbox{#1}{#2}\endgroup}
 
+% table cite
+\newcommand{\citea}[1]{\citeauthor{#1}\cite{#1}}
+
+% customized table headers
+\newcommand{\theaderR}[1]{\multicolumn{1}{c|}{\cellcolor{Mycolor3} \textbf{\rotatebox{90}{#1 \phantom{-} }}}}
+\newcommand{\theaderP}[1]{\cellcolor{Mycolor3} \textbf{#1}}
+
 \newcommand{\note}[1]{\textcolor{blue}{#1}}
 
 \newcommand{\expertcomment}[1]{\textit{``#1''}}
@@ -138,9 +134,9 @@
 
 \end{abstract}
 
-\section{Introduction and Motivation}
+\input{section/introduction}
 
-\section{Related Work}
+\input{section/related}
 
 \section{Data Description}
 

@@ -87,19 +87,19 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxalphanames</bcf:key>
-      <bcf:value>4</bcf:value>
+      <bcf:value>2</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxbibnames</bcf:key>
-      <bcf:value>4</bcf:value>
+      <bcf:value>2</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxcitenames</bcf:key>
-      <bcf:value>4</bcf:value>
+      <bcf:value>2</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxsortnames</bcf:key>
-      <bcf:value>4</bcf:value>
+      <bcf:value>2</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxitems</bcf:key>
@@ -107,19 +107,19 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minalphanames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minbibnames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>mincitenames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minsortnames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minitems</bcf:key>
@@ -313,19 +313,19 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxalphanames</bcf:key>
-      <bcf:value>4</bcf:value>
+      <bcf:value>2</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxbibnames</bcf:key>
-      <bcf:value>4</bcf:value>
+      <bcf:value>2</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxcitenames</bcf:key>
-      <bcf:value>4</bcf:value>
+      <bcf:value>2</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxsortnames</bcf:key>
-      <bcf:value>4</bcf:value>
+      <bcf:value>2</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxitems</bcf:key>
@@ -333,19 +333,19 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minalphanames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minbibnames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>mincitenames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minsortnames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minitems</bcf:key>
@@ -2339,9 +2339,15 @@
   <!-- CITATION DATA -->
   <!-- SECTION 0 -->
   <bcf:bibdata section="0">
-    <bcf:datasource type="file" datatype="bibtex" glob="false">LetterVis.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">GeoVis.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey order="1">dorling2011Area</bcf:citekey>
+    <bcf:citekey order="2">dorling2011Area</bcf:citekey>
+    <bcf:citekey order="3">dorling2011Area</bcf:citekey>
+    <bcf:citekey order="4">dorling2011Area</bcf:citekey>
+    <bcf:citekey order="5">dorling2011Area</bcf:citekey>
+    <bcf:citekey order="6">dorling2011Area</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="anyt">

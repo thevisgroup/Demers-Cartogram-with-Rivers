@@ -16,5 +16,71 @@
   {}
 \endgroup
 
+
+\refsection{0}
+  \datalist[entry]{anyt/global//global/global}
+    \entry{dorling2011Area}{incollection}{}
+      \name{author}{1}{}{%
+        {{hash=0c52e954d7bdb0fa0d93af1351f3785d}{%
+           family={Dorling},
+           familyi={D\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \name{editor}{3}{}{%
+        {{hash=0b2a765c4db43d186758680591f96504}{%
+           family={Dodge},
+           familyi={D\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=0a6733829fcc127126b10855df06ec2d}{%
+           family={Kitchin},
+           familyi={K\bibinitperiod},
+           given={Rob},
+           giveni={R\bibinitperiod}}}%
+        {{hash=a438474ec4004fb3797371d773bb4bdd}{%
+           family={Perkins},
+           familyi={P\bibinitperiod},
+           given={Chris},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Chichester, UK}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons, Ltd}%
+      }
+      \strng{namehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{fullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{bibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authorbibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authornamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authorfullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{editorbibnamehash}{f12ecc2fbb52188c26d559e168d81e79}
+      \strng{editornamehash}{f12ecc2fbb52188c26d559e168d81e79}
+      \strng{editorfullhash}{e7525ccb8dbe8a5f79aaa7cfa6e08a0f}
+      \field{labelalpha}{Dor11}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{booktitle}{The {{Map Reader}}}
+      \field{isbn}{978-0-470-97958-7 978-0-470-74283-9}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{shorttitle}{Area {{Cartograms}}}
+      \field{title}{Area {{Cartograms}}: {{Their Use}} and {{Creation}}}
+      \field{year}{2011}
+      \field{pages}{252\bibrangedash 260}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1002/9780470979587.ch33
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/YXMYIIUQ/Dorling - 2011 - Area Cartograms Their Use and Creation.pdf
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
 \endinput
 

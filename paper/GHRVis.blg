@@ -1,9 +1,17 @@
 [0] Config.pm:311> INFO - This is Biber 2.16
 [0] Config.pm:314> INFO - Logfile is 'GHRVis.blg'
-[68] biber-darwin:340> INFO - === Tue Oct  5, 2021, 19:04:12
-[82] Biber.pm:415> INFO - Reading 'GHRVis.bcf'
-[166] Biber.pm:952> INFO - Found 0 citekeys in bib section 0
-[172] Utils.pm:395> WARN - The file 'GHRVis.bcf' does not contain any citations!
-[179] bbl.pm:654> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
-[179] bbl.pm:757> INFO - Output to GHRVis.bbl
-[179] Biber.pm:128> INFO - WARNINGS: 1
+[53] biber-darwin:340> INFO - === Sun Dec  5, 2021, 06:10:47
+[68] Biber.pm:415> INFO - Reading 'GHRVis.bcf'
+[138] Biber.pm:952> INFO - Found 1 citekeys in bib section 0
+[168] Biber.pm:4340> INFO - Processing section 0
+[177] Biber.pm:4531> INFO - Looking for bibtex format file 'GeoVis.bib' for section 0
+[179] bibtex.pm:1689> INFO - LaTeX decoding ...
+[213] bibtex.pm:1494> INFO - Found BibTeX data source 'GeoVis.bib'
+[253] Utils.pm:395> WARN - ISBN '978-0-470-97958-7 978-0-470-74283-9' in entry 'dorling2011Area' is invalid - run biber with '--validate_datamodel' for details.
+[260] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[260] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[260] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
+[260] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
+[261] bbl.pm:654> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
+[262] bbl.pm:757> INFO - Output to GHRVis.bbl
+[262] Biber.pm:128> INFO - WARNINGS: 1

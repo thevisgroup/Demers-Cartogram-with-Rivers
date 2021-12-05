@@ -79,7 +79,7 @@
       <file>GHRVis.bcf</file>
     </requires>
     <requires type="editable">
-      <file>LetterVis.bib</file>
+      <file>GeoVis.bib</file>
     </requires>
   </external>
 </requests>
