@@ -24,30 +24,30 @@
                 stroke="red"
                 stroke-width="2"
                 x="2"
-                y="22"
+                y="27"
               ></rect>
-              <text x="22" y="35">riverX</text>
+              <text x="22" y="40">riverX</text>
 
               <rect
                 fill="green"
                 stroke="blue"
                 stroke-width="2"
                 x="2"
-                y="39"
+                y="49"
               ></rect>
-              <text x="22" y="52">nodeX</text>
+              <text x="22" y="62">nodeX</text>
 
-              <rect fill="blue" x="82" y="39"></rect>
-              <text x="102" y="52">nodeX stalemate</text>
+              <rect fill="blue" x="82" y="49"></rect>
+              <text x="102" y="62">nodeX stalemate</text>
 
               <rect
                 fill="green"
                 stroke="purple"
                 stroke-width="2"
                 x="2"
-                y="56"
+                y="71"
               ></rect>
-              <text x="22" y="69">riverX + nodeX</text>
+              <text x="22" y="84">riverX + nodeX</text>
 
               <!-- rect y= last rect y + 17, text y = rect y +13 -->
             </g>
@@ -590,7 +590,9 @@ export default {
           return res;
         })
           .attr("stroke-width", () => {
-            return r.attr("nodeX") || r.attr("riverX") ? "0.5" : "0.3";
+            return r.attr("nodeX") || r.attr("riverX")
+              ? __VM.rect.nodeX.stroke_width
+              : "0.3";
           })
           //.attr("fill", __VM.colorVariant[__VM.rect.color])
           .transition()
@@ -1028,6 +1030,7 @@ export default {
         d3Rect
           .attr("fill", "blue")
           .attr("stroke", "blue")
+          .attr("stroke-width", __VM.rect.nodeX.stroke_width)
           .attr("nodeX", true)
           .transition()
           .duration(__VM.timer * 100)
@@ -1437,19 +1440,19 @@ export default {
       __VM.region.blue.push([370, 60]);
       __VM.region.blue.push(blueFirst);
 
-      __VM.svg
-        .append("path")
-        .attr("d", d3.line()(__VM.region.blue))
-        .attr("stroke", "black")
-        .attr("stroke-width", "2px")
-        .attr("fill", "none");
+      // __VM.svg
+      //   .append("path")
+      //   .attr("d", d3.line()(__VM.region.blue))
+      //   .attr("stroke", "black")
+      //   .attr("stroke-width", "2px")
+      //   .attr("fill", "none");
 
-      __VM.svg
-        .append("path")
-        .attr("d", d3.line()(__VM.region.yellow))
-        .attr("stroke", "black")
-        .attr("stroke-width", "2px")
-        .attr("fill", "none");
+      // __VM.svg
+      //   .append("path")
+      //   .attr("d", d3.line()(__VM.region.yellow))
+      //   .attr("stroke", "black")
+      //   .attr("stroke-width", "2px")
+      //   .attr("fill", "none");
 
       for (let [i, rect] of d3
         .selectAll(".rect-layer > rect")
@@ -1469,8 +1472,8 @@ export default {
           d3.line()(__VM.region.yellow)
         )
       ) {
-        rect.attr("fill", __VM.colorVariant.mississippi);
-        rect.attr("original_fill", __VM.colorVariant.mississippi);
+        rect.attr("fill", __VM.colorVariant.yellowRegion);
+        rect.attr("original_fill", __VM.colorVariant.yellowRegion);
       } else if (
         pip.isInside(
           [
@@ -1480,8 +1483,8 @@ export default {
           d3.line()(__VM.region.blue)
         )
       ) {
-        rect.attr("fill", __VM.colorVariant.rio_grande);
-        rect.attr("original_fill", __VM.colorVariant.rio_grande);
+        rect.attr("fill", __VM.colorVariant.blueRegion);
+        rect.attr("original_fill", __VM.colorVariant.blueRegion);
       }
     },
     writeRectHistory(rect, x, y) {
@@ -1513,6 +1516,9 @@ export default {
         color: "success",
         size: 3,
         sizeStep: 0.25,
+        nodeX: {
+          stroke_width: "0.7",
+        },
       },
       river: {
         translation: {
@@ -1588,6 +1594,8 @@ export default {
         missouri: "rgb(20, 84, 140)",
         mississippi: "rgb(240, 173, 78)",
         rio_grande: "	rgb(132, 196, 224)",
+        blueRegion: "#ba68c8",
+        yellowRegion: "#a1887f",
       },
     };
   },
