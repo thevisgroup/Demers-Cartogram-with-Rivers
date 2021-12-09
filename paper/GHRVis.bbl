@@ -19,65 +19,276 @@
 
 \refsection{0}
   \datalist[entry]{anyt/global//global/global}
-    \entry{dorling2011Area}{incollection}{}
+    \entry{cruz2017Adapted}{inproceedings}{}
       \name{author}{1}{}{%
-        {{hash=0c52e954d7bdb0fa0d93af1351f3785d}{%
-           family={Dorling},
-           familyi={D\bibinitperiod},
-           given={Daniel},
-           giveni={D\bibinitperiod}}}%
-      }
-      \name{editor}{3}{}{%
-        {{hash=0b2a765c4db43d186758680591f96504}{%
-           family={Dodge},
-           familyi={D\bibinitperiod},
-           given={Martin},
-           giveni={M\bibinitperiod}}}%
-        {{hash=0a6733829fcc127126b10855df06ec2d}{%
-           family={Kitchin},
-           familyi={K\bibinitperiod},
-           given={Rob},
-           giveni={R\bibinitperiod}}}%
-        {{hash=a438474ec4004fb3797371d773bb4bdd}{%
-           family={Perkins},
-           familyi={P\bibinitperiod},
-           given={Chris},
-           giveni={C\bibinitperiod}}}%
+        {{hash=f1986c6605bd2e1b4015d6695eca2c58}{%
+           family={Cruz},
+           familyi={C\bibinitperiod},
+           given={Pedro},
+           giveni={P\bibinitperiod}}}%
       }
       \list{location}{1}{%
-        {Chichester, UK}%
+        {Phoenix, AZ}%
       }
       \list{publisher}{1}{%
-        {John Wiley \& Sons, Ltd}%
+        {IEEE}%
       }
-      \strng{namehash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{fullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{bibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{authorbibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{authornamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{authorfullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{editorbibnamehash}{f12ecc2fbb52188c26d559e168d81e79}
-      \strng{editornamehash}{f12ecc2fbb52188c26d559e168d81e79}
-      \strng{editorfullhash}{e7525ccb8dbe8a5f79aaa7cfa6e08a0f}
-      \field{labelalpha}{Dor11}
-      \field{sortinit}{D}
-      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \strng{namehash}{f1986c6605bd2e1b4015d6695eca2c58}
+      \strng{fullhash}{f1986c6605bd2e1b4015d6695eca2c58}
+      \strng{bibnamehash}{f1986c6605bd2e1b4015d6695eca2c58}
+      \strng{authorbibnamehash}{f1986c6605bd2e1b4015d6695eca2c58}
+      \strng{authornamehash}{f1986c6605bd2e1b4015d6695eca2c58}
+      \strng{authorfullhash}{f1986c6605bd2e1b4015d6695eca2c58}
+      \field{labelalpha}{Cru17}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{booktitle}{The {{Map Reader}}}
-      \field{isbn}{978-0-470-97958-7 978-0-470-74283-9}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2017 {{IEEE VIS Arts Program}} ({{VISAP}})}
+      \field{isbn}{978-1-5386-3490-5}
       \field{langid}{english}
-      \field{month}{4}
-      \field{shorttitle}{Area {{Cartograms}}}
-      \field{title}{Area {{Cartograms}}: {{Their Use}} and {{Creation}}}
-      \field{year}{2011}
-      \field{pages}{252\bibrangedash 260}
-      \range{pages}{9}
+      \field{month}{10}
+      \field{title}{Adapted Dorling Cartogram on Wage Inequality in {{Portugal}}}
+      \field{year}{2017}
+      \field{pages}{1\bibrangedash 5}
+      \range{pages}{5}
       \verb{doi}
-      \verb 10.1002/9780470979587.ch33
+      \verb 10.1109/VISAP.2017.8282365
       \endverb
       \verb{file}
-      \verb /Users/henry/SynologyDrive/Zotero/storage/YXMYIIUQ/Dorling - 2011 - Area Cartograms Their Use and Creation.pdf
+      \verb /Users/henry/SynologyDrive/Zotero/storage/VZTGBSA5/Cruz - 2017 - Adapted dorling cartogram on wage inequality in Po.pdf
+      \endverb
+    \endentry
+    \entry{gao2020Visualising}{article}{}
+      \name{author}{4}{}{%
+        {{hash=ed211f686471a8376b1179f7a8d4d7b6}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Peichao},
+           giveni={P\bibinitperiod}}}%
+        {{hash=5c197210ea3c3cd10b35ad3c6922e157}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Hong},
+           giveni={H\bibinitperiod}}}%
+        {{hash=02f6bdc3bac584c637cdeda62ada6f7d}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Zhiwei},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=20a609f53c7d9954daee81425c25b883}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Jicheng},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{fullhash}{bb1d3ba648321bb27c119f1512cb2f95}
+      \strng{bibnamehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{authorbibnamehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{authornamehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{authorfullhash}{bb1d3ba648321bb27c119f1512cb2f95}
+      \field{labelalpha}{Gao*20}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Coronavirus disease 2019 (COVID-19) has emerged as a growing focus of global attention and a critical factor in public-health decision making. Towards fighting the COVID-19 outbreak, countries worldwide and international organisations have taken various actions, including promoting the transparency of and public access to disease data. In such public communications, maps have played an important role in that a map is worth a thousand words. Most of these have taken the form of a choropleth map. Here, we propose employing cartograms to visualise both the expansion and spread of COVID-19. We designed a combination of six circular cartograms containing the data of confirmed cases every 48 hours from 24 January to 3 February 2020. Such a design conveys both spatial and temporal information more intuitively and efficiently, so it can be expected to facilitate better public participation in the fight against COVID-19.}
+      \field{issn}{0308-518X, 1472-3409}
+      \field{journaltitle}{Environment and Planning A: Economy and Space}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{number}{4}
+      \field{title}{Visualising the Expansion and Spread of Coronavirus Disease 2019 by Cartograms}
+      \field{volume}{52}
+      \field{year}{2020}
+      \field{pages}{698\bibrangedash 701}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1177/0308518X20910162
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/XMZRHN9H/Gao et al. - 2020 - Visualising the expansion and spread of coronaviru.pdf
+      \endverb
+    \endentry
+    \entry{nusrat2020Recognition}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=c7a975a81ed7dd45d12c93db01e47c05}{%
+           family={Nusrat},
+           familyi={N\bibinitperiod},
+           given={Sabrina},
+           giveni={S\bibinitperiod}}}%
+        {{hash=17b83b55232e95915da2573edb48d0ab}{%
+           family={Alam},
+           familyi={A\bibinitperiod},
+           given={Jawaherul},
+           giveni={J\bibinitperiod}}}%
+        {{hash=123e113ab51eb0c183fe920eb804b36b}{%
+           family={Kobourov},
+           familyi={K\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Salerno Italy}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{4375b69af4377d282b6cc8ae7181ecf9}
+      \strng{fullhash}{33cad7e75082b2d5fc3057ad5d79d11e}
+      \strng{bibnamehash}{4375b69af4377d282b6cc8ae7181ecf9}
+      \strng{authorbibnamehash}{4375b69af4377d282b6cc8ae7181ecf9}
+      \strng{authornamehash}{4375b69af4377d282b6cc8ae7181ecf9}
+      \strng{authorfullhash}{33cad7e75082b2d5fc3057ad5d79d11e}
+      \field{labelalpha}{Nus*20}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We investigate the memorability of two types of cartograms, both in terms of recognition of the visualization and recall of the data. A cartogram, or a value-by-area map, is a representation of a map in which geographic regions are modified to reflect a given statistic, such as population or income. Of the many different types of cartograms, the contiguous and Dorling types are among the most popular and most effective. With this in mind, we evaluate the memorability of these two cartogram types with a human-subjects study, using task-based experimental data and cartogram visualization tasks based on Bertin's map reading levels. In particular, our results indicate that Dorling cartograms are associated with better recall of general patterns and trends. This, together with additional significant differences between the two most popular cartogram types, has implications for the design and use of cartograms, in the context of memorability.}
+      \field{booktitle}{Proceedings of the {{International Conference}} on {{Advanced Visual Interfaces}}}
+      \field{isbn}{978-1-4503-7535-1}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{title}{Recognition and {{Recall}} of {{Geographic Data In Cartograms}}}
+      \field{year}{2020}
+      \field{pages}{1\bibrangedash 9}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1145/3399715.3399873
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/CZCB6RDS/Nusrat et al. - 2020 - Recognition and Recall of Geographic Data In Carto.pdf
+      \endverb
+    \endentry
+    \entry{sun2010Effectiveness}{article}{}
+      \name{author}{2}{}{%
+        {{hash=fc4d4f6080dbd569718f9709acaa7768}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Hui},
+           giveni={H\bibinitperiod}}}%
+        {{hash=d3fb92106be4653ce817a66507119c69}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Zhilin},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{64829e3c08a5a903182fc7f9583b83e2}
+      \strng{fullhash}{64829e3c08a5a903182fc7f9583b83e2}
+      \strng{bibnamehash}{64829e3c08a5a903182fc7f9583b83e2}
+      \strng{authorbibnamehash}{64829e3c08a5a903182fc7f9583b83e2}
+      \strng{authornamehash}{64829e3c08a5a903182fc7f9583b83e2}
+      \strng{authorfullhash}{64829e3c08a5a903182fc7f9583b83e2}
+      \field{labelalpha}{SL10}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cartogram is a technique for visualisation of the geographical distribution of spatial data. It has two main types, i.e. distance cartogram and area cartogram. Area cartogram is a transformed map in which areas are resized in proportion to an attribute value. A number of techniques have been developed for the generation of area cartograms. Some researchers consider cartogram as a very effective technique for visualisation of spatial data, while others doubt about the effectiveness because of the possible distortion in shape and/or disconnectivity in topology. This study aims to evaluate the effectiveness of area cartogram for visualizing spatial data. In this study, two comparative experiments have been conducted. One is the comparison between thematic maps and cartograms, and the other is the comparison among different types of area cartogram. Two sets of data with different characteristics are used, i.e. 2005 China population data and 1996 US election data. Results show that cartogram is more effective in the representation of the 1996 US election data which provides a qualitative result (i.e. in binary form or nominal data), but thematic map is far more effective in the representation of 2005 China population data which provides a quantitative result (in classes or ordinal data). It is also found that among different types of area cartogram, pseudo-cartogram is the most preferred technique and Dorling cartogram is the least preferred one.}
+      \field{issn}{0008-7041, 1743-2774}
+      \field{journaltitle}{The Cartographic Journal}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{1}
+      \field{title}{Effectiveness of {{Cartogram}} for the {{Representation}} of {{Spatial Data}}}
+      \field{volume}{47}
+      \field{year}{2010}
+      \field{pages}{12\bibrangedash 21}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1179/000870409X12525737905169
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/3IE768R3/Sun and Li - 2010 - Effectiveness of Cartogram for the Representation .pdf
+      \endverb
+    \endentry
+    \entry{tong2018cartograms}{article}{}
+      \name{author}{3}{}{%
+        {{hash=8f66720367a9bc8ebe969bbe027c5045}{%
+           family={Tong},
+           familyi={T\bibinitperiod},
+           given={Chao},
+           giveni={C\bibinitperiod}}}%
+        {{hash=0e9375fa3535a4c5436b0e252f9ab6c3}{%
+           family={McNabb},
+           familyi={M\bibinitperiod},
+           given={Liam},
+           giveni={L\bibinitperiod}}}%
+        {{hash=59dd071b19e76f0f77403531d0c28ad2}{%
+           family={Laramee},
+           familyi={L\bibinitperiod},
+           given={Robert\bibnamedelima S.},
+           giveni={R\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {The Eurographics Association}%
+      }
+      \strng{namehash}{5cbc09595524a0d72092fb91e60f59bf}
+      \strng{fullhash}{3c51e8718828398e57dd37e761a46a29}
+      \strng{bibnamehash}{5cbc09595524a0d72092fb91e60f59bf}
+      \strng{authorbibnamehash}{5cbc09595524a0d72092fb91e60f59bf}
+      \strng{authornamehash}{5cbc09595524a0d72092fb91e60f59bf}
+      \strng{authorfullhash}{3c51e8718828398e57dd37e761a46a29}
+      \field{labelalpha}{Ton*18}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cartograms are a popular and useful technique for depicting geo-spatial data. Dorling style and rectangular cartograms are very good for facilitating comparisons between unit areas. Each unit area is represented by the same shape such as a circle or rectangle, and the uniformity in shapes facilitates comparative judgment. However, the layout of these more abstract shapes may also simultaneously reduce the map's legibility and increase error. When we integrate univariate data into a cartogram, the recognizability of cartogram may be reduced. There is a trade-off between information recognition and geo-information accuracy. This is the inspiration behind the work we present. We attempt to increase the map's recognizability and reduce error by introducing topological features into the cartographic map. Our goal is to include topological features such as a river in a Dorling-style or rectangular cartogram to make the visual layout more recognizable, increase map cognition and reduce geospatial error. We believe that compared to the standard Dorling and rectangular style cartogram, adding topological features provides familiar geo-spatial cues and flexibility to enhance the recognizability of a cartogram.}
+      \field{isbn}{9783038680710}
+      \field{journaltitle}{Computer Graphics and Visual Computing (CGVC)}
+      \field{title}{Cartograms with {{Topological Features}}}
+      \field{year}{2018}
+      \field{pages}{8 pages}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.2312/CGVC.20181217
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/AVSEUUCM/tong2018cartograms.pdf
+      \endverb
+    \endentry
+    \entry{warf2008Geography}{article}{}
+      \name{author}{2}{}{%
+        {{hash=b248ca8884afdfeb514357da56c3e8a6}{%
+           family={Warf},
+           familyi={W\bibinitperiod},
+           given={Barney},
+           giveni={B\bibinitperiod}}}%
+        {{hash=289183179b752e14f1a58efec047fba2}{%
+           family={Winsberg},
+           familyi={W\bibinitperiod},
+           given={Mort},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{2b534341010d5d709b48f2180bb43336}
+      \strng{fullhash}{2b534341010d5d709b48f2180bb43336}
+      \strng{bibnamehash}{2b534341010d5d709b48f2180bb43336}
+      \strng{authorbibnamehash}{2b534341010d5d709b48f2180bb43336}
+      \strng{authornamehash}{2b534341010d5d709b48f2180bb43336}
+      \strng{authorfullhash}{2b534341010d5d709b48f2180bb43336}
+      \field{labelalpha}{WW08}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0033-0124}
+      \field{journaltitle}{The Professional Geographer}
+      \field{langid}{english}
+      \field{month}{8}
+      \field{number}{3}
+      \field{title}{The {{Geography}} of {{Religious Diversity}} in the {{United States}}}
+      \field{volume}{60}
+      \field{year}{2008}
+      \field{pages}{413\bibrangedash 424}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1080/00330120802046786
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/5ZKSRMNK/Warf and Winsberg - 2008 - The Geography of Religious Diversity in the United.pdf
       \endverb
     \endentry
   \enddatalist
