@@ -1,4 +1,42 @@
 \section{Related Work}
+
+Cartograms combine statistical and geographical information in thematic maps. We follow the categorization of cartograms by \citeauthor{vankreveld2004Rectangular} \cite{vankreveld2004Rectangular}: contiguous, non-contiguous, rectangular, and Dorling. \citeauthor{nusrat2016State} \cite{nusrat2016State} summarize three major accuracy dimensions for cartograms: statistical, geographical, and topological. Each cartogram design may make accuracy trade-offs between dimensions, we provide an overview in Table \ref{table:accuracy}.
+
+{
+\renewcommand{\arraystretch}{1.5}
+\begin{table*}[!tb]
+	\centering
+	\resizebox{\textwidth}{!}{
+		\begin{tabulary}{\textwidth}{|*{5}{l|}}
+			\hhline{~|*{3}{-}|~}
+			\multicolumn{1}{c|}{} & \multicolumn{3}{c|}{\cellcolor{Mycolor2} \textbf{Accuracy}} \\
+			\hhline{~|*{4}{-}}
+			\multicolumn{1}{c|}{\textbf{Catogram Type}} &
+			\textbf{Statistical} &
+			\textbf{Geographical} &
+			\textbf{Topological} &
+			\textbf{Contiguity} \\
+			\hline
+			Contiguous & \cellcolor{Mycolor3}Varies & \cellcolor{Mycolor3}Varies & Accurate & Yes \\
+			\hline
+			Non-contiguous & \cellcolor{Mycolor5}\textcolor{white}{Accurate} & \cellcolor{Mycolor5}\textcolor{white}{Shape is accurate} &\cellcolor{Mycolor6}Inaccurate & No   \\
+			\hline
+			Rectangular & \cellcolor{Mycolor3}Varies & Shape is inaccurate & \cellcolor{Mycolor3}Varies & Yes   \\
+			\hline
+			Dorling & Accurate & Inaccurate & Inaccurate & No  \\
+			\hline
+		\end{tabulary}
+	}
+	\caption{\textcolor{Mycolor3}{\textbf{Trade-off between dimensions}}. \textcolor{Mycolor6}{\textbf{Dimension sacrificed}} in order to improve \textcolor{Mycolor5}{\textbf{target dimension}}'s accuracy.}
+	\label{table:accuracy}
+\end{table*}
+}
+
+
+Dorling cartograms are non-contiguous and do not preserve geography and topology. A Dorling cartogram is statistically accurate, regions are represented by circles and the statistic of interest is represented by the circle size. In Demers Cartograms, a variant of Dorling, squares are used instead to capture a certain level of topology. Dorling cartograms are unable to maintain topological accuracy as circles are often repositioned to remove overlaps. Table \ref{table:region vs node} includes a list of literature that adopts Dorling cartograms with corresponding geographical regions and node counts.
+
+{
+\renewcommand{\arraystretch}{1.5}
 \begin{table*}[!tb]
 	\centering
 	\resizebox{\textwidth}{!}{
@@ -26,14 +64,16 @@
 			\citea{nusrat2020Recognition} & \citetitlea{nusrat2020Recognition} & Portugal & 49 & \citeyear{nusrat2020Recognition} \\
 			\hline
 			
-
-
-
 			% \multicolumn{1}{c|}{\textbf{Total unique papers: 51}} & 24&15&12& \multicolumn{1}{c}{}  \\
 			% \hhline{~|*{3}{-}|~}
 
 		\end{tabulary}
 	}
-	\caption{Discuss Demers cartogram}
-	\label{table:challenge table}
+	\caption{}
+	\label{table:region vs node}
 \end{table*}
+}
+
+Rectangular cartograms are contiguous and do not preserve geographical accuracy. Depending on the variant, a rectangular cartogram may trade between statistical and topological accuracy.
+
+Mosaic cartograms are contiguous and sacrifice statistical accuracy to preserve some level of geographical accuracy. Some variants are able to preserve topological accuracy as well.

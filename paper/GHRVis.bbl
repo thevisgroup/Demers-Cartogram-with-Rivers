@@ -111,6 +111,48 @@
       \verb /Users/henry/SynologyDrive/Zotero/storage/XMZRHN9H/Gao et al. - 2020 - Visualising the expansion and spread of coronaviru.pdf
       \endverb
     \endentry
+    \entry{nusrat2016State}{article}{}
+      \name{author}{2}{}{%
+        {{hash=c7a975a81ed7dd45d12c93db01e47c05}{%
+           family={Nusrat},
+           familyi={N\bibinitperiod},
+           given={Sabrina},
+           giveni={S\bibinitperiod}}}%
+        {{hash=123e113ab51eb0c183fe920eb804b36b}{%
+           family={Kobourov},
+           familyi={K\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{88033b02c452d4b1a88cc10953118d18}
+      \strng{fullhash}{88033b02c452d4b1a88cc10953118d18}
+      \strng{bibnamehash}{88033b02c452d4b1a88cc10953118d18}
+      \strng{authorbibnamehash}{88033b02c452d4b1a88cc10953118d18}
+      \strng{authornamehash}{88033b02c452d4b1a88cc10953118d18}
+      \strng{authorfullhash}{88033b02c452d4b1a88cc10953118d18}
+      \field{labelalpha}{NK16}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cartograms combine statistical and geographical information in thematic maps, where areas of geographical regions (e.g., countries, states) are scaled in proportion to some statistic (e.g., population, income). Cartograms make it possible to gain insight into patterns and trends in the world around us and have been very popular visualizations for geo-referenced data for over a century. This work surveys cartogram research in visualization, cartography and geometry, covering a broad spectrum of different cartogram types: from the traditional rectangular and table cartograms, to Dorling and diffusion cartograms. A particular focus is the study of the major cartogram dimensions: statistical accuracy, geographical accuracy, and topological accuracy. We review the history of cartograms, describe the algorithms for generating them, and consider task taxonomies. We also review quantitative and qualitative evaluations, and we use these to arrive at design guidelines and research challenges.}
+      \field{issn}{01677055}
+      \field{journaltitle}{Computer Graphics Forum}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{number}{3}
+      \field{title}{The {{State}} of the {{Art}} in {{Cartograms}}}
+      \field{volume}{35}
+      \field{year}{2016}
+      \field{pages}{619\bibrangedash 642}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.1111/cgf.12932
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/KJA9SQ9V/Nusrat and Kobourov - 2016 - The State of the Art in Cartograms.pdf
+      \endverb
+    \endentry
     \entry{nusrat2020Recognition}{inproceedings}{}
       \name{author}{3}{}{%
         {{hash=c7a975a81ed7dd45d12c93db01e47c05}{%
@@ -248,6 +290,137 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/AVSEUUCM/tong2018cartograms.pdf
+      \endverb
+    \endentry
+    \entry{vankreveld2004Rectangular}{incollection}{}
+      \name{author}{2}{}{%
+        {{hash=f63070c24f9774d9662edbad83b67ff8}{%
+           family={{van Kreveld}},
+           familyi={v\bibinitperiod},
+           given={Marc},
+           giveni={M\bibinitperiod}}}%
+        {{hash=d1b091611207641ad30b432737e7581a}{%
+           family={Speckmann},
+           familyi={S\bibinitperiod},
+           given={Bettina},
+           giveni={B\bibinitperiod}}}%
+      }
+      \name{editor}{17}{}{%
+        {{hash=d003d9a994005f480f7fa06dde74326e}{%
+           family={Hutchison},
+           familyi={H\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=45496c6a7530cfbfb4f3218a2602b77e}{%
+           family={Kanade},
+           familyi={K\bibinitperiod},
+           given={Takeo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=9dd3a56c94774f5880ca7475fdc308ea}{%
+           family={Kittler},
+           familyi={K\bibinitperiod},
+           given={Josef},
+           giveni={J\bibinitperiod}}}%
+        {{hash=fb11814963625d418100ec9ca3710333}{%
+           family={Kleinberg},
+           familyi={K\bibinitperiod},
+           given={Jon\bibnamedelima M.},
+           giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=e07c4272d13053fc36d770d4735f2c14}{%
+           family={Mattern},
+           familyi={M\bibinitperiod},
+           given={Friedemann},
+           giveni={F\bibinitperiod}}}%
+        {{hash=47dbc192a926109dd86ea18b25249a93}{%
+           family={Mitchell},
+           familyi={M\bibinitperiod},
+           given={John\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=c6af39e79e88306281e6e0b0ccea956c}{%
+           family={Naor},
+           familyi={N\bibinitperiod},
+           given={Moni},
+           giveni={M\bibinitperiod}}}%
+        {{hash=7d3ea70a5274b32c8a184dd4d844ee47}{%
+           family={Nierstrasz},
+           familyi={N\bibinitperiod},
+           given={Oscar},
+           giveni={O\bibinitperiod}}}%
+        {{hash=6bcab2334dc65214139b0ad45fe8185e}{%
+           family={Pandu\bibnamedelima Rangan},
+           familyi={P\bibinitperiod\bibinitdelim R\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=665b6687b4ed05721bf55d61032505ca}{%
+           family={Steffen},
+           familyi={S\bibinitperiod},
+           given={Bernhard},
+           giveni={B\bibinitperiod}}}%
+        {{hash=8753fbfaaa4aa8a1195c657edc9daef4}{%
+           family={Sudan},
+           familyi={S\bibinitperiod},
+           given={Madhu},
+           giveni={M\bibinitperiod}}}%
+        {{hash=cd9aa5de7673e375889cc32997ef97df}{%
+           family={Terzopoulos},
+           familyi={T\bibinitperiod},
+           given={Demetri},
+           giveni={D\bibinitperiod}}}%
+        {{hash=ddfb7c40f1ab7e805c025ac7ef922cc7}{%
+           family={Tygar},
+           familyi={T\bibinitperiod},
+           given={Dough},
+           giveni={D\bibinitperiod}}}%
+        {{hash=a4cf237a06b02ad7e7601b14b4d005be}{%
+           family={Vardi},
+           familyi={V\bibinitperiod},
+           given={Moshe\bibnamedelima Y.},
+           giveni={M\bibinitperiod\bibinitdelim Y\bibinitperiod}}}%
+        {{hash=e47f9d085c16045a5911784850208ada}{%
+           family={Weikum},
+           familyi={W\bibinitperiod},
+           given={Gerhard},
+           giveni={G\bibinitperiod}}}%
+        {{hash=0b66b903ea68fa7756de7807b3cd265d}{%
+           family={Albers},
+           familyi={A\bibinitperiod},
+           given={Susanne},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b5050993ff5f43f49cf5f039ffb44f74}{%
+           family={Radzik},
+           familyi={R\bibinitperiod},
+           given={Tomasz},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer Berlin Heidelberg}%
+      }
+      \strng{namehash}{6bb668f621d876ad955fb9127a69b45a}
+      \strng{fullhash}{6bb668f621d876ad955fb9127a69b45a}
+      \strng{bibnamehash}{6bb668f621d876ad955fb9127a69b45a}
+      \strng{authorbibnamehash}{6bb668f621d876ad955fb9127a69b45a}
+      \strng{authornamehash}{6bb668f621d876ad955fb9127a69b45a}
+      \strng{authorfullhash}{6bb668f621d876ad955fb9127a69b45a}
+      \strng{editorbibnamehash}{1878e5aaeb2ba2e2aaa5cb8a1a7cf207}
+      \strng{editornamehash}{1878e5aaeb2ba2e2aaa5cb8a1a7cf207}
+      \strng{editorfullhash}{b46a138f5dc99329df986e011dbecde3}
+      \field{labelalpha}{vS04}
+      \field{sortinit}{v}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Algorithms –{} {{ESA}} 2004}
+      \field{isbn}{978-3-540-23025-0 978-3-540-30140-0}
+      \field{title}{On {{Rectangular Cartograms}}}
+      \field{volume}{3221}
+      \field{year}{2004}
+      \field{pages}{724\bibrangedash 735}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1007/978-3-540-30140-0_64
       \endverb
     \endentry
     \entry{warf2008Geography}{article}{}

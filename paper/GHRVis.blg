@@ -1,15 +1,17 @@
 [0] Config.pm:311> INFO - This is Biber 2.16
 [0] Config.pm:314> INFO - Logfile is 'GHRVis.blg'
-[54] biber-darwin:340> INFO - === Wed Dec  8, 2021, 23:47:02
-[65] Biber.pm:415> INFO - Reading 'GHRVis.bcf'
-[138] Biber.pm:952> INFO - Found 6 citekeys in bib section 0
-[150] Biber.pm:4340> INFO - Processing section 0
-[159] Biber.pm:4531> INFO - Looking for bibtex format file 'GeoVis.bib' for section 0
-[161] bibtex.pm:1689> INFO - LaTeX decoding ...
-[186] bibtex.pm:1494> INFO - Found BibTeX data source 'GeoVis.bib'
-[254] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[254] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[254] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
-[254] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
-[259] bbl.pm:654> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
-[262] bbl.pm:757> INFO - Output to GHRVis.bbl
+[54] biber-darwin:340> INFO - === Sun Jan  2, 2022, 22:27:19
+[66] Biber.pm:415> INFO - Reading 'GHRVis.bcf'
+[137] Biber.pm:952> INFO - Found 8 citekeys in bib section 0
+[149] Biber.pm:4340> INFO - Processing section 0
+[158] Biber.pm:4531> INFO - Looking for bibtex format file 'GeoVis.bib' for section 0
+[159] bibtex.pm:1689> INFO - LaTeX decoding ...
+[184] bibtex.pm:1494> INFO - Found BibTeX data source 'GeoVis.bib'
+[234] Utils.pm:395> WARN - ISBN '978-3-540-23025-0 978-3-540-30140-0' in entry 'vankreveld2004Rectangular' is invalid - run biber with '--validate_datamodel' for details.
+[268] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[268] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[268] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
+[268] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
+[274] bbl.pm:654> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
+[281] bbl.pm:757> INFO - Output to GHRVis.bbl
+[281] Biber.pm:128> INFO - WARNINGS: 1
