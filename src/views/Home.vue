@@ -21,6 +21,15 @@
 
               <rect
                 fill="green"
+                stroke="pink"
+                stroke-width="2"
+                x="82"
+                y="5"
+              ></rect>
+              <text x="102" y="18">node pushed</text>
+
+              <rect
+                fill="green"
                 stroke="red"
                 stroke-width="2"
                 x="2"
@@ -879,6 +888,9 @@ export default {
       //   .attr("fill", "pink");
 
       const moveRectC = (rect, previous) => {
+        const x = Number(rect.attr("x"));
+        const y = Number(rect.attr("y"));
+
         const x_new =
           quadrant === 1 || quadrant === 4 || quadrant === 8
             ? x + halfSize
