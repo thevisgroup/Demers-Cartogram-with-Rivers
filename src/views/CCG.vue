@@ -1,7 +1,15 @@
 <template>
   <b-container fluid>
-    <h2 id="ccg_name">NHS England CCGs</h2>
-    <div id="map"></div>
+    <h2 id="ccg_name">NHS England CCGs (2020)</h2>
+    <svg
+      id="base-layer"
+      viewBox="0,0,800,600"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+    >
+      <rect width="100%" height="100%" fill="none" pointer-events="all"></rect>
+      <g id="map"></g>
+    </svg>
 
     <footer class="footer" style="width: 98%">
       <div class="container">
@@ -25,7 +33,9 @@ export default {
   methods: {
     async init() {
       const __VM = this;
-      const shapefile = await d3.json(`/data/ccg_2020.json`);
+
+      const ccg_shapefile = await d3.json(`/data/ccg.json`);
+      const river_shapefile = await d3.json(`/data/river.json`);
       const indicators = await d3.json(`/data/cardiovascular_00754.json`);
 
       const calculateRectSize = (d) => {
@@ -34,29 +44,44 @@ export default {
         return (Math.abs(current - min) / range) * 15;
       };
 
-      d3.selectAll("#map > svg").remove();
+      d3.selectAll("#map").remove();
 
-      const svg = d3
+      __VM.svg = d3.select("#base-layer").append("g").attr("id", "map");
+
+      d3.select("#base-layer").call(
+        d3
+          .zoom()
+          .extent([
+            [0, 0],
+            [1000, 800],
+          ])
+          .scaleExtent([1, 15])
+          .on("zoom", zoomed)
+      );
+
+      __VM.svg = d3
         .select("#map")
         .append("svg")
-        .attr("viewBox", [0, 0, 900, 400])
+        .attr("viewBox", [0, 0, 1000, 800])
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round");
 
+      function zoomed(event) {
+        const { transform } = event;
+        d3.select("#map").attr("transform", transform);
+        d3.select("#map").attr("stroke-width", 1 / transform.k);
+
+        __VM.zoom = transform;
+      }
+
+      // avoid resetting zoom level
+      if (__VM.zoom) {
+        d3.select("#map").attr("transform", __VM.zoom);
+        d3.select("#map").attr("stroke-width", 1 / __VM.zoom.k);
+      }
       const config = { base_traslate: "" };
 
-      // CCG contour layer
       const path = d3.geoPath();
-      svg
-        .append("g")
-        .attr("stroke", "#000")
-        .selectAll("path")
-        .data(topojson.feature(shapefile, shapefile.objects.ccg).features)
-        .join("path")
-        .attr("vector-effect", "non-scaling-stroke")
-        .attr("d", path)
-        .attr("fill", "white")
-        .attr("transform", config.base_traslate);
 
       // centroid rectangle layer
       const rectConfig = {
@@ -64,23 +89,44 @@ export default {
         color: "rgb(60, 120, 172)",
       };
 
-      const rects = svg
+      // CCG layer
+      __VM.svg
+        .append("g")
+        .attr("stroke", "#000")
+        .selectAll("path")
+        .data(
+          topojson.feature(ccg_shapefile, ccg_shapefile.objects.ccg).features
+        )
+        .join("path")
+        .attr("vector-effect", "non-scaling-stroke")
+        .attr("d", path)
+        .attr("fill", "white")
+        .attr("transform", config.base_traslate);
+
+      // river layer
+      __VM.svg
+        .append("g")
+        .attr("stroke", "#000")
+        .selectAll("path")
+        .data(
+          topojson.feature(river_shapefile, river_shapefile.objects.river)
+            .features
+        )
+        .join("path")
+        .attr("vector-effect", "non-scaling-stroke")
+        .attr("d", path)
+        .attr("fill", "red")
+        .attr("transform", config.base_traslate);
+
+      const rects = __VM.svg
         .append("g")
         .attr("stroke", "#000")
         .selectAll("rect")
-        .data(topojson.feature(shapefile, shapefile.objects.ccg).features)
+        .data(
+          topojson.feature(ccg_shapefile, ccg_shapefile.objects.ccg).features
+        )
         .enter()
         .append("rect")
-        // .attr("transform", (d) => {
-        //   const [x, y] = path.centroid(d);
-        //   return `
-        //   ${config.base_traslate}
-        //   translate(${x},${y})
-        //   translate(${-x - calculateRectSize(d) / 2},${
-        //     -y - calculateRectSize(d) / 2
-        //   })
-        //   `;
-        // })
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
         .attr("width", (d) => calculateRectSize(d))
@@ -136,6 +182,7 @@ export default {
   data() {
     return {
       rect: { list: [] },
+      svg: {},
     };
   },
   async mounted() {
