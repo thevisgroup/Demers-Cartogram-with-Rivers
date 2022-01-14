@@ -13,10 +13,12 @@ const routes = [
   {
     path: "/ccg",
     name: "CCG",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "US" */ "../views/CCG.vue"),
+  },
+  {
+    path: "/ccg2",
+    name: "CCG2",
+    component: () => import(/* webpackChunkName: "US" */ "../views/CCG2.vue"),
   },
 ];
 
