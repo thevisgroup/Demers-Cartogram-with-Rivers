@@ -283,6 +283,14 @@
                     >{{ state.border ? "Hide" : "Show" }} bordering
                     states</b-button
                   >
+
+                  <b-button
+                    block
+                    :variant="state.centroid ? 'danger' : 'primary'"
+                    v-on:click="showStateCentroid()"
+                    >{{ state.centroid ? "Hide" : "Show" }} state
+                    centroids</b-button
+                  >
                 </td>
               </tr>
             </tbody>
@@ -438,7 +446,7 @@ export default {
       const colormap = d3.scaleSequential(d3.interpolatePRGn);
 
       // county data layer
-      const rects = svg
+      svg
         .append("g")
         .attr("class", "rect-layer")
         // .style("visibility", "hidden")
@@ -450,38 +458,11 @@ export default {
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
         .attr("id", (d) => d.properties.NAME)
-        // .attr("width", (d) => calculateRectSize(d))
-        // .attr("height", (d) => calculateRectSize(d))
-
         .attr("width", __VM.rect.size)
         .attr("height", __VM.rect.size)
         .attr("stroke", "black")
         .attr("stroke-width", "0.3")
         .attr("fill", (d) => {
-          // let state;
-
-          // let temp = d.properties.NAME.split(",");
-
-          // if (temp.length > 1) {
-          //   state = temp[1].trim();
-          // } else {
-          //   state = temp[0].trim();
-          // }
-
-          // if (state.includes("Oregon")) {
-          //   return "rgb(2, 117, 216)";
-          // } else if (state.includes("Washington")) {
-          //   return "rgb(217, 83, 79)";
-          // } else if (state.includes("Illinois")) {
-          //   return "rgb(17, 83, 79)";
-          // } else if (state.includes("Pennsylvania")) {
-          //   return "rgb(117, 83, 79)";
-          // } else if (state.includes("Massa")) {
-          //   return "rgb(117, 83, 179)";
-          // } else {
-          //   return __VM.colorVariant[__VM.rect.color];
-          // }
-
           return __VM.colorVariant[__VM.rect.color];
         })
         .attr("original_fill", (d) => {
@@ -504,6 +485,24 @@ export default {
           // __VM.setRectColor(this);
           tooltip.style("visibility", "hidden");
         });
+
+      // state centroids
+      svg
+        .append("g")
+        .attr("class", "state-centroid-layer")
+        .attr("visibility", "hidden")
+        .selectAll("rect")
+        .data(__VM.state_list)
+        .enter()
+        .append("rect")
+        .attr("x", (d) => path.centroid(d)[0])
+        .attr("y", (d) => path.centroid(d)[1])
+        .attr("id", (d) => d.properties.NAME)
+        .attr("width", __VM.rect.size * 2)
+        .attr("height", __VM.rect.size * 2)
+        .attr("stroke", "black")
+        .attr("stroke-width", "0.3")
+        .attr("fill", "red");
 
       // original river layer
       const river_layer = svg.append("g").attr("class", "river-layer");
@@ -1164,6 +1163,16 @@ export default {
         });
       });
     },
+    showStateCentroid(type) {
+      const __VM = this;
+
+      __VM.state.centroid = !__VM.state.centroid;
+
+      d3.select(`.state-centroid-layer`).attr(
+        "visibility",
+        __VM.state.centroid ? "visible" : "hidden"
+      );
+    },
     setRiverWidth() {
       const __VM = this;
 
@@ -1594,7 +1603,12 @@ export default {
           },
         },
       },
-      state: { border: false, visibility: true, color: "danger" },
+      state: {
+        border: false,
+        centroid: false,
+        visibility: true,
+        color: "danger",
+      },
       county: { border: false, visibility: true, color: "dark" },
       region: { blue: [], yellow: [] },
       colorVariant: {
@@ -1643,6 +1657,8 @@ export default {
       __VM.shapefile,
       __VM.shapefile.objects.state
     ).features;
+
+    console.log(__VM.state_list);
 
     __VM.county_list = [];
     __VM.county_list.push(
