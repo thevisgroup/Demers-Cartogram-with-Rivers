@@ -19,6 +19,47 @@
 
 \refsection{0}
   \datalist[entry]{anyt/global//global/global}
+    \entry{bearak2016Everything}{article}{}
+      \name{author}{2}{}{%
+        {{hash=2e667514363d5bf4cd1fc946cfddaa35}{%
+           family={Bearak},
+           familyi={B\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=6332fb25977140b757a6704143146607}{%
+           family={Gamio},
+           familyi={G\bibinitperiod},
+           given={Lazaro},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{b73445a4b9e7a09c9fea61ed36e0d317}
+      \strng{fullhash}{b73445a4b9e7a09c9fea61ed36e0d317}
+      \strng{bibnamehash}{b73445a4b9e7a09c9fea61ed36e0d317}
+      \strng{authorbibnamehash}{b73445a4b9e7a09c9fea61ed36e0d317}
+      \strng{authornamehash}{b73445a4b9e7a09c9fea61ed36e0d317}
+      \strng{authorfullhash}{b73445a4b9e7a09c9fea61ed36e0d317}
+      \field{labelalpha}{BG16}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{From helping build wells to helping build armies}
+      \field{journaltitle}{Washington Post}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{title}{Everything You Ever Wanted to Know about the {{U}}.{{S}}. Foreign Assistance Budget}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.washingtonpost.com/graphics/world/which-countries-get-the-most-foreign-aid/
+      \endverb
+      \verb{url}
+      \verb https://www.washingtonpost.com/graphics/world/which-countries-get-the-most-foreign-aid/
+      \endverb
+    \endentry
     \entry{cano2015Mosaic}{article}{}
       \name{author}{6}{}{%
         {{hash=d365d87d243556cf8b91d39ecd5043f7}{%
@@ -70,8 +111,12 @@
       \field{month}{6}
       \field{number}{3}
       \field{title}{Mosaic {{Drawings}} and {{Cartograms}}}
+      \field{urlday}{15}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
       \field{volume}{34}
       \field{year}{2015}
+      \field{urldateera}{ce}
       \field{pages}{361\bibrangedash 370}
       \range{pages}{10}
       \verb{doi}
@@ -79,6 +124,12 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/Q2G5MIVY/Cano et al. - 2015 - Mosaic Drawings and Cartograms.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12648
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12648
       \endverb
     \endentry
     \entry{cruz2017Adapted}{inproceedings}{}
@@ -111,7 +162,11 @@
       \field{langid}{english}
       \field{month}{10}
       \field{title}{Adapted Dorling Cartogram on Wage Inequality in {{Portugal}}}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{year}{2017}
+      \field{urldateera}{ce}
       \field{pages}{1\bibrangedash 5}
       \range{pages}{5}
       \verb{doi}
@@ -119,6 +174,12 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/VZTGBSA5/Cruz - 2017 - Adapted dorling cartogram on wage inequality in Po.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://ieeexplore.ieee.org/document/8282365/
+      \endverb
+      \verb{url}
+      \verb http://ieeexplore.ieee.org/document/8282365/
       \endverb
     \endentry
     \entry{dorling2011Area}{incollection}{}
@@ -172,7 +233,11 @@
       \field{month}{4}
       \field{shorttitle}{Area {{Cartograms}}}
       \field{title}{Area {{Cartograms}}: {{Their Use}} and {{Creation}}}
+      \field{urlday}{5}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{year}{2011}
+      \field{urldateera}{ce}
       \field{pages}{252\bibrangedash 260}
       \range{pages}{9}
       \verb{doi}
@@ -180,6 +245,51 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/YXMYIIUQ/Dorling - 2011 - Area Cartograms Their Use and Creation.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1002/9780470979587.ch33
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1002/9780470979587.ch33
+      \endverb
+    \endentry
+    \entry{gamio2016Election}{article}{}
+      \name{author}{1}{}{%
+        {{hash=6332fb25977140b757a6704143146607}{%
+           family={Gamio},
+           familyi={G\bibinitperiod},
+           given={Lazaro},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{6332fb25977140b757a6704143146607}
+      \strng{fullhash}{6332fb25977140b757a6704143146607}
+      \strng{bibnamehash}{6332fb25977140b757a6704143146607}
+      \strng{authorbibnamehash}{6332fb25977140b757a6704143146607}
+      \strng{authornamehash}{6332fb25977140b757a6704143146607}
+      \strng{authorfullhash}{6332fb25977140b757a6704143146607}
+      \field{labelalpha}{Gam16}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{In 2012, 160 counties cast about the same number of votes as the rest of the country. But, your run-of-the-mill election map won't show you that.}
+      \field{journaltitle}{Washington Post}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{title}{Election Maps Are Telling You Big Lies about Small Things}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/H3NTRDLF/how-election-maps-lie.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.washingtonpost.com/graphics/politics/2016-election/how-election-maps-lie/
+      \endverb
+      \verb{url}
+      \verb https://www.washingtonpost.com/graphics/politics/2016-election/how-election-maps-lie/
       \endverb
     \endentry
     \entry{gao2020Visualising}{article}{}
@@ -223,8 +333,12 @@
       \field{month}{6}
       \field{number}{4}
       \field{title}{Visualising the Expansion and Spread of Coronavirus Disease 2019 by Cartograms}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{volume}{52}
       \field{year}{2020}
+      \field{urldateera}{ce}
       \field{pages}{698\bibrangedash 701}
       \range{pages}{4}
       \verb{doi}
@@ -232,6 +346,208 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/XMZRHN9H/Gao et al. - 2020 - Visualising the expansion and spread of coronaviru.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://journals.sagepub.com/doi/10.1177/0308518X20910162
+      \endverb
+      \verb{url}
+      \verb http://journals.sagepub.com/doi/10.1177/0308518X20910162
+      \endverb
+    \endentry
+    \entry{mccartney20202020}{article}{}
+      \name{author}{10}{}{%
+        {{hash=40f2babdb5f3f37946a351593c51d98b}{%
+           family={McCartney},
+           familyi={M\bibinitperiod},
+           given={Allison},
+           giveni={A\bibinitperiod}}}%
+        {{hash=0a8be444187a8dac673f6f6317949685}{%
+           family={Harris},
+           familyi={H\bibinitperiod},
+           given={Brittany},
+           giveni={B\bibinitperiod}}}%
+        {{hash=53a136fac593f978ed25495d1cae1a62}{%
+           family={Rojanasakul},
+           familyi={R\bibinitperiod},
+           given={Mira},
+           giveni={M\bibinitperiod}}}%
+        {{hash=8ce5a4a428f696431a1281e4f4988877}{%
+           family={Burgess},
+           familyi={B\bibinitperiod},
+           given={Julian},
+           giveni={J\bibinitperiod}}}%
+        {{hash=7e946e259f2cfb1d94f03f29c8380722}{%
+           family={Murray},
+           familyi={M\bibinitperiod},
+           given={Paul},
+           giveni={P\bibinitperiod}}}%
+        {{hash=36aca1a4765cb99c2d19fb6b85ddcf26}{%
+           family={Vann},
+           familyi={V\bibinitperiod},
+           given={Alyssa},
+           giveni={A\bibinitperiod}}}%
+        {{hash=0fb965743ac34e998885cbc3e48594d9}{%
+           family={Pogkas},
+           familyi={P\bibinitperiod},
+           given={Demetrios},
+           giveni={D\bibinitperiod}}}%
+        {{hash=b1de98decdfe1ee3d9f7ab4696a54ff7}{%
+           family={Benhamou},
+           familyi={B\bibinitperiod},
+           given={Brad},
+           giveni={B\bibinitperiod}}}%
+        {{hash=ba6196f739358cb23a427130b905f824}{%
+           family={Kessler},
+           familyi={K\bibinitperiod},
+           given={Aaron},
+           giveni={A\bibinitperiod}}}%
+        {{hash=5da6f47a7ce3358c84a446b8f17a1ada}{%
+           family={Tribou},
+           familyi={T\bibinitperiod},
+           given={Alex},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{aea2011fa7895bccd19ff521f228efc8}
+      \strng{fullhash}{82eeeb35ac4b6423e340474bede0bf4f}
+      \strng{bibnamehash}{aea2011fa7895bccd19ff521f228efc8}
+      \strng{authorbibnamehash}{aea2011fa7895bccd19ff521f228efc8}
+      \strng{authornamehash}{aea2011fa7895bccd19ff521f228efc8}
+      \strng{authorfullhash}{82eeeb35ac4b6423e340474bede0bf4f}
+      \field{labelalpha}{McC*20}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Bloomberg}
+      \field{title}{2020 {{Presidential Election Results}}: {{Live Updates}}}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/WN72U67Z/2020-us-election-results.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.bloomberg.com/graphics/2020-us-election-results
+      \endverb
+      \verb{url}
+      \verb https://www.bloomberg.com/graphics/2020-us-election-results
+      \endverb
+    \endentry
+    \entry{miller2016Election}{article}{}
+      \name{author}{1}{}{%
+        {{hash=19a46ccebbf378a3f4b35fdcc0870017}{%
+           family={Miller},
+           familyi={M\bibinitperiod},
+           given={Greg},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{19a46ccebbf378a3f4b35fdcc0870017}
+      \strng{fullhash}{19a46ccebbf378a3f4b35fdcc0870017}
+      \strng{bibnamehash}{19a46ccebbf378a3f4b35fdcc0870017}
+      \strng{authorbibnamehash}{19a46ccebbf378a3f4b35fdcc0870017}
+      \strng{authornamehash}{19a46ccebbf378a3f4b35fdcc0870017}
+      \strng{authorfullhash}{19a46ccebbf378a3f4b35fdcc0870017}
+      \field{labelalpha}{Mil16}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{There are better ways to map voting results. So why do we stick with the same old red and blue?}
+      \field{chapter}{Culture}
+      \field{journaltitle}{National Geographic}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{title}{Election {{Maps Can Be Misleading}}—{{Here}}'s a {{Solution}}}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.nationalgeographic.com/culture/article/improved-election-map-cartograms
+      \endverb
+      \verb{url}
+      \verb https://www.nationalgeographic.com/culture/article/improved-election-map-cartograms
+      \endverb
+    \endentry
+    \entry{thelearningnetwork2020What}{article}{}
+      \name{author}{1}{}{%
+        {{hash=9e5e113341d7358f83ee81d911abc4c1}{%
+           family={Network},
+           familyi={N\bibinitperiod},
+           given={The\bibnamedelima Learning},
+           giveni={T\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \strng{namehash}{9e5e113341d7358f83ee81d911abc4c1}
+      \strng{fullhash}{9e5e113341d7358f83ee81d911abc4c1}
+      \strng{bibnamehash}{9e5e113341d7358f83ee81d911abc4c1}
+      \strng{authorbibnamehash}{9e5e113341d7358f83ee81d911abc4c1}
+      \strng{authornamehash}{9e5e113341d7358f83ee81d911abc4c1}
+      \strng{authorfullhash}{9e5e113341d7358f83ee81d911abc4c1}
+      \field{labelalpha}{Net20}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{These two maps show the results of the 2020 presidential election. Which map does a better job of visualizing the outcome of the election?}
+      \field{chapter}{The Learning Network}
+      \field{issn}{0362-4331}
+      \field{journaltitle}{The New York Times}
+      \field{langid}{american}
+      \field{month}{11}
+      \field{shorttitle}{What's {{Going On}} in {{This Graph}}?}
+      \field{title}{What's {{Going On}} in {{This Graph}}? | 2020 {{Presidential Election Maps}}}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/8FSYDPRZ/whats-going-on-in-this-graph-2020-presidential-election-maps.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nytimes.com/2020/11/19/learning/whats-going-on-in-this-graph-2020-presidential-election-maps.html
+      \endverb
+      \verb{url}
+      \verb https://www.nytimes.com/2020/11/19/learning/whats-going-on-in-this-graph-2020-presidential-election-maps.html
+      \endverb
+    \endentry
+    \entry{newman2016Election}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=91c825ea422365e0f6cb2597658def75}{%
+           family={Newman},
+           familyi={N\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{91c825ea422365e0f6cb2597658def75}
+      \strng{fullhash}{91c825ea422365e0f6cb2597658def75}
+      \strng{bibnamehash}{91c825ea422365e0f6cb2597658def75}
+      \strng{authorbibnamehash}{91c825ea422365e0f6cb2597658def75}
+      \strng{authornamehash}{91c825ea422365e0f6cb2597658def75}
+      \strng{authorfullhash}{91c825ea422365e0f6cb2597658def75}
+      \field{labelalpha}{New16}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{12}
+      \field{title}{Election Maps}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/8I8H434T/2016.html
+      \endverb
+      \verb{urlraw}
+      \verb http://www-personal.umich.edu/~mejn/election/2016/
+      \endverb
+      \verb{url}
+      \verb http://www-personal.umich.edu/~mejn/election/2016/
       \endverb
     \endentry
     \entry{nusrat2016State}{article}{}
@@ -265,8 +581,12 @@
       \field{month}{6}
       \field{number}{3}
       \field{title}{The {{State}} of the {{Art}} in {{Cartograms}}}
+      \field{urlday}{5}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{volume}{35}
       \field{year}{2016}
+      \field{urldateera}{ce}
       \field{pages}{619\bibrangedash 642}
       \range{pages}{24}
       \verb{doi}
@@ -274,6 +594,12 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/KJA9SQ9V/Nusrat and Kobourov - 2016 - The State of the Art in Cartograms.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12932
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12932
       \endverb
     \endentry
     \entry{nusrat2020Recognition}{inproceedings}{}
@@ -317,7 +643,11 @@
       \field{langid}{english}
       \field{month}{9}
       \field{title}{Recognition and {{Recall}} of {{Geographic Data In Cartograms}}}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{year}{2020}
+      \field{urldateera}{ce}
       \field{pages}{1\bibrangedash 9}
       \range{pages}{9}
       \verb{doi}
@@ -325,6 +655,12 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/CZCB6RDS/Nusrat et al. - 2020 - Recognition and Recall of Geographic Data In Carto.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/3399715.3399873
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/3399715.3399873
       \endverb
     \endentry
     \entry{raisz1934Rectangular}{article}{}
@@ -351,12 +687,59 @@
       \field{month}{4}
       \field{number}{2}
       \field{title}{The {{Rectangular Statistical Cartogram}}}
+      \field{urlday}{15}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
       \field{volume}{24}
       \field{year}{1934}
+      \field{urldateera}{ce}
       \field{pages}{292}
       \range{pages}{1}
       \verb{doi}
       \verb 10.2307/208794
+      \endverb
+      \verb{urlraw}
+      \verb https://www.jstor.org/stable/208794?origin=crossref
+      \endverb
+      \verb{url}
+      \verb https://www.jstor.org/stable/208794?origin=crossref
+      \endverb
+    \endentry
+    \entry{sandberg2018Cartogram}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=86c7cd3f53c63aadf31be2a9c8a8f46f}{%
+           family={Sandberg},
+           familyi={S\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{fullhash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{bibnamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{authorbibnamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{authornamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{authorfullhash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \field{labelalpha}{San18}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Readers: Last week, The New York Times published an interactive map for the 2018 Midterm Elections. The map and story were titled House Election Results: Democrats Take Control.~ You were given two\ldots}
+      \field{journaltitle}{Michael Sandberg's Data Visualization Blog}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{shorttitle}{Cartogram}
+      \field{title}{Cartogram: {{House Election Results}}: {{Democrats Take Control}} ({{The New York Times}})}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2018}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://datavizblog.com/2018/11/14/cartogram-house-election-results-democrats-take-control-the-new-york-times/
+      \endverb
+      \verb{url}
+      \verb https://datavizblog.com/2018/11/14/cartogram-house-election-results-democrats-take-control-the-new-york-times/
       \endverb
     \endentry
     \entry{sun2010Effectiveness}{article}{}
@@ -390,8 +773,12 @@
       \field{month}{1}
       \field{number}{1}
       \field{title}{Effectiveness of {{Cartogram}} for the {{Representation}} of {{Spatial Data}}}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{volume}{47}
       \field{year}{2010}
+      \field{urldateera}{ce}
       \field{pages}{12\bibrangedash 21}
       \range{pages}{10}
       \verb{doi}
@@ -399,6 +786,89 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/3IE768R3/Sun and Li - 2010 - Effectiveness of Cartogram for the Representation .pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://www.tandfonline.com/doi/full/10.1179/000870409X12525737905169
+      \endverb
+      \verb{url}
+      \verb http://www.tandfonline.com/doi/full/10.1179/000870409X12525737905169
+      \endverb
+    \endentry
+    \entry{stabe2016Search}{article}{}
+      \name{author}{1}{}{%
+        {{hash=dc72570e83a7fa726f0a11dd5315ee3d}{%
+           family={Stabe},
+           familyi={S\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{dc72570e83a7fa726f0a11dd5315ee3d}
+      \strng{fullhash}{dc72570e83a7fa726f0a11dd5315ee3d}
+      \strng{bibnamehash}{dc72570e83a7fa726f0a11dd5315ee3d}
+      \strng{authorbibnamehash}{dc72570e83a7fa726f0a11dd5315ee3d}
+      \strng{authornamehash}{dc72570e83a7fa726f0a11dd5315ee3d}
+      \strng{authorfullhash}{dc72570e83a7fa726f0a11dd5315ee3d}
+      \field{labelalpha}{Sta16}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The FT's data team plotted a third way between election maps and cartograms}
+      \field{journaltitle}{Financial Times}
+      \field{month}{11}
+      \field{title}{The Search for a Better {{US}} Election Map}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/UYAPFRXI/3685bf9e-a4cc-11e6-8b69-02899e8bd9d1.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.ft.com/content/3685bf9e-a4cc-11e6-8b69-02899e8bd9d1
+      \endverb
+      \verb{url}
+      \verb https://www.ft.com/content/3685bf9e-a4cc-11e6-8b69-02899e8bd9d1
+      \endverb
+    \endentry
+    \entry{taylor2016What}{article}{}
+      \name{author}{1}{}{%
+        {{hash=0d12d636c286b40166fb781ab5cfb1ec}{%
+           family={Taylor},
+           familyi={T\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{0d12d636c286b40166fb781ab5cfb1ec}
+      \strng{fullhash}{0d12d636c286b40166fb781ab5cfb1ec}
+      \strng{bibnamehash}{0d12d636c286b40166fb781ab5cfb1ec}
+      \strng{authorbibnamehash}{0d12d636c286b40166fb781ab5cfb1ec}
+      \strng{authornamehash}{0d12d636c286b40166fb781ab5cfb1ec}
+      \strng{authorfullhash}{0d12d636c286b40166fb781ab5cfb1ec}
+      \field{labelalpha}{Tay16}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{If pro-E.U. voters seceded, we would be left with rump state.}
+      \field{journaltitle}{Washington Post}
+      \field{langid}{american}
+      \field{month}{6}
+      \field{title}{What a Real `{{Brexit Britain}}' Would Look Like}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/7ML46VQ9/what-a-real-brexit-britain-would-look-like.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.washingtonpost.com/news/worldviews/wp/2016/06/29/what-a-real-brexit-britain-would-look-like/
+      \endverb
+      \verb{url}
+      \verb https://www.washingtonpost.com/news/worldviews/wp/2016/06/29/what-a-real-brexit-britain-would-look-like/
       \endverb
     \endentry
     \entry{tong2018cartograms}{article}{}
@@ -437,7 +907,11 @@
       \field{isbn}{9783038680710}
       \field{journaltitle}{Computer Graphics and Visual Computing (CGVC)}
       \field{title}{Cartograms with {{Topological Features}}}
+      \field{urlday}{18}
+      \field{urlmonth}{5}
+      \field{urlyear}{2021}
       \field{year}{2018}
+      \field{urldateera}{ce}
       \field{pages}{8 pages}
       \range{pages}{-1}
       \verb{doi}
@@ -445,6 +919,12 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/AVSEUUCM/tong2018cartograms.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://diglib.eg.org/handle/10.2312/cgvc20181217
+      \endverb
+      \verb{url}
+      \verb https://diglib.eg.org/handle/10.2312/cgvc20181217
       \endverb
     \endentry
     \entry{vankreveld2004Rectangular}{incollection}{}
@@ -570,12 +1050,22 @@
       \field{booktitle}{Algorithms –{} {{ESA}} 2004}
       \field{isbn}{978-3-540-23025-0 978-3-540-30140-0}
       \field{title}{On {{Rectangular Cartograms}}}
+      \field{urlday}{2}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
       \field{volume}{3221}
       \field{year}{2004}
+      \field{urldateera}{ce}
       \field{pages}{724\bibrangedash 735}
       \range{pages}{12}
       \verb{doi}
       \verb 10.1007/978-3-540-30140-0_64
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/978-3-540-30140-0_64
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/978-3-540-30140-0_64
       \endverb
     \endentry
     \entry{warf2008Geography}{article}{}
@@ -608,8 +1098,12 @@
       \field{month}{8}
       \field{number}{3}
       \field{title}{The {{Geography}} of {{Religious Diversity}} in the {{United States}}}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{volume}{60}
       \field{year}{2008}
+      \field{urldateera}{ce}
       \field{pages}{413\bibrangedash 424}
       \range{pages}{12}
       \verb{doi}
@@ -617,6 +1111,12 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/5ZKSRMNK/Warf and Winsberg - 2008 - The Geography of Religious Diversity in the United.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://www.tandfonline.com/doi/abs/10.1080/00330120802046786
+      \endverb
+      \verb{url}
+      \verb http://www.tandfonline.com/doi/abs/10.1080/00330120802046786
       \endverb
     \endentry
   \enddatalist

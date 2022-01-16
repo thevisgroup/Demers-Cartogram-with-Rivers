@@ -50,8 +50,20 @@
 % ---------------------------
 \biberVersion
 \BibtexOrBiblatex
-\usepackage[backend=biber,bibstyle=EG,citestyle=alphabetic,backref=true]{biblatex}
+\usepackage[backend=biber,bibstyle=EG,citestyle=alphabetic,backref=true,url=false]{biblatex}
 %\addbibresource{egbibsample.bib}
+
+\renewbibmacro*{doi+eprint+url}{%
+    \printfield{doi}%
+    \newunit\newblock%
+    \iftoggle{bbx:eprint}{%
+        \usebibmacro{eprint}%
+    }{}%
+    \newunit\newblock%
+    \iffieldundef{doi}{%
+        \usebibmacro{url+urldate}}%
+        {}%
+    }
 
 \addbibresource{GeoVis.bib}
 

@@ -1,5 +1,9 @@
 \section{Related Work}
 
+This section introduces the definition of cartogram types, describes relevant applications of cartograms, and provides a brief overview of some real-world applications of cartogram-based visualizations.
+
+\subsection{Definitions}
+
 Cartograms combine statistical and geographical information in thematic maps. We follow the categorization of cartograms by \citea{vankreveld2004Rectangular}: contiguous, non-contiguous, rectangular, and Dorling. \citea{nusrat2016State} summarize three major accuracy dimensions for cartograms: statistical, geographical, and topological. Each cartogram design may make accuracy trade-offs between dimensions, we provide an overview in Table \ref{table:accuracy}.
 
 {
@@ -40,8 +44,9 @@ Rectangular cartograms are contiguous and do not preserve geographical accuracy 
 
 Mosaic cartograms are contiguous and sacrifice statistical accuracy to preserve some level of geographical accuracy \cite{cano2015Mosaic}. Some variants are able to preserve topological accuracy as well.
 
+\subsection{Peer-reviewed Applications}
 
-\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} visualize 1996 US election data and 2005 China population date using Dorling, Mosaic, and contiguous cartograms. \citea{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Dorling cartogram to visualize health-related date by regions in England. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, Agriculture, and Retail data in the US. See Table \ref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
+\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} visualize 1996 US election data and 2005 China population date using Dorling, Mosaic, and contiguous cartograms. \citea{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Demers cartogram to visualize health-related date by regions in England, the work introduces a novel technique to remove overlaps of squares based on topological features, aiming to improve both geographical and topological accuracy. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, agriculture, and retail data in the US. See Table \ref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
 
 
 {
@@ -83,3 +88,7 @@ Mosaic cartograms are contiguous and sacrifice statistical accuracy to preserve 
 	\label{table:region vs node}
 \end{table*}
 }
+
+\subsection{Other Applications}
+
+Cartogram has become a popular choice of visualization in covering various topics by the media, in order to present an unbiased and complete picture of the news. \citea{newman2016Election} generates contiguous cartograms to present US Election results in 2012 and 2016. The Washington Post adopts cartograms to visualize the US overseas economic assistance, arm sales (Mosaic) \cite{bearak2016Everything}, the 2016 US Election (contiguous) \cite{gamio2016Election}, and the Brexit Referendum (Mosaic) \cite{taylor2016What}. The National Geographic uses contiguous and Mosaic cartograms to analyze the 2016 US Election results \cite{miller2016Election}, the same topic is also covered by the Financial Times with a Dorling cartogram \cite{stabe2016Search}. \citea{sandberg2018Cartogram} reports the 2018 US midterm Election with a Mosaic cartogram, the same approach is used to cover the 2020 US Election by the New York Times \cite{thelearningnetwork2020What} and Bloomberg \cite{mccartney20202020}.

@@ -1,18 +1,18 @@
 [0] Config.pm:311> INFO - This is Biber 2.16
 [0] Config.pm:314> INFO - Logfile is 'GHRVis.blg'
-[55] biber-darwin:340> INFO - === Sun Jan 16, 2022, 00:36:34
-[68] Biber.pm:415> INFO - Reading 'GHRVis.bcf'
-[137] Biber.pm:952> INFO - Found 11 citekeys in bib section 0
-[148] Biber.pm:4340> INFO - Processing section 0
-[158] Biber.pm:4531> INFO - Looking for bibtex format file 'GeoVis.bib' for section 0
-[160] bibtex.pm:1689> INFO - LaTeX decoding ...
-[186] bibtex.pm:1494> INFO - Found BibTeX data source 'GeoVis.bib'
+[49] biber-darwin:340> INFO - === Sun Jan 16, 2022, 22:45:51
+[60] Biber.pm:415> INFO - Reading 'GHRVis.bcf'
+[130] Biber.pm:952> INFO - Found 20 citekeys in bib section 0
+[141] Biber.pm:4340> INFO - Processing section 0
+[148] Biber.pm:4531> INFO - Looking for bibtex format file 'GeoVis.bib' for section 0
+[151] bibtex.pm:1689> INFO - LaTeX decoding ...
+[189] bibtex.pm:1494> INFO - Found BibTeX data source 'GeoVis.bib'
 [236] Utils.pm:395> WARN - ISBN '978-3-540-23025-0 978-3-540-30140-0' in entry 'vankreveld2004Rectangular' is invalid - run biber with '--validate_datamodel' for details.
-[244] Utils.pm:395> WARN - ISBN '978-0-470-97958-7 978-0-470-74283-9' in entry 'dorling2011Area' is invalid - run biber with '--validate_datamodel' for details.
-[284] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[284] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[284] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
-[284] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
-[292] bbl.pm:654> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
-[301] bbl.pm:757> INFO - Output to GHRVis.bbl
-[301] Biber.pm:128> INFO - WARNINGS: 2
+[245] Utils.pm:395> WARN - ISBN '978-0-470-97958-7 978-0-470-74283-9' in entry 'dorling2011Area' is invalid - run biber with '--validate_datamodel' for details.
+[318] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[318] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[318] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
+[318] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
+[335] bbl.pm:654> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
+[349] bbl.pm:757> INFO - Output to GHRVis.bbl
+[349] Biber.pm:128> INFO - WARNINGS: 2
