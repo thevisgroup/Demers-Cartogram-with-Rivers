@@ -19,6 +19,68 @@
 
 \refsection{0}
   \datalist[entry]{anyt/global//global/global}
+    \entry{cano2015Mosaic}{article}{}
+      \name{author}{6}{}{%
+        {{hash=d365d87d243556cf8b91d39ecd5043f7}{%
+           family={Cano},
+           familyi={C\bibinitperiod},
+           given={R.\bibnamedelimi G.},
+           giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=db7229aaf30c63d019c594a14eadfedf}{%
+           family={Buchin},
+           familyi={B\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=1eaa13e93a5788ecf804024c813a79e9}{%
+           family={Castermans},
+           familyi={C\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=afe66fd08357597a0d4804c68920b621}{%
+           family={Pieterse},
+           familyi={P\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1196c502567a587b5cb22593c3b4b6a7}{%
+           family={Sonke},
+           familyi={S\bibinitperiod},
+           given={W.},
+           giveni={W\bibinitperiod}}}%
+        {{hash=b543953da81a8169b63a997adea96e38}{%
+           family={Speckmann},
+           familyi={S\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{44dcaafc9a14b6d15e97a6f28d2bbf6c}
+      \strng{fullhash}{0889e2d503cb477532b863a2f00b29e6}
+      \strng{bibnamehash}{44dcaafc9a14b6d15e97a6f28d2bbf6c}
+      \strng{authorbibnamehash}{44dcaafc9a14b6d15e97a6f28d2bbf6c}
+      \strng{authornamehash}{44dcaafc9a14b6d15e97a6f28d2bbf6c}
+      \strng{authorfullhash}{0889e2d503cb477532b863a2f00b29e6}
+      \field{labelalpha}{Can*15}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cartograms visualize quantitative data about a set of regions such as countries or states. There are several different types of cartograms and –{} for some –{} algorithms to automatically construct them exist. We focus on mosaic cartograms: cartograms that use multiples of simple tiles –{} usually squares or hexagons –{} to represent regions. Mosaic cartograms communicate well data that consist of, or can be cast into, small integer units (for example, electorial college votes). In addition, they allow users to accurately compare regions and can often maintain a (schematized) version of the input regions' shapes. We propose the first fully automated method to construct mosaic cartograms. To do so, we first introduce mosaic drawings of triangulated planar graphs. We then show how to modify mosaic drawings into mosaic cartograms with low cartographic error while maintaining correct adjacencies between regions. We validate our approach experimentally and compare to other cartogram methods.}
+      \field{issn}{01677055}
+      \field{journaltitle}{Computer Graphics Forum}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{number}{3}
+      \field{title}{Mosaic {{Drawings}} and {{Cartograms}}}
+      \field{volume}{34}
+      \field{year}{2015}
+      \field{pages}{361\bibrangedash 370}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1111/cgf.12648
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/Q2G5MIVY/Cano et al. - 2015 - Mosaic Drawings and Cartograms.pdf
+      \endverb
+    \endentry
     \entry{cruz2017Adapted}{inproceedings}{}
       \name{author}{1}{}{%
         {{hash=f1986c6605bd2e1b4015d6695eca2c58}{%
@@ -57,6 +119,67 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/VZTGBSA5/Cruz - 2017 - Adapted dorling cartogram on wage inequality in Po.pdf
+      \endverb
+    \endentry
+    \entry{dorling2011Area}{incollection}{}
+      \name{author}{1}{}{%
+        {{hash=0c52e954d7bdb0fa0d93af1351f3785d}{%
+           family={Dorling},
+           familyi={D\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \name{editor}{3}{}{%
+        {{hash=0b2a765c4db43d186758680591f96504}{%
+           family={Dodge},
+           familyi={D\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=0a6733829fcc127126b10855df06ec2d}{%
+           family={Kitchin},
+           familyi={K\bibinitperiod},
+           given={Rob},
+           giveni={R\bibinitperiod}}}%
+        {{hash=a438474ec4004fb3797371d773bb4bdd}{%
+           family={Perkins},
+           familyi={P\bibinitperiod},
+           given={Chris},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Chichester, UK}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons, Ltd}%
+      }
+      \strng{namehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{fullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{bibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authorbibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authornamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authorfullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{editorbibnamehash}{f12ecc2fbb52188c26d559e168d81e79}
+      \strng{editornamehash}{f12ecc2fbb52188c26d559e168d81e79}
+      \strng{editorfullhash}{e7525ccb8dbe8a5f79aaa7cfa6e08a0f}
+      \field{labelalpha}{Dor11}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{booktitle}{The {{Map Reader}}}
+      \field{isbn}{978-0-470-97958-7 978-0-470-74283-9}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{shorttitle}{Area {{Cartograms}}}
+      \field{title}{Area {{Cartograms}}: {{Their Use}} and {{Creation}}}
+      \field{year}{2011}
+      \field{pages}{252\bibrangedash 260}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1002/9780470979587.ch33
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/YXMYIIUQ/Dorling - 2011 - Area Cartograms Their Use and Creation.pdf
       \endverb
     \endentry
     \entry{gao2020Visualising}{article}{}
@@ -202,6 +325,38 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/CZCB6RDS/Nusrat et al. - 2020 - Recognition and Recall of Geographic Data In Carto.pdf
+      \endverb
+    \endentry
+    \entry{raisz1934Rectangular}{article}{}
+      \name{author}{1}{}{%
+        {{hash=47d1f0befcb810c387f9c3201aa8c35e}{%
+           family={Raisz},
+           familyi={R\bibinitperiod},
+           given={Erwin},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{47d1f0befcb810c387f9c3201aa8c35e}
+      \strng{fullhash}{47d1f0befcb810c387f9c3201aa8c35e}
+      \strng{bibnamehash}{47d1f0befcb810c387f9c3201aa8c35e}
+      \strng{authorbibnamehash}{47d1f0befcb810c387f9c3201aa8c35e}
+      \strng{authornamehash}{47d1f0befcb810c387f9c3201aa8c35e}
+      \strng{authorfullhash}{47d1f0befcb810c387f9c3201aa8c35e}
+      \field{labelalpha}{Rai34}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{00167428}
+      \field{journaltitle}{Geographical Review}
+      \field{month}{4}
+      \field{number}{2}
+      \field{title}{The {{Rectangular Statistical Cartogram}}}
+      \field{volume}{24}
+      \field{year}{1934}
+      \field{pages}{292}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.2307/208794
       \endverb
     \endentry
     \entry{sun2010Effectiveness}{article}{}

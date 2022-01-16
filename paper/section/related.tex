@@ -1,13 +1,13 @@
 \section{Related Work}
 
-Cartograms combine statistical and geographical information in thematic maps. We follow the categorization of cartograms by \citeauthor{vankreveld2004Rectangular} \cite{vankreveld2004Rectangular}: contiguous, non-contiguous, rectangular, and Dorling. \citeauthor{nusrat2016State} \cite{nusrat2016State} summarize three major accuracy dimensions for cartograms: statistical, geographical, and topological. Each cartogram design may make accuracy trade-offs between dimensions, we provide an overview in Table \ref{table:accuracy}.
+Cartograms combine statistical and geographical information in thematic maps. We follow the categorization of cartograms by \citea{vankreveld2004Rectangular}: contiguous, non-contiguous, rectangular, and Dorling. \citea{nusrat2016State} summarize three major accuracy dimensions for cartograms: statistical, geographical, and topological. Each cartogram design may make accuracy trade-offs between dimensions, we provide an overview in Table \ref{table:accuracy}.
 
 {
 \renewcommand{\arraystretch}{1.5}
-\begin{table*}[!tb]
+\begin{table}[!b]
 	\centering
-	\resizebox{\textwidth}{!}{
-		\begin{tabulary}{\textwidth}{|*{5}{l|}}
+	\resizebox{\columnwidth}{!}{
+		\begin{tabulary}{\columnwidth}{|*{5}{l|}}
 			\hhline{~|*{3}{-}|~}
 			\multicolumn{1}{c|}{} & \multicolumn{3}{c|}{\cellcolor{Mycolor2} \textbf{Accuracy}} \\
 			\hhline{~|*{4}{-}}
@@ -17,11 +17,11 @@ Cartograms combine statistical and geographical information in thematic maps. We
 			\textbf{Topological} &
 			\textbf{Contiguity} \\
 			\hline
-			Contiguous & \cellcolor{Mycolor3}Varies & \cellcolor{Mycolor3}Varies & Accurate & Yes \\
+			Contiguous & \cellcolor{Mycolor3}Variable & \cellcolor{Mycolor3}Variable & Accurate & Yes \\
 			\hline
 			Non-contiguous & \cellcolor{Mycolor5}\textcolor{white}{Accurate} & \cellcolor{Mycolor5}\textcolor{white}{Shape is accurate} &\cellcolor{Mycolor6}Inaccurate & No   \\
 			\hline
-			Rectangular & \cellcolor{Mycolor3}Varies & Shape is inaccurate & \cellcolor{Mycolor3}Varies & Yes   \\
+			Rectangular & \cellcolor{Mycolor3}Variable & Shape is inaccurate & \cellcolor{Mycolor3}Variable & Yes   \\
 			\hline
 			Dorling & Accurate & Inaccurate & Inaccurate & No  \\
 			\hline
@@ -29,39 +29,49 @@ Cartograms combine statistical and geographical information in thematic maps. We
 	}
 	\caption{\textcolor{Mycolor3}{\textbf{Trade-off between dimensions}}. \textcolor{Mycolor6}{\textbf{Dimension sacrificed}} in order to improve \textcolor{Mycolor5}{\textbf{target dimension}}'s accuracy.}
 	\label{table:accuracy}
-\end{table*}
+\end{table}
 }
 
 
-Dorling cartograms are non-contiguous and do not preserve geography and topology. A Dorling cartogram is statistically accurate, regions are represented by circles and the statistic of interest is represented by the circle size. In Demers Cartograms, a variant of Dorling, squares are used instead to capture a certain level of topology. Dorling cartograms are unable to maintain topological accuracy as circles are often repositioned to remove overlaps. Table \ref{table:region vs node} includes a list of literature that adopts Dorling cartograms with corresponding geographical regions and node counts.
+Dorling cartograms are non-contiguous and do not preserve geography and topology. A Dorling cartogram is statistically accurate, regions are represented by circles and the statistic of interest is represented by the circle size \cite{dorling2011Area}. 
+In Demers Cartograms, a variant of Dorling, squares are used instead to capture a certain level of topology \cite{cano2015Mosaic}. Dorling cartograms are unable to maintain topological accuracy as circles are often repositioned to remove overlaps. 
+
+Rectangular cartograms are contiguous and do not preserve geographical accuracy \cite{raisz1934Rectangular}. Depending on the variant, a rectangular cartogram may trade between statistical and topological accuracy.
+
+Mosaic cartograms are contiguous and sacrifice statistical accuracy to preserve some level of geographical accuracy \cite{cano2015Mosaic}. Some variants are able to preserve topological accuracy as well.
+
+
+\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} visualize 1996 US election data and 2005 China population date using Dorling, Mosaic, and contiguous cartograms. \citea{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Dorling cartogram to visualize health-related date by regions in England. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, Agriculture, and Retail data in the US. See Table \ref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
+
 
 {
 \renewcommand{\arraystretch}{1.5}
 \begin{table*}[!tb]
 	\centering
 	\resizebox{\textwidth}{!}{
-		\begin{tabulary}{\textwidth}{|*{3}{l|}r|c|}
-			\hhline{~|*{3}{-}|~}
+		\begin{tabulary}{\textwidth}{|*{4}{l|}r|c|}
+			\hhline{~|*{4}{-}|~}
 			\multicolumn{1}{c|}{\textbf{Literature}} &
 			\textbf{Title} &
-			\textbf{Geographic Region} &
+			\textbf{Cartogram Type(s)} &
+			\textbf{Geographic Region(s)} &
 			\textbf{Number of Nodes} &
 			\multicolumn{1}{c}{\textbf{Year}} \\
 			\hline
 			
 			% \citea{auber2007Geographical} & \citetitlea{auber2007Geographical} & US & 19 & 2007 \\
 			% \hline
-			\citea{warf2008Geography} & \citetitlea{warf2008Geography} & US & 3,142 & \citeyear{warf2008Geography} \\
+			\citea{warf2008Geography} & \citetitlea{warf2008Geography} & Dorling & US & 3,142 & \citeyear{warf2008Geography} \\
 			\hline
-			\citea{sun2010Effectiveness} & \citetitlea{sun2010Effectiveness} & US, China & 34 - 49 & \citeyear{sun2010Effectiveness} \\
+			\citea{sun2010Effectiveness} & \citetitlea{sun2010Effectiveness} & Dorling, Mosaic, Contiguous & US, China & 34 - 49 & \citeyear{sun2010Effectiveness} \\
 			\hline
-			\citea{cruz2017Adapted} & \citetitlea{cruz2017Adapted} & Portugal & 2,882 & \citeyear{cruz2017Adapted} \\
+			\citea{cruz2017Adapted} & \citetitlea{cruz2017Adapted} & Dorling, Non-contiguous, Contiguous & Portugal & 2,882 & \citeyear{cruz2017Adapted} \\
 			\hline
-			\citea{tong2018cartograms} & \citetitlea{tong2018cartograms} & England & 209 & \citeyear{tong2018cartograms} \\
+			\citea{tong2018cartograms} & \citetitlea{tong2018cartograms} & Demers & England & 209 & \citeyear{tong2018cartograms} \\
 			\hline
-			\citea{gao2020Visualising} & \citetitlea{gao2020Visualising} & China & 34 & \citeyear{gao2020Visualising} \\
+			\citea{gao2020Visualising} & \citetitlea{gao2020Visualising} & Dorling & China & 34 & \citeyear{gao2020Visualising} \\
 			\hline
-			\citea{nusrat2020Recognition} & \citetitlea{nusrat2020Recognition} & Portugal & 49 & \citeyear{nusrat2020Recognition} \\
+			\citea{nusrat2020Recognition} & \citetitlea{nusrat2020Recognition} & Contiguous, Dorling & Portugal & 49 & \citeyear{nusrat2020Recognition} \\
 			\hline
 			
 			% \multicolumn{1}{c|}{\textbf{Total unique papers: 51}} & 24&15&12& \multicolumn{1}{c}{}  \\
@@ -73,7 +83,3 @@ Dorling cartograms are non-contiguous and do not preserve geography and topology
 	\label{table:region vs node}
 \end{table*}
 }
-
-Rectangular cartograms are contiguous and do not preserve geographical accuracy. Depending on the variant, a rectangular cartogram may trade between statistical and topological accuracy.
-
-Mosaic cartograms are contiguous and sacrifice statistical accuracy to preserve some level of geographical accuracy. Some variants are able to preserve topological accuracy as well.
