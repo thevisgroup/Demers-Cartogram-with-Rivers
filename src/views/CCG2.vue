@@ -237,8 +237,9 @@
                       id="slider-river-space"
                       v-model="river.spacing"
                       type="range"
-                      min="1"
-                      max="100"
+                      min="100"
+                      max="400"
+                      step="5"
                       @change="translateRiver()"
                     ></b-form-input
                   ></b-button>
@@ -1392,7 +1393,7 @@ export default {
         },
         visibility: true,
         width: 1,
-        spacing: 10,
+        spacing: 150,
         color: "info",
         rivers: {
           thames: {
