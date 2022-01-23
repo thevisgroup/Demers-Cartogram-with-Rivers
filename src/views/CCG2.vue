@@ -414,16 +414,16 @@ export default {
         });
 
       // river layer
-      svg
-        .append("g")
-        .attr("class", "river-layer-init")
-        .attr("stroke", "#000")
-        .selectAll("path")
-        .data(__VM.river_list)
-        .join("path")
-        .attr("vector-effect", "non-scaling-stroke")
-        .attr("d", path)
-        .attr("fill", "red");
+      // svg
+      //   .append("g")
+      //   .attr("class", "river-layer-init")
+      //   .attr("stroke", "#000")
+      //   .selectAll("path")
+      //   .data(__VM.river_list)
+      //   .join("path")
+      //   .attr("vector-effect", "non-scaling-stroke")
+      //   .attr("d", path)
+      //   .attr("fill", "red");
 
       // original river layer
       const river_layer = svg.append("g").attr("class", "river-layer");
