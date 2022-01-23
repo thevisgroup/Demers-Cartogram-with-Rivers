@@ -1,0 +1,24 @@
+\section{Data Description}
+
+Obtaining the data used in this paper is challenging, especially when an Electronic Health Records (EHR) dataset is involved \cite{wang2021EHRa}. The data acquisition involves multiple complicated steps. The first step is to obtain both geospaital data and EHR data that are compatible for projection. The second step is to pre-process the data for removing empty and erroneous values. The final step is to transform the data into a format that is suitable for visualization.
+
+\subsection{Geospatial Data}
+
+Geospatial data, commonly known as shapefiles, were obtained from the following sources. After acquiring these data, we used QGIS \cite{qgisWelcome} to manually adjust projections and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to converted the merged shapefile into a TopoJSON \cite{TopoJSON} file to reduce the file size in order to improve the performance of our system.
+
+\subsubsection{Clinical Commissioning Groups}
+
+Clinical Commissioning Groups (CCGs) are the main geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs is changing each year due to the NHS annual re-organization, the most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 as at the time of writing, there is no EHR data published based on the latest CCG re-organization took place in April 2021.
+
+\subsubsection{River Thames}
+
+We first obtained the relation ID (2263653) for River Thames from OpenStreetMap \cite{openstreetmapRelation}, then downloaded the entire shapefile via a query (See Listing~\ref{overpass}) through the Overpass Turbo \cite{overpassturboOverpass}.
+
+\begin{lstlisting}[caption={The Overpass Turbo query that downloads the shapefile of River Thames from OpenStreetMap.}, label={overpass},captionpos=b]
+    relation(2263653);>>;
+    out skel;
+\end{lstlisting}
+
+\subsection{EHR Data}
+
+We obtained the Clinical Commissioning Group Outcomes Indicator Set (CCG OIS) from NHS Digital \cite{nhsdigitalClinical}. The OIS is a set of indicators that are used to measure the quality of care and the associated health outcomes in the NHS.

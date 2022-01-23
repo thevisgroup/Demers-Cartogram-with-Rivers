@@ -37,8 +37,8 @@ Cartograms combine statistical and geographical information in thematic maps. We
 }
 
 
-Dorling cartograms are non-contiguous and do not preserve geography and topology. A Dorling cartogram is statistically accurate, regions are represented by circles and the statistic of interest is represented by the circle size \cite{dorling2011Area}. 
-In Demers Cartograms, a variant of Dorling, squares are used instead to capture a certain level of topology \cite{cano2015Mosaic}. Dorling cartograms are unable to maintain topological accuracy as circles are often repositioned to remove overlaps. 
+Dorling cartograms are non-contiguous and do not preserve geography and topology. A Dorling cartogram is statistically accurate, regions are represented by circles and the statistic of interest is represented by the circle size \cite{dorling2011Area}.
+In Demers Cartograms, a variant of Dorling, squares are used instead to capture a certain level of topology \cite{cano2015Mosaic}. Dorling cartograms are unable to maintain topological accuracy as circles are often repositioned to remove overlaps.
 
 Rectangular cartograms are contiguous and do not preserve geographical accuracy \cite{raisz1934Rectangular}. Depending on the variant, a rectangular cartogram may trade between statistical and topological accuracy.
 
@@ -46,49 +46,53 @@ Mosaic cartograms are contiguous and sacrifice statistical accuracy to preserve 
 
 \subsection{Peer-reviewed Applications}
 
-\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} visualize 1996 US election data and 2005 China population date using Dorling, Mosaic, and contiguous cartograms. \citea{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Demers cartogram to visualize health-related date by regions in England, the work introduces a novel technique to remove overlaps of squares based on topological features, aiming to improve both geographical and topological accuracy. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, agriculture, and retail data in the US. See Table \ref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
+\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} visualize 1996 US election data and 2005 China population date using Dorling, Mosaic, and contiguous cartograms. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Demers cartogram to visualize health-related date by regions in England, the work introduces a novel technique to remove overlaps of squares based on topological features, aiming to improve both geographical and topological accuracy. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, agriculture, and retail data in the US. See Table \ref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
 
-
-{
-\renewcommand{\arraystretch}{1.5}
-\begin{table*}[!tb]
-	\centering
-	\resizebox{\textwidth}{!}{
-		\begin{tabulary}{\textwidth}{|*{4}{l|}r|c|}
-			\hhline{~|*{4}{-}|~}
-			\multicolumn{1}{c|}{\textbf{Literature}} &
-			\textbf{Title} &
-			\textbf{Cartogram Type(s)} &
-			\textbf{Geographic Region(s)} &
-			\textbf{Number of Nodes} &
-			\multicolumn{1}{c}{\textbf{Year}} \\
-			\hline
-			
-			% \citea{auber2007Geographical} & \citetitlea{auber2007Geographical} & US & 19 & 2007 \\
-			% \hline
-			\citea{warf2008Geography} & \citetitlea{warf2008Geography} & Dorling & US & 3,142 & \citeyear{warf2008Geography} \\
-			\hline
-			\citea{sun2010Effectiveness} & \citetitlea{sun2010Effectiveness} & Dorling, Mosaic, Contiguous & US, China & 34 - 49 & \citeyear{sun2010Effectiveness} \\
-			\hline
-			\citea{cruz2017Adapted} & \citetitlea{cruz2017Adapted} & Dorling, Non-contiguous, Contiguous & Portugal & 2,882 & \citeyear{cruz2017Adapted} \\
-			\hline
-			\citea{tong2018cartograms} & \citetitlea{tong2018cartograms} & Demers & England & 209 & \citeyear{tong2018cartograms} \\
-			\hline
-			\citea{gao2020Visualising} & \citetitlea{gao2020Visualising} & Dorling & China & 34 & \citeyear{gao2020Visualising} \\
-			\hline
-			\citea{nusrat2020Recognition} & \citetitlea{nusrat2020Recognition} & Contiguous, Dorling & Portugal & 49 & \citeyear{nusrat2020Recognition} \\
-			\hline
-			
-			% \multicolumn{1}{c|}{\textbf{Total unique papers: 51}} & 24&15&12& \multicolumn{1}{c}{}  \\
-			% \hhline{~|*{3}{-}|~}
-
-		\end{tabulary}
-	}
-	\caption{}
-	\label{table:region vs node}
-\end{table*}
-}
 
 \subsection{Other Applications}
 
 Cartogram has become a popular choice of visualization in covering various topics by the media, in order to present an unbiased and complete picture of the news. \citea{newman2016Election} generates contiguous cartograms to present US Election results in 2012 and 2016. The Washington Post adopts cartograms to visualize the US overseas economic assistance, arm sales (Mosaic) \cite{bearak2016Everything}, the 2016 US Election (contiguous) \cite{gamio2016Election}, and the Brexit Referendum (Mosaic) \cite{taylor2016What}. The National Geographic uses contiguous and Mosaic cartograms to analyze the 2016 US Election results \cite{miller2016Election}, the same topic is also covered by the Financial Times with a Dorling cartogram \cite{stabe2016Search}. \citea{sandberg2018Cartogram} reports the 2018 US midterm Election with a Mosaic cartogram, the same approach is used to cover the 2020 US Election by the New York Times \cite{thelearningnetwork2020What} and Bloomberg \cite{mccartney20202020}.
+
+\subsection{Contiguous Applications}
+
+\cite{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal.
+
+	{
+		\renewcommand{\arraystretch}{1.5}
+		\begin{table*}[!tb]
+			\centering
+			\resizebox{\textwidth}{!}{
+				\begin{tabulary}{\textwidth}{|*{4}{l|}r|c|}
+					\hhline{~|*{4}{-}|~}
+					\multicolumn{1}{c|}{\textbf{Literature}} &
+					\textbf{Title} &
+					\textbf{Cartogram Type(s)} &
+					\textbf{Geographic Region(s)} &
+					\textbf{Number of Nodes} &
+					\multicolumn{1}{c}{\textbf{Year}} \\
+					\hline
+
+					% \citea{auber2007Geographical} & \citetitlea{auber2007Geographical} & US & 19 & 2007 \\
+					% \hline
+					\citea{warf2008Geography} & \citetitlea{warf2008Geography} & Dorling & US & 3,142 & \citeyear{warf2008Geography} \\
+					\hline
+					\citea{sun2010Effectiveness} & \citetitlea{sun2010Effectiveness} & Dorling, Mosaic, Contiguous & US, China & 34 - 49 & \citeyear{sun2010Effectiveness} \\
+					\hline
+					\citea{cruz2017Adapted} & \citetitlea{cruz2017Adapted} & Dorling, Non-contiguous, Contiguous & Portugal & 2,882 & \citeyear{cruz2017Adapted} \\
+					\hline
+					\citea{tong2018cartograms} & \citetitlea{tong2018cartograms} & Demers & England & 209 & \citeyear{tong2018cartograms} \\
+					\hline
+					\citea{gao2020Visualising} & \citetitlea{gao2020Visualising} & Dorling & China & 34 & \citeyear{gao2020Visualising} \\
+					\hline
+					\citea{nusrat2020Recognition} & \citetitlea{nusrat2020Recognition} & Contiguous, Dorling & Portugal & 49 & \citeyear{nusrat2020Recognition} \\
+					\hline
+
+					% \multicolumn{1}{c|}{\textbf{Total unique papers: 51}} & 24&15&12& \multicolumn{1}{c}{}  \\
+					% \hhline{~|*{3}{-}|~}
+
+				\end{tabulary}
+			}
+			\caption{}
+			\label{table:region vs node}
+		\end{table*}
+	}

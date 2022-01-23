@@ -60,6 +60,37 @@
       \verb https://www.washingtonpost.com/graphics/world/which-countries-get-the-most-foreign-aid/
       \endverb
     \endentry
+    \entry{blochMapshaper}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=086d60fea583e1b74410a6a49495eb4b}{%
+           family={Bloch},
+           familyi={B\bibinitperiod},
+           given={Matthew},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{086d60fea583e1b74410a6a49495eb4b}
+      \strng{fullhash}{086d60fea583e1b74410a6a49495eb4b}
+      \strng{bibnamehash}{086d60fea583e1b74410a6a49495eb4b}
+      \strng{authorbibnamehash}{086d60fea583e1b74410a6a49495eb4b}
+      \strng{authornamehash}{086d60fea583e1b74410a6a49495eb4b}
+      \strng{authorfullhash}{086d60fea583e1b74410a6a49495eb4b}
+      \field{labelalpha}{Blo}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Mapshaper}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://mapshaper.org/
+      \endverb
+      \verb{url}
+      \verb https://mapshaper.org/
+      \endverb
+    \endentry
     \entry{cano2015Mosaic}{article}{}
       \name{author}{6}{}{%
         {{hash=d365d87d243556cf8b91d39ecd5043f7}{%
@@ -472,48 +503,6 @@
       \verb https://www.nationalgeographic.com/culture/article/improved-election-map-cartograms
       \endverb
     \endentry
-    \entry{thelearningnetwork2020What}{article}{}
-      \name{author}{1}{}{%
-        {{hash=9e5e113341d7358f83ee81d911abc4c1}{%
-           family={Network},
-           familyi={N\bibinitperiod},
-           given={The\bibnamedelima Learning},
-           giveni={T\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
-      }
-      \strng{namehash}{9e5e113341d7358f83ee81d911abc4c1}
-      \strng{fullhash}{9e5e113341d7358f83ee81d911abc4c1}
-      \strng{bibnamehash}{9e5e113341d7358f83ee81d911abc4c1}
-      \strng{authorbibnamehash}{9e5e113341d7358f83ee81d911abc4c1}
-      \strng{authornamehash}{9e5e113341d7358f83ee81d911abc4c1}
-      \strng{authorfullhash}{9e5e113341d7358f83ee81d911abc4c1}
-      \field{labelalpha}{Net20}
-      \field{sortinit}{N}
-      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{These two maps show the results of the 2020 presidential election. Which map does a better job of visualizing the outcome of the election?}
-      \field{chapter}{The Learning Network}
-      \field{issn}{0362-4331}
-      \field{journaltitle}{The New York Times}
-      \field{langid}{american}
-      \field{month}{11}
-      \field{shorttitle}{What's {{Going On}} in {{This Graph}}?}
-      \field{title}{What's {{Going On}} in {{This Graph}}? | 2020 {{Presidential Election Maps}}}
-      \field{urlday}{16}
-      \field{urlmonth}{1}
-      \field{urlyear}{2022}
-      \field{year}{2020}
-      \field{urldateera}{ce}
-      \verb{file}
-      \verb /Users/henry/SynologyDrive/Zotero/storage/8FSYDPRZ/whats-going-on-in-this-graph-2020-presidential-election-maps.html
-      \endverb
-      \verb{urlraw}
-      \verb https://www.nytimes.com/2020/11/19/learning/whats-going-on-in-this-graph-2020-presidential-election-maps.html
-      \endverb
-      \verb{url}
-      \verb https://www.nytimes.com/2020/11/19/learning/whats-going-on-in-this-graph-2020-presidential-election-maps.html
-      \endverb
-    \endentry
     \entry{newman2016Election}{misc}{}
       \name{author}{1}{}{%
         {{hash=91c825ea422365e0f6cb2597658def75}{%
@@ -548,6 +537,75 @@
       \endverb
       \verb{url}
       \verb http://www-personal.umich.edu/~mejn/election/2016/
+      \endverb
+    \endentry
+    \entry{nhsNHS}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=4459a7e783de4f93dc38a03555f4191f}{%
+           family={{NHS}},
+           familyi={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{4459a7e783de4f93dc38a03555f4191f}
+      \strng{fullhash}{4459a7e783de4f93dc38a03555f4191f}
+      \strng{bibnamehash}{4459a7e783de4f93dc38a03555f4191f}
+      \strng{authorbibnamehash}{4459a7e783de4f93dc38a03555f4191f}
+      \strng{authornamehash}{4459a7e783de4f93dc38a03555f4191f}
+      \strng{authorfullhash}{4459a7e783de4f93dc38a03555f4191f}
+      \field{labelalpha}{NHS}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extraalpha}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{{NHS}} Commissioning »{} {{Clinical}} Commissioning Groups ({{CCGs}})}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/2BVHCMJW/ccgs.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.england.nhs.uk/commissioning/who-commissions-nhs-services/ccgs/
+      \endverb
+      \verb{url}
+      \verb https://www.england.nhs.uk/commissioning/who-commissions-nhs-services/ccgs/
+      \endverb
+    \endentry
+    \entry{nhsdigitalClinical}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=33e2783f7f42154abb99f176ff889254}{%
+           family={{NHS Digital}},
+           familyi={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{33e2783f7f42154abb99f176ff889254}
+      \strng{fullhash}{33e2783f7f42154abb99f176ff889254}
+      \strng{bibnamehash}{33e2783f7f42154abb99f176ff889254}
+      \strng{authorbibnamehash}{33e2783f7f42154abb99f176ff889254}
+      \strng{authornamehash}{33e2783f7f42154abb99f176ff889254}
+      \strng{authorfullhash}{33e2783f7f42154abb99f176ff889254}
+      \field{labelalpha}{NHS}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We're the national information and technology partner to the health and social care system using digital technology to transform the NHS and social care}
+      \field{journaltitle}{NHS Digital}
+      \field{langid}{english}
+      \field{title}{Clinical {{Commissioning Group Outcomes Indicator Set}} ({{CCG OIS}})}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/4GJC6P29/ccg-outcomes-indicator-set.html
+      \endverb
+      \verb{urlraw}
+      \verb https://digital.nhs.uk/data-and-information/publications/statistical/ccg-outcomes-indicator-set
+      \endverb
+      \verb{url}
+      \verb https://digital.nhs.uk/data-and-information/publications/statistical/ccg-outcomes-indicator-set
       \endverb
     \endentry
     \entry{nusrat2016State}{article}{}
@@ -661,6 +719,144 @@
       \endverb
       \verb{url}
       \verb https://dl.acm.org/doi/10.1145/3399715.3399873
+      \endverb
+    \endentry
+    \entry{opengeographyportalxOpen}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=cd5c6c9a0dcedc0f595e20d6ec255185}{%
+           family={{Open Geography portalx}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{cd5c6c9a0dcedc0f595e20d6ec255185}
+      \strng{fullhash}{cd5c6c9a0dcedc0f595e20d6ec255185}
+      \strng{bibnamehash}{cd5c6c9a0dcedc0f595e20d6ec255185}
+      \strng{authorbibnamehash}{cd5c6c9a0dcedc0f595e20d6ec255185}
+      \strng{authornamehash}{cd5c6c9a0dcedc0f595e20d6ec255185}
+      \strng{authorfullhash}{cd5c6c9a0dcedc0f595e20d6ec255185}
+      \field{labelalpha}{Ope}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{extraalpha}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The UK's official Office for National Statistics Open Data Geography Site}
+      \field{langid}{british}
+      \field{title}{Open {{Geography}} Portalx}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/CJ473XRT/explore.html
+      \endverb
+      \verb{urlraw}
+      \verb https://geoportal.statistics.gov.uk/datasets/d6acd30ad71f4e14b4de808e58d9bc4c
+      \endverb
+      \verb{url}
+      \verb https://geoportal.statistics.gov.uk/datasets/d6acd30ad71f4e14b4de808e58d9bc4c
+      \endverb
+    \endentry
+    \entry{openstreetmapRelation}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=7e9cea4fb21abc9cd4eeee5116f7e101}{%
+           family={{OpenStreetMap}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{7e9cea4fb21abc9cd4eeee5116f7e101}
+      \strng{fullhash}{7e9cea4fb21abc9cd4eeee5116f7e101}
+      \strng{bibnamehash}{7e9cea4fb21abc9cd4eeee5116f7e101}
+      \strng{authorbibnamehash}{7e9cea4fb21abc9cd4eeee5116f7e101}
+      \strng{authornamehash}{7e9cea4fb21abc9cd4eeee5116f7e101}
+      \strng{authorfullhash}{7e9cea4fb21abc9cd4eeee5116f7e101}
+      \field{labelalpha}{Ope}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{OpenStreetMap is a map of the world, created by people like you and free to use under an open licence.}
+      \field{journaltitle}{OpenStreetMap}
+      \field{langid}{british}
+      \field{shorttitle}{Relation}
+      \field{title}{Relation: {{Thames}} (2263653)}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/DGQFQCE4/2263653.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.openstreetmap.org/relation/2263653
+      \endverb
+      \verb{url}
+      \verb https://www.openstreetmap.org/relation/2263653
+      \endverb
+    \endentry
+    \entry{overpassturboOverpass}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=162a801e94922edca71b61a7f83ffb52}{%
+           family={{Overpass Turbo}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{162a801e94922edca71b61a7f83ffb52}
+      \strng{fullhash}{162a801e94922edca71b61a7f83ffb52}
+      \strng{bibnamehash}{162a801e94922edca71b61a7f83ffb52}
+      \strng{authorbibnamehash}{162a801e94922edca71b61a7f83ffb52}
+      \strng{authornamehash}{162a801e94922edca71b61a7f83ffb52}
+      \strng{authorfullhash}{162a801e94922edca71b61a7f83ffb52}
+      \field{labelalpha}{Ove}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{A web based data mining tool for OpenStreetMap which runs any kind of Overpass API query and shows the results on an interactive map.}
+      \field{langid}{english}
+      \field{title}{Overpass Turbo}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/FHE44TX9/overpass-turbo.eu.html
+      \endverb
+      \verb{urlraw}
+      \verb https://overpass-turbo.eu/
+      \endverb
+      \verb{url}
+      \verb https://overpass-turbo.eu/
+      \endverb
+    \endentry
+    \entry{qgisWelcome}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=57470aaa9e22adaefac7f5f342f1c6da}{%
+           family={{QGIS}},
+           familyi={Q\bibinitperiod}}}%
+      }
+      \strng{namehash}{57470aaa9e22adaefac7f5f342f1c6da}
+      \strng{fullhash}{57470aaa9e22adaefac7f5f342f1c6da}
+      \strng{bibnamehash}{57470aaa9e22adaefac7f5f342f1c6da}
+      \strng{authorbibnamehash}{57470aaa9e22adaefac7f5f342f1c6da}
+      \strng{authornamehash}{57470aaa9e22adaefac7f5f342f1c6da}
+      \strng{authorfullhash}{57470aaa9e22adaefac7f5f342f1c6da}
+      \field{labelalpha}{QGI}
+      \field{sortinit}{Q}
+      \field{sortinithash}{ce69a400a872ddd02ee7fdb3b38c6abd}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Welcome to the {{QGIS}} Project!}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/3JWREP5P/site.html
+      \endverb
+      \verb{urlraw}
+      \verb https://qgis.org/en/site/
+      \endverb
+      \verb{url}
+      \verb https://qgis.org/en/site/
       \endverb
     \endentry
     \entry{raisz1934Rectangular}{article}{}
@@ -871,6 +1067,46 @@
       \verb https://www.washingtonpost.com/news/worldviews/wp/2016/06/29/what-a-real-brexit-britain-would-look-like/
       \endverb
     \endentry
+    \entry{thelearningnetwork2020What}{article}{}
+      \name{author}{1}{}{%
+        {{hash=0be961efead52407a8a028e8099eb97b}{%
+           family={{The Learning Network}},
+           familyi={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{0be961efead52407a8a028e8099eb97b}
+      \strng{fullhash}{0be961efead52407a8a028e8099eb97b}
+      \strng{bibnamehash}{0be961efead52407a8a028e8099eb97b}
+      \strng{authorbibnamehash}{0be961efead52407a8a028e8099eb97b}
+      \strng{authornamehash}{0be961efead52407a8a028e8099eb97b}
+      \strng{authorfullhash}{0be961efead52407a8a028e8099eb97b}
+      \field{labelalpha}{The20}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{These two maps show the results of the 2020 presidential election. Which map does a better job of visualizing the outcome of the election?}
+      \field{chapter}{The Learning Network}
+      \field{issn}{0362-4331}
+      \field{journaltitle}{The New York Times}
+      \field{langid}{american}
+      \field{month}{11}
+      \field{shorttitle}{What's {{Going On}} in {{This Graph}}?}
+      \field{title}{What's {{Going On}} in {{This Graph}}? | 2020 {{Presidential Election Maps}}}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/8FSYDPRZ/whats-going-on-in-this-graph-2020-presidential-election-maps.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nytimes.com/2020/11/19/learning/whats-going-on-in-this-graph-2020-presidential-election-maps.html
+      \endverb
+      \verb{url}
+      \verb https://www.nytimes.com/2020/11/19/learning/whats-going-on-in-this-graph-2020-presidential-election-maps.html
+      \endverb
+    \endentry
     \entry{tong2018cartograms}{article}{}
       \name{author}{3}{}{%
         {{hash=8f66720367a9bc8ebe969bbe027c5045}{%
@@ -925,6 +1161,36 @@
       \endverb
       \verb{url}
       \verb https://diglib.eg.org/handle/10.2312/cgvc20181217
+      \endverb
+    \endentry
+    \entry{TopoJSON}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=80645a271e91e912051f908930f7d39c}{%
+           family={{TopoJSON}},
+           familyi={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{80645a271e91e912051f908930f7d39c}
+      \strng{fullhash}{80645a271e91e912051f908930f7d39c}
+      \strng{bibnamehash}{80645a271e91e912051f908930f7d39c}
+      \strng{authorbibnamehash}{80645a271e91e912051f908930f7d39c}
+      \strng{authornamehash}{80645a271e91e912051f908930f7d39c}
+      \strng{authorfullhash}{80645a271e91e912051f908930f7d39c}
+      \field{labelalpha}{Top}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{An extension to GeoJSON that encodes topology and allows compact, delta-encoded coordinates.}
+      \field{title}{The {{TopoJSON Format Specification}}}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/topojson/topojson-specification
+      \endverb
+      \verb{url}
+      \verb https://github.com/topojson/topojson-specification
       \endverb
     \endentry
     \entry{vankreveld2004Rectangular}{incollection}{}
@@ -1066,6 +1332,56 @@
       \endverb
       \verb{url}
       \verb http://link.springer.com/10.1007/978-3-540-30140-0_64
+      \endverb
+    \endentry
+    \entry{wang2021EHRa}{article}{}
+      \name{author}{2}{}{%
+        {{hash=415d15406f27ab6319fe3dc2d7408598}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Q.},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=2795080390fd5299a057caf6ee35fcf5}{%
+           family={Laramee},
+           familyi={L\bibinitperiod},
+           given={R.S.},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{d776c3db6e1e7d3031a83aaefb3bd6cf}
+      \strng{fullhash}{d776c3db6e1e7d3031a83aaefb3bd6cf}
+      \strng{bibnamehash}{d776c3db6e1e7d3031a83aaefb3bd6cf}
+      \strng{authorbibnamehash}{d776c3db6e1e7d3031a83aaefb3bd6cf}
+      \strng{authornamehash}{d776c3db6e1e7d3031a83aaefb3bd6cf}
+      \strng{authorfullhash}{d776c3db6e1e7d3031a83aaefb3bd6cf}
+      \field{labelalpha}{WL21}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{0167-7055, 1467-8659}
+      \field{journaltitle}{Computer Graphics Forum}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{shorttitle}{{{EHR STAR}}}
+      \field{title}{{{EHR STAR}}: {{The State}}-{{Of}}-the-{{Art}} in {{Interactive EHR Visualization}}}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \field{pages}{cgf.14424}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1111/cgf.14424
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/AUY4ZCGI/Wang and Laramee - 2021 - EHR STAR The State‐Of‐the‐Art in Interactive EHR .pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.14424
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.14424
       \endverb
     \endentry
     \entry{warf2008Geography}{article}{}
