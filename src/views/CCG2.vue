@@ -344,7 +344,6 @@ export default {
       const path = d3.geoPath();
 
       const getBorderingColor = (d) => {
-        console.log(d);
         if (d.properties.river.length > 0) {
           return __VM.colorVariant[
             __VM.river.rivers[d.properties.river[0]].color
@@ -385,8 +384,10 @@ export default {
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
         .attr("id", (d) => d.properties.NAME)
-        .attr("width", (d) => getIndicatorRate(d))
-        .attr("height", (d) => getIndicatorRate(d))
+        // .attr("width", (d) => getIndicatorRate(d))
+        // .attr("height", (d) => getIndicatorRate(d))
+        .attr("width", __VM.rect.size)
+        .attr("height", __VM.rect.size)
         .attr("stroke", "black")
         .attr("stroke-width", "0.3")
         .attr("fill", (d) => {
@@ -438,7 +439,7 @@ export default {
 
       __VM.translateRiver();
 
-      // __VM.mapNodeColorToRegion();
+      __VM.mapNodeColorToRegion();
 
       __VM.rect.rectOverlapsRemoved = false;
     },
@@ -1073,9 +1074,6 @@ export default {
       Object.keys(__VM.river.rivers).forEach((river) => {
         let points = topojson.mesh(__VM.shapefile, __VM.shapefile.objects.river)
           .coordinates;
-        console.log(
-          topojson.mesh(__VM.shapefile, __VM.shapefile.objects.river)
-        );
         points = [].concat(...points);
 
         let spacing = Number(__VM.river.spacing);
@@ -1092,7 +1090,6 @@ export default {
           }
         }
 
-        console.log(resolution);
         __VM.river.rivers[river].resolution = resolution.sort(
           ([a, b], [c, d]) => {
             return c - a;
@@ -1315,6 +1312,39 @@ export default {
           break;
       }
     },
+    mapNodeColorToRegion() {
+      const __VM = this;
+      __VM.region.thames = [];
+
+      let thamesFirst;
+
+      Object.keys(__VM.river.rivers).forEach((river) => {
+        const res = __VM.river.rivers[river].resolution;
+
+        if (river === "thames") {
+          __VM.region.thames.push(...res);
+          thamesFirst = res[0];
+        }
+      });
+
+      __VM.region.thames.push([418.58315235212353, 388.0239754703938]);
+      __VM.region.thames.push([543.1300902625651, 388.0239754703938]);
+
+      __VM.region.thames.push(thamesFirst);
+
+      // __VM.svg
+      //   .append("path")
+      //   .attr("d", d3.line()(__VM.region.thames))
+      //   .attr("stroke", "black")
+      //   .attr("stroke-width", "2px")
+      //   .attr("fill", "none");
+
+      for (let [i, rect] of d3
+        .selectAll(".rect-layer > rect")
+        ._groups[0].entries()) {
+        __VM.runPIP(d3.select(rect));
+      }
+    },
     runPIP(rect) {
       const __VM = this;
       const nodeWidth = __VM.rect.size / 2;
@@ -1324,22 +1354,11 @@ export default {
             Number(rect.attr("x")) + nodeWidth,
             Number(rect.attr("y")) + nodeWidth,
           ],
-          d3.line()(__VM.region.yellow)
+          d3.line()(__VM.region.thames)
         )
       ) {
-        rect.attr("fill", __VM.colorVariant.yellowRegion);
-        rect.attr("original_fill", __VM.colorVariant.yellowRegion);
-      } else if (
-        pip.isInside(
-          [
-            Number(rect.attr("x")) + nodeWidth,
-            Number(rect.attr("y")) + nodeWidth,
-          ],
-          d3.line()(__VM.region.blue)
-        )
-      ) {
-        rect.attr("fill", __VM.colorVariant.blueRegion);
-        rect.attr("original_fill", __VM.colorVariant.blueRegion);
+        rect.attr("fill", __VM.colorVariant.thamesRegion);
+        rect.attr("original_fill", __VM.colorVariant.thamesRegion);
       }
     },
     writeRectHistory(rect, x, y) {
@@ -1369,7 +1388,7 @@ export default {
         rectMapToColor: false,
         visibility: true,
         color: "success",
-        size: 3,
+        size: 5,
         sizeStep: 0.25,
         nodeX: {
           stroke_width: "0.7",
@@ -1412,6 +1431,7 @@ export default {
         },
       },
       ccg: { border: false, visibility: true, color: "dark" },
+      region: { thames: [] },
       colorVariant: {
         primary: "rgb(2, 117, 216)",
         info: "rgb(91, 192, 222)",
@@ -1419,6 +1439,7 @@ export default {
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
         thames: "rgb(20, 84, 140)",
+        thamesRegion: "#a1887f",
       },
     };
   },
