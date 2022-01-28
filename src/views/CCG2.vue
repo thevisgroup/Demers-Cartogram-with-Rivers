@@ -114,7 +114,7 @@
                       v-model="rect.size"
                       type="range"
                       min="0.5"
-                      max="10"
+                      max="100"
                       step="0.5"
                       @change="setRectSize()"
                     ></b-form-input
@@ -237,8 +237,8 @@
                       id="slider-river-space"
                       v-model="river.spacing"
                       type="range"
-                      min="100"
-                      max="400"
+                      min="50"
+                      max="200"
                       step="5"
                       @change="translateRiver()"
                     ></b-form-input
@@ -1072,9 +1072,14 @@ export default {
       const __VM = this;
 
       Object.keys(__VM.river.rivers).forEach((river) => {
-        let points = topojson.mesh(__VM.shapefile, __VM.shapefile.objects.river)
-          .coordinates;
-        points = [].concat(...points);
+        let points = topojson.mesh(
+          __VM.shapefile,
+          __VM.shapefile.objects[river]
+        ).coordinates;
+
+        points = [].concat(...points).sort(([a, b], [c, d]) => {
+          return c - a;
+        });
 
         let spacing = Number(__VM.river.spacing);
 
@@ -1090,11 +1095,40 @@ export default {
           }
         }
 
-        __VM.river.rivers[river].resolution = resolution.sort(
-          ([a, b], [c, d]) => {
-            return c - a;
+        const res = [];
+
+        let current = __VM.river.rivers[river].start;
+        res.push(current);
+        for (let i = 0; i < resolution.length; i++) {
+          resolution.splice(
+            resolution.findIndex((p) => p.toString() === current.toString()),
+            1,
+            [0, 0]
+          );
+
+          const distance = (p) =>
+            Math.sqrt(
+              Math.pow(current[0] - p[0], 2) + Math.pow(current[1] - p[1], 2)
+            );
+
+          const closest = resolution.reduce((a, b) =>
+            distance(a) < distance(b) ? a : b
+          );
+
+          const closest_index = resolution.findIndex(
+            (p) => p.toString() === closest.toString()
+          );
+          resolution.splice(closest_index, 1, [0, 0]);
+
+          if (closest.toString() !== "0,0") {
+            if (distance(closest) < 15 || river === "trent") {
+              res.push(closest);
+              current = closest;
+            }
           }
-        );
+        }
+
+        __VM.river.rivers[river].resolution = res;
 
         d3.selectAll(`.${river} .river *`).remove();
 
@@ -1103,14 +1137,14 @@ export default {
         river_layer
           .append("path")
           .attr("id", `${river}`)
-          .attr("d", d3.line()(resolution))
+          .attr("d", d3.line()(res))
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           .attr("stroke-width", `${__VM.river.width}px`)
           .attr("fill", "none");
 
         river_layer
           .selectAll("circle")
-          .data(resolution)
+          .data(res)
           .enter()
           .append("circle")
           .attr("fill", "red")
@@ -1412,7 +1446,7 @@ export default {
         },
         visibility: true,
         width: 1,
-        spacing: 150,
+        spacing: 100,
         color: "info",
         rivers: {
           thames: {
@@ -1427,6 +1461,35 @@ export default {
               finalY: 0,
               finalYOld: 0,
             },
+            start: [479.02905797094195, 425.36659340425064],
+          },
+          trent: {
+            visibility: true,
+            color: "trent",
+            name: "Trent",
+            translate: {
+              x: 0,
+              y: 0,
+              finalX: 0,
+              finalXOld: 0,
+              finalY: 0,
+              finalYOld: 0,
+            },
+            start: [421.57027396650403, 285.2932749819865],
+          },
+          ouse: {
+            visibility: true,
+            color: "ouse",
+            name: "Ouse",
+            translate: {
+              x: 0,
+              y: 0,
+              finalX: 0,
+              finalXOld: 0,
+              finalY: 0,
+              finalYOld: 0,
+            },
+            start: [463.77093643287986, 338.09757337526446],
           },
         },
       },
@@ -1439,6 +1502,9 @@ export default {
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
         thames: "rgb(20, 84, 140)",
+        trent: "rgb(240, 173, 78)",
+        ouse: "	rgb(132, 196, 224)",
+        blueRegion: "#ba68c8",
         thamesRegion: "#a1887f",
       },
     };
@@ -1467,21 +1533,21 @@ export default {
 
     __VM.indicators = await d3.json(`/data/cardiovascular_00754.json`);
 
-    __VM.shapefile = await d3.json(`/data/ccg_thames.json`);
+    __VM.shapefile = await d3.json(`/data/ccg_rivers.json`);
 
     __VM.ccg_list = [];
     __VM.ccg_list.push(
       ...topojson
-        .feature(__VM.shapefile, __VM.shapefile.objects.ccg)
+        .feature(__VM.shapefile, __VM.shapefile.objects.CCG)
         .features.filter((e) => e.geometry && e.geometry.type)
     );
 
-    __VM.river_list = [];
-    __VM.river_list.push(
-      ...topojson
-        .feature(__VM.shapefile, __VM.shapefile.objects.river)
-        .features.filter((e) => e.geometry && e.geometry.type)
-    );
+    // __VM.river_list = [];
+    // __VM.river_list.push(
+    //   ...topojson
+    //     .feature(__VM.shapefile, __VM.shapefile.objects.river)
+    //     .features.filter((e) => e.geometry && e.geometry.type)
+    // );
 
     this.init();
     this.rect.rectSizeUniformed = false;
@@ -1515,6 +1581,28 @@ export default {
 .btn-outline-thames {
   color: rgb(20, 84, 140) !important;
   border-color: rgb(20, 84, 140) !important;
+}
+
+.btn-trent {
+  color: #fff !important;
+  background-color: rgb(240, 173, 78) !important;
+  border-color: rgb(240, 173, 78) !important;
+}
+
+.btn-outline-trent {
+  color: rgb(240, 173, 78) !important;
+  border-color: rgb(240, 173, 78) !important;
+}
+
+.btn-ouse {
+  color: #fff !important;
+  background-color: rgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+}
+
+.btn-outline-ouse {
+  color: rgbrgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
 }
 
 .btn-group-vertical .btn:not(:last-child) {
