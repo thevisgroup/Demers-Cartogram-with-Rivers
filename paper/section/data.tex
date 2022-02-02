@@ -10,15 +10,53 @@ Geospatial data, commonly known as shapefiles, were obtained from the following 
 
 Clinical Commissioning Groups (CCGs) are the main geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs is changing each year due to the NHS annual re-organization, the most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 as at the time of writing, there is no EHR data published based on the latest CCG re-organization took place in April 2021.
 
-\subsubsection{River Thames}
+\subsubsection{Rivers}
 
-We first obtained the relation ID (2263653) for River Thames from OpenStreetMap \cite{openstreetmapRelation}, then downloaded the entire shapefile via a query (See Listing~\ref{overpass}) through the Overpass Turbo \cite{overpassturboOverpass}.
+We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Ouse in England. These rivers were chosen as they pass through regions with clusters of CCGs, and provide informative geographical and topological cues. 
 
-\begin{lstlisting}[caption={The Overpass Turbo query that downloads the shapefile of River Thames from OpenStreetMap.}, label={overpass},captionpos=b]
+We first obtained a relation ID for the shapefile from OpenStreetMap, then downloaded the entire shapefile via a query (See Listing~\ref{overpass}) through Overpass Turbo \cite{overpassturboOverpass}.
+
+\begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via Overpass Turbo API.}, label={overpass},captionpos=b]
     relation(2263653);>>;
     out skel;
 \end{lstlisting}
 
 \subsection{EHR Data}
 
-We obtained the Clinical Commissioning Group Outcomes Indicator Set (CCG OIS) from NHS Digital \cite{nhsdigitalClinical}. The OIS is a set of indicators that are used to measure the quality of care and the associated health outcomes in the NHS.
+We obtained the Clinical Commissioning Group Outcomes Indicator Set (CCG OIS) from NHS Digital \cite{nhsdigitalClinical}. The OIS is a set of indicators that are used to measure the quality of care and the associated health outcomes in the NHS. Some datasets include:
+\begin{itemize}
+    \item Under 75 mortality
+    \begin{multicols}{2}
+        \begin{itemize}
+            \item Cardiovascular disease
+            \item Respiratory disease
+            \item Liver disease
+            \item Cancer
+        \end{itemize}
+    \end{multicols}
+    \item Emergency hospital admission
+        \begin{itemize}
+            \item Stoke
+            \item Alcohol-specific admission and readmission
+            \item Coronary heart disease
+            \item Readmissions within 30 days of discharge
+            \item Children with lower respiratory tract infections
+        \end{itemize}
+\end{itemize}
+
+For all datasets, a spreadsheet including the following data is provided:
+
+\begin{itemize}
+    \item Reporting period: Calendar year of registration
+    \item Period of coverage: Start and end date or reporting period
+    \item Breakdown: Organization type
+    \item ONS code: UK Office for National Statistics CCG code
+    \item Level: CCG Code
+    \item Level description: CCG Name
+    \item Gender
+    \item Indicator value: Directly standardized mortality rate
+    \item CI lower: lower 95\% confidence interval
+    \item CI upper: upper 95\% confidence interval
+    \item Denominator: The count of registered patients
+    \item Numerator: Number of deaths
+\end{itemize}
