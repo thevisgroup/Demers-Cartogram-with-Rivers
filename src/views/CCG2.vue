@@ -132,9 +132,21 @@
                       overlaps</b-button
                     > -->
 
-                  <b-button block variant="primary" v-on:click="triggerStep()"
+                  <b-button
+                    block
+                    variant="primary"
+                    v-on:click="triggerStep()"
+                    :disabled="step.button_disabled"
                     >Remove overlaps</b-button
                   >
+
+                  <b-form-checkbox
+                    v-model="step.enabled"
+                    name="check-button"
+                    switch
+                  >
+                    Step mode enabled: {{ step.enabled }}
+                  </b-form-checkbox>
 
                   <b-button block variant="info">
                     Iteration limit: {{ iteration.limit
@@ -445,6 +457,7 @@ export default {
     },
     removeOverlap(repeat = false) {
       const __VM = this;
+      __VM.step.button_disabled = true;
 
       const data = [];
 
@@ -566,9 +579,10 @@ export default {
       __VM.rect.rectOverlapsRemoved = true;
 
       __VM.step.step_index = 1;
-      // __VM.delay(timer * 1.5).then(() => {
-      // __VM.checkORAIteration();
-      // });
+
+      __VM.delay(timer).then(() => {
+        __VM.step.button_disabled = false;
+      });
     },
     checkORAIteration() {
       const __VM = this;
@@ -597,6 +611,8 @@ export default {
           __VM.iteration.current = 0;
 
           __VM.step.step_index = 0;
+
+          __VM.step.button_disabled = false;
         }
 
         const ta_log = document.querySelector("#ta_log");
@@ -794,42 +810,27 @@ export default {
 
       const timer = 100 * __VM.timer;
 
-      // rect
-      //   .transition()
-      //   .duration(timer)
-      //   .attr("x", quadrant === 1 || quadrant === 4 ? x + size : x - size)
-      //   .attr("y", quadrant === 1 || quadrant === 2 ? y - size : y + size)
-      //   .attr("fill", "pink");
-
       const moveRectC = (rect, previous) => {
         const x = Number(rect.attr("x"));
         const y = Number(rect.attr("y"));
 
-        const x_new =
+        let x_new =
           quadrant === 1 || quadrant === 4 || quadrant === 8
             ? x + halfSize
             : x - halfSize;
 
-        const y_new =
-          quadrant === 1 || quadrant === 2 || quadrant === 5
-            ? y + halfSize
-            : y - halfSize;
+        x_new = Math.abs(x - previous[0]) < halfSize ? x_new : previous[0];
 
-        rect
-          .transition()
-          .duration(timer)
-          .attr("x", () => {
-            if (Math.abs(x - previous[0]) < halfSize) {
-              return x_new;
-            }
-            return previous[0];
-          })
-          .attr("y", () => {
-            if (Math.abs(y - previous[1]) < halfSize) {
-              return y_new;
-            }
-            return previous[1];
-          });
+        let y_new =
+          quadrant === 1 || quadrant === 2 || quadrant === 5
+            ? y - halfSize
+            : y + halfSize;
+
+        y_new = Math.abs(y - previous[1]) < halfSize ? y_new : previous[1];
+
+        console.log(quadrant, x_new, y_new);
+
+        rect.transition().duration(timer).attr("x", x_new).attr("y", y_new);
 
         __VM.delay(timer).then(() => {
           // __VM.runPIP(rect);
@@ -877,7 +878,7 @@ export default {
       __VM.step.step_index = 2;
       __VM.delay(timer).then(() => {
         d3.select(".corridor").remove();
-        // __VM.removeOverlap(true);
+        __VM.step.button_disabled = false;
       });
     },
     checkNodeX(rect, d3Rect) {
@@ -1327,6 +1328,8 @@ export default {
     triggerStep() {
       const __VM = this;
 
+      __VM.step.button_disabled = true;
+
       const step = __VM.step.step_index;
 
       switch (__VM.step.step_list[step]) {
@@ -1345,41 +1348,91 @@ export default {
         default:
           break;
       }
+
+      if (!__VM.step.enabled && __VM.step.step_index !== 2) {
+        __VM.delay(40 * __VM.timer * __VM.rect.size).then(() => {
+          __VM.triggerStep();
+        });
+      }
     },
     mapNodeColorToRegion() {
       const __VM = this;
       __VM.region.thames = [];
 
-      let thamesFirst;
+      const thamesRes = __VM.river.rivers.thames.resolution;
+      const trentRes = __VM.river.rivers.trent.resolution;
+      const ouseRes = __VM.river.rivers.ouse.resolution;
 
       Object.keys(__VM.river.rivers).forEach((river) => {
-        const res = __VM.river.rivers[river].resolution;
-
         if (river === "thames") {
-          __VM.region.thames.push(...res);
-          thamesFirst = res[0];
+          __VM.region.thames = [];
+          __VM.region.thames.push(...thamesRes);
+
+          const first = thamesRes[0];
+          const last = thamesRes[thamesRes.length - 1];
+
+          const width = 0;
+          const height = 50;
+
+          __VM.region.thames.push([last[0] - width, last[1]]);
+          __VM.region.thames.push([last[0] - width, last[1] + height]);
+          __VM.region.thames.push([first[0] + width, first[1] + height]);
+          __VM.region.thames.push([first[0] + width, first[1]]);
+          __VM.region.thames.push(first);
+        }
+
+        if (river === "trent") {
+          __VM.region.trent = [];
+          __VM.region.trent.push(...trentRes);
+
+          const first = trentRes[0];
+          const last = trentRes[trentRes.length - 1];
+
+          const width = 0;
+          const height = -50;
+
+          __VM.region.trent.push([last[0] - width, last[1]]);
+          __VM.region.trent.push([last[0] - width, last[1] + height]);
+          __VM.region.trent.push([first[0] + width, first[1] + height]);
+          __VM.region.trent.push([first[0] + width, first[1]]);
+          __VM.region.trent.push(first);
+        }
+
+        if (river === "ouse") {
+          __VM.region.ouse = [];
+          __VM.region.ouse.push(...ouseRes);
+
+          const first = ouseRes[0];
+          const trentFirst = trentRes[0];
+          const last = ouseRes[ouseRes.length - 1];
+          const trentLast = trentRes[trentRes.length - 1];
+
+          const width = 20;
+          const height = 50;
+
+          __VM.region.ouse.push([last[0] - width, last[1]]);
+          __VM.region.ouse.push([trentLast[0] - width, last[1]]);
+          __VM.region.ouse.push(...trentRes.reverse());
+          __VM.region.ouse.push([first[0] + width, trentFirst[1]]);
+          __VM.region.ouse.push([first[0] + width, first[1]]);
+          __VM.region.ouse.push(first);
+        }
+
+        __VM.svg
+          .append("path")
+          .attr("d", d3.line()(__VM.region[river]))
+          .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          .attr("stroke-width", "2px")
+          .attr("fill", "none");
+
+        for (let [i, rect] of d3
+          .selectAll(".rect-layer > rect")
+          ._groups[0].entries()) {
+          __VM.runPIP(d3.select(rect), river);
         }
       });
-
-      __VM.region.thames.push([418.58315235212353, 388.0239754703938]);
-      __VM.region.thames.push([543.1300902625651, 388.0239754703938]);
-
-      __VM.region.thames.push(thamesFirst);
-
-      // __VM.svg
-      //   .append("path")
-      //   .attr("d", d3.line()(__VM.region.thames))
-      //   .attr("stroke", "black")
-      //   .attr("stroke-width", "2px")
-      //   .attr("fill", "none");
-
-      for (let [i, rect] of d3
-        .selectAll(".rect-layer > rect")
-        ._groups[0].entries()) {
-        __VM.runPIP(d3.select(rect));
-      }
     },
-    runPIP(rect) {
+    runPIP(rect, river) {
       const __VM = this;
       const nodeWidth = __VM.rect.size / 2;
       if (
@@ -1388,11 +1441,11 @@ export default {
             Number(rect.attr("x")) + nodeWidth,
             Number(rect.attr("y")) + nodeWidth,
           ],
-          d3.line()(__VM.region.thames)
+          d3.line()(__VM.region[river])
         )
       ) {
-        rect.attr("fill", __VM.colorVariant.thamesRegion);
-        rect.attr("original_fill", __VM.colorVariant.thamesRegion);
+        rect.attr("fill", __VM.colorVariant[river]);
+        rect.attr("original_fill", __VM.colorVariant[river]);
       }
     },
     writeRectHistory(rect, x, y) {
@@ -1407,6 +1460,8 @@ export default {
   data() {
     return {
       step: {
+        button_disabled: false,
+        enabled: true,
         step_index: 0,
         step_list: ["ORA", "Check ORA", "ORA Repeat", "Corridor"],
       },
@@ -1501,11 +1556,10 @@ export default {
         success: "rgb(92, 184, 92)",
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
-        thames: "rgb(20, 84, 140)",
-        trent: "rgb(240, 173, 78)",
-        ouse: "	rgb(132, 196, 224)",
+        thames: "rgb(20, 84, 140, 45%)",
+        trent: "rgb(240, 173, 78, 45%)",
+        ouse: "	rgb(132, 196, 224, 45%)",
         blueRegion: "#ba68c8",
-        thamesRegion: "#a1887f",
       },
     };
   },
