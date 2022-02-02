@@ -114,11 +114,23 @@
                       v-model="rect.size"
                       type="range"
                       min="0.5"
-                      max="100"
+                      :max="rect.maxSize > 0 ? rect.maxSize : 100"
                       step="0.5"
                       @change="setRectSize()"
                     ></b-form-input
                   ></b-button>
+
+                  <b-row>
+                    <b-col sm="5">Max node size:</b-col>
+                    <b-col sm="7">
+                      <input
+                        v-model="rect.maxSize"
+                        type="number"
+                        class="form-control"
+                        placeholder="Max node size allowed"
+                      />
+                    </b-col>
+                  </b-row>
                 </td>
                 <td>
                   <!-- <b-button
@@ -1478,6 +1490,7 @@ export default {
         visibility: true,
         color: "success",
         size: 5,
+        maxSize: 20,
         sizeStep: 0.25,
         nodeX: {
           stroke_width: "0.7",
