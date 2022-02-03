@@ -9,6 +9,12 @@
             stroke-linejoin="round"
             stroke-linecap="round"
           >
+            <rect
+              width="800"
+              height="800"
+              style="fill: none; stroke-width: 4; stroke: rgb(43, 222, 221)"
+            />
+
             <g class="legend">
               <rect
                 fill="green"
@@ -1478,7 +1484,7 @@ export default {
         step_list: ["ORA", "Check ORA", "ORA Repeat", "Corridor"],
       },
       iteration: { current: 0, limit: 1 },
-      timer: 50,
+      timer: 5,
       log: "",
       corridor: {
         length: 30,
