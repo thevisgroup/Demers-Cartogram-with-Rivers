@@ -90,28 +90,28 @@
             <tbody>
               <tr>
                 <td>
-                  <b-button
+                  <!-- <b-button
                     block
                     :variant="(rect.visibility ? '' : 'outline-') + rect.color"
                     v-on:click="toggleFeatureVisibility('rect')"
                     >Rectangle</b-button
-                  >
+                  > -->
 
-                  <b-button
+                  <!-- <b-button
                     block
                     :variant="rect.rectSizeUniformed ? 'danger' : 'primary'"
                     v-on:click="setRectSize(!rect.rectSizeUniformed)"
                     >{{ rect.rectSizeUniformed ? "Variable" : "Uniform" }} Rect
                     Size</b-button
-                  >
+                  > -->
 
-                  <b-button
+                  <!-- <b-button
                     block
                     :variant="rect.rectMapToColor ? 'danger' : 'primary'"
                     v-on:click="setRectColor()"
                     >Map to
                     {{ rect.rectMapToColor ? "Size" : "Color" }}</b-button
-                  >
+                  > -->
 
                   <b-button block variant="info">
                     Rect size: {{ rect.size
@@ -123,6 +123,18 @@
                       :max="rect.maxSize > 0 ? rect.maxSize : 100"
                       step="0.5"
                       @change="setRectSize()"
+                    ></b-form-input
+                  ></b-button>
+
+                  <b-button block variant="info">
+                    Rect Increment: {{ rect.sizeStep
+                    }}<b-form-input
+                      id="slider-rect-size"
+                      v-model="rect.sizeStep"
+                      type="range"
+                      min="0.25"
+                      max="10"
+                      step="0.25"
                     ></b-form-input
                   ></b-button>
 
@@ -178,25 +190,13 @@
                     ></b-form-input
                   ></b-button>
 
-                  <b-button
+                  <!-- <b-button
                     block
                     v-if="rect.rectOverlapsRemoved"
                     variant="danger"
                     v-on:click="init()"
                     >Reset overlaps</b-button
-                  >
-
-                  <b-button block variant="info">
-                    Rect Increment: {{ rect.sizeStep
-                    }}<b-form-input
-                      id="slider-rect-size"
-                      v-model="rect.sizeStep"
-                      type="range"
-                      min="0.25"
-                      max="10"
-                      step="0.25"
-                    ></b-form-input
-                  ></b-button>
+                  > -->
 
                   <b-form-group>
                     <b-form-checkbox-group
@@ -413,7 +413,7 @@ export default {
         .attr("colormap", (d) => colormap(getIndicatorRate(d) / 100))
         .attr("x", (d) => path.centroid(d)[0])
         .attr("y", (d) => path.centroid(d)[1])
-        .attr("id", (d) => d.properties.NAME)
+        .attr("id", (d) => d.properties.id)
         // .attr("width", (d) => getIndicatorRate(d))
         // .attr("height", (d) => getIndicatorRate(d))
         .attr("width", __VM.rect.size)
@@ -430,7 +430,7 @@ export default {
           tooltip
             .style("visibility", "visible")
             .html(
-              `${d.properties.NAME} <br/>Vaccination Rate: ${getIndicatorRate(
+              `${d.properties.name} <br/>Vaccination Rate: ${getIndicatorRate(
                 d
               )}%`
             );
@@ -678,7 +678,7 @@ export default {
           b = [p[0] - dx, p[1] - dy];
         }
 
-        console.log(slope, Math.hypot(a[0] - b[0], a[1] - b[1]));
+        // console.log(slope, Math.hypot(a[0] - b[0], a[1] - b[1]));
 
         return [a, b];
       };
