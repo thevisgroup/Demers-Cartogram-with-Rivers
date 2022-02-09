@@ -537,7 +537,7 @@ export default {
         r.attr("stroke", () => {
           let res = "black";
 
-          if (r.attr("nodeX")) {
+          if (r.attr("nodeXCount")) {
             res = "blue";
           }
 
@@ -545,14 +545,14 @@ export default {
             res = "red";
           }
 
-          if (r.attr("nodeX") && r.attr("riverX")) {
+          if (r.attr("nodeXCount") && r.attr("riverX")) {
             res = "purple";
           }
 
           return res;
         })
           .attr("stroke-width", () => {
-            return r.attr("nodeX") || r.attr("riverX")
+            return r.attr("nodeXCount") || r.attr("riverX")
               ? __VM.rect.nodeX.stroke_width
               : "0.3";
           })
@@ -598,7 +598,7 @@ export default {
 
       __VM.step.step_index = 1;
 
-      __VM.delay(timer).then(() => {
+      __VM.delay(timer * 1.1).then(() => {
         __VM.step.button_disabled = false;
       });
     },
@@ -642,7 +642,7 @@ export default {
 
       let rect = d3.select(`#map rect[fill="blue"]`);
 
-      const history = JSON.parse(rect.attr("history"))[1];
+      const history = __VM.getRectHistory(rect)[1];
 
       const x = Number(rect.attr("x"));
       const y = Number(rect.attr("y"));
@@ -715,7 +715,7 @@ export default {
 
       const timer = 100 * __VM.timer;
 
-      const moveRectC = (rect, previous) => {
+      const moveRectC = (rect) => {
         const x = Number(rect.attr("x"));
         const y = Number(rect.attr("y"));
 
@@ -733,7 +733,7 @@ export default {
           const rectObj = {
             x: rect.attr("x"),
             y: rect.attr("y"),
-            history: JSON.parse(rect.attr("history")),
+            history: __VM.getRectHistory(rect),
           };
 
           __VM.writeRectHistory(rect, newPos[0], newPos[1]);
@@ -741,7 +741,7 @@ export default {
           __VM.checkNodeX(rectObj, rect);
 
           // reset fill color for nodeC
-          if (rect.attr("nodeX")) {
+          if (rect.attr("nodeXCount")) {
             rect.attr("stroke", "blue");
           } else {
             rect.attr("stroke", "pink");
@@ -751,23 +751,19 @@ export default {
         });
       };
 
-      moveRectC(rect, previous);
-
-      const halfSize = __VM.rect.size / 2;
+      moveRectC(rect);
 
       for (let [i, rect] of d3
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
         rect = d3.select(rect);
 
-        const history = JSON.parse(rect.attr("history"))[0];
-
-        const x_in = Number(rect.attr("x")) + halfSize;
-        const y_in = Number(rect.attr("y")) + halfSize;
+        const x_in = Number(rect.attr("x")) + __VM.getHalfRectSize;
+        const y_in = Number(rect.attr("y")) + __VM.getHalfRectSize;
 
         if (x_in !== x && y_in !== y) {
           if (pip.isInside([x_in, y_in], corridor)) {
-            moveRectC(rect, history);
+            moveRectC(rect);
           }
         }
       }
@@ -781,21 +777,20 @@ export default {
     checkNodeX(rect, d3Rect) {
       const __VM = this;
 
-      const nodeWidth = __VM.rect.size / 2;
-
-      const line = d3.line()([
-        [Number(rect.x) + nodeWidth, Number(rect.y) + nodeWidth],
+      const riverCrossingLine = d3.line()([
         [
-          Number(rect.history[0][0]) + nodeWidth,
-          Number(rect.history[0][1]) + nodeWidth,
+          Number(rect.x) + __VM.getHalfRectSize,
+          Number(rect.y) + __VM.getHalfRectSize,
+        ],
+        [
+          Number(rect.history[0][0]) + __VM.getHalfRectSize,
+          Number(rect.history[0][1]) + __VM.getHalfRectSize,
         ],
       ]);
 
       const checkIntersect = (line) => {
-        let intersected = false;
+        let intersectPoints = [];
         for (const river of Object.keys(__VM.river.rivers)) {
-          // const river_path = d3.select(`g.${river} .river path`).attr("d");
-
           const river_path = flattener.flatten_path(
             document.querySelector(`#${river}`).getPathData(),
             [
@@ -806,10 +801,11 @@ export default {
 
           const river_edge_layer = d3.select(`.${river} .river-edge`);
 
-          const intersectPoints = findPathIntersections(river_path, line, true);
+          intersectPoints = findPathIntersections(river_path, line);
 
-          if (intersectPoints) {
-            intersected = true;
+          if (intersectPoints.length > 0) {
+            console.log(intersectPoints);
+            intersectPoints = [intersectPoints[0].x, intersectPoints[0].y];
             __VM.river.rivers[river].translate.x +=
               Number(rect.x) - Number(rect.history[0][0]);
             __VM.river.rivers[river].translate.y +=
@@ -822,42 +818,57 @@ export default {
               .attr("stroke-width", "1px")
               .attr("fill", "none")
               .attr("marker-end", "url(#arrow)");
+
+            return intersectPoints;
           }
         }
 
-        return intersected;
+        return intersectPoints;
       };
-      if (checkIntersect(line)) {
+
+      const intersect = checkIntersect(riverCrossingLine);
+
+      if (d3Rect.attr("id") === "E38000048") {
+        console.log(intersect);
+      }
+
+      if (intersect.length > 0) {
+        const nodeXCount =
+          Number(d3Rect.attr("nodeXCount")) > 0
+            ? Number(d3Rect.attr("nodeXCount")) + 1
+            : 1;
+
         d3Rect
           .attr("fill", "blue")
           .attr("stroke", "blue")
           .attr("stroke-width", __VM.rect.nodeX.stroke_width)
-          .attr("nodeX", true)
+          .attr("nodeXCount", nodeXCount)
           .transition()
           .duration(__VM.timer * 100)
           .attr("x", rect.history[0][0])
           .attr("y", rect.history[0][1]);
 
-        __VM.writeRectHistory(d3Rect, rect.history[0][0], rect.history[0][1]);
+        const historyLength = __VM.writeRectHistory(
+          d3Rect,
+          rect.history[0][0],
+          rect.history[0][1]
+        );
 
-        __VM.delay(__VM.timer * 100).then(() => {
-          let history = JSON.parse(d3Rect.attr("history"));
-
-          if (history.length > 3) {
-            if (
-              history[0][0] === history[2][0] &&
-              history[0][1] === history[2][1]
-            ) {
-              // a stalemate nodeX
-              d3Rect.attr("fill", "blue");
-            } else {
-              // reset fill color for non-stalemate nodeX
-              d3Rect.attr("fill", d3Rect.attr("original_fill").trim());
-            }
+        if (historyLength > 3) {
+          if (nodeXCount > __VM.iteration.limit) {
+            // a stalemate nodeX
+            d3Rect.attr("fill", "blue");
           } else {
+            // reset fill color for non-stalemate nodeX
             d3Rect.attr("fill", d3Rect.attr("original_fill").trim());
           }
-        });
+        } else {
+          d3Rect.attr("fill", d3Rect.attr("original_fill").trim());
+        }
+      } else {
+        if (d3Rect.attr("nodeXCount")) {
+          d3Rect.attr("nodeXCount", 0);
+        }
       }
     },
     toggleFeatureVisibility(type, name = false) {
@@ -1247,7 +1258,7 @@ export default {
       }
 
       if (!__VM.step.enabled && __VM.step.step_index !== 2) {
-        __VM.delay(40 * __VM.timer * __VM.rect.size).then(() => {
+        __VM.delay(45 * __VM.timer * __VM.rect.size).then(() => {
           __VM.triggerStep();
         });
       }
@@ -1331,12 +1342,11 @@ export default {
     },
     runPIP(rect, river) {
       const __VM = this;
-      const nodeWidth = __VM.rect.size / 2;
       if (
         pip.isInside(
           [
-            Number(rect.attr("x")) + nodeWidth,
-            Number(rect.attr("y")) + nodeWidth,
+            Number(rect.attr("x")) + __VM.getHalfRectSize,
+            Number(rect.attr("y")) + __VM.getHalfRectSize,
           ],
           d3.line()(__VM.region[river])
         )
@@ -1346,9 +1356,14 @@ export default {
       }
     },
     writeRectHistory(rect, x, y) {
-      let history = JSON.parse(rect.attr("history"));
+      const __VM = this;
+      let history = __VM.getRectHistory(rect);
       history.unshift([x, y]);
       rect.attr("history", JSON.stringify(history));
+      return history.length;
+    },
+    getRectHistory(rect) {
+      return JSON.parse(rect.attr("history"));
     },
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -1362,7 +1377,7 @@ export default {
         step_index: 0,
         step_list: ["ORA", "Check ORA", "ORA Repeat", "Corridor"],
       },
-      iteration: { current: 0, limit: 1 },
+      iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
       timer: 10,
       log: "",
       corridor: {
@@ -1470,6 +1485,9 @@ export default {
     },
     getRiverTranslationRepeat: function () {
       return this.river.translation.checked.includes("repeat");
+    },
+    getHalfRectSize: function () {
+      return this.rect.size / 2;
     },
   },
   watch: {
