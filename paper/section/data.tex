@@ -4,7 +4,7 @@ Obtaining the data used in this paper is challenging, especially when an Electro
 
 \subsection{Geospatial Data}
 
-Geospatial data, commonly known as shapefiles, were obtained from the following sources. After acquiring these data, we used QGIS \cite{qgisWelcome} to manually adjust projections and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to converted the merged shapefile into a TopoJSON \cite{TopoJSON} file to reduce the file size in order to improve the performance of our system.
+Geospatial data, commonly known as shapefiles, were obtained from the following sources. After acquiring these data, we used QGIS \cite{qgisWelcome} to manually adjust projections and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to converted the merged shapefile into a TopoJSON \cite{TopoJSON} file to reduce the file size in order to improve the performance of our software.
 
 \subsubsection{Clinical Commissioning Groups}
 
@@ -12,9 +12,9 @@ Clinical Commissioning Groups (CCGs) are the main geographic unit of the Nationa
 
 \subsubsection{Rivers}
 
-We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Ouse in England. These rivers were chosen as they pass through regions with clusters of CCGs, and provide informative geographical and topological cues. 
+We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Great Ouse in England. These rivers were chosen as they pass through regions with clusters of CCGs, and provide informative geographical and topological cues. 
 
-We first obtained a relation ID for the shapefile from OpenStreetMap, then downloaded the entire shapefile via a query (See Listing~\ref{overpass}) through Overpass Turbo \cite{overpassturboOverpass}.
+We first obtained a relation ID by searching a river, e.g. River Thames, on OpenStreetMap. The obtained relation ID was used to construct a query (See Listing~\ref{overpass}) which enabled use to download the entire river shapefile through Overpass Turbo \cite{overpassturboOverpass}.
 
 \begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via Overpass Turbo API.}, label={overpass},captionpos=b]
     relation(2263653);>>;

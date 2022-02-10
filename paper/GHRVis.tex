@@ -112,6 +112,10 @@
 
 \usepackage{multicol}
 
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{amsmath}
+
 \author[Q. Wang \& R. S. Laramee]
 {\parbox{\textwidth}{\centering Q. Wang
   and R. S. Laramee
@@ -139,6 +143,9 @@
 \newcommand{\figureref}[1]{Figure \ref{#1}}
 \newcommand{\tableref}[1]{Table \ref{#1}}
 \newcommand{\phantomref}[1]{$\hyperref[#1]{\ref{#1}}$}
+
+% software name
+\newcommand{\software}{GHRVis}
 
 % Bob's dream paragraph style
 \newcommand{\bobgraph}[1]{ \noindent\textbf{#1} \phantomsection \label{bobgraph:{#1}}}
@@ -177,9 +184,7 @@
 
 \input{section/data}
 
-\section{GHRVis}
-
-\subsection{VPSC}
+\input{section/main}
 
 \section{Evaluation}
 
