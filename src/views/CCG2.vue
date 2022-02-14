@@ -117,12 +117,12 @@
                     Rect size: {{ rect.size
                     }}<b-form-input
                       id="slider-rect-size"
-                      v-model="rect.size"
+                      :value="rect.size"
                       type="range"
                       min="0.5"
                       :max="rect.maxSize > 0 ? rect.maxSize : 100"
                       step="0.5"
-                      @change="setRectSize()"
+                      @change="updateRectSizeFromInput(rect.size, $event)"
                     ></b-form-input
                   ></b-button>
 
@@ -267,8 +267,8 @@
                       id="slider-river-space"
                       v-model="river.spacing"
                       type="range"
-                      min="50"
-                      max="200"
+                      min="100"
+                      max="230"
                       step="5"
                       @change="translateRiver()"
                     ></b-form-input
@@ -346,7 +346,7 @@ export default {
         .append("svg:path")
         .attr("d", "M0,0 L0,3 L3,1.5")
         .attr("stroke", "none")
-        .attr("fill", "blue");
+        .attr("fill", "red");
 
       function zoomed(event) {
         const { transform } = event;
@@ -411,8 +411,8 @@ export default {
         .enter()
         .append("rect")
         .attr("colormap", (d) => colormap(getIndicatorRate(d) / 100))
-        .attr("x", (d) => path.centroid(d)[0])
-        .attr("y", (d) => path.centroid(d)[1])
+        .attr("x", (d) => path.centroid(d)[0] - __VM.getHalfRectSize)
+        .attr("y", (d) => path.centroid(d)[1] - __VM.getHalfRectSize)
         .attr("id", (d) => d.properties.id)
         // .attr("width", (d) => getIndicatorRate(d))
         // .attr("height", (d) => getIndicatorRate(d))
@@ -469,8 +469,6 @@ export default {
 
       __VM.translateRiver();
 
-      __VM.mapNodeColorToRegion();
-
       __VM.rect.rectOverlapsRemoved = false;
     },
     removeOverlap(repeat = false) {
@@ -485,7 +483,8 @@ export default {
 
       // prepration before removing overlaps
       if (!repeat) {
-        __VM.rect.size = Number(__VM.rect.size) + Number(__VM.rect.sizeStep);
+        __VM.rect.previousSize = __VM.rect.size;
+        __VM.rect.size = __VM.rect.size + __VM.rect.sizeStep;
         __VM.setRectSize();
       }
 
@@ -527,32 +526,33 @@ export default {
       const timer = 20 * __VM.timer * __VM.rect.size;
 
       // draw river crossing edges
-      for (const [i, rect] of d3
+      for (let [i, rect] of d3
         .selectAll(".rect-layer > rect")
         ._groups[0].entries()) {
         // redraw rects using new coordinates
 
-        const r = d3.select(rect);
+        rect = d3.select(rect);
 
-        r.attr("stroke", () => {
-          let res = "black";
+        rect
+          .attr("stroke", () => {
+            let res = "black";
 
-          if (r.attr("nodeXCount")) {
-            res = "blue";
-          }
+            if (rect.attr("nodeXCount")) {
+              res = "blue";
+            }
 
-          if (r.attr("riverX")) {
-            res = "red";
-          }
+            if (rect.attr("riverX")) {
+              res = "red";
+            }
 
-          if (r.attr("nodeXCount") && r.attr("riverX")) {
-            res = "purple";
-          }
+            if (rect.attr("nodeXCount") && rect.attr("riverX")) {
+              res = "purple";
+            }
 
-          return res;
-        })
+            return res;
+          })
           .attr("stroke-width", () => {
-            return r.attr("nodeXCount") || r.attr("riverX")
+            return rect.attr("nodeXCount") || rect.attr("riverX")
               ? __VM.rect.nodeX.stroke_width
               : "0.3";
           })
@@ -568,9 +568,8 @@ export default {
         ) {
           // add ORAed x,y into the history
 
-          __VM.writeRectHistory(r, data[i].x, data[i].y);
-
-          __VM.checkNodeX(data[i], r);
+          __VM.writeRectHistory(rect, [data[i].x, data[i].y]);
+          __VM.checkNodeX(rect);
         }
       }
 
@@ -595,7 +594,6 @@ export default {
       }
 
       __VM.rect.rectOverlapsRemoved = true;
-
       __VM.step.step_index = 1;
 
       __VM.delay(timer * 1.1).then(() => {
@@ -605,44 +603,42 @@ export default {
     checkORAIteration() {
       const __VM = this;
 
-      if (__VM.iteration.current >= __VM.iteration.limit) {
-        __VM.log += `Overlap removal iteration: ${__VM.iteration.current} stopped, iteration limit of ${__VM.iteration.limit} reached. \n`;
+      const edgeCount = d3.selectAll(".river-edge > path")._groups[0].length;
+      if (edgeCount > 0) {
+        if (__VM.iteration.current >= __VM.iteration.limit) {
+          __VM.log += `Overlap removal iteration: ${__VM.iteration.current} stopped, iteration limit of ${__VM.iteration.limit} reached. \n`;
 
-        d3.selectAll(".river-edge > path").remove();
-        __VM.iteration.current = 0;
-
-        __VM.delay(20 * __VM.timer * __VM.rect.size).then(() => {
-          __VM.drawCorridor();
-        });
-      } else {
-        const numEdges = d3.selectAll(".river-edge > path")._groups[0].length;
-
-        if (numEdges > 0) {
-          __VM.iteration.current++;
-
-          __VM.log += `Overlap removal iteration: ${__VM.iteration.current}, finished with ${numEdges} nodeX \n`;
-
-          __VM.removeOverlap(true);
-        } else {
-          __VM.log += `Overlap removal iteration: ${__VM.iteration.current} finished, no more nodeX \n`;
+          d3.selectAll(".river-edge > path").remove();
 
           __VM.iteration.current = 0;
+          __VM.delay(20 * __VM.timer * __VM.rect.size).then(() => {
+            __VM.deriveCorridor();
+          });
+          return;
+        } else {
+          __VM.iteration.current++;
 
-          __VM.step.step_index = 0;
+          __VM.log += `Overlap removal iteration: ${__VM.iteration.current}, finished with ${edgeCount} nodeX \n`;
 
-          __VM.step.button_disabled = false;
+          __VM.removeOverlap(true);
+          return;
         }
-
-        const ta_log = document.querySelector("#ta_log");
-        ta_log.scrollTop = ta_log.scrollHeight;
       }
+      __VM.log += `Overlap removal iteration: ${__VM.iteration.current} finished, no more nodeX \n`;
+
+      __VM.iteration.current = 0;
+      __VM.step.step_index = 0;
+      __VM.step.button_disabled = false;
+
+      const ta_log = document.querySelector("#ta_log");
+      ta_log.scrollTop = ta_log.scrollHeight;
     },
-    drawCorridor() {
+    deriveCorridor() {
       const __VM = this;
 
       let rect = d3.select(`#map rect[fill="blue"]`);
 
-      const history = __VM.getRectHistory(rect)[1];
+      const history = __VM.getRectHistory(rect)[0];
 
       const x = Number(rect.attr("x"));
       const y = Number(rect.attr("y"));
@@ -654,6 +650,7 @@ export default {
       const y_diff = previous[1] - current[1];
 
       const slope = y_diff / x_diff;
+
       // draw a line that passes through a given point
       const drawLineFromPoint = (slope, p, distance, sideline = false) => {
         let a, b;
@@ -728,17 +725,9 @@ export default {
           .attr("y", newPos[1]);
 
         __VM.delay(timer).then(() => {
-          // __VM.runPIP(rect);
+          __VM.writeRectHistory(rect, newPos);
 
-          const rectObj = {
-            x: rect.attr("x"),
-            y: rect.attr("y"),
-            history: __VM.getRectHistory(rect),
-          };
-
-          __VM.writeRectHistory(rect, newPos[0], newPos[1]);
-
-          __VM.checkNodeX(rectObj, rect);
+          __VM.checkNodeX(rect);
 
           // reset fill color for nodeC
           if (rect.attr("nodeXCount")) {
@@ -774,17 +763,19 @@ export default {
         __VM.step.button_disabled = false;
       });
     },
-    checkNodeX(rect, d3Rect) {
+    checkNodeX(rect) {
       const __VM = this;
 
+      const x = Number(rect.attr("x"));
+      const y = Number(rect.attr("y"));
+
+      const history = __VM.getRectHistory(rect);
+
       const riverCrossingLine = d3.line()([
+        [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
         [
-          Number(rect.x) + __VM.getHalfRectSize,
-          Number(rect.y) + __VM.getHalfRectSize,
-        ],
-        [
-          Number(rect.history[0][0]) + __VM.getHalfRectSize,
-          Number(rect.history[0][1]) + __VM.getHalfRectSize,
+          Number(history[0][0]) + __VM.getHalfRectSize,
+          Number(history[0][1]) + __VM.getHalfRectSize,
         ],
       ]);
 
@@ -804,17 +795,15 @@ export default {
           intersectPoints = findPathIntersections(river_path, line);
 
           if (intersectPoints.length > 0) {
-            console.log(intersectPoints);
+            // console.log(intersectPoints);
             intersectPoints = [intersectPoints[0].x, intersectPoints[0].y];
-            __VM.river.rivers[river].translate.x +=
-              Number(rect.x) - Number(rect.history[0][0]);
-            __VM.river.rivers[river].translate.y +=
-              Number(rect.y) - Number(rect.history[0][1]);
+            __VM.river.rivers[river].translate.x += x - Number(history[0][0]);
+            __VM.river.rivers[river].translate.y += y - Number(history[0][1]);
 
             river_edge_layer
               .append("path")
               .attr("d", line)
-              .attr("stroke", "blue")
+              .attr("stroke", "red")
               .attr("stroke-width", "1px")
               .attr("fill", "none")
               .attr("marker-end", "url(#arrow)");
@@ -828,46 +817,37 @@ export default {
 
       const intersect = checkIntersect(riverCrossingLine);
 
-      if (d3Rect.attr("id") === "E38000048") {
-        console.log(intersect);
-      }
-
+      // move node back
       if (intersect.length > 0) {
         const nodeXCount =
-          Number(d3Rect.attr("nodeXCount")) > 0
-            ? Number(d3Rect.attr("nodeXCount")) + 1
+          Number(rect.attr("nodeXCount")) > 0
+            ? Number(rect.attr("nodeXCount")) + 1
             : 1;
 
-        d3Rect
-          .attr("fill", "blue")
+        if (rect.attr("id") === "E38000084") {
+          console.log(__VM.getRectHistory(rect), "moved back");
+          console.log(__VM.step.step_index);
+        }
+
+        rect
           .attr("stroke", "blue")
           .attr("stroke-width", __VM.rect.nodeX.stroke_width)
           .attr("nodeXCount", nodeXCount)
           .transition()
           .duration(__VM.timer * 100)
-          .attr("x", rect.history[0][0])
-          .attr("y", rect.history[0][1]);
+          .attr("x", history[1][0])
+          .attr("y", history[1][1]);
 
-        const historyLength = __VM.writeRectHistory(
-          d3Rect,
-          rect.history[0][0],
-          rect.history[0][1]
-        );
-
-        if (historyLength > 3) {
-          if (nodeXCount > __VM.iteration.limit) {
-            // a stalemate nodeX
-            d3Rect.attr("fill", "blue");
-          } else {
-            // reset fill color for non-stalemate nodeX
-            d3Rect.attr("fill", d3Rect.attr("original_fill").trim());
-          }
+        if (nodeXCount > __VM.iteration.limit) {
+          // a stalemate nodeX
+          rect.attr("fill", "blue");
         } else {
-          d3Rect.attr("fill", d3Rect.attr("original_fill").trim());
+          // reset fill color for non-stalemate nodeX
+          rect.attr("fill", rect.attr("original_fill").trim());
         }
       } else {
-        if (d3Rect.attr("nodeXCount")) {
-          d3Rect.attr("nodeXCount", 0);
+        if (rect.attr("nodeXCount")) {
+          rect.attr("nodeXCount", 0);
         }
       }
     },
@@ -913,6 +893,13 @@ export default {
         __VM[type].visibility ? "visible" : "hidden"
       );
     },
+    updateRectSizeFromInput(old, current) {
+      const __VM = this;
+      __VM.rect.previousSize = old;
+      __VM.rect.size = Number(current);
+
+      __VM.setRectSize();
+    },
     setRectSize(uniformed = false) {
       const __VM = this;
       __VM.rect.rectSizeUniformed = uniformed;
@@ -920,9 +907,18 @@ export default {
       if (__VM.rect.rectSizeUniformed) {
         size = 10;
       }
+
+      const sizeDiff = (__VM.rect.previousSize - size) / 2;
+
       d3.selectAll(".rect-layer > rect")
         .attr("width", size)
-        .attr("height", size);
+        .attr("height", size)
+        .attr("x", function () {
+          return Number(d3.select(this).attr("x")) + sizeDiff;
+        })
+        .attr("y", function () {
+          return Number(d3.select(this).attr("y")) + sizeDiff;
+        });
     },
     setRectColor(singleRect) {
       const __VM = this;
@@ -1075,6 +1071,8 @@ export default {
         }
         __VM.delay(timer).then(() => __VM.detectRiverXNodes());
       });
+
+      __VM.mapNodeColorToRegion();
     },
     calculateRiverTranslation() {
       const __VM = this;
@@ -1244,14 +1242,14 @@ export default {
         case "ORA":
           __VM.removeOverlap();
           break;
-        case "ORA Repeat":
-          __VM.removeOverlap(true);
-          break;
         case "Check ORA":
           __VM.checkORAIteration();
           break;
+        case "ORA Repeat":
+          __VM.removeOverlap(true);
+          break;
         case "Corridor":
-          __VM.drawCorridor();
+          __VM.deriveCorridor();
           break;
         default:
           break;
@@ -1264,6 +1262,8 @@ export default {
       }
     },
     mapNodeColorToRegion() {
+      d3.selectAll(".river-region").remove();
+
       const __VM = this;
       __VM.region.thames = [];
 
@@ -1328,39 +1328,48 @@ export default {
 
         __VM.svg
           .append("path")
+          .attr("class", "river-region")
           .attr("d", d3.line()(__VM.region[river]))
           .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           .attr("stroke-width", "2px")
           .attr("fill", "none");
+      });
 
+      __VM.runPIP();
+    },
+    runPIP() {
+      const __VM = this;
+      Object.keys(__VM.river.rivers).forEach((river) => {
         for (let [i, rect] of d3
           .selectAll(".rect-layer > rect")
           ._groups[0].entries()) {
-          __VM.runPIP(d3.select(rect), river);
+          rect = d3.select(rect);
+
+          if (
+            pip.isInside(
+              [
+                Number(rect.attr("x")) + __VM.getHalfRectSize,
+                Number(rect.attr("y")) + __VM.getHalfRectSize,
+              ],
+              d3.line()(__VM.region[river])
+            )
+          ) {
+            rect.attr("fill", __VM.colorVariant[river]);
+            rect.attr("original_fill", __VM.colorVariant[river]);
+          }
         }
       });
     },
-    runPIP(rect, river) {
-      const __VM = this;
-      if (
-        pip.isInside(
-          [
-            Number(rect.attr("x")) + __VM.getHalfRectSize,
-            Number(rect.attr("y")) + __VM.getHalfRectSize,
-          ],
-          d3.line()(__VM.region[river])
-        )
-      ) {
-        rect.attr("fill", __VM.colorVariant[river]);
-        rect.attr("original_fill", __VM.colorVariant[river]);
-      }
-    },
-    writeRectHistory(rect, x, y) {
+    writeRectHistory(rect, position) {
       const __VM = this;
       let history = __VM.getRectHistory(rect);
-      history.unshift([x, y]);
+      history.unshift(position);
+
+      if (history.length > 4) {
+        history.pop();
+      }
+
       rect.attr("history", JSON.stringify(history));
-      return history.length;
     },
     getRectHistory(rect) {
       return JSON.parse(rect.attr("history"));
@@ -1389,6 +1398,7 @@ export default {
         rectMapToColor: false,
         visibility: true,
         color: "success",
+        previousSize: 0,
         size: 5,
         maxSize: 20,
         sizeStep: 0.25,
@@ -1414,7 +1424,7 @@ export default {
         },
         visibility: true,
         width: 1,
-        spacing: 100,
+        spacing: 200,
         color: "info",
         rivers: {
           thames: {
