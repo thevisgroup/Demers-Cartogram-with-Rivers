@@ -163,6 +163,67 @@
       \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12648
       \endverb
     \endentry
+    \entry{chen2020Node}{article}{}
+      \name{author}{4}{}{%
+        {{hash=491e154d3ea6436cbca3b6583285a1de}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Fati},
+           giveni={F\bibinitperiod}}}%
+        {{hash=652c407ec4631bb209bfb36d041bed63}{%
+           family={Piccinini},
+           familyi={P\bibinitperiod},
+           given={Laurent},
+           giveni={L\bibinitperiod}}}%
+        {{hash=b886e77d13773e87e1c82416a988b892}{%
+           family={Poncelet},
+           familyi={P\bibinitperiod},
+           given={Pascal},
+           giveni={P\bibinitperiod}}}%
+        {{hash=f336170bac44a1f6a22bf234ad69a0c5}{%
+           family={Sallaberry},
+           familyi={S\bibinitperiod},
+           given={Arnaud},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{ad357f23d7bb2a299f839ce651b4a729}
+      \strng{fullhash}{201623a880f7d9633de2ad442cf754fb}
+      \strng{bibnamehash}{ad357f23d7bb2a299f839ce651b4a729}
+      \strng{authorbibnamehash}{ad357f23d7bb2a299f839ce651b4a729}
+      \strng{authornamehash}{ad357f23d7bb2a299f839ce651b4a729}
+      \strng{authorfullhash}{201623a880f7d9633de2ad442cf754fb}
+      \field{labelalpha}{Che*20}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{1526-1719}
+      \field{journaltitle}{Journal of Graph Algorithms and Applications}
+      \field{langid}{english}
+      \field{number}{4}
+      \field{shorttitle}{Node {{Overlap Removal Algorithms}}}
+      \field{title}{Node {{Overlap Removal Algorithms}}: An {{Extended Comparative Study}}}
+      \field{urlday}{17}
+      \field{urlmonth}{6}
+      \field{urlyear}{2021}
+      \field{volume}{24}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \field{pages}{683\bibrangedash 706}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.7155/jgaa.00532
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/FPMM2QFE/Chen et al. - 2020 - Node Overlap Removal Algorithms an Extended Compa.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://jgaa.info/getPaper?id=532
+      \endverb
+      \verb{url}
+      \verb http://jgaa.info/getPaper?id=532
+      \endverb
+    \endentry
     \entry{cruz2017Adapted}{inproceedings}{}
       \name{author}{1}{}{%
         {{hash=f1986c6605bd2e1b4015d6695eca2c58}{%
@@ -282,6 +343,155 @@
       \endverb
       \verb{url}
       \verb https://onlinelibrary.wiley.com/doi/10.1002/9780470979587.ch33
+      \endverb
+    \endentry
+    \entry{dwyer2006fast}{incollection}{}
+      \name{author}{3}{}{%
+        {{hash=8bec7f7fdfd1f8d21530db47d8d3fb8f}{%
+           family={Dwyer},
+           familyi={D\bibinitperiod},
+           given={Tim},
+           giveni={T\bibinitperiod}}}%
+        {{hash=b7b9c8a15ea42930441d87944068bfe8}{%
+           family={Marriott},
+           familyi={M\bibinitperiod},
+           given={Kim},
+           giveni={K\bibinitperiod}}}%
+        {{hash=763c041036682c7c20675dab8c437fb0}{%
+           family={Stuckey},
+           familyi={S\bibinitperiod},
+           given={Peter\bibnamedelima J.},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \name{editor}{17}{}{%
+        {{hash=d003d9a994005f480f7fa06dde74326e}{%
+           family={Hutchison},
+           familyi={H\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=45496c6a7530cfbfb4f3218a2602b77e}{%
+           family={Kanade},
+           familyi={K\bibinitperiod},
+           given={Takeo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=9dd3a56c94774f5880ca7475fdc308ea}{%
+           family={Kittler},
+           familyi={K\bibinitperiod},
+           given={Josef},
+           giveni={J\bibinitperiod}}}%
+        {{hash=fb11814963625d418100ec9ca3710333}{%
+           family={Kleinberg},
+           familyi={K\bibinitperiod},
+           given={Jon\bibnamedelima M.},
+           giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=e07c4272d13053fc36d770d4735f2c14}{%
+           family={Mattern},
+           familyi={M\bibinitperiod},
+           given={Friedemann},
+           giveni={F\bibinitperiod}}}%
+        {{hash=47dbc192a926109dd86ea18b25249a93}{%
+           family={Mitchell},
+           familyi={M\bibinitperiod},
+           given={John\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=c6af39e79e88306281e6e0b0ccea956c}{%
+           family={Naor},
+           familyi={N\bibinitperiod},
+           given={Moni},
+           giveni={M\bibinitperiod}}}%
+        {{hash=7d3ea70a5274b32c8a184dd4d844ee47}{%
+           family={Nierstrasz},
+           familyi={N\bibinitperiod},
+           given={Oscar},
+           giveni={O\bibinitperiod}}}%
+        {{hash=6bcab2334dc65214139b0ad45fe8185e}{%
+           family={Pandu\bibnamedelima Rangan},
+           familyi={P\bibinitperiod\bibinitdelim R\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=665b6687b4ed05721bf55d61032505ca}{%
+           family={Steffen},
+           familyi={S\bibinitperiod},
+           given={Bernhard},
+           giveni={B\bibinitperiod}}}%
+        {{hash=8753fbfaaa4aa8a1195c657edc9daef4}{%
+           family={Sudan},
+           familyi={S\bibinitperiod},
+           given={Madhu},
+           giveni={M\bibinitperiod}}}%
+        {{hash=cd9aa5de7673e375889cc32997ef97df}{%
+           family={Terzopoulos},
+           familyi={T\bibinitperiod},
+           given={Demetri},
+           giveni={D\bibinitperiod}}}%
+        {{hash=ddfb7c40f1ab7e805c025ac7ef922cc7}{%
+           family={Tygar},
+           familyi={T\bibinitperiod},
+           given={Dough},
+           giveni={D\bibinitperiod}}}%
+        {{hash=a4cf237a06b02ad7e7601b14b4d005be}{%
+           family={Vardi},
+           familyi={V\bibinitperiod},
+           given={Moshe\bibnamedelima Y.},
+           giveni={M\bibinitperiod\bibinitdelim Y\bibinitperiod}}}%
+        {{hash=e47f9d085c16045a5911784850208ada}{%
+           family={Weikum},
+           familyi={W\bibinitperiod},
+           given={Gerhard},
+           giveni={G\bibinitperiod}}}%
+        {{hash=8270a286eb0014e76fc9623e02a1a1df}{%
+           family={Healy},
+           familyi={H\bibinitperiod},
+           given={Patrick},
+           giveni={P\bibinitperiod}}}%
+        {{hash=0691bbc4a7af0a3b64448656053b85ba}{%
+           family={Nikolov},
+           familyi={N\bibinitperiod},
+           given={Nikola\bibnamedelima S.},
+           giveni={N\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer Berlin Heidelberg}%
+      }
+      \strng{namehash}{adb206ab27ba5a989856b03384e69ed8}
+      \strng{fullhash}{56cb76230fcf488ab46ac2b492aad3a4}
+      \strng{bibnamehash}{adb206ab27ba5a989856b03384e69ed8}
+      \strng{authorbibnamehash}{adb206ab27ba5a989856b03384e69ed8}
+      \strng{authornamehash}{adb206ab27ba5a989856b03384e69ed8}
+      \strng{authorfullhash}{56cb76230fcf488ab46ac2b492aad3a4}
+      \strng{editorbibnamehash}{1878e5aaeb2ba2e2aaa5cb8a1a7cf207}
+      \strng{editornamehash}{1878e5aaeb2ba2e2aaa5cb8a1a7cf207}
+      \strng{editorfullhash}{896c7409ba56beae4d0d57c8873f40e6}
+      \field{labelalpha}{Dwy*06}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Graph {{Drawing}}}
+      \field{isbn}{978-3-540-31425-7 978-3-540-31667-1}
+      \field{title}{Fast {{Node Overlap Removal}}}
+      \field{urlday}{17}
+      \field{urlmonth}{6}
+      \field{urlyear}{2021}
+      \field{volume}{3843}
+      \field{year}{2006}
+      \field{urldateera}{ce}
+      \field{pages}{153\bibrangedash 164}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1007/11618058_15
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/YXLZSHIP/Dwyer et al. - 2006 - Fast Node Overlap Removal.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/11618058_15
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/11618058_15
       \endverb
     \endentry
     \entry{gamio2016Election}{article}{}
@@ -501,42 +711,6 @@
       \endverb
       \verb{url}
       \verb https://www.nationalgeographic.com/culture/article/improved-election-map-cartograms
-      \endverb
-    \endentry
-    \entry{newman2016Election}{misc}{}
-      \name{author}{1}{}{%
-        {{hash=91c825ea422365e0f6cb2597658def75}{%
-           family={Newman},
-           familyi={N\bibinitperiod},
-           given={Mark},
-           giveni={M\bibinitperiod}}}%
-      }
-      \strng{namehash}{91c825ea422365e0f6cb2597658def75}
-      \strng{fullhash}{91c825ea422365e0f6cb2597658def75}
-      \strng{bibnamehash}{91c825ea422365e0f6cb2597658def75}
-      \strng{authorbibnamehash}{91c825ea422365e0f6cb2597658def75}
-      \strng{authornamehash}{91c825ea422365e0f6cb2597658def75}
-      \strng{authorfullhash}{91c825ea422365e0f6cb2597658def75}
-      \field{labelalpha}{New16}
-      \field{sortinit}{N}
-      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{month}{12}
-      \field{title}{Election Maps}
-      \field{urlday}{16}
-      \field{urlmonth}{1}
-      \field{urlyear}{2022}
-      \field{year}{2016}
-      \field{urldateera}{ce}
-      \verb{file}
-      \verb /Users/henry/SynologyDrive/Zotero/storage/8I8H434T/2016.html
-      \endverb
-      \verb{urlraw}
-      \verb http://www-personal.umich.edu/~mejn/election/2016/
-      \endverb
-      \verb{url}
-      \verb http://www-personal.umich.edu/~mejn/election/2016/
       \endverb
     \endentry
     \entry{nhsNHS}{misc}{}

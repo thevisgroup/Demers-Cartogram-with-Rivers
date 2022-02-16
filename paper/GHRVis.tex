@@ -140,8 +140,10 @@
 \let\origsubsubsection=\subsubsection
 \renewcommand\subsubsection[1]{\origsubsubsection{#1}\label{subsubsec:{#1}}}
 
-\newcommand{\figureref}[1]{Figure \ref{#1}}
+\newcommand{\secref}[1]{Section \ref{#1}}
+\newcommand{\figref}[1]{Figure \ref{#1}}
 \newcommand{\tableref}[1]{Table \ref{#1}}
+\newcommand{\algoref}[1]{Algorithm \ref{#1}}
 \newcommand{\phantomref}[1]{$\hyperref[#1]{\ref{#1}}$}
 
 % software name
@@ -167,10 +169,20 @@
 
 \newcommand{\note}[1]{\textcolor{blue}{#1}}
 
-\newcommand{\expertcomment}[1]{\textit{``#1''}}
+% switch for algorithmic
+% New definitions
+\algnewcommand\algorithmicswitch{\textbf{switch}}
+\algnewcommand\algorithmiccase{\textbf{case}}
+\algnewcommand\algorithmicdefault{\textbf{default}}
+% New "environments"
+\algdef{SE}[SWITCH]{Switch}{EndSwitch}[1]{\algorithmicswitch\ #1\textbf{:}}{\algorithmicend\ \algorithmicswitch}%
+\algtext*{EndSwitch}%
 
-\newcommand{\task}[1]{\textbf{T#1}}
-\newcommand{\req}[1]{\textbf{R#1}}
+\algdef{SE}[CASE]{Case}{EndCase}[1]{\algorithmiccase\ #1\textbf{:}}{\algorithmicend\ \algorithmiccase}%
+\algtext*{EndCase}%
+
+\algdef{SE}[DEFUALT]{Default}{EndDefault}{\algorithmicdefault\textbf{:}}{\algorithmicend\ \algorithmicdefault}%
+\algtext*{EndDefault}%
 
 \maketitle
 

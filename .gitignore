@@ -30,3 +30,5 @@ tempCodeRunnerFile.*
 *.gz
 paper/GHRVis.pdf
 paper/*.gz
+
+test.js
