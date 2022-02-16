@@ -513,46 +513,44 @@ export default {
         const x_old = history[0][0];
         const y_old = history[0][1];
 
-        if (x_old !== x_new || y_old !== y_new) {
-          rect
-            .attr("stroke", () => {
-              let res = "black";
+        rect
+          .attr("stroke", () => {
+            let res = "black";
 
-              if (rect.attr("nodeXCount")) {
-                res = "blue";
-              }
+            if (rect.attr("nodeXCount")) {
+              res = "blue";
+            }
 
-              if (rect.attr("riverX")) {
-                res = "red";
-              }
+            if (rect.attr("riverX")) {
+              res = "red";
+            }
 
-              if (rect.attr("nodeXCount") && rect.attr("riverX")) {
-                res = "purple";
-              }
+            if (rect.attr("nodeXCount") && rect.attr("riverX")) {
+              res = "purple";
+            }
 
-              return res;
-            })
-            .attr("stroke-width", () => {
-              return rect.attr("nodeXCount") || rect.attr("riverX")
-                ? __VM.rect.nodeX.stroke_width
-                : "0.3";
-            })
-            //.attr("fill", __VM.colorVariant[__VM.rect.color])
-            .transition()
-            .duration(timer)
-            .attr("x", x_new)
-            .attr("y", y_new);
+            return res;
+          })
+          .attr("stroke-width", () => {
+            return rect.attr("nodeXCount") || rect.attr("riverX")
+              ? __VM.rect.nodeX.stroke_width
+              : "0.3";
+          })
+          //.attr("fill", __VM.colorVariant[__VM.rect.color])
+          .transition()
+          .duration(timer)
+          .attr("x", x_new)
+          .attr("y", y_new);
 
-          __VM.checkNodeX(rect, [x_new, y_new]);
+        __VM.checkNodeX(rect, [x_new, y_new]);
 
-          // if (repeat && rect.attr("id") === "E38000084") {
-          //   console.log(x_old !== x_new || y_old !== y_new);
-          //   console.log(rect.attr("x"), rect.attr("y"));
-          //   console.log(x_new, y_new);
-          //   console.log(rect.attr("history"));
-          //   console.log(history);
-          // }
-        }
+        // if (repeat && rect.attr("id") === "E38000084") {
+        //   console.log(x_old !== x_new || y_old !== y_new);
+        //   console.log(rect.attr("x"), rect.attr("y"));
+        //   console.log(x_new, y_new);
+        //   console.log(rect.attr("history"));
+        //   console.log(history);
+        // }
       }
 
       let translate = false;
@@ -592,7 +590,7 @@ export default {
             });
           } else {
             __VM.updateLog(
-              `Overlap removal iteration: ${__VM.iteration.current}, finished with ${edgeCount} nodeX \n`
+              `Overlap removal iteration: ${__VM.iteration.current}, finished with ${edgeCount} nodeX. \n`
             );
 
             __VM.iteration.current++;
@@ -600,7 +598,7 @@ export default {
           }
         } else {
           __VM.updateLog(
-            `Overlap removal iteration: ${__VM.iteration.current} finished, no more nodeX \n`
+            `Overlap removal iteration: ${__VM.iteration.current} finished, no more nodeX. \n`
           );
 
           __VM.iteration.current = 0;
@@ -608,134 +606,141 @@ export default {
         }
       });
     },
-    checkORAIteration() {
-      const __VM = this;
-    },
     deriveCorridor() {
       const __VM = this;
 
-      let rect = d3.select(
-        `#map rect[nodeXCount="${__VM.iteration.limit + 1}"]`
-      );
-
-      const history = __VM.getRectHistory(rect);
-
-      const previous = history[1];
-      const current = history[0];
-
-      const x_diff = previous[0] - current[0];
-      const y_diff = previous[1] - current[1];
-
-      const slope = y_diff / x_diff;
-
-      // draw a line that passes through a given point
-      const drawLineFromPoint = (slope, p, distance, sideline = false) => {
-        let a, b;
-
-        if (slope === 0) {
-          a = [p[0] + Number(sideline ? 0 : distance), p[1]];
-          b = [p[0] - distance, p[1]];
-        } else if (
-          slope === Number.POSITIVE_INFINITY ||
-          slope === Number.NEGATIVE_INFINITY
-        ) {
-          a = [p[0], p[1] + Number(sideline ? 0 : distance)];
-          b = [p[0], p[1] - distance];
-        } else {
-          const dx = distance / Math.sqrt(1 + slope * slope);
-          const dy = slope * dx;
-
-          a = [
-            p[0] + Number(sideline ? 0 : dx),
-            p[1] + Number(sideline ? 0 : dy),
-          ];
-          b = [p[0] - dx, p[1] - dy];
-        }
-
-        // console.log(slope, Math.hypot(a[0] - b[0], a[1] - b[1]));
-
-        return [a, b];
-      };
-
-      const pLine = drawLineFromPoint(-1 / slope, current, __VM.rect.size);
-      const sideline1 = drawLineFromPoint(
-        slope,
-        pLine[0],
-        __VM.corridor.length,
-        true
-      );
-      const sideline2 = drawLineFromPoint(
-        slope,
-        pLine[1],
-        __VM.corridor.length,
-        true
-      );
-
-      const corridor = d3.line()([
-        pLine[0],
-        sideline1[1],
-        sideline2[1],
-        sideline2[0],
-        pLine[0],
-      ]);
-
-      __VM.svg
-        .append("path")
-        .attr("d", corridor)
-        .attr("class", "corridor")
-        .attr("stroke", "blue")
-        .attr("stroke-width", "1")
-        .attr("fill", "none");
+      let rects = d3
+        .selectAll(`#map rect[nodeXCount="${__VM.iteration.limit + 1}"]`)
+        ._groups[0].entries();
 
       const timer = 100 * __VM.timer;
 
-      const moveRectC = (rect) => {
-        const x = Number(rect.attr("x"));
-        const y = Number(rect.attr("y"));
+      for (let [i, rect] of rects) {
+        // redraw rects using new coordinates
 
-        const newPos = drawLineFromPoint(
-          slope,
-          [x, y],
-          __VM.getHalfRectSize
-        )[1];
-
-        rect
-          .transition()
-          //.duration(timer)
-          .attr("x", newPos[0])
-          .attr("y", newPos[1]);
-
-        __VM.delay(timer).then(() => {
-          __VM.checkNodeX(rect, newPos);
-
-          // reset fill color for nodeC
-          if (rect.attr("nodeXCount")) {
-            rect.attr("stroke", "blue");
-          } else {
-            rect.attr("stroke", "pink");
-          }
-
-          rect.attr("fill", rect.attr("original_fill"));
-        });
-      };
-
-      moveRectC(rect);
-
-      for (let [i, rect] of d3
-        .selectAll(".rect-layer > rect")
-        ._groups[0].entries()) {
         rect = d3.select(rect);
 
-        const x_in = Number(rect.attr("x")) + __VM.getHalfRectSize;
-        const y_in = Number(rect.attr("y")) + __VM.getHalfRectSize;
+        const history = __VM.getRectHistory(rect);
 
-        if (pip.isInside([x_in, y_in], corridor)) {
-          moveRectC(rect);
+        const previous = history[1];
+        const current = history[0];
+
+        const x_diff = previous[0] - current[0];
+        const y_diff = previous[1] - current[1];
+
+        const slope = y_diff / x_diff;
+
+        // draw a line that passes through a given point
+        const drawLineFromPoint = (slope, p, distance, sideline = false) => {
+          let a, b;
+
+          if (slope === 0) {
+            a = [p[0] + Number(sideline ? 0 : distance), p[1]];
+            b = [p[0] - distance, p[1]];
+          } else if (
+            slope === Number.POSITIVE_INFINITY ||
+            slope === Number.NEGATIVE_INFINITY
+          ) {
+            a = [p[0], p[1] + Number(sideline ? 0 : distance)];
+            b = [p[0], p[1] - distance];
+          } else {
+            const dx = distance / Math.sqrt(1 + slope * slope);
+            const dy = slope * dx;
+
+            a = [
+              p[0] + Number(sideline ? 0 : dx),
+              p[1] + Number(sideline ? 0 : dy),
+            ];
+            b = [p[0] - dx, p[1] - dy];
+          }
+
+          // console.log(slope, Math.hypot(a[0] - b[0], a[1] - b[1]));
+
+          return [a, b];
+        };
+
+        const pLine = drawLineFromPoint(-1 / slope, current, __VM.rect.size);
+        const sideline1 = drawLineFromPoint(
+          slope,
+          pLine[0],
+          __VM.corridor.length,
+          true
+        );
+        const sideline2 = drawLineFromPoint(
+          slope,
+          pLine[1],
+          __VM.corridor.length,
+          true
+        );
+
+        const corridor = d3.line()([
+          pLine[0],
+          sideline1[1],
+          sideline2[1],
+          sideline2[0],
+          pLine[0],
+        ]);
+
+        __VM.svg
+          .append("path")
+          .attr("d", corridor)
+          .attr("class", "corridor")
+          .attr("stroke", "blue")
+          .attr("stroke-width", "1")
+          .attr("fill", "none");
+
+        const moveRectC = (rect) => {
+          const history = __VM.getRectHistory(rect);
+
+          const x = Number(history[0][0]);
+          const y = Number(history[0][1]);
+
+          const newPos = drawLineFromPoint(
+            slope,
+            [x, y],
+            __VM.getHalfRectSize
+          )[1];
+
+          rect
+            .transition()
+            //.duration(timer)
+            .attr("x", newPos[0])
+            .attr("y", newPos[1]);
+
+          __VM.delay(timer).then(() => {
+            __VM.checkNodeX(rect, newPos);
+
+            // reset fill color for nodeC
+            if (rect.attr("nodeXCount")) {
+              rect.attr("stroke", "blue");
+            } else {
+              rect.attr("stroke", "pink");
+            }
+
+            rect.attr("fill", rect.attr("original_fill"));
+          });
+        };
+
+        moveRectC(rect);
+
+        for (let [i, rect] of d3
+          .selectAll(".rect-layer > rect")
+          ._groups[0].entries()) {
+          rect = d3.select(rect);
+
+          const x_in = Number(rect.attr("x")) + __VM.getHalfRectSize;
+          const y_in = Number(rect.attr("y")) + __VM.getHalfRectSize;
+
+          if (pip.isInside([x_in, y_in], corridor)) {
+            moveRectC(rect);
+          }
         }
-      }
 
+        __VM.delay(timer).then(() => {
+          d3.select(".corridor").remove();
+        });
+      }
       __VM.delay(timer).then(() => {
-        d3.select(".corridor").remove();
         __VM.step.button_disabled = false;
       });
     },
@@ -747,109 +752,100 @@ export default {
       const y = Number(new_position[1]);
 
       let history = __VM.getRectHistory(rect);
-
+      if (rect.attr("id") === "E38000084") {
+        console.log(history);
+      }
       const x_old = Number(history[0][0]);
       const y_old = Number(history[0][1]);
 
-      if (x !== x_old && y !== y_old) {
-        __VM.writeRectHistory(rect, new_position);
-        history = __VM.getRectHistory(rect);
+      __VM.writeRectHistory(rect, new_position);
+      // if (rect.attr("id") === "E38000084") {
+      //   console.log("history", JSON.stringify(history));
+      //   console.log("line", `[${x},${y}],[${x_old}, ${y_old}]`);
+      //   console.log(
+      //     "line centroid",
+      //     `[${x + __VM.getHalfRectSize},${
+      //       y + __VM.getHalfRectSize
+      //     }],[${x_old}, ${y_old}]`
+      //   );
+      //   const thames =
+      //     "M479.02905797094195,425.36659340425064L470.49523857146625,425.5436279311971L462.1011939917252,427.2689644226242L455.1200084006535,426.134743216086L449.0832472672484,425.6696525097013L444.7842271359499,425.9397051779247L440.12632571073806,425.85268820705267L438.05614729953277,426.26376837979274L436.3372947865795,427.02591702122317L433.9800113402436,426.4318011511317L432.7711480344303,426.3867923730945L431.414954513221,426.389792958297L430.60652717745836,426.91189478352885L431.1807372477197,428.7362505866379L430.99563005401706,429.801458333519L429.3258876128624,429.51940332448567L424.64154230283594,430.1675297282218L422.99446604866534,430.14352504660195L421.37383367930937,428.76025526825777L417.9587948403868,426.389792958297L413.86377039194434,426.0177203931892L412.39424593581504,422.8190965673434L412.0542531310551,422.804093641331L409.7876344326551,422.64506262559945L406.7201437941539,423.39520892621994L403.87175962983133,425.24957058135385L402.67800711534073,423.551239356749L403.3013272574007,422.92411704943027L401.7146941685208,426.5878315816608L398.20521288383156,426.85788424988414L390.7971474378945,423.71327095768305L387.1932237074386,419.5904668894728L383.8839604077748,419.2033913983526L385.85214097755204,416.1728003438458L384.39394961491473,414.9065533883984L382.64865321714683,413.31924381628545L380.01182013134155,414.6214977941626L377.9756410006123,416.74891270272235L375.33880791480703,416.53587115334614L373.3177395754005,417.16899463106984L369.72514893843663,417.0909794158053L366.7256568608874,417.6550894338719L364.99924895227275,417.8561286424382L363.8810503943955,417.4180432028758L362.78929572133285,418.3242199340254L361.6068763003342,418.552264409414L360.02402090928496,418.43224100131476L358.2031705549037,418.975346922964L356.32187703523175,419.50344991860084L353.9381497040812,419.5814651338653L349.86201374479197,418.78631005520765";
+      //   const line = d3.line()([
+      //     [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
+      //     [x_old, y_old],
+      //   ]);
+      //   const intersectPoints = findPathIntersections(thames, line);
+      //   console.log("checkNodeX intersectPoints", intersectPoints);
+      // }
 
-        if (rect.attr("id") === "E38000084") {
-          console.log("history", JSON.stringify(history));
-          console.log("line", `[${x},${y}],[${x_old}, ${y_old}]`);
-          console.log(
-            "line centroid",
-            `[${x + __VM.getHalfRectSize},${y + __VM.getHalfRectSize}],[${
-              x_old + __VM.getHalfRectSize
-            }, ${y_old + __VM.getHalfRectSize}]`
+      const riverCrossingLine = d3.line()([
+        [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
+        [x_old, y_old],
+      ]);
+
+      const checkIntersect = (line) => {
+        let intersectPoints = [];
+        for (const river of Object.keys(__VM.river.rivers)) {
+          const river_path = flattener.flatten_path(
+            document.querySelector(`#${river}`).getPathData(),
+            [
+              __VM.river.rivers[river].translate.finalX,
+              __VM.river.rivers[river].translate.finalY,
+            ]
           );
-          const thames =
-            "M479.02905797094195,425.36659340425064L470.49523857146625,425.5436279311971L462.1011939917252,427.2689644226242L455.1200084006535,426.134743216086L449.0832472672484,425.6696525097013L444.7842271359499,425.9397051779247L440.12632571073806,425.85268820705267L438.05614729953277,426.26376837979274L436.3372947865795,427.02591702122317L433.9800113402436,426.4318011511317L432.7711480344303,426.3867923730945L431.414954513221,426.389792958297L430.60652717745836,426.91189478352885L431.1807372477197,428.7362505866379L430.99563005401706,429.801458333519L429.3258876128624,429.51940332448567L424.64154230283594,430.1675297282218L422.99446604866534,430.14352504660195L421.37383367930937,428.76025526825777L417.9587948403868,426.389792958297L413.86377039194434,426.0177203931892L412.39424593581504,422.8190965673434L412.0542531310551,422.804093641331L409.7876344326551,422.64506262559945L406.7201437941539,423.39520892621994L403.87175962983133,425.24957058135385L402.67800711534073,423.551239356749L403.3013272574007,422.92411704943027L401.7146941685208,426.5878315816608L398.20521288383156,426.85788424988414L390.7971474378945,423.71327095768305L387.1932237074386,419.5904668894728L383.8839604077748,419.2033913983526L385.85214097755204,416.1728003438458L384.39394961491473,414.9065533883984L382.64865321714683,413.31924381628545L380.01182013134155,414.6214977941626L377.9756410006123,416.74891270272235L375.33880791480703,416.53587115334614L373.3177395754005,417.16899463106984L369.72514893843663,417.0909794158053L366.7256568608874,417.6550894338719L364.99924895227275,417.8561286424382L363.8810503943955,417.4180432028758L362.78929572133285,418.3242199340254L361.6068763003342,418.552264409414L360.02402090928496,418.43224100131476L358.2031705549037,418.975346922964L356.32187703523175,419.50344991860084L353.9381497040812,419.5814651338653L349.86201374479197,418.78631005520765";
 
-          const line = d3.line()([
-            [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
-            [x_old + __VM.getHalfRectSize, y_old + __VM.getHalfRectSize],
-          ]);
+          intersectPoints = findPathIntersections(river_path, line);
 
-          const intersectPoints = findPathIntersections(thames, line);
+          if (intersectPoints.length > 0) {
+            intersectPoints = [intersectPoints[0].x, intersectPoints[0].y];
+            __VM.river.rivers[river].translate.x += x - Number(x_old);
+            __VM.river.rivers[river].translate.y += y - Number(y_old);
 
-          console.log("checkNodeX intersectPoints", intersectPoints);
+            d3.select(`.${river} .river-edge`)
+              .append("path")
+              .attr("d", line)
+              .attr("stroke", "black")
+              .attr("stroke-width", "1px")
+              .attr("fill", "none")
+              .attr("marker-end", "url(#arrow)");
+
+            break;
+          }
         }
 
-        const riverCrossingLine = d3.line()([
-          [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
-          [x_old + __VM.getHalfRectSize, y_old + __VM.getHalfRectSize],
-        ]);
+        return intersectPoints;
+      };
 
-        const checkIntersect = (line) => {
-          let intersectPoints = [];
-          for (const river of Object.keys(__VM.river.rivers)) {
-            const river_path = flattener.flatten_path(
-              document.querySelector(`#${river}`).getPathData(),
-              [
-                __VM.river.rivers[river].translate.finalX,
-                __VM.river.rivers[river].translate.finalY,
-              ]
-            );
+      const intersectPoint = checkIntersect(riverCrossingLine);
 
-            intersectPoints = findPathIntersections(river_path, line);
+      // move node back
+      if (intersectPoint.length > 0) {
+        const nodeXCount =
+          Number(rect.attr("nodeXCount")) > 0
+            ? Number(rect.attr("nodeXCount")) + 1
+            : 1;
 
-            if (intersectPoints.length > 0) {
-              intersectPoints = [intersectPoints[0].x, intersectPoints[0].y];
-              __VM.river.rivers[river].translate.x += x - Number(x_old);
-              __VM.river.rivers[river].translate.y += y - Number(y_old);
+        rect
+          .attr("stroke", "blue")
+          .attr("stroke-width", __VM.rect.nodeX.stroke_width)
+          .attr("nodeXCount", nodeXCount)
+          .transition()
+          .duration(__VM.timer * 100)
+          .attr("x", x_old)
+          .attr("y", y_old);
+        __VM.writeRectHistory(rect, [x_old, y_old]);
 
-              d3.select(`.${river} .river-edge`)
-                .append("path")
-                .attr("d", line)
-                .attr("stroke", "black")
-                .attr("stroke-width", "1px")
-                .attr("fill", "none")
-                .attr("marker-end", "url(#arrow)");
-
-              return intersectPoints;
-            }
-          }
-
-          return intersectPoints;
-        };
-
-        const intersectPoint = checkIntersect(riverCrossingLine);
-
-        if (rect.attr("id") === "E38000084") {
-          console.log("checkNodeX intersectPoint actual", intersectPoint);
-        }
-
-        // move node back
-        if (intersectPoint.length > 0) {
-          const nodeXCount =
-            Number(rect.attr("nodeXCount")) > 0
-              ? Number(rect.attr("nodeXCount")) + 1
-              : 1;
-
-          rect
-            .attr("stroke", "blue")
-            .attr("stroke-width", __VM.rect.nodeX.stroke_width)
-            .attr("nodeXCount", nodeXCount)
-            .transition()
-            .duration(__VM.timer * 100)
-
-            // it's not using the correct previous coordinates to move the node
-            .attr("x", history[1][0])
-            .attr("y", history[1][1]);
-
-          if (nodeXCount > __VM.iteration.limit) {
-            // a stalemate nodeX
-            rect.attr("fill", "blue");
-          } else {
-            // reset fill color for non-stalemate nodeX
-            rect.attr("fill", rect.attr("original_fill").trim());
-          }
+        if (nodeXCount > __VM.iteration.limit) {
+          // a stalemate nodeX
+          rect.attr("fill", "blue");
+          rect.attr("nodeXCount", __VM.iteration.limit + 1);
         } else {
-          if (rect.attr("nodeXCount")) {
-            rect.attr("nodeXCount", 0);
-          }
+          // reset fill color for non-stalemate nodeX
+          rect.attr("fill", rect.attr("original_fill").trim());
+        }
+      } else {
+        if (rect.attr("nodeXCount")) {
+          rect.attr("nodeXCount", 0);
         }
       }
     },
@@ -1294,7 +1290,6 @@ export default {
           const trentLast = trentRes[trentRes.length - 1];
 
           const width = 20;
-          const height = 50;
 
           __VM.region.ouse.push([last[0] - width, last[1]]);
           __VM.region.ouse.push([trentLast[0] - width, last[1]]);
@@ -1323,24 +1318,31 @@ export default {
           ._groups[0].entries()) {
           rect = d3.select(rect);
 
-          if (
-            pip.isInside(
-              [
-                Number(rect.attr("x")) + __VM.getHalfRectSize,
-                Number(rect.attr("y")) + __VM.getHalfRectSize,
-              ],
-              d3.line()(__VM.region[river])
-            )
-          ) {
+          if (__VM.isInRiverZone(rect, river)) {
             rect.attr("fill", __VM.colorVariant[river]);
             rect.attr("original_fill", __VM.colorVariant[river]);
+            rect.attr("river", river);
           }
         }
       });
     },
+    isInRiverZone(rect, river) {
+      const __VM = this;
+      return pip.isInside(
+        [
+          Number(rect.attr("x")) + __VM.getHalfRectSize,
+          Number(rect.attr("y")) + __VM.getHalfRectSize,
+        ],
+        d3.line()(__VM.region[river])
+      );
+    },
     writeRectHistory(rect, position) {
       const __VM = this;
       let history = __VM.getRectHistory(rect);
+
+      position[0] = position[0] - __VM.getHalfRectSize;
+      position[1] = position[1] - __VM.getHalfRectSize;
+
       history.unshift(position);
 
       while (history.length > 4) {
@@ -1350,7 +1352,10 @@ export default {
       rect.attr("history", JSON.stringify(history));
     },
     getRectHistory(rect) {
-      return JSON.parse(rect.attr("history"));
+      const __VM = this;
+      return JSON.parse(rect.attr("history")).map((pos) => {
+        return [pos[0] + __VM.getHalfRectSize, pos[1] + __VM.getHalfRectSize];
+      });
     },
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
