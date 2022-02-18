@@ -2397,6 +2397,7 @@
     <bcf:citekey order="53">dorling2011Area</bcf:citekey>
     <bcf:citekey order="54">cano2015Mosaic</bcf:citekey>
     <bcf:citekey order="55">raisz1934Rectangular</bcf:citekey>
+    <bcf:citekey order="55">vankreveld2004Rectangular</bcf:citekey>
     <bcf:citekey order="56">cano2015Mosaic</bcf:citekey>
     <bcf:citekey order="57">warf2008Geography</bcf:citekey>
     <bcf:citekey order="58">warf2008Geography</bcf:citekey>
@@ -2414,21 +2415,24 @@
     <bcf:citekey order="70">miller2016Election</bcf:citekey>
     <bcf:citekey order="71">stabe2016Search</bcf:citekey>
     <bcf:citekey order="72">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="73">sandberg2018Cartogram</bcf:citekey>
+    <bcf:citekey order="73">cruz2017Adapted</bcf:citekey>
     <bcf:citekey order="74">sandberg2018Cartogram</bcf:citekey>
-    <bcf:citekey order="75">thelearningnetwork2020What</bcf:citekey>
-    <bcf:citekey order="76">mccartney20202020</bcf:citekey>
-    <bcf:citekey order="77">wang2021EHRa</bcf:citekey>
-    <bcf:citekey order="78">qgisWelcome</bcf:citekey>
-    <bcf:citekey order="79">blochMapshaper</bcf:citekey>
-    <bcf:citekey order="80">TopoJSON</bcf:citekey>
-    <bcf:citekey order="81">nhsNHS</bcf:citekey>
+    <bcf:citekey order="75">sandberg2018Cartogram</bcf:citekey>
+    <bcf:citekey order="76">thelearningnetwork2020What</bcf:citekey>
+    <bcf:citekey order="77">mccartney20202020</bcf:citekey>
+    <bcf:citekey order="78">wang2021EHRa</bcf:citekey>
+    <bcf:citekey order="79">qgisWelcome</bcf:citekey>
+    <bcf:citekey order="80">blochMapshaper</bcf:citekey>
+    <bcf:citekey order="81">TopoJSON</bcf:citekey>
     <bcf:citekey order="82">opengeographyportalxOpen</bcf:citekey>
-    <bcf:citekey order="83">openstreetmapRelation</bcf:citekey>
-    <bcf:citekey order="84">overpassturboOverpass</bcf:citekey>
-    <bcf:citekey order="85">nhsdigitalClinical</bcf:citekey>
-    <bcf:citekey order="86">dwyer2006fast</bcf:citekey>
-    <bcf:citekey order="87">chen2020Node</bcf:citekey>
+    <bcf:citekey order="83">opengeographyportalxOpen</bcf:citekey>
+    <bcf:citekey order="84">nhsNHS</bcf:citekey>
+    <bcf:citekey order="85">opengeographyportalxOpen</bcf:citekey>
+    <bcf:citekey order="86">openstreetmapRelation</bcf:citekey>
+    <bcf:citekey order="87">overpassturboOverpass</bcf:citekey>
+    <bcf:citekey order="88">nhsdigitalClinical</bcf:citekey>
+    <bcf:citekey order="89">dwyer2006fast</bcf:citekey>
+    <bcf:citekey order="90">chen2020Node</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="anyt">

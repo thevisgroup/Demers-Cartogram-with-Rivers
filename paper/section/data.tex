@@ -1,22 +1,31 @@
 \section{Data Description}
 
-Obtaining the data used in this paper is challenging, especially when an Electronic Health Records (EHR) dataset is involved \cite{wang2021EHRa}. The data acquisition involves multiple complicated steps. The first step is to obtain both geospaital data and EHR data that are compatible for projection. The second step is to pre-process the data for removing empty and erroneous values. The final step is to transform the data into a format that is suitable for visualization.
+Obtaining the data is challenging, especially when an Electronic Health Records (EHR) dataset is involved \cite{wang2021EHRa}. The data acquisition involves multiple steps. The first step is to obtain both geospatial boundaries and EHR data that match one another. The second step is to pre-process the EHR data for removing empty and erroneous values. The final step is to transform the data into a format that is suitable for visualization.
 
 \subsection{Geospatial Data}
 
-Geospatial data, commonly known as shapefiles, were obtained from the following sources. After acquiring these data, we used QGIS \cite{qgisWelcome} to manually adjust projections and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to converted the merged shapefile into a TopoJSON \cite{TopoJSON} file to reduce the file size in order to improve the performance of our software.
+Geospatial boundaries, or shapefiles, were obtained from the following sources. After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to convert the merged shapefile into a TopoJSON \cite{TopoJSON} file to reduce the file size and improve the performance of our implementation.
+
+{
+\begin{figure}[tb!]
+    \centering
+    \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
+    \caption{A map of 106 CCGs in England as of April 2021, obtained from the Open Geography portalx \cite{opengeographyportalxOpen}.}
+    \label{fig:ccg}
+\end{figure}
+}
 
 \subsubsection{Clinical Commissioning Groups}
 
-Clinical Commissioning Groups (CCGs) are the main geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs is changing each year due to the NHS annual re-organization, the most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 as at the time of writing, there is no EHR data published based on the latest CCG re-organization took place in April 2021.
+Clinical Commissioning Groups (CCGs) are the main geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes each year due to the NHS re-organization. The most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, there is no public EHR data published based on the latest CCG re-organization that took place in April 2021.
 
 \subsubsection{Rivers}
 
-We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Great Ouse in England. These rivers were chosen as they pass through regions with clusters of CCGs, and provide informative geographical and topological cues. 
+We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Great Ouse in England. These rivers were chosen as they pass through regions with dense population, and provide informative geographical and topological cues. 
 
-We first obtained a relation ID by searching a river, e.g. River Thames, on OpenStreetMap. The obtained relation ID was used to construct a query (See Listing~\ref{overpass}) which enabled use to download the entire river shapefile through Overpass Turbo \cite{overpassturboOverpass}.
+We first obtain a relation ID by searching for a river, e.g. River Thames, on OpenStreetMap. The relation ID is used to construct a query (See Listing~\ref{overpass}) which enables the user to download the entire river shapefile using Overpass Turbo \cite{overpassturboOverpass}.
 
-\begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via Overpass Turbo API.}, label={overpass},captionpos=b]
+\begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via the Overpass Turbo API.}, label={overpass},captionpos=b]
     relation(2263653);>>;
     out skel;
 \end{lstlisting}

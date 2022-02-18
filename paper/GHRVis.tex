@@ -115,6 +115,11 @@
 \usepackage{algpseudocode}
 \usepackage{algorithm}
 \usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{wrapfig}
+
+\DeclareMathAlphabet{\mathbcal}{OMS}{cmsy}{b}{n}
 
 \author[Q. Wang \& R. S. Laramee]
 {\parbox{\textwidth}{\centering Q. Wang
@@ -140,10 +145,10 @@
 \let\origsubsubsection=\subsubsection
 \renewcommand\subsubsection[1]{\origsubsubsection{#1}\label{subsubsec:{#1}}}
 
-\newcommand{\secref}[1]{Section \ref{#1}}
-\newcommand{\figref}[1]{Figure \ref{#1}}
-\newcommand{\tableref}[1]{Table \ref{#1}}
-\newcommand{\algoref}[1]{Algorithm \ref{#1}}
+\newcommand{\secref}[1]{Section~\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\tableref}[1]{Table~\ref{#1}}
+\newcommand{\algoref}[1]{Algorithm~\ref{#1}}
 \newcommand{\phantomref}[1]{$\hyperref[#1]{\ref{#1}}$}
 
 % software name
@@ -161,7 +166,7 @@
 \newcommand{\mycolorbox}[2]{\begingroup\setlength{\fboxsep}{2pt}\colorbox{#1}{#2}\endgroup}
 
 % table cite
-\newcommand{\citea}[1]{\citeauthor{#1}\cite{#1}}
+\newcommand{\citea}[1]{\citeauthor{#1}~\cite{#1}}
 
 % customized table headers
 \newcommand{\theaderR}[1]{\multicolumn{1}{c|}{\cellcolor{Mycolor3} \textbf{\rotatebox{90}{#1 \phantom{-} }}}}
@@ -174,7 +179,7 @@
 \algnewcommand\algorithmicswitch{\textbf{switch}}
 \algnewcommand\algorithmiccase{\textbf{case}}
 \algnewcommand\algorithmicdefault{\textbf{default}}
-% New "environments"
+
 \algdef{SE}[SWITCH]{Switch}{EndSwitch}[1]{\algorithmicswitch\ #1\textbf{:}}{\algorithmicend\ \algorithmicswitch}%
 \algtext*{EndSwitch}%
 
@@ -183,6 +188,20 @@
 
 \algdef{SE}[DEFUALT]{Default}{EndDefault}{\algorithmicdefault\textbf{:}}{\algorithmicend\ \algorithmicdefault}%
 \algtext*{EndDefault}%
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+\newcommand{\thumbnail}[2]{
+      \setlength{\intextsep}{3pt}
+      \setlength{\columnsep}{3pt}
+      \begin{wrapfigure}{r}{0.2\columnwidth}
+        \begin{center}
+          \includegraphics[width=0.2\columnwidth]{figure/related/"#1".png}
+        \end{center}
+      \end{wrapfigure}
+      #2
+}
 
 \maketitle
 
