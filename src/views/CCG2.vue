@@ -112,6 +112,12 @@
                     >Map to
                     {{ rect.rectMapToColor ? "Size" : "Color" }}</b-button
                   > -->
+                  <b-button
+                    block
+                    :variant="(centroid.visibility ? '' : 'outline-') + 'info'"
+                    v-on:click="toggleFeatureVisibility('centroid')"
+                    >Centroid</b-button
+                  >
 
                   <b-button block variant="info">
                     Rect size: {{ rect.size
@@ -390,6 +396,9 @@ export default {
         .selectAll("rect")
         .data(__VM.ccg_list)
         .enter()
+        .append("g");
+
+      rects
         .append("rect")
         .attr("colormap", (d) => colormap(getIndicatorRate(d) / 100))
         .attr("x", (d) => path.centroid(d)[0] - __VM.getHalfRectSize)
@@ -433,6 +442,14 @@ export default {
           // __VM.setRectColor(this);
           tooltip.style("visibility", "hidden");
         });
+
+      rects
+        .append("circle")
+        .attr("class", "centroid-layer")
+        .attr("cx", (d) => path.centroid(d)[0])
+        .attr("cy", (d) => path.centroid(d)[1])
+        .attr("fill", "black")
+        .attr("r", 0.5);
 
       // __VM.svg
       //   .append("path")
@@ -480,7 +497,7 @@ export default {
 
       // prepare an array for webcola
       const nodeToORA = Array.from(
-        d3.selectAll(".rect-layer > rect")._groups[0]
+        d3.selectAll(".rect-layer > g > rect")._groups[0]
       ).map((r) => {
         r = d3.select(r);
 
@@ -499,7 +516,7 @@ export default {
 
       // draw river crossing edges
       for (let [i, rect] of d3
-        .selectAll(".rect-layer > rect")
+        .selectAll(".rect-layer > g > rect")
         ._groups[0].entries()) {
         // redraw rects using new coordinates
 
@@ -507,11 +524,6 @@ export default {
 
         const x_new = nodeToORA[i].x;
         const y_new = nodeToORA[i].y;
-
-        const history = __VM.getRectHistory(rect);
-
-        const x_old = history[0][0];
-        const y_old = history[0][1];
 
         rect
           .attr("stroke", () => {
@@ -538,19 +550,13 @@ export default {
           })
           //.attr("fill", __VM.colorVariant[__VM.rect.color])
           .transition()
-          .duration(timer)
+          //.duration(timer)
           .attr("x", x_new)
           .attr("y", y_new);
 
-        __VM.checkNodeX(rect, [x_new, y_new]);
+        __VM.moveCentroid(rect, [x_new, y_new]);
 
-        // if (repeat && rect.attr("id") === "E38000084") {
-        //   console.log(x_old !== x_new || y_old !== y_new);
-        //   console.log(rect.attr("x"), rect.attr("y"));
-        //   console.log(x_new, y_new);
-        //   console.log(rect.attr("history"));
-        //   console.log(history);
-        // }
+        __VM.checkNodeX(rect, [x_new, y_new]);
       }
 
       let translate = false;
@@ -700,12 +706,15 @@ export default {
             [x, y],
             __VM.getHalfRectSize
           )[1];
+          //const centroid = d3.select(rect).select((d) => d.nextElementSibling);
 
           rect
             .transition()
             //.duration(timer)
             .attr("x", newPos[0])
             .attr("y", newPos[1]);
+
+          __VM.moveCentroid(rect, newPos);
 
           __VM.delay(timer).then(() => {
             __VM.checkNodeX(rect, newPos);
@@ -724,7 +733,7 @@ export default {
         moveRectC(rect);
 
         for (let [i, rect] of d3
-          .selectAll(".rect-layer > rect")
+          .selectAll(".rect-layer > g > rect")
           ._groups[0].entries()) {
           rect = d3.select(rect);
 
@@ -752,31 +761,11 @@ export default {
       const y = Number(new_position[1]);
 
       let history = __VM.getRectHistory(rect);
-      if (rect.attr("id") === "E38000084") {
-        console.log(history);
-      }
+
       const x_old = Number(history[0][0]);
       const y_old = Number(history[0][1]);
 
       __VM.writeRectHistory(rect, new_position);
-      // if (rect.attr("id") === "E38000084") {
-      //   console.log("history", JSON.stringify(history));
-      //   console.log("line", `[${x},${y}],[${x_old}, ${y_old}]`);
-      //   console.log(
-      //     "line centroid",
-      //     `[${x + __VM.getHalfRectSize},${
-      //       y + __VM.getHalfRectSize
-      //     }],[${x_old}, ${y_old}]`
-      //   );
-      //   const thames =
-      //     "M479.02905797094195,425.36659340425064L470.49523857146625,425.5436279311971L462.1011939917252,427.2689644226242L455.1200084006535,426.134743216086L449.0832472672484,425.6696525097013L444.7842271359499,425.9397051779247L440.12632571073806,425.85268820705267L438.05614729953277,426.26376837979274L436.3372947865795,427.02591702122317L433.9800113402436,426.4318011511317L432.7711480344303,426.3867923730945L431.414954513221,426.389792958297L430.60652717745836,426.91189478352885L431.1807372477197,428.7362505866379L430.99563005401706,429.801458333519L429.3258876128624,429.51940332448567L424.64154230283594,430.1675297282218L422.99446604866534,430.14352504660195L421.37383367930937,428.76025526825777L417.9587948403868,426.389792958297L413.86377039194434,426.0177203931892L412.39424593581504,422.8190965673434L412.0542531310551,422.804093641331L409.7876344326551,422.64506262559945L406.7201437941539,423.39520892621994L403.87175962983133,425.24957058135385L402.67800711534073,423.551239356749L403.3013272574007,422.92411704943027L401.7146941685208,426.5878315816608L398.20521288383156,426.85788424988414L390.7971474378945,423.71327095768305L387.1932237074386,419.5904668894728L383.8839604077748,419.2033913983526L385.85214097755204,416.1728003438458L384.39394961491473,414.9065533883984L382.64865321714683,413.31924381628545L380.01182013134155,414.6214977941626L377.9756410006123,416.74891270272235L375.33880791480703,416.53587115334614L373.3177395754005,417.16899463106984L369.72514893843663,417.0909794158053L366.7256568608874,417.6550894338719L364.99924895227275,417.8561286424382L363.8810503943955,417.4180432028758L362.78929572133285,418.3242199340254L361.6068763003342,418.552264409414L360.02402090928496,418.43224100131476L358.2031705549037,418.975346922964L356.32187703523175,419.50344991860084L353.9381497040812,419.5814651338653L349.86201374479197,418.78631005520765";
-      //   const line = d3.line()([
-      //     [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
-      //     [x_old, y_old],
-      //   ]);
-      //   const intersectPoints = findPathIntersections(thames, line);
-      //   console.log("checkNodeX intersectPoints", intersectPoints);
-      // }
 
       const riverCrossingLine = d3.line()([
         [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
@@ -801,14 +790,6 @@ export default {
             __VM.river.rivers[river].translate.x += x - Number(x_old);
             __VM.river.rivers[river].translate.y += y - Number(y_old);
 
-            d3.select(`.${river} .river-edge`)
-              .append("path")
-              .attr("d", line)
-              .attr("stroke", "black")
-              .attr("stroke-width", "1px")
-              .attr("fill", "none")
-              .attr("marker-end", "url(#arrow)");
-
             break;
           }
         }
@@ -830,10 +811,28 @@ export default {
           .attr("stroke-width", __VM.rect.nodeX.stroke_width)
           .attr("nodeXCount", nodeXCount)
           .transition()
-          .duration(__VM.timer * 100)
+          //.duration(__VM.timer * 100)
           .attr("x", x_old)
           .attr("y", y_old);
+
+        __VM.moveCentroid(rect, [x_old, y_old]);
+
         __VM.writeRectHistory(rect, [x_old, y_old]);
+
+        // TODO: fix river edge
+        d3.select(`.river-edge`)
+          .append("path")
+          .attr(
+            "d",
+            d3.line()([
+              [x_old, y_old],
+              [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
+            ])
+          )
+          .attr("stroke", "black")
+          .attr("stroke-width", "1px")
+          .attr("fill", "none")
+          .attr("marker-end", "url(#arrow)");
 
         if (nodeXCount > __VM.iteration.limit) {
           // a stalemate nodeX
@@ -908,7 +907,7 @@ export default {
 
       const sizeDiff = (__VM.rect.previousSize - size) / 2;
 
-      d3.selectAll(".rect-layer > rect")
+      d3.selectAll(".rect-layer > g > rect")
         .attr("width", size)
         .attr("height", size)
         .transition()
@@ -929,7 +928,7 @@ export default {
         if (singleRect) {
           changeColor(singleRect, d3.select(singleRect).attr("colormap"));
         } else {
-          d3.selectAll(".rect-layer > rect")._groups[0].forEach((r) => {
+          d3.selectAll(".rect-layer > g> rect")._groups[0].forEach((r) => {
             changeColor(r, __VM.colorVariant[__VM.rect.color]);
           });
 
@@ -939,7 +938,7 @@ export default {
         if (singleRect) {
           changeColor(singleRect, __VM.colorVariant[__VM.rect.color]);
         } else {
-          d3.selectAll(".rect-layer > rect")._groups[0].forEach((r) => {
+          d3.selectAll(".rect-layer > g > rect")._groups[0].forEach((r) => {
             const colormap = d3.select(r).attr("colormap");
             changeColor(r, colormap);
           });
@@ -1141,7 +1140,7 @@ export default {
             .attr("fill", "none");
 
           for (const [i, rect] of d3
-            .selectAll(".rect-layer > rect")
+            .selectAll(".rect-layer > g > rect")
             ._groups[0].entries()) {
             const inside = pip.isInside(
               [d3.select(rect).attr("x"), d3.select(rect).attr("y")],
@@ -1314,7 +1313,7 @@ export default {
       const __VM = this;
       Object.keys(__VM.river.rivers).forEach((river) => {
         for (let [i, rect] of d3
-          .selectAll(".rect-layer > rect")
+          .selectAll(".rect-layer > g > rect")
           ._groups[0].entries()) {
           rect = d3.select(rect);
 
@@ -1335,6 +1334,16 @@ export default {
         ],
         d3.line()(__VM.region[river])
       );
+    },
+    moveCentroid(rect, position) {
+      const __VM = this;
+      rect
+        .select(function () {
+          return this.nextElementSibling;
+        })
+        .transition()
+        .attr("cx", position[0] + __VM.getHalfRectSize)
+        .attr("cy", position[1] + __VM.getHalfRectSize);
     },
     writeRectHistory(rect, position) {
       const __VM = this;
@@ -1372,6 +1381,9 @@ export default {
       log: "",
       corridor: {
         length: 30,
+      },
+      centroid: {
+        visibility: true,
       },
       rect: {
         rectSizeUniformed: false,
