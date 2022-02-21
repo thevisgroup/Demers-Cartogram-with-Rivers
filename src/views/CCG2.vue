@@ -125,10 +125,10 @@
                       id="slider-rect-size"
                       :value="rect.size"
                       type="range"
-                      min="0.5"
+                      min="0.25"
                       :max="rect.maxSize > 0 ? rect.maxSize : 100"
-                      step="0.5"
-                      @change="updateRectSizeFromInput(rect.size, $event)"
+                      step="0.25"
+                      @change="setRectSize(rect.size, $event)"
                     ></b-form-input
                   ></b-button>
 
@@ -166,11 +166,11 @@
                   >
 
                   <b-form-checkbox
-                    v-model="step.enabled"
+                    v-model="step.continous"
                     name="check-button"
                     switch
                   >
-                    Step mode enabled: {{ step.enabled }}
+                    Continous mode: {{ step.continous }}
                   </b-form-checkbox>
 
                   <b-button block variant="info">
@@ -360,15 +360,6 @@ export default {
 
       const path = d3.geoPath();
 
-      const getBorderingColor = (d) => {
-        if (d.properties.river.length > 0) {
-          return __VM.colorVariant[
-            __VM.river.rivers[d.properties.river[0]].color
-          ];
-        } else {
-          return "none";
-        }
-      };
       const colormap = d3.scaleSequential(d3.interpolatePRGn);
 
       // CCG layer
@@ -451,20 +442,6 @@ export default {
         .attr("fill", "black")
         .attr("r", 0.5);
 
-      // __VM.svg
-      //   .append("path")
-      //   .attr("class", "river-x")
-      //   .attr(
-      //     "d",
-      //     d3.line()([
-      //       [419.1343268883818, 426.38749019878526],
-      //       [419.89112153497354, 426.22082353211863],
-      //     ])
-      //   )
-      //   .attr("stroke", "pink")
-      //   .attr("stroke-width", "1px")
-      //   .attr("fill", "none");
-
       // original river layer
       const river_layer = svg.append("g").attr("class", "river-layer");
       for (const river of Object.keys(__VM.river.rivers)) {
@@ -487,9 +464,7 @@ export default {
 
       // prepration before removing overlaps
       if (!repeat) {
-        __VM.rect.previousSize = __VM.rect.size;
-        __VM.rect.size = __VM.rect.size + __VM.rect.sizeStep;
-        __VM.setRectSize();
+        __VM.setRectSize(__VM.rect.size, __VM.rect.size + __VM.rect.sizeStep);
       }
 
       // preparation before redrawing rects and edges
@@ -551,8 +526,8 @@ export default {
           //.attr("fill", __VM.colorVariant[__VM.rect.color])
           .transition()
           //.duration(timer)
-          .attr("x", x_new)
-          .attr("y", y_new);
+          .attr("x", x_new - (repeat ? 0 : __VM.rect.sizeStep / 2))
+          .attr("y", y_new - (repeat ? 0 : __VM.rect.sizeStep / 2));
 
         __VM.moveCentroid(rect, [x_new, y_new]);
 
@@ -609,6 +584,10 @@ export default {
 
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
+
+          if (repeat && __VM.step.continous) {
+            __VM.removeOverlap();
+          }
         }
       });
     },
@@ -639,16 +618,25 @@ export default {
         // draw a line that passes through a given point
         const drawLineFromPoint = (slope, p, distance, sideline = false) => {
           let a, b;
-
           if (slope === 0) {
             a = [p[0] + Number(sideline ? 0 : distance), p[1]];
-            b = [p[0] - distance, p[1]];
+
+            if (x_diff < 0) {
+              b = [p[0] + distance, p[1]];
+            } else {
+              b = [p[0] - distance, p[1]];
+            }
           } else if (
             slope === Number.POSITIVE_INFINITY ||
             slope === Number.NEGATIVE_INFINITY
           ) {
             a = [p[0], p[1] + Number(sideline ? 0 : distance)];
-            b = [p[0], p[1] - distance];
+
+            if (y_diff < 0) {
+              b = [p[0], p[1] + distance];
+            } else {
+              b = [p[0], p[1] - distance];
+            }
           } else {
             const dx = distance / Math.sqrt(1 + slope * slope);
             const dy = slope * dx;
@@ -657,7 +645,12 @@ export default {
               p[0] + Number(sideline ? 0 : dx),
               p[1] + Number(sideline ? 0 : dy),
             ];
-            b = [p[0] - dx, p[1] - dy];
+
+            if (x_diff > 0 && slope === 1 && sideline) {
+              b = [p[0] + dx, p[1] + dy];
+            } else {
+              b = [p[0] - dx, p[1] - dy];
+            }
           }
 
           // console.log(slope, Math.hypot(a[0] - b[0], a[1] - b[1]));
@@ -695,7 +688,7 @@ export default {
           .attr("stroke-width", "1")
           .attr("fill", "none");
 
-        const moveRectC = (rect) => {
+        const moveRectInCorridor = (rect) => {
           const history = __VM.getRectHistory(rect);
 
           const x = Number(history[0][0]);
@@ -704,15 +697,11 @@ export default {
           const newPos = drawLineFromPoint(
             slope,
             [x, y],
-            __VM.getHalfRectSize
+            __VM.getHalfRectSize,
+            true
           )[1];
-          //const centroid = d3.select(rect).select((d) => d.nextElementSibling);
 
-          rect
-            .transition()
-            //.duration(timer)
-            .attr("x", newPos[0])
-            .attr("y", newPos[1]);
+          rect.transition().attr("x", newPos[0]).attr("y", newPos[1]);
 
           __VM.moveCentroid(rect, newPos);
 
@@ -730,18 +719,22 @@ export default {
           });
         };
 
-        moveRectC(rect);
+        moveRectInCorridor(rect);
 
-        for (let [i, rect] of d3
+        for (let [i, rect_local] of d3
           .selectAll(".rect-layer > g > rect")
           ._groups[0].entries()) {
-          rect = d3.select(rect);
+          rect_local = d3.select(rect_local);
 
-          const x_in = Number(rect.attr("x")) + __VM.getHalfRectSize;
-          const y_in = Number(rect.attr("y")) + __VM.getHalfRectSize;
+          if (rect_local.attr("id") === rect.attr("id")) {
+            continue;
+          }
+
+          const x_in = Number(rect_local.attr("x")) + __VM.getHalfRectSize;
+          const y_in = Number(rect_local.attr("y")) + __VM.getHalfRectSize;
 
           if (pip.isInside([x_in, y_in], corridor)) {
-            moveRectC(rect);
+            moveRectInCorridor(rect_local);
           }
         }
 
@@ -750,6 +743,7 @@ export default {
         });
       }
       __VM.delay(timer).then(() => {
+        __VM.removeOverlap(true);
         __VM.step.button_disabled = false;
       });
     },
@@ -767,13 +761,8 @@ export default {
 
       __VM.writeRectHistory(rect, new_position);
 
-      const riverCrossingLine = d3.line()([
-        [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
-        [x_old, y_old],
-      ]);
-
       const checkIntersect = (line) => {
-        let intersectPoints = [];
+        let intersect;
         for (const river of Object.keys(__VM.river.rivers)) {
           const river_path = flattener.flatten_path(
             document.querySelector(`#${river}`).getPathData(),
@@ -783,10 +772,16 @@ export default {
             ]
           );
 
-          intersectPoints = findPathIntersections(river_path, line);
+          intersect = findPathIntersections(river_path, line, true);
 
-          if (intersectPoints.length > 0) {
-            intersectPoints = [intersectPoints[0].x, intersectPoints[0].y];
+          if (intersect) {
+            // TODO some detection with wrong result
+            if (rect.attr("id") === "E38000010") {
+              console.log(x, y);
+              console.log(x_old, y_old);
+              console.log("");
+            }
+
             __VM.river.rivers[river].translate.x += x - Number(x_old);
             __VM.river.rivers[river].translate.y += y - Number(y_old);
 
@@ -794,13 +789,18 @@ export default {
           }
         }
 
-        return intersectPoints;
+        return intersect;
       };
 
-      const intersectPoint = checkIntersect(riverCrossingLine);
+      const riverCrossingLine = d3.line()([
+        [x + __VM.getHalfRectSize, y + __VM.getHalfRectSize],
+        [x_old, y_old],
+      ]);
+
+      const intersect = checkIntersect(riverCrossingLine);
 
       // move node back
-      if (intersectPoint.length > 0) {
+      if (intersect) {
         const nodeXCount =
           Number(rect.attr("nodeXCount")) > 0
             ? Number(rect.attr("nodeXCount")) + 1
@@ -890,32 +890,27 @@ export default {
         __VM[type].visibility ? "visible" : "hidden"
       );
     },
-    updateRectSizeFromInput(old, current) {
+    setRectSize(current, next, uniformed = false) {
       const __VM = this;
-      __VM.rect.previousSize = old;
-      __VM.rect.size = Number(current);
-
-      __VM.setRectSize();
-    },
-    setRectSize(uniformed = false) {
-      const __VM = this;
+      __VM.rect.previousSize = current;
+      __VM.rect.size = Number(next);
       __VM.rect.rectSizeUniformed = uniformed;
-      let size = __VM.rect.size;
+
       if (__VM.rect.rectSizeUniformed) {
-        size = 10;
+        next = 10;
       }
 
-      const sizeDiff = (__VM.rect.previousSize - size) / 2;
+      const sizeDiff = (next - current) / 2;
 
       d3.selectAll(".rect-layer > g > rect")
-        .attr("width", size)
-        .attr("height", size)
+        .attr("width", next)
+        .attr("height", next)
         .transition()
         .attr("x", function () {
-          return Number(d3.select(this).attr("x")) + sizeDiff;
+          return Number(d3.select(this).attr("x")) - sizeDiff;
         })
         .attr("y", function () {
-          return Number(d3.select(this).attr("y")) + sizeDiff;
+          return Number(d3.select(this).attr("y")) - sizeDiff;
         });
     },
     setRectColor(singleRect) {
@@ -1337,6 +1332,7 @@ export default {
     },
     moveCentroid(rect, position) {
       const __VM = this;
+
       rect
         .select(function () {
           return this.nextElementSibling;
@@ -1374,7 +1370,7 @@ export default {
     return {
       step: {
         button_disabled: false,
-        enabled: true,
+        continous: true,
       },
       iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
       timer: 10,
