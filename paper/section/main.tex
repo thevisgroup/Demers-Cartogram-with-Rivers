@@ -185,7 +185,6 @@ As the VPSC always tries to produce an optimal node layout where node spread and
     $ \mathcal{C}_l \gets $ the length of a corridor \\
     $ \mathcal{C}_w \gets $ the width of a corridor \\
     $ \mathcal{D} \gets $ the distance to move nodes within the corridor \\
-    $ \mathcal{S} \gets $ the current size of all nodes \\
 
     \textbf{Local variables:} \\
     $ slope \gets $ the slope of $ \overrightarrow{\mathcal{N}\mathcal{N}_{p}\strut} $ \\
@@ -217,6 +216,7 @@ As the VPSC always tries to produce an optimal node layout where node spread and
                 \end{bmatrix} $
 
             \ForEach{$ {n}_{in}^i $ inside $ corridor $}
+                \State $ {n}_{in}^i.dx \gets \Delta x $, $ {n}_{in}^i.dy \gets \Delta y $
                 \State $ e_{d} = $ \Call{DeriveEdge}{$ slope $, $ {n}_{in}^i $, $ \mathcal{D} $}
 
                 \State TranslateNode ($ {n}_{in}^i, e_{d}.b $)
@@ -255,6 +255,12 @@ As the VPSC always tries to produce an optimal node layout where node spread and
                     \State $ a.x \gets Point.x + Length $
                 \EndIf
                 \State $ a.y \gets Point.y $
+
+                \If{$ Point.dx < 0 $}
+                    \State $ a.x \gets Point.x + Length $
+                \Else
+                    \State $ a.x \gets Point.x - Length $
+                \EndIf
                 \State $ b.x \gets Point.x - Length $,~$ b.y \gets Point.y $
             \EndCase
             \Case{$ \infty $ or $ -\infty $}
@@ -266,6 +272,12 @@ As the VPSC always tries to produce an optimal node layout where node spread and
                     \State $ a.y \gets Point.y + Length $
                 \EndIf
 
+                \If{$ Point.dy < 0 $}
+                    \State $ a.y \gets Point.y + Length $
+                \Else
+                    \State $ a.y \gets Point.y - Length $
+                \EndIf
+
                 \State $ b.x \gets Point.x $,~$ b.y \gets Point.y - Length $
             \EndCase
             \Default
@@ -275,8 +287,13 @@ As the VPSC always tries to produce an optimal node layout where node spread and
                 \Else
                     \State $ a.x \gets Point.x + \Delta x $,~$ a.y \gets Point.y + \Delta y $
                 \EndIf
+
+                \If{$ Point.dx > 0 $ and $ Slope = 1 $ and $ IsSideEdge = True $}
+                    \State $ b.x \gets Point.x + \Delta x $,~$ b.y \gets Point.y + \Delta y $
+                \Else
+                    \State $ b.x \gets Point.x - \Delta x $,~$ b.y \gets Point.y - \Delta y $
+                \EndIf
                 
-                \State $ b.x \gets Point.x - \Delta x $,~$ b.y \gets Point.y - \Delta y $
             \EndDefault
 
         \EndSwitch
