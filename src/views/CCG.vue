@@ -92,25 +92,25 @@
                 <td>
                   <!-- <b-button
                     block
-                    :variant="(rect.visibility ? '' : 'outline-') + rect.color"
-                    v-on:click="toggleFeatureVisibility('rect')"
+                    :variant="(node.visibility ? '' : 'outline-') + node.color"
+                    v-on:click="toggleFeatureVisibility('node')"
                     >Rectangle</b-button
                   > -->
 
                   <!-- <b-button
                     block
-                    :variant="rect.rectSizeUniformed ? 'danger' : 'primary'"
-                    v-on:click="setRectSize(!rect.rectSizeUniformed)"
-                    >{{ rect.rectSizeUniformed ? "Variable" : "Uniform" }} Rect
+                    :variant="node.nodeSizeUniformed ? 'danger' : 'primary'"
+                    v-on:click="setNodeSize(!node.nodeSizeUniformed)"
+                    >{{ node.nodeSizeUniformed ? "Variable" : "Uniform" }} Rect
                     Size</b-button
                   > -->
 
                   <!-- <b-button
                     block
-                    :variant="rect.rectMapToColor ? 'danger' : 'primary'"
+                    :variant="node.nodeMapToColor ? 'danger' : 'primary'"
                     v-on:click="setRectColor()"
                     >Map to
-                    {{ rect.rectMapToColor ? "Size" : "Color" }}</b-button
+                    {{ node.nodeMapToColor ? "Size" : "Color" }}</b-button
                   > -->
                   <b-button
                     block
@@ -120,23 +120,23 @@
                   >
 
                   <b-button block variant="info">
-                    Rect size: {{ rect.size
+                    Node size: {{ node.size
                     }}<b-form-input
-                      id="slider-rect-size"
-                      :value="rect.size"
+                      id="slider-node-size"
+                      :value="node.size"
                       type="range"
                       min="0.25"
-                      :max="rect.maxSize > 0 ? rect.maxSize : 100"
+                      :max="node.maxSize > 0 ? node.maxSize : 100"
                       step="0.25"
-                      @change="setRectSize(rect.size, $event)"
+                      @change="setNodeSize(node.size, $event)"
                     ></b-form-input
                   ></b-button>
 
                   <b-button block variant="info">
-                    Rect Increment: {{ rect.sizeStep
+                    Node size increment: {{ node.sizeStep
                     }}<b-form-input
-                      id="slider-rect-size"
-                      v-model="rect.sizeStep"
+                      id="slider-node-size"
+                      v-model="node.sizeStep"
                       type="range"
                       min="0.25"
                       max="10"
@@ -148,7 +148,7 @@
                     <b-col sm="5">Max node size:</b-col>
                     <b-col sm="7">
                       <input
-                        v-model="rect.maxSize"
+                        v-model="node.maxSize"
                         type="number"
                         class="form-control"
                         placeholder="Max node size allowed"
@@ -173,7 +173,11 @@
                     Continous mode: {{ step.continous }}
                   </b-form-checkbox>
 
-                  <b-button block variant="info">
+                  <b-form-checkbox v-model="debug" name="check-button" switch>
+                    Debug mode: {{ debug }}
+                  </b-form-checkbox>
+
+                  <!-- <b-button block variant="info">
                     Iteration limit: {{ iteration.limit
                     }}<b-form-input
                       id="slider-iteration-limit"
@@ -183,7 +187,7 @@
                       max="10"
                       step="1"
                     ></b-form-input
-                  ></b-button>
+                  ></b-button> -->
 
                   <b-form-group>
                     <b-form-checkbox-group
@@ -293,7 +297,7 @@ export default {
     async init() {
       const __VM = this;
 
-      const calculateRectSize = (d) => {
+      const calculatenodesize = (d) => {
         return getIndicatorRate(d) * 0.2;
       };
 
@@ -380,41 +384,41 @@ export default {
         });
 
       // CCG data layer
-      const rects = svg
+      const nodes = svg
         .append("g")
-        .attr("class", "rect-layer")
+        .attr("class", "node-layer")
         // .style("visibility", "hidden")
         .selectAll("rect")
         .data(__VM.ccg_list)
         .enter()
         .append("g");
 
-      rects
+      nodes
         .append("rect")
         .attr("colormap", (d) => colormap(getIndicatorRate(d) / 100))
-        .attr("x", (d) => path.centroid(d)[0] - __VM.getHalfRectSize)
-        .attr("y", (d) => path.centroid(d)[1] - __VM.getHalfRectSize)
+        .attr("x", (d) => path.centroid(d)[0] - __VM.getHalfNodeSize)
+        .attr("y", (d) => path.centroid(d)[1] - __VM.getHalfNodeSize)
         .attr("history", (d) =>
           JSON.stringify([
             [
-              path.centroid(d)[0] - __VM.getHalfRectSize,
-              path.centroid(d)[1] - __VM.getHalfRectSize,
-              __VM.rect.size,
+              path.centroid(d)[0] - __VM.getHalfNodeSize,
+              path.centroid(d)[1] - __VM.getHalfNodeSize,
+              __VM.node.size,
             ],
           ])
         )
         .attr("id", (d) => d.properties.id)
         // .attr("width", (d) => getIndicatorRate(d))
         // .attr("height", (d) => getIndicatorRate(d))
-        .attr("width", __VM.rect.size)
-        .attr("height", __VM.rect.size)
+        .attr("width", __VM.node.size)
+        .attr("height", __VM.node.size)
         .attr("stroke", "black")
         .attr("stroke-width", "0.3")
         .attr("fill", (d) => {
-          return __VM.colorVariant[__VM.rect.color];
+          return __VM.colorVariant[__VM.node.color];
         })
         .attr("original_fill", (d) => {
-          return __VM.colorVariant[__VM.rect.color];
+          return __VM.colorVariant[__VM.node.color];
         })
         .on("mouseover", function (e, d) {
           tooltip
@@ -435,7 +439,7 @@ export default {
           tooltip.style("visibility", "hidden");
         });
 
-      rects
+      nodes
         .append("circle")
         .attr("class", "centroid-layer")
         .attr("cx", (d) => path.centroid(d)[0])
@@ -459,28 +463,28 @@ export default {
       const __VM = this;
       __VM.step.button_disabled = true;
 
-      if (!__VM.rect.visibility) {
+      if (!__VM.node.visibility) {
         __VM.toggleFeatureVisibility("rect");
       }
 
       // prepration before removing overlaps
       if (!repeat) {
-        __VM.setRectSize(__VM.rect.size, __VM.rect.size + __VM.rect.sizeStep);
+        __VM.setNodeSize(__VM.node.size, __VM.node.size + __VM.node.sizeStep);
       }
 
-      // preparation before redrawing rects and edges
+      // preparation before redrawing nodes and edges
       d3.selectAll(".river-edge > path").remove();
 
       // prepare an array for webcola
       const nodeToORA = Array.from(
-        d3.selectAll(".rect-layer > g > rect")._groups[0]
+        d3.selectAll(".node-layer > g > rect")._groups[0]
       ).map((r) => {
         r = d3.select(r);
 
         const x = Number(r.attr("x")),
           y = Number(r.attr("y")),
-          w = __VM.rect.size,
-          h = __VM.rect.size;
+          w = __VM.node.size,
+          h = __VM.node.size;
 
         return new cola.Rectangle(x, x + w, y, y + h);
       });
@@ -488,50 +492,51 @@ export default {
       // remove overlaps
       cola.removeOverlaps(nodeToORA);
 
-      const timer = 20 * __VM.timer * __VM.rect.size;
+      const timer = 20 * __VM.timer * __VM.node.size;
 
       // draw river crossing edges
-      for (let [i, rect] of d3
-        .selectAll(".rect-layer > g > rect")
+      for (let [i, node] of d3
+        .selectAll(".node-layer > g > rect")
         ._groups[0].entries()) {
-        // redraw rects using new coordinates
+        // redraw nodes using new coordinates
 
-        rect = d3.select(rect);
+        node = d3.select(node);
 
         const x_new = nodeToORA[i].x;
         const y_new = nodeToORA[i].y;
 
-        rect
+        node
           .attr("stroke", () => {
             let res = "black";
 
-            if (rect.attr("nodeXCount")) {
+            if (node.attr("nodeXCount")) {
               res = "blue";
             }
 
-            if (rect.attr("riverX")) {
+            if (node.attr("riverX")) {
               res = "red";
             }
 
-            if (rect.attr("nodeXCount") && rect.attr("riverX")) {
+            if (node.attr("nodeXCount") && node.attr("riverX")) {
               res = "purple";
             }
 
             return res;
           })
           .attr("stroke-width", () => {
-            return rect.attr("nodeXCount") || rect.attr("riverX")
-              ? __VM.rect.nodeX.stroke_width
+            return node.attr("nodeXCount") || node.attr("riverX")
+              ? __VM.node.nodeX.stroke_width
               : "0.3";
           })
-          //.attr("fill", __VM.colorVariant[__VM.rect.color])
+          //.attr("fill", __VM.colorVariant[__VM.node.color])
           .transition()
           .attr("x", x_new)
           .attr("y", y_new);
 
-        __VM.moveCentroid(rect, [x_new, y_new, __VM.rect.size]);
+        const new_position = [x_new, y_new, __VM.node.size];
 
-        __VM.checkNodeX(rect, [x_new, y_new]);
+        __VM.moveCentroid(node, new_position);
+        __VM.checkNodeX(node, new_position);
       }
 
       let translate = false;
@@ -554,24 +559,23 @@ export default {
         __VM.calculateRiverTranslation();
       }
 
-      const edgeCount = d3.selectAll(".river-edge > path")._groups[0].length;
+      const crossingCount = d3.selectAll(`.river-crossing-path`)._groups[0]
+        .length;
 
       __VM.delay(timer * 1.1).then(() => {
-        if (edgeCount > 0) {
+        if (crossingCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
             __VM.updateLog(
               `Overlap removal iteration: ${__VM.iteration.current} stopped, iteration limit of ${__VM.iteration.limit} reached. \n`
             );
 
-            d3.selectAll(".river-edge > path").remove();
-
             __VM.iteration.current = 0;
-            __VM.delay(20 * __VM.timer * __VM.rect.size).then(() => {
+            __VM.delay(20 * __VM.timer * __VM.node.size).then(() => {
               __VM.deriveCorridor();
             });
           } else {
             __VM.updateLog(
-              `Overlap removal iteration: ${__VM.iteration.current}, finished with ${edgeCount} nodeX. \n`
+              `Overlap removal iteration: ${__VM.iteration.current}, finished with ${crossingCount} nodeX. \n`
             );
 
             __VM.iteration.current++;
@@ -594,93 +598,108 @@ export default {
     deriveCorridor() {
       const __VM = this;
 
-      let rects = d3
+      let nodes = d3
         .selectAll(`#map rect[nodeXCount="${__VM.iteration.limit + 1}"]`)
         ._groups[0].entries();
 
       const timer = 100 * __VM.timer;
 
-      for (let [i, rect] of rects) {
-        // redraw rects using new coordinates
+      for (let [i, node] of nodes) {
+        // redraw nodes using new coordinates
 
-        rect = d3.select(rect);
+        node = d3.select(node);
 
-        const history = __VM.getRectHistory(rect);
+        const history = __VM.getNodeHistory(node);
 
         const previous = history[1];
-        const current = history[0];
+        const current = [
+          Number(node.attr("x")),
+          Number(node.attr("y")),
+          __VM.node.size,
+        ];
 
         const sizeDiff = previous[2] - current[2];
 
-        const x_diff = previous[0] - current[0] + sizeDiff;
-        const y_diff = previous[1] - current[1] + sizeDiff;
+        const derivePoint = (previous, current, length) => {
+          const dx = current[0] - previous[0] + sizeDiff;
+          const dy = current[1] - previous[1] + sizeDiff;
 
-        const slope = y_diff / x_diff;
+          if (__VM.debug) {
+            d3.selectAll(".debug").remove();
 
-        // draw a line that passes through a given point
-        const drawLineFromPoint = (slope, p, distance, sideline = false) => {
-          let a, b;
-          if (slope === 0) {
-            a = [p[0] + Number(sideline ? 0 : distance), p[1]];
+            __VM.svg
+              .append("circle")
+              .attr("class", "debug")
+              .attr("cx", previous[0] + previous[2] / 2)
+              .attr("cy", previous[1] + previous[2] / 2)
+              .attr("p", previous[2])
+              .attr("r", 0.5)
+              .attr("fill", "red");
 
-            if (x_diff < 0) {
-              b = [p[0] + distance, p[1]];
-            } else {
-              b = [p[0] - distance, p[1]];
-            }
-          } else if (
-            slope === Number.POSITIVE_INFINITY ||
-            slope === Number.NEGATIVE_INFINITY
-          ) {
-            a = [p[0], p[1] + Number(sideline ? 0 : distance)];
+            __VM.svg
+              .append("circle")
+              .attr("class", "debug")
+              .attr("cx", current[0] + current[2] / 2)
+              .attr("cy", current[1] + current[2] / 2)
+              .attr("p", current[2])
+              .attr("r", 0.5)
+              .attr("fill", "green");
 
-            if (y_diff < 0) {
-              b = [p[0], p[1] + distance];
-            } else {
-              b = [p[0], p[1] - distance];
-            }
-          } else {
-            const dx = distance / Math.sqrt(1 + slope * slope);
-            const dy = slope * dx;
-
-            a = [
-              p[0] + Number(sideline ? 0 : dx),
-              p[1] + Number(sideline ? 0 : dy),
-            ];
-
-            if (x_diff > 0 && slope === 1 && sideline) {
-              b = [p[0] + dx, p[1] + dy];
-            } else {
-              b = [p[0] - dx, p[1] - dy];
-            }
+            __VM.svg
+              .append("circle")
+              .attr("class", "debug")
+              .attr(
+                "cx",
+                previous[0] +
+                  previous[2] / 2 +
+                  (dx / Math.sqrt(dx ** 2 + dy ** 2)) * length
+              )
+              .attr(
+                "cy",
+                previous[1] +
+                  previous[2] / 2 +
+                  (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length
+              )
+              .attr("p", current[2])
+              .attr("r", 0.5)
+              .attr("fill", "purple");
           }
-
-          // console.log(slope, Math.hypot(a[0] - b[0], a[1] - b[1]));
-
-          return [a, b];
+          return [
+            previous[0] +
+              previous[2] / 2 +
+              (dx / Math.sqrt(dx ** 2 + dy ** 2)) * length -
+              __VM.getHalfNodeSize,
+            previous[1] +
+              previous[2] / 2 +
+              (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length -
+              __VM.getHalfNodeSize,
+          ];
         };
 
-        const pLine = drawLineFromPoint(-1 / slope, current, __VM.rect.size);
-        const sideline1 = drawLineFromPoint(
-          slope,
-          pLine[0],
-          __VM.corridor.length,
-          true
-        );
-        const sideline2 = drawLineFromPoint(
-          slope,
-          pLine[1],
-          __VM.corridor.length,
-          true
-        );
+        const deriveParallelEdge = (start, end, distance) => {
+          const x_diff = start[0] - end[0] + sizeDiff;
+          const y_diff = start[1] - end[1] + sizeDiff;
 
-        const corridor = d3.line()([
-          pLine[0],
-          sideline1[1],
-          sideline2[1],
-          sideline2[0],
-          pLine[0],
-        ]);
+          const scale = distance / Math.sqrt(x_diff ** 2 + y_diff ** 2);
+          const [dx, dy] = [
+            -y_diff * scale + __VM.getHalfNodeSize,
+            x_diff * scale + __VM.getHalfNodeSize,
+          ];
+
+          return [
+            [dx + start[0], dy + start[1]],
+            [dx + end[0], dy + end[1]],
+          ];
+        };
+
+        const next = derivePoint(previous, current, __VM.corridor.length);
+
+        const p1 = deriveParallelEdge(previous, next, __VM.node.size / 2);
+        const p2 = deriveParallelEdge(previous, next, -__VM.node.size / 2);
+
+        const corridor = d3.line()([p1[0], p1[1], p2[1], p2[0], p1[0]]);
+
+        d3.select(".corridor").remove();
 
         __VM.svg
           .append("path")
@@ -690,74 +709,84 @@ export default {
           .attr("stroke-width", "1")
           .attr("fill", "none");
 
-        const moveRectInCorridor = (rect) => {
-          const history = __VM.getRectHistory(rect);
+        const moveNodeInCorridor = (node, position_diff) => {
+          const history = __VM.getNodeHistory(node);
 
-          const x = Number(history[0][0]);
-          const y = Number(history[0][1]);
+          let newPos;
 
-          const newPos = drawLineFromPoint(
-            slope,
-            [x, y],
-            __VM.getHalfRectSize,
-            true
-          )[1];
+          const x_c = Number(node.attr("x"));
+          const y_c = Number(node.attr("y"));
 
-          rect.transition().attr("x", newPos[0]).attr("y", newPos[1]);
+          if (position_diff) {
+            newPos = [x_c + position_diff[0], y_c + position_diff[1]];
+          } else {
+            const x = Number(history[1][0]);
+            const y = Number(history[1][1]);
 
-          __VM.moveCentroid(rect, newPos);
+            newPos = derivePoint(
+              [x, y, Number(history[1][2])],
+              [x_c, y_c, __VM.node.size],
+              Math.hypot(x - x_c, y - y_c) + __VM.node.size
+            );
+          }
 
-          __VM.delay(timer).then(() => {
-            __VM.checkNodeX(rect, newPos);
+          node.transition().attr("x", newPos[0]).attr("y", newPos[1]);
 
-            // reset fill color for nodeC
-            if (rect.attr("nodeXCount")) {
-              rect.attr("stroke", "blue");
-            } else {
-              rect.attr("stroke", "pink");
-            }
+          newPos[2] = __VM.node.size;
+          __VM.moveCentroid(node, newPos);
 
-            rect.attr("fill", rect.attr("original_fill"));
-          });
+          __VM.checkNodeX(node, newPos);
+
+          // reset fill color for nodeC
+          if (node.attr("nodeXCount")) {
+            node.attr("stroke", "blue");
+          } else {
+            node.attr("stroke", "pink");
+          }
+
+          node.attr("fill", node.attr("original_fill"));
+
+          return [newPos[0] - x_c + sizeDiff, newPos[1] - y_c + sizeDiff];
         };
 
-        moveRectInCorridor(rect);
+        const position_diff = moveNodeInCorridor(node);
 
-        for (let [i, rect_local] of d3
-          .selectAll(".rect-layer > g > rect")
+        // here we can derive the bounding box of the corridor to reduce the number of nodes to be checked
+        for (let [i, node_local] of d3
+          .selectAll(".node-layer > g > rect")
           ._groups[0].entries()) {
-          rect_local = d3.select(rect_local);
+          node_local = d3.select(node_local);
 
-          if (rect_local.attr("id") === rect.attr("id")) {
+          // do not move the node if it's being moved by its own corridor
+          if (node_local.attr("fill") === "blue") {
             continue;
           }
 
-          const x_in = Number(rect_local.attr("x")) + __VM.getHalfRectSize;
-          const y_in = Number(rect_local.attr("y")) + __VM.getHalfRectSize;
+          const x_in = Number(node_local.attr("x")) + __VM.getHalfNodeSize;
+          const y_in = Number(node_local.attr("y")) + __VM.getHalfNodeSize;
 
           if (pip.isInside([x_in, y_in], corridor)) {
-            moveRectInCorridor(rect_local);
+            moveNodeInCorridor(node_local, position_diff);
           }
         }
 
         __VM.delay(timer).then(() => {
-          d3.select(".corridor").remove();
+          // d3.select(".corridor").remove();
         });
       }
       __VM.delay(timer).then(() => {
-        __VM.removeOverlap(true);
+        // __VM.removeOverlap(true);
         __VM.step.button_disabled = false;
       });
     },
     // write new position into history, and check if the node crossed a river
-    checkNodeX(rect, current) {
+    checkNodeX(node, current) {
       const __VM = this;
 
-      current[2] = __VM.rect.size;
-      const previous = __VM.getRectHistory(rect)[0];
+      const previous = __VM.getNodeHistory(node)[0];
       const sizeDiff = previous[2] - current[2];
 
-      __VM.writeRectHistory(rect, current);
+      __VM.writeNodeHistory(node, current);
 
       const checkIntersect = (line) => {
         let intersect;
@@ -773,12 +802,17 @@ export default {
           intersect = findPathIntersections(river_path, line, true);
 
           if (intersect) {
-            __VM.svg
-              .append("path")
-              .attr("d", line)
-              .attr("stroke", "red")
-              .attr("stroke-width", "1")
-              .attr("fill", "none");
+            if (__VM.debug) {
+              d3.selectAll(".river-crossing-path").remove();
+
+              __VM.svg
+                .append("path")
+                .attr("class", "river-crossing-path")
+                .attr("d", line)
+                .attr("stroke", "red")
+                .attr("stroke-width", "1")
+                .attr("fill", "none");
+            }
 
             __VM.river.rivers[river].translate.x +=
               current[0] - previous[0] + sizeDiff;
@@ -793,8 +827,8 @@ export default {
       };
 
       const riverCrossingLine = d3.line()([
-        [current[0] + current[2] / 2, current[1] + current[2] / 2],
         [previous[0] + previous[2] / 2, previous[1] + previous[2] / 2],
+        [current[0] + current[2] / 2, current[1] + current[2] / 2],
       ]);
 
       const intersect = checkIntersect(riverCrossingLine);
@@ -802,47 +836,62 @@ export default {
       // move node back
       if (intersect) {
         const nodeXCount =
-          Number(rect.attr("nodeXCount")) > 0
-            ? Number(rect.attr("nodeXCount")) + 1
+          Number(node.attr("nodeXCount")) > 0
+            ? Number(node.attr("nodeXCount")) + 1
             : 1;
 
-        rect
+        // if (node.attr("id") === "E38000031") {
+        //   console.log(
+        //     [
+        //       previous[0] + previous[2] / 2,
+        //       previous[1] + previous[2] / 2,
+        //       previous[2],
+        //     ],
+        //     [
+        //       current[0] + current[2] / 2,
+        //       current[1] + current[2] / 2,
+        //       current[2],
+        //     ]
+        //   );
+        // }
+
+        node
           .attr("stroke", "blue")
-          .attr("stroke-width", __VM.rect.nodeX.stroke_width)
+          .attr("stroke-width", __VM.node.nodeX.stroke_width)
           .attr("nodeXCount", nodeXCount)
           .transition()
           .attr("x", previous[0])
           .attr("y", previous[1]);
 
-        __VM.moveCentroid(rect, previous);
+        __VM.moveCentroid(node, previous);
 
-        __VM.writeRectHistory(rect, previous);
+        __VM.writeNodeHistory(node, previous);
 
-        d3.select(`.river-edge`)
-          .append("path")
-          .attr(
-            "d",
-            d3.line()([
-              [previous[0] + previous[2] / 2, previous[1] + previous[2] / 2],
-              [current[0] + current[2] / 2, current[1] + current[2] / 2],
-            ])
-          )
-          .attr("stroke", "black")
-          .attr("stroke-width", "1px")
-          .attr("fill", "none")
-          .attr("marker-end", "url(#arrow)");
+        // d3.select(`.river-edge`)
+        //   .append("path")
+        //   .attr(
+        //     "d",
+        //     d3.line()([
+        //       [previous[0] + previous[2] / 2, previous[1] + previous[2] / 2],
+        //       [current[0] + current[2] / 2, current[1] + current[2] / 2],
+        //     ])
+        //   )
+        //   .attr("stroke", "black")
+        //   .attr("stroke-width", "1px")
+        //   .attr("fill", "none")
+        //   .attr("marker-end", "url(#arrow)");
 
         if (nodeXCount > __VM.iteration.limit) {
           // a stalemate nodeX
-          rect.attr("fill", "blue");
-          rect.attr("nodeXCount", __VM.iteration.limit + 1);
+          node.attr("fill", "blue");
+          node.attr("nodeXCount", __VM.iteration.limit + 1);
         } else {
           // reset fill color for non-stalemate nodeX
-          rect.attr("fill", rect.attr("original_fill").trim());
+          node.attr("fill", node.attr("original_fill").trim());
         }
       } else {
-        if (rect.attr("nodeXCount")) {
-          rect.attr("nodeXCount", 0);
+        if (node.attr("nodeXCount")) {
+          node.attr("nodeXCount", 0);
         }
       }
     },
@@ -888,19 +937,19 @@ export default {
         __VM[type].visibility ? "visible" : "hidden"
       );
     },
-    setRectSize(current, next, uniformed = false) {
+    setNodeSize(current, next, uniformed = false) {
       const __VM = this;
-      __VM.rect.previousSize = current;
-      __VM.rect.size = Number(next);
-      __VM.rect.rectSizeUniformed = uniformed;
+      __VM.node.previousSize = current;
+      __VM.node.size = Number(next);
+      __VM.node.nodeSizeUniformed = uniformed;
 
-      if (__VM.rect.rectSizeUniformed) {
+      if (__VM.node.nodeSizeUniformed) {
         next = 10;
       }
 
       const sizeDiff = (next - current) / 2;
 
-      d3.selectAll(".rect-layer > g > rect")
+      d3.selectAll(".node-layer > g > rect")
         .attr("width", next)
         .attr("height", next)
         .transition()
@@ -917,26 +966,26 @@ export default {
         d3.select(r).attr("fill", color);
       };
 
-      if (__VM.rect.rectMapToColor) {
+      if (__VM.node.nodeMapToColor) {
         if (singleRect) {
           changeColor(singleRect, d3.select(singleRect).attr("colormap"));
         } else {
-          d3.selectAll(".rect-layer > g> rect")._groups[0].forEach((r) => {
-            changeColor(r, __VM.colorVariant[__VM.rect.color]);
+          d3.selectAll(".node-layer > g> rect")._groups[0].forEach((r) => {
+            changeColor(r, __VM.colorVariant[__VM.node.color]);
           });
 
-          __VM.rect.rectMapToColor = false;
+          __VM.node.nodeMapToColor = false;
         }
       } else {
         if (singleRect) {
-          changeColor(singleRect, __VM.colorVariant[__VM.rect.color]);
+          changeColor(singleRect, __VM.colorVariant[__VM.node.color]);
         } else {
-          d3.selectAll(".rect-layer > g > rect")._groups[0].forEach((r) => {
+          d3.selectAll(".node-layer > g > rect")._groups[0].forEach((r) => {
             const colormap = d3.select(r).attr("colormap");
             changeColor(r, colormap);
           });
 
-          __VM.rect.rectMapToColor = true;
+          __VM.node.nodeMapToColor = true;
         }
       }
     },
@@ -1077,7 +1126,7 @@ export default {
         __VM.river.rivers[river].translate.finalYOld =
           __VM.river.rivers[river].translate.finalY;
 
-        const size = __VM.rect.size;
+        const size = __VM.node.size;
 
         if (x > 0) {
           __VM.river.rivers[river].translate.finalX += size;
@@ -1132,15 +1181,15 @@ export default {
             .attr("stroke-width", "1px")
             .attr("fill", "none");
 
-          for (const [i, rect] of d3
-            .selectAll(".rect-layer > g > rect")
+          for (const [i, node] of d3
+            .selectAll(".node-layer > g > rect")
             ._groups[0].entries()) {
             const inside = pip.isInside(
-              [d3.select(rect).attr("x"), d3.select(rect).attr("y")],
+              [d3.select(node).attr("x"), d3.select(node).attr("y")],
               crossedRegion
             );
             if (inside) {
-              d3.select(rect)
+              d3.select(node)
                 .attr("stroke", "red")
                 .attr("stroke-width", "0.5")
                 .attr("riverX", true);
@@ -1305,32 +1354,32 @@ export default {
     runPIP() {
       const __VM = this;
       Object.keys(__VM.river.rivers).forEach((river) => {
-        for (let [i, rect] of d3
-          .selectAll(".rect-layer > g > rect")
+        for (let [i, node] of d3
+          .selectAll(".node-layer > g > rect")
           ._groups[0].entries()) {
-          rect = d3.select(rect);
+          node = d3.select(node);
 
-          if (__VM.isInRiverZone(rect, river)) {
-            rect.attr("fill", __VM.colorVariant[river]);
-            rect.attr("original_fill", __VM.colorVariant[river]);
-            rect.attr("river", river);
+          if (__VM.isInRiverZone(node, river)) {
+            node.attr("fill", __VM.colorVariant[river]);
+            node.attr("original_fill", __VM.colorVariant[river]);
+            node.attr("river", river);
           }
         }
       });
     },
-    isInRiverZone(rect, river) {
+    isInRiverZone(node, river) {
       const __VM = this;
       return pip.isInside(
         [
-          // TODO remove all dependancy on half rect size
-          Number(rect.attr("x")) + __VM.getHalfRectSize,
-          Number(rect.attr("y")) + __VM.getHalfRectSize,
+          // TODO remove all dependancy on half node size
+          Number(node.attr("x")) + __VM.getHalfNodeSize,
+          Number(node.attr("y")) + __VM.getHalfNodeSize,
         ],
         d3.line()(__VM.region[river])
       );
     },
-    moveCentroid(rect, position) {
-      rect
+    moveCentroid(node, position) {
+      node
         .select(function () {
           return this.nextElementSibling;
         })
@@ -1338,9 +1387,18 @@ export default {
         .attr("cx", position[0] + position[2] / 2)
         .attr("cy", position[1] + position[2] / 2);
     },
-    writeRectHistory(rect, position) {
+    writeNodeHistory(node, position) {
       const __VM = this;
-      let history = __VM.getRectHistory(rect);
+      let history = __VM.getNodeHistory(node);
+
+      // only write a new history when the position is different
+      if (history[0].toString() === position.toString()) {
+        return;
+      }
+
+      // if (node.attr("id") === "E38000031") {
+      //   console.log(position);
+      // }
 
       history.unshift(position);
 
@@ -1348,10 +1406,10 @@ export default {
         history.pop();
       }
 
-      rect.attr("history", JSON.stringify(history));
+      node.attr("history", JSON.stringify(history));
     },
-    getRectHistory(rect) {
-      return JSON.parse(rect.attr("history"));
+    getNodeHistory(node) {
+      return JSON.parse(node.attr("history"));
     },
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -1366,15 +1424,16 @@ export default {
       iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
       timer: 10,
       log: "",
+      debug: true,
       corridor: {
         length: 30,
       },
       centroid: {
         visibility: true,
       },
-      rect: {
-        rectSizeUniformed: false,
-        rectMapToColor: false,
+      node: {
+        nodeSizeUniformed: false,
+        nodeMapToColor: false,
         visibility: true,
         color: "success",
         previousSize: 0,
@@ -1455,7 +1514,7 @@ export default {
       colorVariant: {
         primary: "rgb(2, 117, 216)",
         info: "rgb(91, 192, 222)",
-        success: "rgb(92, 184, 92)",
+        success: "rgb(92, 184, 92, 45%)",
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
         thames: "rgb(20, 84, 140, 45%)",
@@ -1475,8 +1534,8 @@ export default {
     getRiverTranslationRepeat: function () {
       return this.river.translation.checked.includes("repeat");
     },
-    getHalfRectSize: function () {
-      return this.rect.size / 2;
+    getHalfNodeSize: function () {
+      return this.node.size / 2;
     },
   },
   watch: {
@@ -1509,7 +1568,7 @@ export default {
     // );
 
     this.init();
-    this.rect.rectSizeUniformed = false;
+    this.node.nodeSizeUniformed = false;
   },
 };
 </script>
