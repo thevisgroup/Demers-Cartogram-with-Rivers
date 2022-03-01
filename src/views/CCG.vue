@@ -536,7 +536,7 @@ export default {
         const new_position = [x_new, y_new, __VM.node.size];
 
         __VM.moveCentroid(node, new_position);
-        __VM.checkNodeX(node, new_position);
+        __VM.testRiverCross(node, new_position);
       }
 
       let translate = false;
@@ -735,7 +735,7 @@ export default {
           newPos[2] = __VM.node.size;
           __VM.moveCentroid(node, newPos);
 
-          __VM.checkNodeX(node, newPos);
+          __VM.testRiverCross(node, newPos);
 
           // reset fill color for nodeC
           if (node.attr("nodeXCount")) {
@@ -780,7 +780,7 @@ export default {
       });
     },
     // write new position into history, and check if the node crossed a river
-    checkNodeX(node, current) {
+    testRiverCross(node, current) {
       const __VM = this;
 
       const previous = __VM.getNodeHistory(node)[0];

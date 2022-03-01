@@ -274,6 +274,49 @@
       \verb http://ieeexplore.ieee.org/document/8282365/
       \endverb
     \endentry
+    \entry{dent2009Cartography}{book}{}
+      \name{author}{3}{}{%
+        {{hash=a1286ee4b728c47e8730bac87bd52e9d}{%
+           family={Dent},
+           familyi={D\bibinitperiod},
+           given={Borden\bibnamedelima D.},
+           giveni={B\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=e99501d20a1dcc557e6e830c9a1e177d}{%
+           family={Torguson},
+           familyi={T\bibinitperiod},
+           given={Jeffrey},
+           giveni={J\bibinitperiod}}}%
+        {{hash=39f77b5ce1fcdaa565992bfed96746b5}{%
+           family={Hodler},
+           familyi={H\bibinitperiod},
+           given={T.\bibnamedelimi W.},
+           giveni={T\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {McGraw-Hill Higher Education}%
+      }
+      \strng{namehash}{365b2c4d71816b45ad713c8f11956533}
+      \strng{fullhash}{28a15c57c2d9ef2baedec77075be7de6}
+      \strng{bibnamehash}{365b2c4d71816b45ad713c8f11956533}
+      \strng{authorbibnamehash}{365b2c4d71816b45ad713c8f11956533}
+      \strng{authornamehash}{365b2c4d71816b45ad713c8f11956533}
+      \strng{authorfullhash}{28a15c57c2d9ef2baedec77075be7de6}
+      \field{labelalpha}{Den*09}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{OCLC: ocn184827987}
+      \field{edition}{6th ed}
+      \field{isbn}{978-0-07-294382-5}
+      \field{shorttitle}{Cartography}
+      \field{title}{Cartography: Thematic Map Design}
+      \field{year}{2009}
+      \keyw{Cartography,Thematic maps}
+    \endentry
     \entry{dorling2011Area}{incollection}{}
       \name{author}{1}{}{%
         {{hash=0c52e954d7bdb0fa0d93af1351f3785d}{%
