@@ -726,8 +726,11 @@ export default {
             newPos = derivePoint(
               [x, y, Number(history[1][2])],
               [x_c, y_c, __VM.node.size],
-              Math.hypot(x - x_c, y - y_c) + __VM.node.size
+              Math.hypot(x - x_c, y - y_c) * 2
             );
+
+            // reset stalemate fill color
+            node.attr("fill", node.attr("original_fill"));
           }
 
           node.transition().attr("x", newPos[0]).attr("y", newPos[1]);
@@ -737,14 +740,12 @@ export default {
 
           __VM.testRiverCross(node, newPos);
 
-          // reset fill color for nodeC
+          // set stroke color for nodeC
           if (node.attr("nodeXCount")) {
             node.attr("stroke", "blue");
           } else {
             node.attr("stroke", "pink");
           }
-
-          node.attr("fill", node.attr("original_fill"));
 
           return [newPos[0] - x_c + sizeDiff, newPos[1] - y_c + sizeDiff];
         };
