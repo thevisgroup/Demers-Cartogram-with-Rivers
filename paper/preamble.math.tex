@@ -1,23 +1,35 @@
+\usepackage{amsmath,bm}
+\usepackage{amssymb}
+
+% bold \mathcal{}
+\DeclareMathAlphabet{\mathbcal}{OMS}{cmsy}{b}{n}
+
 % UpdateNodePosition
 
-\newcommand{\nodeList}{\mathbcal{L}}
+\newcommand{\nodeList}{L}
 \newcommand{\nodeListEach}{l^i}
-\newcommand{\nodeListVPSC}{\mathbcal{L}_{vpsc}}
-\newcommand{\nodeListVPSCEach}{l^i_{vpsc}}
+
+\newcommand{\nodeListEachStalemate}{\nodeListEach.stalemate}
+\newcommand{\nodeListEachPrevious}{\nodeListEach_{previous}}
+\newcommand{\nodeListVPSC}{L'}
+\newcommand{\nodeListVPSCEach}{l^{i'}}
 \newcommand{\nodeSize}{s}
 \newcommand{\nodeSizeMax}{s_{max}}
-\newcommand{\stalemate}{t}
+\newcommand{\stalemateMax}{t}
 \newcommand{\crossRiver}{cross}
 
 % move position
 
 \newcommand{\node}{\bm{n}}
-\newcommand{\nodeVPSC}{\bm{n}_{vpsc}}
+\newcommand{\nodePrevious}{\node_{p}}
+\newcommand{\nodeVectorPC}{\Vector{\nodePrevious}{\node}}
+\newcommand{\nodeVPSC}{\node'}
 
 % check river crossing
 
 \newcommand{\riverEdgeList}{\bm{R}}
 \newcommand{\riverEdgeListEach}{r^i}
+\newcommand{\riverEdgeListEachLine}{\LineOne{\riverEdgeListEach}}
 \newcommand{\nodeBoundingBox}{b_n}
 \newcommand{\riverEdgeBoundingBoxEach}{b_{\riverEdgeListEach}}
 \newcommand{\boundingBoxInt}{b_{int.}}
@@ -28,13 +40,18 @@
 \newcommand{\CorridorLength}{c_l}
 \newcommand{\CorridorWidth}{c_w}
 \newcommand{\PointP}{p}
-\newcommand{\Edge}{e}
-\newcommand{\EdgeParallel}{e_p}
-\newcommand{\EdgeParallelA}{e_{p^1}}
-\newcommand{\EdgeParallelB}{e_{p^2}}
+\newcommand{\Edge}{\LineOne{e}}
+\newcommand{\EdgeStart}{\Edge.start}
+\newcommand{\EdgeEnd}{\Edge.end}
+\newcommand{\EdgeParallel}{\LineOne{e_p}}
+\newcommand{\EdgeParallelA}{\LineOne{e_{p^1}}}
+\newcommand{\EdgeParallelB}{\LineOne{e_{p^2}}}
 \newcommand{\Distance}{d}
-\newcommand{\PointStart}{p_s}
-\newcommand{\PointEnd}{p_e}
+\newcommand{\nodeVectorNP}{\Vector{\node}{\PointP}}
+\newcommand{\nodeVectorNV}{\Vector{\node}{\nodeVPSC}}
+\newcommand{\nodeLineNV}{\Line{\node}{\nodeVPSC}}
+\newcommand{\nodeVectorNpP}{\Vector{\nodePrevious}{\PointP}}
+\newcommand{\nodeLineNpP}{\Line{\nodePrevious}{\PointP}}
 \newcommand{\nodeInCorridorEach}{{n}_{in}^i}
 \newcommand{\nodeInCorridorEachDx}{\Delta x_{\nodeInCorridorEach}}
 \newcommand{\nodeInCorridorEachDy}{\Delta y_{\nodeInCorridorEach}}
@@ -44,4 +61,6 @@
 \newcommand{\Scale}{scale}
 \newcommand{\dx}{\Delta x}
 \newcommand{\dy}{\Delta y}
-\newcommand{\Vector}[2]{\protect\overrightarrow{#1#2\strut}}
+\newcommand{\Vector}[2]{\protect\overrightarrow{#1#2}}
+\newcommand{\Line}[2]{\protect\overline{#1#2}}
+\newcommand{\LineOne}[1]{\protect\overline{#1}}

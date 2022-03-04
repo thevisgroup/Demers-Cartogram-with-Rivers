@@ -4,8 +4,7 @@ Obtaining the heterogenous data can be challenging, especially when an EHR datas
 
 \subsection{Geospatial Data}
 
-Geospatial boundaries, or shapefiles, were obtained from the following sources. After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to convert the merged shapefile into a TopoJSON \cite{TopoJSON} file to reduce the file size and improve the performance of our implementation.
-
+Geospatial boundaries, or shapefiles, were obtained from the sources described below.
 {
 \begin{figure}[tb!]
     \centering
@@ -15,11 +14,11 @@ Geospatial boundaries, or shapefiles, were obtained from the following sources. 
 \end{figure}
 }
 
-\subsubsection{Clinical Commissioning Groups Shapefile}
+\bobgraph{Clinical Commissioning Groups Shapefile}
 
-Clinical Commissioning Groups (CCGs) are the main geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to the NHS re-organization. The most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, because there is no public EHR data published based on the latest CCG re-organization that took place in 2021.
+Clinical Commissioning Groups (CCGs) are the main geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to the NHS re-organization. The most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, because there is still no public EHR data published based on the latest CCG re-organization that took place in 2021.
 
-\subsubsection{River Features}
+\bobgraph{River Features}
 
 We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Great Ouse in England. These rivers were chosen as they pass through regions with dense population, and provide informative geographical and topological cues. 
 
@@ -29,6 +28,8 @@ We first obtain a relation ID by searching for a river, e.g. River Thames, on Op
     relation(2263653);>>;
     out skel;
 \end{lstlisting}
+
+After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections and scales, and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to convert the merged shapefile into a TopoJSON \cite{TopoJSON} file to reduce the file size and improve the performance of our implementation.
 
 \subsection{EHR Data}
 

@@ -19,6 +19,106 @@
 
 \refsection{0}
   \datalist[entry]{anyt/global//global/global}
+    \entry{alieva2021How}{article}{}
+      \name{author}{1}{}{%
+        {{hash=19f0827a79dd1afbb98e4185092503f0}{%
+           family={Alieva},
+           familyi={A\bibinitperiod},
+           given={Iuliia},
+           giveni={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{19f0827a79dd1afbb98e4185092503f0}
+      \strng{fullhash}{19f0827a79dd1afbb98e4185092503f0}
+      \strng{bibnamehash}{19f0827a79dd1afbb98e4185092503f0}
+      \strng{authorbibnamehash}{19f0827a79dd1afbb98e4185092503f0}
+      \strng{authornamehash}{19f0827a79dd1afbb98e4185092503f0}
+      \strng{authorfullhash}{19f0827a79dd1afbb98e4185092503f0}
+      \field{labelalpha}{Ali21}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{The purpose of this study is to explore the role of data visualization in the media coverage of the 2016 presidential election in the United States focusing on data-visualization projects from the New York Times and the Washington Post. This research aims to examine how media coverage of the election has been framed with infographics through mixed methods analysis. Another part of this article presents an investigation of data journalists' working routines and so-called boundary-work (Boyles, J. L., and E. Meyer. 2016. ``Letting the Data Speak.'' Digital Journalism 4 (7): 944–954. doi:10.1080/21670811.2016.1166063) by conducting interviews with data reporters.}
+      \field{issn}{1751-2786, 1751-2794}
+      \field{journaltitle}{Journalism Practice}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{shorttitle}{How {{American Media Framed}} 2016 {{Presidential Election Using Data Visualization}}}
+      \field{title}{How {{American Media Framed}} 2016 {{Presidential Election Using Data Visualization}}: {{The Case Study}} of the {{New York Times}} and the {{Washington Post}}}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 27}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.1080/17512786.2021.1930573
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/MLYFGXAU/Alieva - 2021 - How American Media Framed 2016 Presidential Electi.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.tandfonline.com/doi/full/10.1080/17512786.2021.1930573
+      \endverb
+      \verb{url}
+      \verb https://www.tandfonline.com/doi/full/10.1080/17512786.2021.1930573
+      \endverb
+    \endentry
+    \entry{arranz-lopez2021Enduser}{article}{}
+      \name{author}{3}{}{%
+        {{hash=b6289e221f02008cc44a3f6ed891e76f}{%
+           family={{Arranz-López}},
+           familyi={A\bibinitperiod},
+           given={Aldo},
+           giveni={A\bibinitperiod}}}%
+        {{hash=0610e78442d1ec29474f447f6e64ff25}{%
+           family={{Soria-Lara}},
+           familyi={S\bibinitperiod},
+           given={Julio\bibnamedelima A},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=e7047d4f5ffeace0051ecbae408cb6b9}{%
+           family={{Ariza-Álvarez}},
+           familyi={A\bibinitperiod},
+           given={Amor},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{a3eb1ed2bc0885dd7bf09e58f9821b05}
+      \strng{fullhash}{c26ffcdcd4e2d0d6fe5e8c109106d9c1}
+      \strng{bibnamehash}{a3eb1ed2bc0885dd7bf09e58f9821b05}
+      \strng{authorbibnamehash}{a3eb1ed2bc0885dd7bf09e58f9821b05}
+      \strng{authornamehash}{a3eb1ed2bc0885dd7bf09e58f9821b05}
+      \strng{authorfullhash}{c26ffcdcd4e2d0d6fe5e8c109106d9c1}
+      \field{labelalpha}{Arr*21}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Relative accessibility is a widely studied approach that recognizes access to major locations as subjective and shaped by individual circumstances (e.g., individual preferences, habits, and cultural norms). One missing element in the knowledge base is how relative accessibility can be effectively mapped for decision-making. To fill the research gap, this paper evaluates whether cartograms are an appropriate tool for mapping relative accessibility, taking the city of Zaragoza, Spain as a case study. The research design included three phases: (i) elaboration of grid-based maps on relative non-motorized accessibility; (ii) elaboration of cartograms on relative non-motorized accessibility; (iii) an end-user evaluation with 30 local practitioners to analyze the effectiveness of cartograms to map relative accessibility compared to grid-based maps. Participants signaled that diffusion-based cartograms could be complementary to grid-based maps, providing better visualization of spatial dissimilarity patterns of accessibility between population groups. However, participants noted greater difficulty in identifying Dorling cartograms as an effective technique for mapping relative accessibility. The paper closes with a review of the strengths and weaknesses of the potential application of these visualization techniques in the field of accessibility planning.}
+      \field{issn}{2399-8083, 2399-8091}
+      \field{journaltitle}{Environment and Planning B: Urban Analytics and City Science}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{9}
+      \field{title}{An End-User Evaluation to Analyze the Effectiveness of Cartograms for Mapping Relative Non-Motorized Accessibility}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{volume}{48}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \field{pages}{2880\bibrangedash 2897}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1177/2399808321991541
+      \endverb
+      \verb{urlraw}
+      \verb http://journals.sagepub.com/doi/10.1177/2399808321991541
+      \endverb
+      \verb{url}
+      \verb http://journals.sagepub.com/doi/10.1177/2399808321991541
+      \endverb
+    \endentry
     \entry{bearak2016Everything}{article}{}
       \name{author}{2}{}{%
         {{hash=2e667514363d5bf4cd1fc946cfddaa35}{%
@@ -89,6 +189,52 @@
       \endverb
       \verb{url}
       \verb https://mapshaper.org/
+      \endverb
+    \endentry
+    \entry{breitzman2018Using}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{hash=aed3fbb81762fcd9585b4c975331f5fc}{%
+           family={Breitzman},
+           familyi={B\bibinitperiod},
+           given={Anthony},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Seattle, WA, USA}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{aed3fbb81762fcd9585b4c975331f5fc}
+      \strng{fullhash}{aed3fbb81762fcd9585b4c975331f5fc}
+      \strng{bibnamehash}{aed3fbb81762fcd9585b4c975331f5fc}
+      \strng{authorbibnamehash}{aed3fbb81762fcd9585b4c975331f5fc}
+      \strng{authornamehash}{aed3fbb81762fcd9585b4c975331f5fc}
+      \strng{authorfullhash}{aed3fbb81762fcd9585b4c975331f5fc}
+      \field{labelalpha}{Bre18}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2018 {{IEEE International Conference}} on {{Big Data}} ({{Big Data}})}
+      \field{isbn}{978-1-5386-5035-6}
+      \field{month}{12}
+      \field{title}{Using {{Cartograms}} to {{Visualize Population Normalized Big-Data Sets}}}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{year}{2018}
+      \field{urldateera}{ce}
+      \field{pages}{3575\bibrangedash 3580}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/BigData.2018.8622217
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/8622217/
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/8622217/
       \endverb
     \endentry
     \entry{cano2015Mosaic}{article}{}
@@ -537,6 +683,69 @@
       \verb http://link.springer.com/10.1007/11618058_15
       \endverb
     \endentry
+    \entry{galluzzi2018Mapping}{article}{}
+      \name{author}{5}{}{%
+        {{hash=307f073da35a2f416d9e245a59e9d51c}{%
+           family={Galluzzi},
+           familyi={G\bibinitperiod},
+           given={Marta},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9bd4f12a0a58acb47589656860aa0f73}{%
+           family={Rocchini},
+           familyi={R\bibinitperiod},
+           given={Duccio},
+           giveni={D\bibinitperiod}}}%
+        {{hash=3b15cf825fde8f5641a7246bac11e1b9}{%
+           family={Canullo},
+           familyi={C\bibinitperiod},
+           given={Roberto},
+           giveni={R\bibinitperiod}}}%
+        {{hash=a96b2fca8d84ae5523665cd2fd14e9b1}{%
+           family={McRoberts},
+           familyi={M\bibinitperiod},
+           given={Ronald\bibnamedelima E.},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=fdd7602040694bccdd2a91e87a4468ad}{%
+           family={Chirici},
+           familyi={C\bibinitperiod},
+           given={Gherardo},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{a86371b8757e07d766a362a63a7b6a30}
+      \strng{fullhash}{bed6b06a9a2b1a81625f9593bcfa13b2}
+      \strng{bibnamehash}{a86371b8757e07d766a362a63a7b6a30}
+      \strng{authorbibnamehash}{a86371b8757e07d766a362a63a7b6a30}
+      \strng{authornamehash}{a86371b8757e07d766a362a63a7b6a30}
+      \strng{authorfullhash}{bed6b06a9a2b1a81625f9593bcfa13b2}
+      \field{labelalpha}{Gal*18}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{15749541}
+      \field{journaltitle}{Ecological Informatics}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{shorttitle}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data}
+      \field{title}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data: {{From}} Standard Treatment of Diffusion to Density-Equalizing Cartograms}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{volume}{48}
+      \field{year}{2018}
+      \field{urldateera}{ce}
+      \field{pages}{281\bibrangedash 289}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1016/j.ecoinf.2018.06.005
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1574954118300463
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1574954118300463
+      \endverb
+    \endentry
     \entry{gamio2016Election}{article}{}
       \name{author}{1}{}{%
         {{hash=6332fb25977140b757a6704143146607}{%
@@ -636,6 +845,107 @@
       \endverb
       \verb{url}
       \verb http://journals.sagepub.com/doi/10.1177/0308518X20910162
+      \endverb
+    \endentry
+    \entry{harris2018Mapping}{article}{}
+      \name{author}{3}{}{%
+        {{hash=cfe261d732d73c710ecb9e08b1f94a83}{%
+           family={Harris},
+           familyi={H\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=18e010ad6f178bf5db6f777026b33739}{%
+           family={Charlton},
+           familyi={C\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=98a0d3717c90f41d9846124c798cbfc3}{%
+           family={Brunsdon},
+           familyi={B\bibinitperiod},
+           given={Chris},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{6f378d99697d36c82acabf2fcfd6c7b1}
+      \strng{fullhash}{a48b93373d31a56d1503d1cdcbcefd2d}
+      \strng{bibnamehash}{6f378d99697d36c82acabf2fcfd6c7b1}
+      \strng{authorbibnamehash}{6f378d99697d36c82acabf2fcfd6c7b1}
+      \strng{authornamehash}{6f378d99697d36c82acabf2fcfd6c7b1}
+      \strng{authorfullhash}{a48b93373d31a56d1503d1cdcbcefd2d}
+      \field{labelalpha}{Har*18}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1744-5647}
+      \field{journaltitle}{Journal of Maps}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{1}
+      \field{title}{Mapping the Changing Residential Geography of {{White British}} Secondary School Children in {{England}} Using Visually Balanced Cartograms and Hexograms}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{volume}{14}
+      \field{year}{2018}
+      \field{urldateera}{ce}
+      \field{pages}{65\bibrangedash 72}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1080/17445647.2018.1478753
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/27DPWCTF/Harris et al. - 2018 - Mapping the changing residential geography of Whit.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.tandfonline.com/doi/full/10.1080/17445647.2018.1478753
+      \endverb
+      \verb{url}
+      \verb https://www.tandfonline.com/doi/full/10.1080/17445647.2018.1478753
+      \endverb
+    \endentry
+    \entry{ian2002Cartogram}{misc}{}
+      \name{author}{3}{}{%
+        {{hash=a2cb483ed11921ac828aadf7d8bc1c3c}{%
+           family={Ian},
+           familyi={I\bibinitperiod},
+           given={Bortins},
+           giveni={B\bibinitperiod}}}%
+        {{hash=f42e052cf6e9af506495857cc4cbb112}{%
+           family={Steve},
+           familyi={S\bibinitperiod},
+           given={Demers},
+           giveni={D\bibinitperiod}}}%
+        {{hash=72ede5e8008fe9f7b859a83158c75daa}{%
+           family={Keith},
+           familyi={K\bibinitperiod},
+           given={Clarke},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{07c9fe42ca2de5e1be8bcd002303d547}
+      \strng{fullhash}{9024538167922a3ba9c4042e53cb1081}
+      \strng{bibnamehash}{07c9fe42ca2de5e1be8bcd002303d547}
+      \strng{authorbibnamehash}{07c9fe42ca2de5e1be8bcd002303d547}
+      \strng{authornamehash}{07c9fe42ca2de5e1be8bcd002303d547}
+      \strng{authorfullhash}{9024538167922a3ba9c4042e53cb1081}
+      \field{labelalpha}{Ian*02}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Cartogram {{Home}}}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{year}{2002}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/JIJ5N9BN/index.html
+      \endverb
+      \verb{urlraw}
+      \verb http://www.ncgia.ucsb.edu/projects/Cartogram_Central/index.html
+      \endverb
+      \verb{url}
+      \verb http://www.ncgia.ucsb.edu/projects/Cartogram_Central/index.html
       \endverb
     \endentry
     \entry{mccartney20202020}{article}{}
@@ -1044,6 +1354,119 @@
       \verb https://overpass-turbo.eu/
       \endverb
     \endentry
+    \entry{pappenberger2019Cartograms}{article}{}
+      \name{author}{3}{}{%
+        {{hash=e720bddb729a8b3e7dd4a679cce4eb3b}{%
+           family={Pappenberger},
+           familyi={P\bibinitperiod},
+           given={Florian},
+           giveni={F\bibinitperiod}}}%
+        {{hash=49c4c390c9101d0095774720d37d4b42}{%
+           family={Cloke},
+           familyi={C\bibinitperiod},
+           given={Hannah\bibnamedelima L.},
+           giveni={H\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=197dd9fe3f0c87358941b588e6eb3ed4}{%
+           family={Baugh},
+           familyi={B\bibinitperiod},
+           given={Calum\bibnamedelima A.},
+           giveni={C\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{25567ec96c3cc50cfaf586b9f5d95f81}
+      \strng{fullhash}{aaddc0481ef76193ac3cc41804f2e2f4}
+      \strng{bibnamehash}{25567ec96c3cc50cfaf586b9f5d95f81}
+      \strng{authorbibnamehash}{25567ec96c3cc50cfaf586b9f5d95f81}
+      \strng{authornamehash}{25567ec96c3cc50cfaf586b9f5d95f81}
+      \strng{authorfullhash}{aaddc0481ef76193ac3cc41804f2e2f4}
+      \field{labelalpha}{Pap*19}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0008-7041, 1743-2774}
+      \field{journaltitle}{The Cartographic Journal}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{number}{2}
+      \field{title}{Cartograms for {{Use}} in {{Forecasting Weather-Driven Natural Hazards}}}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{volume}{56}
+      \field{year}{2019}
+      \field{urldateera}{ce}
+      \field{pages}{134\bibrangedash 145}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1080/00087041.2018.1534358
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/5CJGWLZC/Pappenberger et al. - 2019 - Cartograms for Use in Forecasting Weather-Driven N.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.tandfonline.com/doi/full/10.1080/00087041.2018.1534358
+      \endverb
+      \verb{url}
+      \verb https://www.tandfonline.com/doi/full/10.1080/00087041.2018.1534358
+      \endverb
+    \endentry
+    \entry{park2020Flood}{article}{}
+      \name{author}{3}{}{%
+        {{hash=c0757381400d1e14d0a9438ef8b003c3}{%
+           family={Park},
+           familyi={P\bibinitperiod},
+           given={Seula},
+           giveni={S\bibinitperiod}}}%
+        {{hash=9a070b49f93222a6bda832b076836da6}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Gunhak},
+           giveni={G\bibinitperiod}}}%
+        {{hash=bceab0006bfb347ed54b81085cba8000}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Jung\bibnamedelima Ok},
+           giveni={J\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+      }
+      \strng{namehash}{391dfc33fd6fae83822fe9ba1c89d5a6}
+      \strng{fullhash}{6a27fa184a5e01df60b1170342109a05}
+      \strng{bibnamehash}{391dfc33fd6fae83822fe9ba1c89d5a6}
+      \strng{authorbibnamehash}{391dfc33fd6fae83822fe9ba1c89d5a6}
+      \strng{authornamehash}{391dfc33fd6fae83822fe9ba1c89d5a6}
+      \strng{authorfullhash}{6a27fa184a5e01df60b1170342109a05}
+      \field{labelalpha}{Par*20}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{When flooding occurs, people should be evacuated safely to designated shelters along the optimal routes to minimize serious damages on lives and properties. However, in general, only limited information related to evacuation procedures and using a directional arrow to indicate existing shelters is provided on the evacuation map. Moreover, the evacuation routes leading to nearby shelters are not presented effectively to people in an emergency situation. This paper aimed to provide an approach to generate a flood evacuation cartogram based on an actual evacuation. The proposed time–distance cartogram preserves the topological characteristics by minimizing distortion in transforming the evacuation routes. To empirically evaluate its application, we applied the proposed method to Siheung city in Korea. As a result, optimal shelter and evacuation routes were derived by considering significant factors influencing the actual access to the facilities. Moreover, the flood evacuation cartogram provides a more intuitive visualization than classic topographic maps, by relocating shelters and reshaping the routes intended for evacuation. The suggested method is significant as it provides practical flood evacuation information effectively and intuitively, and the generated cartograms as empirical results also provide helpful insights for more efficient evacuation plans.}
+      \field{issn}{2220-9964}
+      \field{journaltitle}{ISPRS International Journal of Geo-Information}
+      \field{langid}{english}
+      \field{month}{3}
+      \field{number}{4}
+      \field{title}{Flood {{Evacuation Mapping Using}} a {{Time}}–{{Distance}} Cartogram}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{volume}{9}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \field{pages}{207}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/ijgi9040207
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/MK6NLHFS/Park et al. - 2020 - Flood Evacuation Mapping Using a Time–Distance car.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.mdpi.com/2220-9964/9/4/207
+      \endverb
+      \verb{url}
+      \verb https://www.mdpi.com/2220-9964/9/4/207
+      \endverb
+    \endentry
     \entry{qgisWelcome}{misc}{}
       \name{author}{1}{}{%
         {{hash=57470aaa9e22adaefac7f5f342f1c6da}{%
@@ -1116,6 +1539,159 @@
       \endverb
       \verb{url}
       \verb https://www.jstor.org/stable/208794?origin=crossref
+      \endverb
+    \endentry
+    \entry{rocchini2019Cartogramming}{article}{}
+      \name{author}{6}{}{%
+        {{hash=9bd4f12a0a58acb47589656860aa0f73}{%
+           family={Rocchini},
+           familyi={R\bibinitperiod},
+           given={Duccio},
+           giveni={D\bibinitperiod}}}%
+        {{hash=21dfdca79d3b48b6dcedc711d39d9594}{%
+           family={Marcantonio},
+           familyi={M\bibinitperiod},
+           given={Matteo},
+           giveni={M\bibinitperiod}}}%
+        {{hash=b4941bb79149ba7d02d35707fb4c549d}{%
+           family={Arhonditsis},
+           familyi={A\bibinitperiod},
+           given={George},
+           giveni={G\bibinitperiod}}}%
+        {{hash=30bf6fbbab96c628318962bccd8bdbe4}{%
+           family={Cacciato},
+           familyi={C\bibinitperiod},
+           given={Alessandro\bibnamedelima Lo},
+           giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=d195f233d27d20d5522ae711e232a145}{%
+           family={Hauffe},
+           familyi={H\bibinitperiod},
+           given={Heidi\bibnamedelima C.},
+           giveni={H\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=b6d1dbe89ef4c5660ae1c1c47ba937af}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Kate\bibnamedelima S.},
+           giveni={K\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{7b406ba19caf2495df66339876154f6e}
+      \strng{fullhash}{51a8d39578d43dc8ee8d995b84fa0a83}
+      \strng{bibnamehash}{7b406ba19caf2495df66339876154f6e}
+      \strng{authorbibnamehash}{7b406ba19caf2495df66339876154f6e}
+      \strng{authornamehash}{7b406ba19caf2495df66339876154f6e}
+      \strng{authorfullhash}{51a8d39578d43dc8ee8d995b84fa0a83}
+      \field{labelalpha}{Roc*19}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{1476945X}
+      \field{journaltitle}{Ecological Complexity}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{shorttitle}{Cartogramming Uncertainty in Species Distribution Models}
+      \field{title}{Cartogramming Uncertainty in Species Distribution Models: {{A Bayesian}} Approach}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{volume}{38}
+      \field{year}{2019}
+      \field{urldateera}{ce}
+      \field{pages}{146\bibrangedash 155}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/j.ecocom.2019.04.002
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1476945X18301132
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1476945X18301132
+      \endverb
+    \endentry
+    \entry{sack2021Visualizing}{article}{}
+      \name{author}{10}{}{%
+        {{hash=553cea1461ee4d744a62b46bedfc464d}{%
+           family={Sack},
+           familyi={S\bibinitperiod},
+           given={Daniel\bibnamedelima E.},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=b28d3a07eeb0014df5d869bf6ef49c2d}{%
+           family={Gange},
+           familyi={G\bibinitperiod},
+           given={Stephen\bibnamedelima J.},
+           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=5eb70400bdcdbc80e43792390505b53a}{%
+           family={Althoff},
+           familyi={A\bibinitperiod},
+           given={Keri\bibnamedelima N.},
+           giveni={K\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=3ebc63e0afa3bbe5157778884bbcb9bf}{%
+           family={Pettit},
+           familyi={P\bibinitperiod},
+           given={April\bibnamedelima C.},
+           giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=7092bcd3d755da1a04c293b2137048b3}{%
+           family={Kheshti},
+           familyi={K\bibinitperiod},
+           given={Asghar\bibnamedelima N.},
+           giveni={A\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=61c1111e490e93e7218ec30381317dcf}{%
+           family={Ransby},
+           familyi={R\bibinitperiod},
+           given={Imani\bibnamedelima S.},
+           giveni={I\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=88954ebb53b3555767ada54d632ffc6f}{%
+           family={Nelson},
+           familyi={N\bibinitperiod},
+           given={Jeff\bibnamedelima J.},
+           giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=ab07e21258b8c691ba99b136c0c95c00}{%
+           family={Turner},
+           familyi={T\bibinitperiod},
+           given={Megan\bibnamedelima M.},
+           giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=fad28307cb7aa7bdc7fc003137db7df6}{%
+           family={Sterling},
+           familyi={S\bibinitperiod},
+           given={Timothy\bibnamedelima R.},
+           giveni={T\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=6c37bfc2e2b07eeb28d18bee3dd53d03}{%
+           family={Rebeiro},
+           familyi={R\bibinitperiod},
+           given={Peter\bibnamedelima F.},
+           giveni={P\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+      }
+      \strng{namehash}{4894dee5c2e57960866a69798651e759}
+      \strng{fullhash}{840c7e9dde235e4317c849a2a9ab2c5f}
+      \strng{bibnamehash}{4894dee5c2e57960866a69798651e759}
+      \strng{authorbibnamehash}{4894dee5c2e57960866a69798651e759}
+      \strng{authornamehash}{4894dee5c2e57960866a69798651e759}
+      \strng{authorfullhash}{840c7e9dde235e4317c849a2a9ab2c5f}
+      \field{labelalpha}{Sac*21}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1525-4135}
+      \field{journaltitle}{JAIDS Journal of Acquired Immune Deficiency Syndromes}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{title}{Visualizing the Geography of {{HIV}} Observational Cohorts with Density-Adjusted Cartograms}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{volume}{Publish Ahead of Print}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.1097/QAI.0000000000002903
+      \endverb
+      \verb{urlraw}
+      \verb https://journals.lww.com/10.1097/QAI.0000000000002903
+      \endverb
+      \verb{url}
+      \verb https://journals.lww.com/10.1097/QAI.0000000000002903
       \endverb
     \endentry
     \entry{sandberg2018Cartogram}{misc}{}
