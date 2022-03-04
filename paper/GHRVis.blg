@@ -1,19 +1,19 @@
 [0] Config.pm:311> INFO - This is Biber 2.16
 [0] Config.pm:314> INFO - Logfile is 'GHRVis.blg'
-[49] biber-darwin:340> INFO - === Fri Mar  4, 2022, 10:37:48
-[59] Biber.pm:415> INFO - Reading 'GHRVis.bcf'
-[133] Biber.pm:952> INFO - Found 41 citekeys in bib section 0
-[144] Biber.pm:4340> INFO - Processing section 0
-[151] Biber.pm:4531> INFO - Looking for bibtex format file 'GeoVis.bib' for section 0
-[154] bibtex.pm:1689> INFO - LaTeX decoding ...
-[210] bibtex.pm:1494> INFO - Found BibTeX data source 'GeoVis.bib'
-[311] Utils.pm:395> WARN - ISBN '978-0-470-97958-7 978-0-470-74283-9' in entry 'dorling2011Area' is invalid - run biber with '--validate_datamodel' for details.
-[333] Utils.pm:395> WARN - ISBN '978-3-540-23025-0 978-3-540-30140-0' in entry 'vankreveld2004Rectangular' is invalid - run biber with '--validate_datamodel' for details.
-[388] Utils.pm:395> WARN - ISBN '978-3-540-31425-7 978-3-540-31667-1' in entry 'dwyer2006fast' is invalid - run biber with '--validate_datamodel' for details.
-[433] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[433] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[433] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
-[433] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
-[465] bbl.pm:654> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
-[491] bbl.pm:757> INFO - Output to GHRVis.bbl
-[491] Biber.pm:128> INFO - WARNINGS: 3
+[48] biber-darwin:340> INFO - === Fri Mar  4, 2022, 15:45:42
+[58] Biber.pm:415> INFO - Reading 'GHRVis.bcf'
+[130] Biber.pm:952> INFO - Found 41 citekeys in bib section 0
+[141] Biber.pm:4340> INFO - Processing section 0
+[149] Biber.pm:4531> INFO - Looking for bibtex format file 'GeoVis.bib' for section 0
+[152] bibtex.pm:1689> INFO - LaTeX decoding ...
+[207] bibtex.pm:1494> INFO - Found BibTeX data source 'GeoVis.bib'
+[304] Utils.pm:395> WARN - ISBN '978-0-470-97958-7 978-0-470-74283-9' in entry 'dorling2011Area' is invalid - run biber with '--validate_datamodel' for details.
+[325] Utils.pm:395> WARN - ISBN '978-3-540-23025-0 978-3-540-30140-0' in entry 'vankreveld2004Rectangular' is invalid - run biber with '--validate_datamodel' for details.
+[376] Utils.pm:395> WARN - ISBN '978-3-540-31425-7 978-3-540-31667-1' in entry 'dwyer2006fast' is invalid - run biber with '--validate_datamodel' for details.
+[420] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[420] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[420] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
+[420] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
+[451] bbl.pm:654> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
+[476] bbl.pm:757> INFO - Output to GHRVis.bbl
+[476] Biber.pm:128> INFO - WARNINGS: 3

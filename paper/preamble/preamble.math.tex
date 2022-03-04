@@ -6,30 +6,34 @@
 
 % UpdateNodePosition
 
-\newcommand{\nodeList}{L}
+\newcommand{\nodeList}{\bm{L}}
 \newcommand{\nodeListEach}{l^i}
 
 \newcommand{\nodeListEachStalemate}{\nodeListEach.stalemate}
-\newcommand{\nodeListEachPrevious}{\nodeListEach_{previous}}
-\newcommand{\nodeListVPSC}{L'}
+\newcommand{\nodeListEachPrevious}{\nodeListEach_{p}}
+\newcommand{\nodeListVPSC}{\bm{L}'}
 \newcommand{\nodeListVPSCEach}{l^{i'}}
+
+\newcommand{\nodeListVPSCEachLine}{\Line{\nodeListEach\nodeListVPSCEach}}
 \newcommand{\nodeSize}{s}
 \newcommand{\nodeSizeMax}{s_{max}}
 \newcommand{\stalemateMax}{t}
 \newcommand{\crossRiver}{cross}
+\newcommand{\solved}{solved}
 
 % move position
 
 \newcommand{\node}{\bm{n}}
 \newcommand{\nodePrevious}{\node_{p}}
-\newcommand{\nodeVectorPC}{\Vector{\nodePrevious}{\node}}
+\newcommand{\nodeVectorPC}{\Vector{\nodePrevious\node}}
+\newcommand{\nodeVectorCP}{\Vector{\node\nodePrevious}}
 \newcommand{\nodeVPSC}{\node'}
 
 % check river crossing
 
 \newcommand{\riverEdgeList}{\bm{R}}
 \newcommand{\riverEdgeListEach}{r^i}
-\newcommand{\riverEdgeListEachLine}{\LineOne{\riverEdgeListEach}}
+\newcommand{\riverEdgeListEachLine}{\Line{\riverEdgeListEach}}
 \newcommand{\nodeBoundingBox}{b_n}
 \newcommand{\riverEdgeBoundingBoxEach}{b_{\riverEdgeListEach}}
 \newcommand{\boundingBoxInt}{b_{int.}}
@@ -40,21 +44,23 @@
 \newcommand{\CorridorLength}{c_l}
 \newcommand{\CorridorWidth}{c_w}
 \newcommand{\PointP}{p}
-\newcommand{\Edge}{\LineOne{e}}
+\newcommand{\Edge}{\Line{e}}
 \newcommand{\EdgeStart}{\Edge.start}
 \newcommand{\EdgeEnd}{\Edge.end}
-\newcommand{\EdgeParallel}{\LineOne{e_p}}
-\newcommand{\EdgeParallelA}{\LineOne{e_{p^1}}}
-\newcommand{\EdgeParallelB}{\LineOne{e_{p^2}}}
+\newcommand{\EdgeParallel}{\Line{e_p}}
+\newcommand{\EdgeParallelA}{\Line{e_{p^1}}}
+\newcommand{\EdgeParallelB}{\Line{e_{p^2}}}
 \newcommand{\Distance}{d}
-\newcommand{\nodeVectorNP}{\Vector{\node}{\PointP}}
-\newcommand{\nodeVectorNV}{\Vector{\node}{\nodeVPSC}}
-\newcommand{\nodeLineNV}{\Line{\node}{\nodeVPSC}}
-\newcommand{\nodeVectorNpP}{\Vector{\nodePrevious}{\PointP}}
-\newcommand{\nodeLineNpP}{\Line{\nodePrevious}{\PointP}}
+\newcommand{\nodeVectorNP}{\Vector{\node\PointP}}
+\newcommand{\nodeVectorNV}{\Vector{\node\nodeVPSC}}
+\newcommand{\nodeLineNV}{\Line{\node\nodeVPSC}}
+\newcommand{\nodeLinePN}{\Line{\nodePrevious\node}}
+\newcommand{\nodeVectorNpP}{\Vector{\nodePrevious\PointP}}
+\newcommand{\nodeLineNpP}{\Line{\nodePrevious\PointP}}
 \newcommand{\nodeLineWidthNpP}{\Width{\nodePrevious\PointP}}
-\newcommand{\nodeLineWidthNpN}{\Width{\nodePrevious\Node}}
-\newcommand{\nodeInCorridorEach}{{n}_{in}^i}
+\newcommand{\nodeLineWidthNpN}{\Width{\nodePrevious\node}}
+\newcommand{\nodeInCorridor}{\node_{in}}
+\newcommand{\nodeInCorridorEach}{\nodeInCorridor^i}
 \newcommand{\nodeInCorridorEachDx}{\Delta x_{\nodeInCorridorEach}}
 \newcommand{\nodeInCorridorEachDy}{\Delta y_{\nodeInCorridorEach}}
 
@@ -63,9 +69,14 @@
 \newcommand{\Scale}{scale}
 \newcommand{\dx}{\Delta x}
 \newcommand{\dy}{\Delta y}
-\newcommand{\Vector}[2]{\protect\overrightarrow{#1#2}}
-\newcommand{\Line}[2]{\protect\overline{#1#2}}
-\newcommand{\LineOne}[1]{\protect\overline{#1}}
+\newcommand{\Vector}[1]{\protect\overrightarrow{#1}}
+\newcommand{\Line}[1]{\protect\overline{#1}}
 
 
 \newcommand{\Width}[1]{\lvert #1 \rvert}
+
+
+% figure fig:corridor
+
+\newcommand{\nodeVectorNNn}{\Vector{\node\node_{next}}}
+\newcommand{\nodeVectorNinNinn}{\Vector{\nodeInCorridor\nodeInCorridor.next}}
