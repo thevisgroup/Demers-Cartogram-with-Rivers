@@ -52,6 +52,8 @@
 \newcommand{\nodeLineNV}{\Line{\node}{\nodeVPSC}}
 \newcommand{\nodeVectorNpP}{\Vector{\nodePrevious}{\PointP}}
 \newcommand{\nodeLineNpP}{\Line{\nodePrevious}{\PointP}}
+\newcommand{\nodeLineWidthNpP}{\Width{\nodePrevious\PointP}}
+\newcommand{\nodeLineWidthNpN}{\Width{\nodePrevious\Node}}
 \newcommand{\nodeInCorridorEach}{{n}_{in}^i}
 \newcommand{\nodeInCorridorEachDx}{\Delta x_{\nodeInCorridorEach}}
 \newcommand{\nodeInCorridorEachDy}{\Delta y_{\nodeInCorridorEach}}
@@ -64,3 +66,6 @@
 \newcommand{\Vector}[2]{\protect\overrightarrow{#1#2}}
 \newcommand{\Line}[2]{\protect\overline{#1#2}}
 \newcommand{\LineOne}[1]{\protect\overline{#1}}
+
+
+\newcommand{\Width}[1]{\lvert #1 \rvert}

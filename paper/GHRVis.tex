@@ -80,44 +80,16 @@
 
 \usepackage{float,hhline,hyperref,array,tabulary,tabularx,etoolbox,multirow}
 
-% code listing
-\usepackage{listings}
-\lstdefinestyle{customc}{
-  belowcaptionskip=1\baselineskip,
-  breaklines=true,
-  xleftmargin=\parindent,
-  language=C,
-  showstringspaces=false,
-  basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{green!40!black},
-  commentstyle=\itshape\color{purple!40!black},
-  identifierstyle=\color{blue},
-  stringstyle=\color{orange},
-}
-
-\lstdefinestyle{customasm}{
-  belowcaptionskip=1\baselineskip,
-  xleftmargin=\parindent,
-  language=[x86masm]Assembler,
-  basicstyle=\footnotesize\ttfamily,
-  commentstyle=\itshape\color{purple!40!black},
-}
-
-\lstset{escapechar=@,style=customc}
-
 \usepackage{dblfloatfix}
 
 \usepackage[table, dvipsnames]{xcolor}
 
 \usepackage{multicol}
 
-\usepackage{algpseudocode}
-\usepackage{algorithm}
-\usepackage{wrapfig}
-
-
-\include{preamble.math}
-\include{preamble.draft}
+\include{preamble/preamble.basic}
+\include{preamble/preamble.main}
+\include{preamble/preamble.math}
+\include{preamble/preamble.draft}
 
 \author[Q. Wang \& R. S. Laramee]
 {\parbox{\textwidth}{\centering Q. Wang
@@ -132,74 +104,6 @@
 \begin{document}
 
 \pagestyle{plain}
-
-% auto labeling of sections
-\let\origsection=\section
-\renewcommand\section[1]{\origsection{#1}\label{sec:{#1}}}
-
-\let\origsubsection=\subsection
-\renewcommand\subsection[1]{\origsubsection{#1}\label{subsec:{#1}}}
-
-\let\origsubsubsection=\subsubsection
-\renewcommand\subsubsection[1]{\origsubsubsection{#1}\label{subsubsec:{#1}}}
-
-\newcommand{\secref}[1]{Section~\ref{#1}}
-\newcommand{\figref}[1]{Figure~\ref{#1}}
-\newcommand{\tableref}[1]{Table~\ref{#1}}
-\newcommand{\algoref}[1]{Algorithm~\ref{#1}}
-\newcommand{\phantomref}[1]{$\hyperref[#1]{\ref{#1}}$}
-
-% software name
-\newcommand{\software}{GHRVis}
-
-% Bob's dream paragraph style
-\newcommand{\bobgraph}[1]{ \noindent\textbf{#1} \phantomsection \label{bobgraph:{#1}}}
-
-\definecolor{Mycolor1}{HTML}{4C5866} %#4C5866
-\definecolor{Mycolor2}{HTML}{A6B6D2} %#A6B6D2
-\definecolor{Mycolor3}{HTML}{67daff} %#67daff
-\definecolor{Mycolor4}{HTML}{F7F7FE} %#F7F7FE
-\definecolor{Mycolor5}{HTML}{666ad1} %#666ad1
-\definecolor{Mycolor6}{HTML}{ffbb93} %#ffbb93
-\newcommand{\mycolorbox}[2]{\begingroup\setlength{\fboxsep}{2pt}\colorbox{#1}{#2}\endgroup}
-
-% table cite
-\newcommand{\citea}[1]{\citeauthor{#1}~\cite{#1}}
-
-% customized table headers
-\newcommand{\theaderR}[1]{\multicolumn{1}{c|}{\cellcolor{Mycolor3} \textbf{\rotatebox{90}{#1 \phantom{-} }}}}
-\newcommand{\theaderP}[1]{\cellcolor{Mycolor3} \textbf{#1}}
-
-\newcommand{\note}[1]{\textcolor{blue}{#1}}
-
-% switch for algorithmic
-% New definitions
-\algnewcommand\algorithmicswitch{\textbf{switch}}
-\algnewcommand\algorithmiccase{\textbf{case}}
-\algnewcommand\algorithmicdefault{\textbf{default}}
-
-\algdef{SE}[SWITCH]{Switch}{EndSwitch}[1]{\algorithmicswitch\ #1\textbf{:}}{\algorithmicend\ \algorithmicswitch}%
-\algtext*{EndSwitch}%
-
-\algdef{SE}[CASE]{Case}{EndCase}[1]{\algorithmiccase\ #1\textbf{:}}{\algorithmicend\ \algorithmiccase}%
-\algtext*{EndCase}%
-
-\algdef{SE}[DEFUALT]{Default}{EndDefault}{\algorithmicdefault\textbf{:}}{\algorithmicend\ \algorithmicdefault}%
-\algtext*{EndDefault}%
-
-\algnewcommand\algorithmicforeach{\textbf{for each}}
-\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
-
-\newcommand{\thumbnail}[2]{
-      \setlength{\intextsep}{3pt}
-      \setlength{\columnsep}{3pt}
-      \begin{wrapfigure}{r}{0.2\columnwidth}
-        \begin{center}
-          \includegraphics[width=0.2\columnwidth]{figure/related/"#1".png}
-        \end{center}
-      \end{wrapfigure}
-      #2
-}
 
 \maketitle
 

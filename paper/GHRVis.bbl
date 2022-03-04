@@ -45,11 +45,7 @@
       \field{month}{5}
       \field{shorttitle}{How {{American Media Framed}} 2016 {{Presidential Election Using Data Visualization}}}
       \field{title}{How {{American Media Framed}} 2016 {{Presidential Election Using Data Visualization}}: {{The Case Study}} of the {{New York Times}} and the {{Washington Post}}}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{year}{2021}
-      \field{urldateera}{ce}
       \field{pages}{1\bibrangedash 27}
       \range{pages}{27}
       \verb{doi}
@@ -57,12 +53,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/MLYFGXAU/Alieva - 2021 - How American Media Framed 2016 Presidential Electi.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://www.tandfonline.com/doi/full/10.1080/17512786.2021.1930573
-      \endverb
-      \verb{url}
-      \verb https://www.tandfonline.com/doi/full/10.1080/17512786.2021.1930573
       \endverb
     \endentry
     \entry{arranz-lopez2021Enduser}{article}{}
@@ -101,22 +91,12 @@
       \field{month}{11}
       \field{number}{9}
       \field{title}{An End-User Evaluation to Analyze the Effectiveness of Cartograms for Mapping Relative Non-Motorized Accessibility}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{volume}{48}
       \field{year}{2021}
-      \field{urldateera}{ce}
       \field{pages}{2880\bibrangedash 2897}
       \range{pages}{18}
       \verb{doi}
       \verb 10.1177/2399808321991541
-      \endverb
-      \verb{urlraw}
-      \verb http://journals.sagepub.com/doi/10.1177/2399808321991541
-      \endverb
-      \verb{url}
-      \verb http://journals.sagepub.com/doi/10.1177/2399808321991541
       \endverb
     \endentry
     \entry{bearak2016Everything}{article}{}
@@ -220,21 +200,11 @@
       \field{isbn}{978-1-5386-5035-6}
       \field{month}{12}
       \field{title}{Using {{Cartograms}} to {{Visualize Population Normalized Big-Data Sets}}}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{year}{2018}
-      \field{urldateera}{ce}
       \field{pages}{3575\bibrangedash 3580}
       \range{pages}{6}
       \verb{doi}
       \verb 10.1109/BigData.2018.8622217
-      \endverb
-      \verb{urlraw}
-      \verb https://ieeexplore.ieee.org/document/8622217/
-      \endverb
-      \verb{url}
-      \verb https://ieeexplore.ieee.org/document/8622217/
       \endverb
     \endentry
     \entry{cano2015Mosaic}{article}{}
@@ -288,12 +258,8 @@
       \field{month}{6}
       \field{number}{3}
       \field{title}{Mosaic {{Drawings}} and {{Cartograms}}}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2022}
       \field{volume}{34}
       \field{year}{2015}
-      \field{urldateera}{ce}
       \field{pages}{361\bibrangedash 370}
       \range{pages}{10}
       \verb{doi}
@@ -301,12 +267,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/Q2G5MIVY/Cano et al. - 2015 - Mosaic Drawings and Cartograms.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12648
-      \endverb
-      \verb{url}
-      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12648
       \endverb
     \endentry
     \entry{chen2020Node}{article}{}
@@ -349,12 +309,8 @@
       \field{number}{4}
       \field{shorttitle}{Node {{Overlap Removal Algorithms}}}
       \field{title}{Node {{Overlap Removal Algorithms}}: An {{Extended Comparative Study}}}
-      \field{urlday}{17}
-      \field{urlmonth}{6}
-      \field{urlyear}{2021}
       \field{volume}{24}
       \field{year}{2020}
-      \field{urldateera}{ce}
       \field{pages}{683\bibrangedash 706}
       \range{pages}{24}
       \verb{doi}
@@ -362,12 +318,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/FPMM2QFE/Chen et al. - 2020 - Node Overlap Removal Algorithms an Extended Compa.pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://jgaa.info/getPaper?id=532
-      \endverb
-      \verb{url}
-      \verb http://jgaa.info/getPaper?id=532
       \endverb
     \endentry
     \entry{cruz2017Adapted}{inproceedings}{}
@@ -400,11 +350,7 @@
       \field{langid}{english}
       \field{month}{10}
       \field{title}{Adapted Dorling Cartogram on Wage Inequality in {{Portugal}}}
-      \field{urlday}{8}
-      \field{urlmonth}{12}
-      \field{urlyear}{2021}
       \field{year}{2017}
-      \field{urldateera}{ce}
       \field{pages}{1\bibrangedash 5}
       \range{pages}{5}
       \verb{doi}
@@ -412,12 +358,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/VZTGBSA5/Cruz - 2017 - Adapted dorling cartogram on wage inequality in Po.pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://ieeexplore.ieee.org/document/8282365/
-      \endverb
-      \verb{url}
-      \verb http://ieeexplore.ieee.org/document/8282365/
       \endverb
     \endentry
     \entry{dent2009Cartography}{book}{}
@@ -514,11 +454,7 @@
       \field{month}{4}
       \field{shorttitle}{Area {{Cartograms}}}
       \field{title}{Area {{Cartograms}}: {{Their Use}} and {{Creation}}}
-      \field{urlday}{5}
-      \field{urlmonth}{12}
-      \field{urlyear}{2021}
       \field{year}{2011}
-      \field{urldateera}{ce}
       \field{pages}{252\bibrangedash 260}
       \range{pages}{9}
       \verb{doi}
@@ -526,12 +462,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/YXMYIIUQ/Dorling - 2011 - Area Cartograms Their Use and Creation.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://onlinelibrary.wiley.com/doi/10.1002/9780470979587.ch33
-      \endverb
-      \verb{url}
-      \verb https://onlinelibrary.wiley.com/doi/10.1002/9780470979587.ch33
       \endverb
     \endentry
     \entry{dwyer2006fast}{incollection}{}
@@ -662,12 +592,8 @@
       \field{booktitle}{Graph {{Drawing}}}
       \field{isbn}{978-3-540-31425-7 978-3-540-31667-1}
       \field{title}{Fast {{Node Overlap Removal}}}
-      \field{urlday}{17}
-      \field{urlmonth}{6}
-      \field{urlyear}{2021}
       \field{volume}{3843}
       \field{year}{2006}
-      \field{urldateera}{ce}
       \field{pages}{153\bibrangedash 164}
       \range{pages}{12}
       \verb{doi}
@@ -675,12 +601,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/YXLZSHIP/Dwyer et al. - 2006 - Fast Node Overlap Removal.pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://link.springer.com/10.1007/11618058_15
-      \endverb
-      \verb{url}
-      \verb http://link.springer.com/10.1007/11618058_15
       \endverb
     \endentry
     \entry{galluzzi2018Mapping}{article}{}
@@ -728,22 +648,12 @@
       \field{month}{11}
       \field{shorttitle}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data}
       \field{title}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data: {{From}} Standard Treatment of Diffusion to Density-Equalizing Cartograms}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{volume}{48}
       \field{year}{2018}
-      \field{urldateera}{ce}
       \field{pages}{281\bibrangedash 289}
       \range{pages}{9}
       \verb{doi}
       \verb 10.1016/j.ecoinf.2018.06.005
-      \endverb
-      \verb{urlraw}
-      \verb https://linkinghub.elsevier.com/retrieve/pii/S1574954118300463
-      \endverb
-      \verb{url}
-      \verb https://linkinghub.elsevier.com/retrieve/pii/S1574954118300463
       \endverb
     \endentry
     \entry{gamio2016Election}{article}{}
@@ -826,12 +736,8 @@
       \field{month}{6}
       \field{number}{4}
       \field{title}{Visualising the Expansion and Spread of Coronavirus Disease 2019 by Cartograms}
-      \field{urlday}{8}
-      \field{urlmonth}{12}
-      \field{urlyear}{2021}
       \field{volume}{52}
       \field{year}{2020}
-      \field{urldateera}{ce}
       \field{pages}{698\bibrangedash 701}
       \range{pages}{4}
       \verb{doi}
@@ -839,12 +745,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/XMZRHN9H/Gao et al. - 2020 - Visualising the expansion and spread of coronaviru.pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://journals.sagepub.com/doi/10.1177/0308518X20910162
-      \endverb
-      \verb{url}
-      \verb http://journals.sagepub.com/doi/10.1177/0308518X20910162
       \endverb
     \endentry
     \entry{harris2018Mapping}{article}{}
@@ -882,12 +782,8 @@
       \field{month}{1}
       \field{number}{1}
       \field{title}{Mapping the Changing Residential Geography of {{White British}} Secondary School Children in {{England}} Using Visually Balanced Cartograms and Hexograms}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{volume}{14}
       \field{year}{2018}
-      \field{urldateera}{ce}
       \field{pages}{65\bibrangedash 72}
       \range{pages}{8}
       \verb{doi}
@@ -895,12 +791,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/27DPWCTF/Harris et al. - 2018 - Mapping the changing residential geography of Whit.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://www.tandfonline.com/doi/full/10.1080/17445647.2018.1478753
-      \endverb
-      \verb{url}
-      \verb https://www.tandfonline.com/doi/full/10.1080/17445647.2018.1478753
       \endverb
     \endentry
     \entry{ian2002Cartogram}{misc}{}
@@ -1166,12 +1056,8 @@
       \field{month}{6}
       \field{number}{3}
       \field{title}{The {{State}} of the {{Art}} in {{Cartograms}}}
-      \field{urlday}{5}
-      \field{urlmonth}{12}
-      \field{urlyear}{2021}
       \field{volume}{35}
       \field{year}{2016}
-      \field{urldateera}{ce}
       \field{pages}{619\bibrangedash 642}
       \range{pages}{24}
       \verb{doi}
@@ -1179,12 +1065,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/KJA9SQ9V/Nusrat and Kobourov - 2016 - The State of the Art in Cartograms.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12932
-      \endverb
-      \verb{url}
-      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.12932
       \endverb
     \endentry
     \entry{nusrat2020Recognition}{inproceedings}{}
@@ -1228,11 +1108,7 @@
       \field{langid}{english}
       \field{month}{9}
       \field{title}{Recognition and {{Recall}} of {{Geographic Data In Cartograms}}}
-      \field{urlday}{8}
-      \field{urlmonth}{12}
-      \field{urlyear}{2021}
       \field{year}{2020}
-      \field{urldateera}{ce}
       \field{pages}{1\bibrangedash 9}
       \range{pages}{9}
       \verb{doi}
@@ -1240,12 +1116,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/CZCB6RDS/Nusrat et al. - 2020 - Recognition and Recall of Geographic Data In Carto.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://dl.acm.org/doi/10.1145/3399715.3399873
-      \endverb
-      \verb{url}
-      \verb https://dl.acm.org/doi/10.1145/3399715.3399873
       \endverb
     \endentry
     \entry{opengeographyportalxOpen}{misc}{}
@@ -1389,12 +1259,8 @@
       \field{month}{4}
       \field{number}{2}
       \field{title}{Cartograms for {{Use}} in {{Forecasting Weather-Driven Natural Hazards}}}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{volume}{56}
       \field{year}{2019}
-      \field{urldateera}{ce}
       \field{pages}{134\bibrangedash 145}
       \range{pages}{12}
       \verb{doi}
@@ -1402,12 +1268,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/5CJGWLZC/Pappenberger et al. - 2019 - Cartograms for Use in Forecasting Weather-Driven N.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://www.tandfonline.com/doi/full/10.1080/00087041.2018.1534358
-      \endverb
-      \verb{url}
-      \verb https://www.tandfonline.com/doi/full/10.1080/00087041.2018.1534358
       \endverb
     \endentry
     \entry{park2020Flood}{article}{}
@@ -1446,12 +1306,8 @@
       \field{month}{3}
       \field{number}{4}
       \field{title}{Flood {{Evacuation Mapping Using}} a {{Time}}–{{Distance}} Cartogram}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{volume}{9}
       \field{year}{2020}
-      \field{urldateera}{ce}
       \field{pages}{207}
       \range{pages}{1}
       \verb{doi}
@@ -1459,12 +1315,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/MK6NLHFS/Park et al. - 2020 - Flood Evacuation Mapping Using a Time–Distance car.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://www.mdpi.com/2220-9964/9/4/207
-      \endverb
-      \verb{url}
-      \verb https://www.mdpi.com/2220-9964/9/4/207
       \endverb
     \endentry
     \entry{qgisWelcome}{misc}{}
@@ -1523,22 +1373,12 @@
       \field{month}{4}
       \field{number}{2}
       \field{title}{The {{Rectangular Statistical Cartogram}}}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2022}
       \field{volume}{24}
       \field{year}{1934}
-      \field{urldateera}{ce}
       \field{pages}{292}
       \range{pages}{1}
       \verb{doi}
       \verb 10.2307/208794
-      \endverb
-      \verb{urlraw}
-      \verb https://www.jstor.org/stable/208794?origin=crossref
-      \endverb
-      \verb{url}
-      \verb https://www.jstor.org/stable/208794?origin=crossref
       \endverb
     \endentry
     \entry{rocchini2019Cartogramming}{article}{}
@@ -1591,22 +1431,12 @@
       \field{month}{4}
       \field{shorttitle}{Cartogramming Uncertainty in Species Distribution Models}
       \field{title}{Cartogramming Uncertainty in Species Distribution Models: {{A Bayesian}} Approach}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{volume}{38}
       \field{year}{2019}
-      \field{urldateera}{ce}
       \field{pages}{146\bibrangedash 155}
       \range{pages}{10}
       \verb{doi}
       \verb 10.1016/j.ecocom.2019.04.002
-      \endverb
-      \verb{urlraw}
-      \verb https://linkinghub.elsevier.com/retrieve/pii/S1476945X18301132
-      \endverb
-      \verb{url}
-      \verb https://linkinghub.elsevier.com/retrieve/pii/S1476945X18301132
       \endverb
     \endentry
     \entry{sack2021Visualizing}{article}{}
@@ -1678,20 +1508,10 @@
       \field{langid}{english}
       \field{month}{12}
       \field{title}{Visualizing the Geography of {{HIV}} Observational Cohorts with Density-Adjusted Cartograms}
-      \field{urlday}{3}
-      \field{urlmonth}{3}
-      \field{urlyear}{2022}
       \field{volume}{Publish Ahead of Print}
       \field{year}{2021}
-      \field{urldateera}{ce}
       \verb{doi}
       \verb 10.1097/QAI.0000000000002903
-      \endverb
-      \verb{urlraw}
-      \verb https://journals.lww.com/10.1097/QAI.0000000000002903
-      \endverb
-      \verb{url}
-      \verb https://journals.lww.com/10.1097/QAI.0000000000002903
       \endverb
     \endentry
     \entry{sandberg2018Cartogram}{misc}{}
@@ -1762,12 +1582,8 @@
       \field{month}{1}
       \field{number}{1}
       \field{title}{Effectiveness of {{Cartogram}} for the {{Representation}} of {{Spatial Data}}}
-      \field{urlday}{8}
-      \field{urlmonth}{12}
-      \field{urlyear}{2021}
       \field{volume}{47}
       \field{year}{2010}
-      \field{urldateera}{ce}
       \field{pages}{12\bibrangedash 21}
       \range{pages}{10}
       \verb{doi}
@@ -1775,12 +1591,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/3IE768R3/Sun and Li - 2010 - Effectiveness of Cartogram for the Representation .pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://www.tandfonline.com/doi/full/10.1179/000870409X12525737905169
-      \endverb
-      \verb{url}
-      \verb http://www.tandfonline.com/doi/full/10.1179/000870409X12525737905169
       \endverb
     \endentry
     \entry{stabe2016Search}{article}{}
@@ -1936,11 +1746,7 @@
       \field{isbn}{9783038680710}
       \field{journaltitle}{Computer Graphics and Visual Computing (CGVC)}
       \field{title}{Cartograms with {{Topological Features}}}
-      \field{urlday}{18}
-      \field{urlmonth}{5}
-      \field{urlyear}{2021}
       \field{year}{2018}
-      \field{urldateera}{ce}
       \field{pages}{8 pages}
       \range{pages}{-1}
       \verb{doi}
@@ -1948,12 +1754,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/AVSEUUCM/tong2018cartograms.pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://diglib.eg.org/handle/10.2312/cgvc20181217
-      \endverb
-      \verb{url}
-      \verb https://diglib.eg.org/handle/10.2312/cgvc20181217
       \endverb
     \endentry
     \entry{TopoJSON}{misc}{}
@@ -2109,22 +1909,12 @@
       \field{booktitle}{Algorithms –{} {{ESA}} 2004}
       \field{isbn}{978-3-540-23025-0 978-3-540-30140-0}
       \field{title}{On {{Rectangular Cartograms}}}
-      \field{urlday}{2}
-      \field{urlmonth}{1}
-      \field{urlyear}{2022}
       \field{volume}{3221}
       \field{year}{2004}
-      \field{urldateera}{ce}
       \field{pages}{724\bibrangedash 735}
       \range{pages}{12}
       \verb{doi}
       \verb 10.1007/978-3-540-30140-0_64
-      \endverb
-      \verb{urlraw}
-      \verb http://link.springer.com/10.1007/978-3-540-30140-0_64
-      \endverb
-      \verb{url}
-      \verb http://link.springer.com/10.1007/978-3-540-30140-0_64
       \endverb
     \endentry
     \entry{wang2021EHRa}{article}{}
@@ -2157,11 +1947,7 @@
       \field{month}{12}
       \field{shorttitle}{{{EHR STAR}}}
       \field{title}{{{EHR STAR}}: {{The State}}-{{Of}}-the-{{Art}} in {{Interactive EHR Visualization}}}
-      \field{urlday}{23}
-      \field{urlmonth}{1}
-      \field{urlyear}{2022}
       \field{year}{2021}
-      \field{urldateera}{ce}
       \field{pages}{cgf.14424}
       \range{pages}{-1}
       \verb{doi}
@@ -2169,12 +1955,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/AUY4ZCGI/Wang and Laramee - 2021 - EHR STAR The State‐Of‐the‐Art in Interactive EHR .pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.14424
-      \endverb
-      \verb{url}
-      \verb https://onlinelibrary.wiley.com/doi/10.1111/cgf.14424
       \endverb
     \endentry
     \entry{warf2008Geography}{article}{}
@@ -2207,12 +1987,8 @@
       \field{month}{8}
       \field{number}{3}
       \field{title}{The {{Geography}} of {{Religious Diversity}} in the {{United States}}}
-      \field{urlday}{8}
-      \field{urlmonth}{12}
-      \field{urlyear}{2021}
       \field{volume}{60}
       \field{year}{2008}
-      \field{urldateera}{ce}
       \field{pages}{413\bibrangedash 424}
       \range{pages}{12}
       \verb{doi}
@@ -2220,12 +1996,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/5ZKSRMNK/Warf and Winsberg - 2008 - The Geography of Religious Diversity in the United.pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://www.tandfonline.com/doi/abs/10.1080/00330120802046786
-      \endverb
-      \verb{url}
-      \verb http://www.tandfonline.com/doi/abs/10.1080/00330120802046786
       \endverb
     \endentry
   \enddatalist
