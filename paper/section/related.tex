@@ -4,7 +4,7 @@ This section introduces the characteristics of various cartogram styles, describ
 
 \subsection{Definitions}
 
-While we focus on rectangular and Dorling cartograms in this paper, we provide brief definitions of contiguous and non-contiguous cartograms for interested readers: Contiguous cartograms are topology-preserving that maintain connectivity with their adjacent neighbors but have distortion in shape. Non-contiguous cartograms sacrifice the topological connectivity with neighbors to enable growing or shrinking in size while maintaining their original shape \cite{dent2009Cartography}.
+While we focus on rectangular and Dorling cartograms in this paper, we start with brief definitions of contiguous and non-contiguous cartograms for interested readers: Contiguous cartograms are topology-preserving that maintain connectivity with their adjacent neighbors but are also subject to distortion in shape. Non-contiguous cartograms sacrifice the topological connectivity with neighbors to enable expansion or reduction in size while maintaining their polygonal shape \cite{dent2009Cartography}.
 
 \citea{nusrat2016State} define and summarize three major accuracy dimensions for cartograms: statistical, geographical, and topological. Each cartogram design may make accuracy trade-offs between dimensions. We provide an overview of these cartograms in Table \ref{table:accuracy}.
 
@@ -107,4 +107,4 @@ Cartograms are a popular choice of representation in covering various topics by 
 % \citea{newman2016Election} generates contiguous cartograms to present US Election results in 2012 and 2016.
 
 
-Our work extends Demers cartograms. We introduce dynamic topological feature, a river, aiming to improve the interpretation, readability, and geographical accuracy.
+One of the disadvantages of Dorling and Demers cartograms is the legibility. The layout algorithms may displace regions far from their original position and making them more difficult to interpret. Our work extends Demers cartograms. We introduce a new type of dynamic topological feature, a river, aiming to improve the interpretation, readability, and geographical accuracy of this class of cartograms.
