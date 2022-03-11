@@ -841,21 +841,6 @@ export default {
             ? Number(node.attr("nodeXCount")) + 1
             : 1;
 
-        // if (node.attr("id") === "E38000031") {
-        //   console.log(
-        //     [
-        //       previous[0] + previous[2] / 2,
-        //       previous[1] + previous[2] / 2,
-        //       previous[2],
-        //     ],
-        //     [
-        //       current[0] + current[2] / 2,
-        //       current[1] + current[2] / 2,
-        //       current[2],
-        //     ]
-        //   );
-        // }
-
         node
           .attr("stroke", "blue")
           .attr("stroke-width", __VM.node.nodeX.stroke_width)
@@ -1396,10 +1381,6 @@ export default {
       if (history[0].toString() === position.toString()) {
         return;
       }
-
-      // if (node.attr("id") === "E38000031") {
-      //   console.log(position);
-      // }
 
       history.unshift(position);
 
