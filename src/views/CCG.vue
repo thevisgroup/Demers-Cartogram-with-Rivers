@@ -571,7 +571,7 @@ export default {
 
             __VM.iteration.current = 0;
             __VM.delay(20 * __VM.timer * __VM.node.size).then(() => {
-              __VM.deriveCorridor();
+              __VM.processStalemate();
             });
           } else {
             __VM.updateLog(
@@ -595,7 +595,7 @@ export default {
         }
       });
     },
-    deriveCorridor() {
+    processStalemate() {
       const __VM = this;
 
       let nodes = d3
@@ -608,10 +608,17 @@ export default {
         // redraw nodes using new coordinates
 
         node = d3.select(node);
+        const XRiver = node.attr("XRiver");
+        const pSlope = -1 / __VM.river.rivers[XRiver].slope;
 
         const history = __VM.getNodeHistory(node);
 
         const previous = history[1];
+
+        const tempPoint = [500, 500, __VM.node.size];
+
+        tempPoint[1] = pSlope * (tempPoint[0] - previous[0]) + previous[1];
+
         const current = [
           Number(node.attr("x")),
           Number(node.attr("y")),
@@ -624,14 +631,33 @@ export default {
           const dx = current[0] - previous[0] + sizeDiff;
           const dy = current[1] - previous[1] + sizeDiff;
 
+          const pointP = [
+            previous[0] + previous[2] / 2,
+            previous[1] + previous[2] / 2,
+          ];
+
+          const pointC = [
+            current[0] + current[2] / 2,
+            current[1] + current[2] / 2,
+          ];
+
+          const point = [
+            previous[0] +
+              previous[2] / 2 +
+              (dx / Math.sqrt(dx ** 2 + dy ** 2)) * length,
+            previous[1] +
+              previous[2] / 2 +
+              (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length,
+          ];
+
           if (__VM.debug) {
             d3.selectAll(".debug").remove();
 
             __VM.svg
               .append("circle")
               .attr("class", "debug")
-              .attr("cx", previous[0] + previous[2] / 2)
-              .attr("cy", previous[1] + previous[2] / 2)
+              .attr("cx", Number(pointP[0]))
+              .attr("cy", Number(pointP[1]))
               .attr("p", previous[2])
               .attr("r", 0.5)
               .attr("fill", "red");
@@ -639,8 +665,8 @@ export default {
             __VM.svg
               .append("circle")
               .attr("class", "debug")
-              .attr("cx", current[0] + current[2] / 2)
-              .attr("cy", current[1] + current[2] / 2)
+              .attr("cx", Number(pointC[0]))
+              .attr("cy", Number(pointC[1]))
               .attr("p", current[2])
               .attr("r", 0.5)
               .attr("fill", "green");
@@ -648,32 +674,18 @@ export default {
             __VM.svg
               .append("circle")
               .attr("class", "debug")
-              .attr(
-                "cx",
-                previous[0] +
-                  previous[2] / 2 +
-                  (dx / Math.sqrt(dx ** 2 + dy ** 2)) * length
-              )
-              .attr(
-                "cy",
-                previous[1] +
-                  previous[2] / 2 +
-                  (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length
-              )
+              .attr("cx", Number(point[0]))
+              .attr("cy", Number(point[1]))
               .attr("p", current[2])
               .attr("r", 0.5)
               .attr("fill", "purple");
           }
-          return [
-            previous[0] +
-              previous[2] / 2 +
-              (dx / Math.sqrt(dx ** 2 + dy ** 2)) * length -
-              __VM.getHalfNodeSize,
-            previous[1] +
-              previous[2] / 2 +
-              (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length -
-              __VM.getHalfNodeSize,
-          ];
+          return {
+            next: [
+              point[0] - __VM.getHalfNodeSize,
+              point[1] - __VM.getHalfNodeSize,
+            ],
+          };
         };
 
         const deriveParallelEdge = (start, end, distance) => {
@@ -692,10 +704,22 @@ export default {
           ];
         };
 
-        const next = derivePoint(previous, current, __VM.corridor.length);
+        const derivedPoints = derivePoint(
+          previous,
+          tempPoint,
+          __VM.corridor.length
+        );
 
-        const p1 = deriveParallelEdge(previous, next, __VM.node.size / 2);
-        const p2 = deriveParallelEdge(previous, next, -__VM.node.size / 2);
+        const p1 = deriveParallelEdge(
+          previous,
+          derivedPoints.next,
+          __VM.node.size / 2
+        );
+        const p2 = deriveParallelEdge(
+          previous,
+          derivedPoints.next,
+          -__VM.node.size / 2
+        );
 
         const corridor = d3.line()([p1[0], p1[1], p2[1], p2[0], p1[0]]);
 
@@ -725,9 +749,21 @@ export default {
 
             newPos = derivePoint(
               [x, y, Number(history[1][2])],
-              [x_c, y_c, __VM.node.size],
+              [derivedPoints.next[0], derivedPoints.next[1], __VM.node.size],
               Math.hypot(x - x_c, y - y_c) * 2
-            );
+            ).next;
+
+            // const tra = d3.line()([[x, y], newPos]);
+
+            // d3.selectAll(".tra").remove();
+
+            // __VM.svg
+            //   .append("path")
+            //   .attr("d", tra)
+            //   .attr("class", "tra")
+            //   .attr("stroke", "black")
+            //   .attr("stroke-width", "1")
+            //   .attr("fill", "none");
 
             // reset stalemate fill color
             node.attr("fill", node.attr("original_fill"));
@@ -750,6 +786,7 @@ export default {
           return [newPos[0] - x_c + sizeDiff, newPos[1] - y_c + sizeDiff];
         };
 
+        // a vector for the position diff of n, we use this vector to move all nodes in corridor
         const position_diff = moveNodeInCorridor(node);
 
         // here we can derive the bounding box of the corridor to reduce the number of nodes to be checked
@@ -790,7 +827,7 @@ export default {
       __VM.writeNodeHistory(node, current);
 
       const checkIntersect = (line) => {
-        let intersect;
+        let result = [false, ""];
         for (const river of Object.keys(__VM.river.rivers)) {
           const river_path = flattener.flatten_path(
             document.querySelector(`#${river}`).getPathData(),
@@ -800,9 +837,10 @@ export default {
             ]
           );
 
-          intersect = findPathIntersections(river_path, line, true);
+          result[0] = findPathIntersections(river_path, line, true);
 
-          if (intersect) {
+          if (result[0]) {
+            result[1] = river;
             if (__VM.debug) {
               d3.selectAll(".river-crossing-path").remove();
 
@@ -824,7 +862,7 @@ export default {
           }
         }
 
-        return intersect;
+        return result;
       };
 
       const riverCrossingLine = d3.line()([
@@ -832,10 +870,10 @@ export default {
         [current[0] + current[2] / 2, current[1] + current[2] / 2],
       ]);
 
-      const intersect = checkIntersect(riverCrossingLine);
+      const result = checkIntersect(riverCrossingLine);
 
       // move node back
-      if (intersect) {
+      if (result[0]) {
         const nodeXCount =
           Number(node.attr("nodeXCount")) > 0
             ? Number(node.attr("nodeXCount")) + 1
@@ -845,6 +883,7 @@ export default {
           .attr("stroke", "blue")
           .attr("stroke-width", __VM.node.nodeX.stroke_width)
           .attr("nodeXCount", nodeXCount)
+          .attr("XRiver", result[1])
           .transition()
           .attr("x", previous[0])
           .attr("y", previous[1]);
@@ -878,6 +917,7 @@ export default {
       } else {
         if (node.attr("nodeXCount")) {
           node.attr("nodeXCount", 0);
+          node.attr("XRiver", null);
         }
       }
     },
@@ -1370,8 +1410,8 @@ export default {
           return this.nextElementSibling;
         })
         .transition()
-        .attr("cx", position[0] + position[2] / 2)
-        .attr("cy", position[1] + position[2] / 2);
+        .attr("cx", Number(position[0] + position[2] / 2))
+        .attr("cy", Number(position[1] + position[2] / 2));
     },
     writeNodeHistory(node, position) {
       const __VM = this;
@@ -1460,6 +1500,8 @@ export default {
               finalYOld: 0,
             },
             start: [479.02905797094195, 425.36659340425064],
+            end: [347.65206051385206, 417.3280256468014],
+            slope: 0.06118702598660611,
           },
           trent: {
             visibility: true,
@@ -1474,6 +1516,8 @@ export default {
               finalYOld: 0,
             },
             start: [421.57027396650403, 285.2932749819865],
+            end: [347.65206051385206, 417.3280256468014],
+            slope: -0.5460223491545525,
           },
           ouse: {
             visibility: true,
@@ -1488,6 +1532,8 @@ export default {
               finalYOld: 0,
             },
             start: [463.77093643287986, 338.09757337526446],
+            end: [381.6475632920202, 391.79904674408465],
+            slope: -0.5603770457959354,
           },
         },
       },
