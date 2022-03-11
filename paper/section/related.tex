@@ -1,14 +1,17 @@
 \section{Related Work}
 
-This section introduces the characteristics of various cartogram styles, describes relevant applications of cartograms, and provides a brief overview of some real-world applications of cartogram-based visualizations.
+This section introduces the characteristics of various cartogram styles, describes relevant applications of cartograms, and provides a brief overview of some real-world implementations of cartogram-based visualizations.
 
 \subsection{Definitions}
 
-Cartograms combine statistical and geographical information in thematic maps. We follow the categorization of cartograms by \citea{vankreveld2004Rectangular}: contiguous, non-contiguous, rectangular, and Dorling. \citea{nusrat2016State} summarize three major accuracy dimensions for cartograms: statistical, geographical, and topological. Each cartogram design may make accuracy trade-offs between dimensions, we provide an overview in Table \ref{table:accuracy}.
+While we focus on rectangular and Dorling cartograms in this paper, we start with brief definitions of contiguous and non-contiguous cartograms for interested readers: Contiguous cartograms are topology-preserving that maintain connectivity with their adjacent neighbors but are also subject to distortion in shape. Non-contiguous cartograms sacrifice the topological connectivity with neighbors to enable expansion or reduction in size while maintaining their polygonal shape \cite{dent2009Cartography}.
+
+\citea{nusrat2016State} define and summarize three major accuracy dimensions for cartograms: statistical, geographical, and topological. Each cartogram design may make accuracy trade-offs between dimensions. We provide an overview of these cartograms in Table \ref{table:accuracy}.
+
 
 {
 \renewcommand{\arraystretch}{1.5}
-\begin{table}[!b]
+\begin{table}[!tb]
 	\centering
 	\resizebox{\columnwidth}{!}{
 		\begin{tabulary}{\columnwidth}{|*{5}{l|}}
@@ -39,7 +42,7 @@ Cartograms combine statistical and geographical information in thematic maps. We
 
 {
 \renewcommand{\arraystretch}{1.5}
-\begin{table*}[!htb]
+\begin{table*}[!tb]
 	\centering
 	\resizebox{\textwidth}{!}{
 		\begin{tabulary}{\textwidth}{|*{4}{l|}r|c|}
@@ -56,9 +59,9 @@ Cartograms combine statistical and geographical information in thematic maps. We
 			% \hline
 			\citea{warf2008Geography} & \citetitlea{warf2008Geography} & Dorling & US & 3,142 & \citeyear{warf2008Geography} \\
 			\hline
-			\citea{sun2010Effectiveness} & \citetitlea{sun2010Effectiveness} & Dorling, Mosaic, Contiguous & US, China & 34 - 49 & \citeyear{sun2010Effectiveness} \\
+			\citea{sun2010Effectiveness} & \citetitlea{sun2010Effectiveness} & Dorling, Mosaic, Neighbor-preserving & US, China & 34 - 49 & \citeyear{sun2010Effectiveness} \\
 			\hline
-			\citea{cruz2017Adapted} & \citetitlea{cruz2017Adapted} & Dorling, Non-contiguous, Contiguous & Portugal & 2,882 & \citeyear{cruz2017Adapted} \\
+			\citea{cruz2017Adapted} & \citetitlea{cruz2017Adapted} & Dorling, Non-contiguous, Neighbor-preserving & Portugal & 2,882 & \citeyear{cruz2017Adapted} \\
 			\hline
 			\citea{tong2018cartograms} & \citetitlea{tong2018cartograms} & Demers & England & 209 & \citeyear{tong2018cartograms} \\
 			\hline
@@ -72,13 +75,13 @@ Cartograms combine statistical and geographical information in thematic maps. We
 
 		\end{tabulary}
 	}
-	\caption{Related work with cartogram-based visualizations. \textbf{Cartogram type} is the type of cartogram used. \textbf{Geographic region} is the geographic region depicted by the cartogram. \textbf{Number of nodes} is the number of nodes depicted in the cartogram. }
+	\caption{Related work with non-contiguous cartogram-based visualizations. \textbf{Cartogram type} is the type of cartogram used. \textbf{Geographic region} is the geographic region depicted by the cartogram. \textbf{Number of nodes} is the number of nodes depicted in the cartogram. }
 	\label{table:region vs node}
 \end{table*}
 }
 
 \thumbnail{dorling}{
-	Dorling cartograms are non-contiguous and do not preserve geography and topology. A Dorling cartogram is statistically accurate, regions are represented by circles and the data dimension of interest is represented by the circle size \cite{dorling2011Area}. In a Demers Cartogram, a variant of Dorling, squares are used instead to capture a certain level of topology \cite{cano2015Mosaic}. Dorling cartograms are unable to maintain topological accuracy as circles are often repositioned to remove overlap.
+	Dorling cartograms are non-contiguous and do not preserve geography and topology. A Dorling cartogram is statistically accurate, regions are represented by circles and the data dimensions of interest are represented by the circle size \cite{dorling2011Area}. In a Demers cartogram, a variant of Dorling, squares are used instead to capture a certain level of topology \cite{cano2015Mosaic}. Dorling cartograms are unable to maintain topological accuracy as circles are often repositioned to remove overlap. Here we focus on Demers cartograms as we use squares to depict regions. This style of cartogram offers the advantages that the comparisons between regions are intuitive and screen space utilization is more efficient. Demers cartograms also have the advantage of preserving a higher level of topology. 
 }
 
 \thumbnail{rectangular}{
@@ -92,16 +95,16 @@ Cartograms combine statistical and geographical information in thematic maps. We
 
 \subsection{Peer-reviewed Applications}
 
-\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Demers cartogram to visualize health-related date by regions in England, the work introduces a novel technique to remove overlap of squares based on topological features, aiming to improve both geographical and topological accuracy. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, agriculture, and retail data in the US. See Table \ref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
+\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Demers cartogram to visualize health-related data by CCG regions in England, the work introduces a novel technique to remove overlap of squares based on topological features, aiming to improve both geographical and topological accuracy. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, agriculture, and retail data in the US. See \tableref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
 
 
-\subsection{Other Applications}
+\subsection{Implementations}
 
-Cartograms are a popular choice of representation in covering various topics by the media, in order to present an unbiased and complete picture of the news. The Washington Post uses cartograms to visualize the US overseas economic assistance, arm sales (Mosaic) \cite{bearak2016Everything}, the 2016 US Election (contiguous) \cite{gamio2016Election}, and the Brexit Referendum (Mosaic) \cite{taylor2016What}. The National Geographic uses contiguous and Mosaic cartograms to analyze the 2016 US Election results \cite{miller2016Election}, the same topic is also covered by the Financial Times with a Dorling cartogram \cite{stabe2016Search}. \citea{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal. \citea{sandberg2018Cartogram} reports the 2018 US midterm Election with a Mosaic cartogram, the same approach is used to cover the 2020 US Election by the New York Times \cite{thelearningnetwork2020What} and Bloomberg \cite{mccartney20202020}.
+Cartograms are a popular choice of representation in covering various topics by the media, with the goal of presenting an unbiased and complete picture of the news. The Washington Post uses cartograms to visualize the US overseas economic assistance, arm sales (Mosaic) \cite{bearak2016Everything}, the 2016 US Election (contiguous) \cite{gamio2016Election}, and the Brexit Referendum (Mosaic) \cite{taylor2016What}. National Geographic uses contiguous and Mosaic cartograms to analyze the 2016 US Election results \cite{miller2016Election}, the same topic is also covered by the Financial Times with a Dorling cartogram \cite{stabe2016Search}. \citea{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal. \citea{sandberg2018Cartogram} reports the 2018 US midterm Election with a Mosaic cartogram, the same approach is used to cover the 2020 US Election by the New York Times \cite{thelearningnetwork2020What} and Bloomberg \cite{mccartney20202020}.
 
 % \subsection{Contiguous Applications}
 
 % \citea{newman2016Election} generates contiguous cartograms to present US Election results in 2012 and 2016.
 
 
-Compared to previous work on Demers Cartogram, we introduce a topological feature, a river, aiming to improve the interpretation, readability, and topological accuracy.
+One of the disadvantages of Dorling and Demers cartograms is the legibility. The layout algorithms may displace regions far from their original position and making them more difficult to interpret. Our work extends Demers cartograms. We introduce a new type of dynamic topological feature, a river, aiming to improve the interpretation, readability, and geographical accuracy of this class of cartograms.

@@ -1,27 +1,26 @@
 \section{Data Description}
 
-Obtaining the data is challenging, especially when an Electronic Health Records (EHR) dataset is involved \cite{wang2021EHRa}. The data acquisition involves multiple steps. The first step is to obtain both geospatial boundaries and EHR data that match one another. The second step is to pre-process the EHR data for removing empty and erroneous values. The final step is to transform the data into a format that is suitable for visualization.
+Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved \cite{wang2021EHRa}. The data acquisition involves multiple steps. The first step is to obtain both geospatial boundaries and EHR data that match one another. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for visualization.
 
 \subsection{Geospatial Data}
 
-Geospatial boundaries, or shapefiles, were obtained from the following sources. After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to convert the merged shapefile into a TopoJSON \cite{TopoJSON} file to reduce the file size and improve the performance of our implementation.
-
+Geospatial boundaries, or shapefiles, were obtained from the sources described below.
 {
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
-    \caption{A map of 106 CCGs in England as of April 2021, obtained from the Open Geography portalx \cite{opengeographyportalxOpen}.}
+    \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography portalx \cite{opengeographyportalxOpen}.}
     \label{fig:ccg}
 \end{figure}
 }
 
-\subsubsection{Clinical Commissioning Groups}
+\bobgraph{Clinical Commissioning Groups Shapefile}
 
-Clinical Commissioning Groups (CCGs) are the main geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes each year due to the NHS re-organization. The most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, there is no public EHR data published based on the latest CCG re-organization that took place in April 2021.
+Clinical Commissioning Groups (CCGs) are the primary administrative and geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to the NHS re-organization. The most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, because there is still no public EHR data published based on the latest CCG re-organization that took place in 2021.
 
-\subsubsection{Rivers}
+\bobgraph{River Features}
 
-We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Great Ouse in England. These rivers were chosen as they pass through regions with dense population, and provide informative geographical and topological cues. 
+We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Great Ouse in England. These rivers were chosen as they are well-known rivers and pass through regions with dense population, and provide informative geographical and topological cues. 
 
 We first obtain a relation ID by searching for a river, e.g. River Thames, on OpenStreetMap. The relation ID is used to construct a query (See Listing~\ref{overpass}) which enables the user to download the entire river shapefile using Overpass Turbo \cite{overpassturboOverpass}.
 
@@ -29,6 +28,8 @@ We first obtain a relation ID by searching for a river, e.g. River Thames, on Op
     relation(2263653);>>;
     out skel;
 \end{lstlisting}
+
+After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections and scales, and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to convert the merged shapefile into a TopoJSON \cite{TopoJSON} file. TopoJSON eliminates redundant coordinates in the data, this improves the rendering speed of our implementation.
 
 \subsection{EHR Data}
 
@@ -45,7 +46,7 @@ We obtained the Clinical Commissioning Group Outcomes Indicator Set (CCG OIS) fr
     \end{multicols}
     \item Emergency hospital admission
         \begin{itemize}
-            \item Stoke
+            \item Stroke
             \item Alcohol-specific admission and readmission
             \item Coronary heart disease
             \item Readmissions within 30 days of discharge
@@ -69,3 +70,5 @@ For all datasets, a spreadsheet including the following data is provided:
     \item Denominator: The count of registered patients
     \item Numerator: Number of deaths
 \end{itemize}
+
+Each CCG has a unique ONS code, which is used to link the CCG shapefile with the statistical data.

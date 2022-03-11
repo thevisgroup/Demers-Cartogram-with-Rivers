@@ -1,0 +1,85 @@
+\usepackage{amsmath,bm}
+\usepackage{amssymb}
+
+% bold \mathcal{}
+\DeclareMathAlphabet{\mathbcal}{OMS}{cmsy}{b}{n}
+
+% UpdateNodePosition
+
+\newcommand{\nodeList}{\bm{L}}
+\newcommand{\nodeListEach}{\node^i}
+
+\newcommand{\nodeListEachStalemate}{\nodeListEach.stalemate}
+\newcommand{\nodeListEachPrevious}{\nodeListEach_{p}}
+\newcommand{\nodeListVPSC}{\bm{L}'}
+\newcommand{\nodeListVPSCEach}{\node^{i'}}
+
+\newcommand{\nodeListVPSCEachLine}{\Line{\nodeListEach\nodeListVPSCEach}}
+\newcommand{\nodeSize}{s}
+\newcommand{\nodeSizeMax}{s_{max}}
+\newcommand{\stalemateMax}{t}
+\newcommand{\nodeCross}{\node.cross}
+\newcommand{\nodeListCross}{\nodeList.cross}
+
+% move position
+
+\newcommand{\node}{\bm{n}}
+\newcommand{\nodePrevious}{\node_{p}}
+\newcommand{\nodeVectorPC}{\Vector{\nodePrevious\node}}
+\newcommand{\nodeVectorCP}{\Vector{\node\nodePrevious}}
+\newcommand{\nodeVPSC}{\node'}
+
+% check river crossing
+
+\newcommand{\riverEdgeList}{\bm{R}}
+\newcommand{\riverEdgeListEach}{r^i}
+\newcommand{\riverEdgeListEachLine}{\Line{\riverEdgeListEach}}
+\newcommand{\nodeBoundingBox}{b_n}
+\newcommand{\riverEdgeBoundingBoxEach}{b_{\riverEdgeListEach}}
+\newcommand{\boundingBoxInt}{b_{int.}}
+\newcommand{\nodeEdge}{e_n}
+\newcommand{\edgeBoxInt}{e_{int.}}
+
+% derive corridor
+\newcommand{\Corridor}{c}
+\newcommand{\CorridorLength}{\Corridor_l}
+\newcommand{\CorridorWidth}{\Corridor_w}
+\newcommand{\PointP}{\node_c}
+\newcommand{\Edge}{\Line{e}}
+\newcommand{\EdgeStart}{\Edge.start}
+\newcommand{\EdgeEnd}{\Edge.end}
+\newcommand{\EdgeParallel}{\Line{e_p}}
+\newcommand{\EdgeParallelA}{\Line{e_{p^1}}}
+\newcommand{\EdgeParallelB}{\Line{e_{p^2}}}
+\newcommand{\Distance}{d}
+\newcommand{\nodeVectorNP}{\Vector{\node\PointP}}
+\newcommand{\nodeVectorNV}{\Vector{\node\nodeVPSC}}
+\newcommand{\nodeLineNV}{\Line{\node\nodeVPSC}}
+\newcommand{\nodeLinePN}{\Line{\nodePrevious\node}}
+\newcommand{\nodeVectorNpP}{\Vector{\nodePrevious\PointP}}
+\newcommand{\nodeLineNpP}{\Line{\nodePrevious\PointP}}
+\newcommand{\nodeLineWidthNpP}{\Width{\nodePrevious\PointP}}
+\newcommand{\nodeLineWidthNpN}{\Width{\nodePrevious\node}}
+\newcommand{\nodeInCorridor}{\node_{in}}
+\newcommand{\nodeInCorridorT}{\node_{in_t}}
+\newcommand{\nodeInCorridorEach}{\nodeInCorridor^i}
+\newcommand{\nodeInCorridorEachT}{\nodeInCorridorT^i}
+\newcommand{\nodeInCorridorEachDx}{\Delta x_{\nodeInCorridorEach}}
+\newcommand{\nodeInCorridorEachDy}{\Delta y_{\nodeInCorridorEach}}
+
+
+% derive corridor point
+\newcommand{\Scale}{scale}
+\newcommand{\dx}{\Delta x}
+\newcommand{\dy}{\Delta y}
+\newcommand{\Vector}[1]{\protect\overrightarrow{#1}}
+\newcommand{\Line}[1]{\protect\overline{#1}}
+
+
+\newcommand{\Width}[1]{\lvert #1 \rvert}
+
+
+% figure fig:corridor
+
+\newcommand{\nodeVectorNNn}{\Vector{\node\node_{t}}}
+\newcommand{\nodeVectorNinNinn}{\Vector{\nodeInCorridor\nodeInCorridorT}}

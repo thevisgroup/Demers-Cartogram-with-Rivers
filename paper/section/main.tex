@@ -1,143 +1,162 @@
-\section{Cartograms with Features}
+\section{Cartograms with Dynamic Features}
 
 {
-\begin{figure}[b!]
+\begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{example-image-a}
-    \caption{An overview of \software. Figure TBA.}
+    \caption{An screenshot of \software. Figure TBA.}
     \label{fig:overview}
 \end{figure}
 }
 
-\algoref{alg:UpdateNodePosition} describes the overview of \software. We first load and render the CCG geospatial boundaries, for each CCG we compute the centroid where we render a node with $ \mathcal{S} $ as its size. We then apply the Fast Node Overlap Removal (VPSC) algorithm \cite{dwyer2006fast} recursively to remove overlaps. We chose VPSC over other node overlap removal algorithms since VPSC is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. During each iteration, we test node trajectories (See \algoref{alg:check river crossing}) and move nodes that cross a river back to their previous position. A procedure ends when 1) no overlaps are present; 2) no nodes cross a river. We then increase $ \mathcal{S} $ by one pixel and repeat the algorithm until the entire map canvas is filled.
+{
+\begin{figure}[tb!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/flowchart.png}
+    \caption{A flowchart showing the abstraction of our layout algorithm.}
+    \label{fig:flowchart}
+\end{figure}
+}
+
+\algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of our algorithm. \textbf{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a small unit size square node with $ \nodeSize $ as the initial size. \textbf{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (VPSC) algorithm \cite{dwyer2006fast} to remove overlaps. We chose VPSC over other node overlap removal algorithms since VPSC is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. \new{The size growing process provides a stability in the layout and minimizes geographical errors.}
 
 % \begin{noindent}
 
 \begin{algorithm}[tb!]
-    \caption{The procedure to update node positions by removing overlap and prevent nodes from crossing rivers.}\label{alg:UpdateNodePosition}
+    \caption{Procedure to update node positions by removing overlap and prevent nodes from crossing rivers.}\label{alg:UpdateNodePosition}
     \textbf{Global variables:} \\
-    $ \mathbcal{L} \gets $ a list of nodes representing CCGs \\
-    $ \mathcal{S} \gets $ the current size of all nodes \\
-    $ \mathcal{S}_{max} \gets $ the maximum size of a node \\
-    $ \mathcal{I} \gets $ the maximum number of iterations before a stalemate \\
+    $ \nodeList \gets $ a list of nodes representing CCGs \\
+    $ \nodeSize \gets $ the current size of all nodes \\
+    $ \nodeSizeMax \gets $ the maximum size of a node \\
+    $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
 
     \textbf{Local variables:} \\
-    $ \mathbcal{L}_{vpsc} \gets $ a list of nodes representing CCGs after running VPSC \\
-    $ cross \gets $ the boolean for whether a node crossed a river \\
+    $ \nodeListVPSC \gets $ a list of nodes representing CCGs after VPSC \\
+    $ \nodeListCross \gets True $ if any node in the list crossed a river \\
+    $ \nodeCross \gets True $ if the node crossed a river \\
+    $ \nodeListEach \gets $ a node in $ \nodeList $ \\
+    $ \nodeListEachPrevious \gets $ the previous position of $ \nodeListEach $\\
+    $ \nodeListVPSCEach \gets $ a node in $ \nodeListVPSC $, which is the position of $ \nodeListEach $ after VPSC \\
 
     \begin{algorithmic}[1]
         \Procedure{UpdateNodePosition}{}
-        \While{$ \mathcal{S} < \mathcal{S}_{max} $}
+        \While{$ \nodeSize < \nodeSizeMax $}
 
-        \State $ \mathbcal{L}_{vpsc} \gets $ RunVPSC ($ \mathbcal{L} $)
+            \While{$ \nodeListCross = True $}
 
-            \ForEach {$ \mathbcal{L}^i_{vpsc} \in \mathbcal{L}_{vpsc} $}
+                \State $ \nodeListCross \gets False $
+                \State $ \nodeListVPSC \gets $ RemoveOverlap ($ \nodeList $)
 
-                \If {TranslateNode ($ \mathbcal{L}^i, \mathbcal{L}^i_{vpsc} $)}
-                    \State $ cross \gets $ \Call{TestRiverCross}{$ \mathbcal{L}^i, \mathbcal{L}^i_{vpsc} $}
+                \ForEach {$ \nodeListVPSCEach \in \nodeListVPSC $}
 
-                    \If{$ cross = True $}
-                        \State $ \mathcal{I} \gets \mathcal{I} + 1 $
+                    \If {$ \nodeListEach(x,y) \neq \nodeListVPSCEach(x,y) $}
 
-                        \If{$ \mathcal{I} < \mathcal{I} $}
-                            \State \Call{TranslateNode}{$ \mathbcal{L}^i $}
-                        \Else
-                            \State \Call{DeriveCorridor}{$ \mathbcal{L}^i, \mathbcal{L}^i_{vpsc} $}
+                        \State $ \nodeCross \gets $ \Call{TestRiverIntersection}{$ \nodeListVPSCEachLine $}
+                        \State $ \nodeListEach(x,y) \gets \nodeListVPSCEach(x,y) $
+
+                        \If{$ \nodeCross = True $}
+
+                            \State $ \nodeListCross \gets True $
+                            \State $ \nodeListEachStalemate \gets \nodeListEachStalemate + 1 $
+
+                            \If{$ \nodeListEachStalemate < \stalemateMax $}
+
+                                \State $ \nodeListEach(x,y) \gets \nodeListEachPrevious(x,y) $
+
+                            \Else
+
+                                \State \Call{ProcessStalemate}{$ \nodeListEach, \nodeListVPSCEach $}
+                                \State $ \nodeListEachStalemate \gets 0 $ \Comment{Reset counter}
+
+                            \EndIf
+                            
                         \EndIf
 
                     \EndIf
 
-                \EndIf
+                \EndFor
 
-            \EndFor
+            \EndWhile
+
+            \State $ \nodeSize \gets \nodeSize ++$
 
         \EndWhile
 
-        \State $ \mathcal{S} \gets \mathcal{S} ++$
-
         \EndProcedure
     \end{algorithmic}
 \end{algorithm}
 
 
-\begin{algorithm}[tb!]
-    \caption{The procedure to update a single node's position.}\label{alg:move position}
+% \begin{algorithm}[tb!]
+%     \caption{Procedure to update the position of a single node $ \node $.}\label{alg:move position}
 
-    \textbf{Input:} \\
-    $ \mathcal{N} \gets $ required, the node \\
-    $ \mathcal{N}_{vpsc} \gets $ optional, the node after running VPSC \\
+%     \textbf{Input:} \\
+%     $ \node \gets $ the node \\
+%     $ \nodeVPSC \gets $ the node after running VPSC \\
 
-    \textbf{Output:} \\
-    A boolean for whether the node's position is updated. \\
+%     \textbf{Output:} \\
+%     Returns $ True $ if the node's position is updated. \\
 
-    \textbf{Local variables:} \\
-    $ x,y \gets $ variables used to store coordinates \\
+%     \begin{algorithmic}[1]
+%         \Procedure{TranslateNode}{$ \node, \nodeVPSC $}
+%         \If{$ \node(x,y) = \nodeVPSC(x,y) $}
+%             \item[] \Comment{Node position remains unchanged}
+%             \State \Return{$ False $}
+%         \EndIf
 
-    \begin{algorithmic}[1]
-        \Procedure{TranslateNode}{$ \mathcal{N}, \mathcal{N}_{vpsc} $}
-        \If{$ \mathcal{N}.x = \mathcal{N}_{vpsc}.x $ and $ \mathcal{N}.y = \mathcal{N}_{vpsc}.y $}
-            \item[] \Comment{Node position remains unchanged}
-            \State \Return{$ False $}
-        \EndIf
+%         \State $ \node(x,y) \gets \nodeVPSC(x,y) $
 
-        \If{$ \mathcal{N}_{vpsc}$ is undefined } 
-        \item[] \Comment{When optional parameter $ \mathcal{N}_{vpsc} $ is undefined}
-        \item[] \Comment{Move the node back to its previous position}
-            \State $ x \gets \mathcal{N}.previous.x,~y \gets \mathcal{N}.previous.y $
-        \Else
-            \State $ x \gets \mathcal{N}_{vpsc}.x,~y \gets \mathcal{N}_{vpsc}.y $
-            \State $ \mathcal{N}.history.push(x, y) $
-        \EndIf
-
-        \State $ \mathcal{N}.x \gets x $
-        \State $ \mathcal{N}.y \gets y $
-        \State \Return{$ True $}
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
+%         \State \Return{$ True $}
+%         \EndProcedure
+%     \end{algorithmic}
+% \end{algorithm}
 
 %\end{noindent}
 
-\subsection{River Cross Testing}
+\subsection{River Intersection Testing}
 
-We use rivers as topological boundaries and prevent nodes from crossing them. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river crossing}. A bounding box intersection test can be performed to reduce the number of line intersection detections required.
+We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of edges is reduced from 10,170 to 65. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection detections required.
+
+
+{
+\begin{figure}[tb!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/river_resolution.png}
+    \caption{The resolution of rivers can be dynamically adjusted by the user. The top figure shows River Thames at its original resolution with 10,170 edges. The bottom figure shows the river at a  reduced resolution of 65 edges. The reduced resolution preserves the majority of River Thames' original shape and improves the performance of our river intersection tests.}
+    \label{fig:river resolution}
+\end{figure}
+}
 
 % \begin{noindent}
 \begin{algorithm}[tb!]
-    \caption{The procedure to test if a node crosses a river.}\label{alg:check river crossing}
+    \caption{Procedure to test if a node's translation path, $ \nodeLineNV $ intersects a river.}\label{alg:check river intersection}
     \textbf{Input:} \\
-    $ \mathcal{N} \gets $ required, the node \\
-    $ \mathcal{N}_{vpsc} \gets $ required, the node after running VPSC \\
+    $ \nodeLineNV \gets $ the node's translation path \\
 
     \textbf{Output:} \\
-    A boolean for whether the node crosses a river. \\
+    Returns $ True $ if the node crosses a river. \\
 
     \textbf{Global variables:} \\
-    $ \mathbcal{R} \gets $ a list of river edges \\
+    $ \riverEdgeList \gets $ a list of river edges \\
 
     \textbf{Local variables:} \\
-    $ b_\mathcal{N}, b_{\mathcal{R}^i} \gets $ the bounding boxes for $\mathcal{N}$ and $\mathcal{R}^i$ \\
-    $ b_{intersect} \gets $ a boolean for whether $b_\mathcal{N}$ intersects $b_\mathcal{R}^i$ \\
-    $ e_\mathcal{N}, b_{\mathcal{R}^i} \gets $ the edges for $\mathcal{N}$ and $\mathcal{R}^i$ \\
-    $ e_{intersect} \gets $ a boolean for whether $e_\mathcal{N}$ intersects $e_\mathcal{R}^i$ \\
+    $ \riverEdgeListEachLine \gets $ a river edge in $ \riverEdgeList $ \\ 
+    $ \nodeBoundingBox, \riverEdgeBoundingBoxEach \gets $ the bounding boxes for $ \nodeLineNV $ and $ \riverEdgeListEachLine $ \\
+    % $ \boundingBoxInt \gets $ boolean indicating $ \nodeBoundingBox $ intersects $ \riverEdgeBoundingBoxEach $ \\
+    % $ \nodeEdge \gets $ the edge for $ \node $\\
+    % $ \edgeBoxInt \gets $ boolean indicating $ \nodeEdge $ intersects $ \riverEdgeListEach $ \\
 
     \begin{algorithmic}[1]
-        \Procedure{TestRiverCross}{$ \mathcal{N}, \mathcal{N}_{vpsc} $}
+        \Procedure{TestRiverIntersection}{$ \nodeLineNV $}
         
-        \ForEach{$ \mathcal{R}^i \in \mathbcal{R} $}
-            \State $ b_{\mathcal{N}} \gets $ GenerateBoundingBox ($ \mathcal{N}, \mathcal{N}_{vpsc} $)
-            \State $ b_{\mathcal{R}^i} \gets $ GenerateBoundingBox ($ \mathcal{R}^i $)
-            \State $ b_{intersect} \gets $ TestBoundingIntersection ($ b_{\mathcal{N}}, b_{\mathcal{R}^i} $)
-            
-            \If{$ b_{intersect} = True $}
-                \State $ e_{\mathcal{N}} \gets $ GenerateEdge ($ \mathcal{N}, \mathcal{N}_{vpsc} $)
-                \State $ e_{\mathcal{R}^i} \gets $ GenerateEdge ($ \mathcal{R}^i $)
-                \State $ e_{intersect} \gets $ TestEdgeIntersection ($ e_\mathcal{N}, e_{\mathcal{R}^i} $)
-                
-                \If{$ e_{intersect} = True $}
-                    \State \Return{$ True $}
-                \EndIf
-            
+        \ForEach{$ \riverEdgeListEachLine \in \riverEdgeList $}
+            \State $ \nodeBoundingBox \gets $ GetBoundingBox ($ \nodeLineNV $)
+            \State $ \riverEdgeBoundingBoxEach \gets $ GetBoundingBox ($ \riverEdgeListEachLine $)
+            % \State $ \boundingBoxInt \gets $ TestIntersection ($ \nodeBoundingBox, \riverEdgeBoundingBoxEach $)
+            % \If{$ \boundingBoxInt = True $}
+
+            \If{$ \nodeBoundingBox ~intersect~ \riverEdgeBoundingBoxEach = True $}
+                \State \Return{$ \nodeLineNV ~intersect~ \riverEdgeListEachLine $}
                 \EndIf
         \EndFor
         
@@ -147,15 +166,15 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Wh
 \end{algorithm}
 %\end{noindent}
 
-\subsection{Corridor Derivation}
+\subsection{Detecting Stalemates}
 
-As the VPSC always tries to produce an optimal node layout where node spread and movement are minimized, a node might be repeatedly translated between two positions due to the lack of available space, creating a stalemate situation, as shown in \figref{fig:stalemate}. In order to create space for VPSC to generate a new layout, we introduce a user-adjustable parameter, $ \mathcal{I} $, to test for stalemate. If a node is translated between two positions for more than $ \mathcal{I} $ iterations, it is considered to be in a stalemate. A stalemate triggers a corridor derivation which moves all nodes within the corridor by $ \mathcal{D} $ set by the user (See \figref{fig:corridor} and \algoref{alg:derive corridor}).
+As the VPSC always tries to produce an optimal node layout where node distribution and translation are minimized, a node's translation path might be repeatedly intersecting a river due to congestion, creating a stalemate situation, as shown in \figref{fig:stalemate}. If a node is translated between two positions for $ \stalemateMax $ iterations, a corridor is derived to break up the congestion. A corridor, $ c $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNpP $ (See \figref{fig:corridor}C and D). All enclosed nodes are then translated by $ \nodeVectorPC $ to alleviate the congestion (See \figref{fig:corridor}D).
 
 {
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{figure/stalemate.png}
-    \caption{A stalemate situation is when a node repeatedly translates between two positions (A and B) for more than $\mathcal{I}$ iterations. }
+    \caption{A stalemate situation is when a node's translation path $ \nodeVectorCP $ intersects a river for $ \stalemateMax $ times. A stalemate often occurs when the area is congested and the node is unable to move to a position that is not intersecting a river.}
     \label{fig:stalemate}
 \end{figure}
 }
@@ -164,7 +183,7 @@ As the VPSC always tries to produce an optimal node layout where node spread and
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{figure/corridor.png}
-    \caption{When a stalemate occurs, a corridor (black rectangular) is derived based on the current (A) and previous (B) positions of the node that crossed a river, as described in \algoref{alg:derive corridor}. All nodes within the corridor are moved by $ \mathcal{D} $ in the direction of $ \protect\overrightarrow{BA\strut} $. }
+    \caption{A stalemate occurs when a node's translation path $ \nodeVectorCP $ intersects a river for $ \stalemateMax $ times, as shown in A. To address the issue, we derive a corridor (orange rectangle in D) based on $ \node $ and $ \nodePrevious $. All nodes within the corridor are translated based on $ \nodeVectorPC $, such that $ \nodeVectorPC = \nodeVectorNNn = \nodeVectorNinNinn $. In order to show a clear illustration, we place nodes sparsely in this figure.}
     \label{fig:corridor}
 \end{figure}
 }
@@ -172,119 +191,49 @@ As the VPSC always tries to produce an optimal node layout where node spread and
 % \begin{noindent}
 
 \begin{algorithm}[tb!]
-    \caption{The procedure to derive a corridor to move included nodes. We use a SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending to the bottom, there is no negative axes.}\label{alg:derive corridor}
+    \caption{Procedure to derive a corridor to translate enclosed nodes. We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \figref{fig:stalemate}).}\label{alg:derive corridor}
 
     \textbf{Input:} \\
-    $ \mathcal{N} \gets $ required, the node current state \\
-    $ \mathcal{N}_{p} \gets $ required, the node's previous state \\
-
-    \textbf{Output:} \\
-    A boolean for whether the node's position is updated. \\
+    $ \node \gets $ the node used to derive the corridor \\
 
     \textbf{Global variables:} \\
-    $ \mathcal{C}_l \gets $ the length of a corridor \\
-    $ \mathcal{C}_w \gets $ the width of a corridor \\
-    $ \mathcal{D} \gets $ the distance to move nodes within the corridor \\
-    $ \mathcal{S} \gets $ the current size of all nodes \\
+    $ \CorridorLength \gets $ the length of a corridor \\
+    $ \CorridorWidth \gets $ the width of a corridor \\
 
     \textbf{Local variables:} \\
-    $ slope \gets $ the slope of $ \overrightarrow{\mathcal{N}\mathcal{N}_{p}\strut} $ \\
-    $ e_{p} \gets $ an edge perpendicular at $ \mathcal{N} $ on $ \overrightarrow{\mathcal{N}\mathcal{N}_{p}\strut} $ \\
-    $ e_{s^1} \gets $ a perpendicular edge at the start of $ e_{p} $ \\
-    $ e_{s^2} \gets $ a perpendicular edge at the end of $ e_{p} $ \\
-    $ corridor \gets $ a rectangular formed by $ e_p $, $ e_{s^1} $ and $ e_{s^2} $ \\
-    $ n_{in} \gets $ a node located inside $ corridor $ \\
-    $ e_{d} \gets $ an edge connecting $ \mathcal{N} $ and its destination \\
+    $ \Corridor \gets $ the corridor \\
+    $ \nodePrevious \gets $ the previous position of $ \node $ \\
+    $ \PointP \gets $ the point extending $ \nodeVectorPC $ such that $ \nodeLineWidthNpP = \CorridorLength $\\
+    $ \EdgeParallelA, \EdgeParallelB \gets $ the edges parallel to $ \nodeLineNpP $ \\
+    $ corridor \gets $ a rectangle formed by $ \EdgeParallelA $ and $ \EdgeParallelB $ \\
 
     \begin{algorithmic}[1]
-        \Procedure{DeriveCorridor}{$ \mathcal{N}, \mathcal{N}_{p} $}
-            \State TranslateNode ($ \mathcal{N} $)
+        \Procedure{ProcessStalemate}{$ \node $}
+            \State $ \node(x,y) \gets \nodePrevious(x,y) $
 
-            \State $ \Delta x \gets \mathcal{N}.x - \mathcal{N}_{p}.x,~ \Delta y \gets \mathcal{N}.y - \mathcal{N}_{p}.y $
+            \State $ \PointP \gets $ \Call{DerivePoint}{$ \nodeVectorPC $, $ \CorridorLength $}
 
-            \State $ slope \gets \frac{\Delta x}{\Delta y}$
+            \State $ \EdgeParallelA \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNpP $, $ \frac{\CorridorWidth}{2} $}
 
-            \State $ e_{p} = $ \Call{DeriveEdge}{$ \frac{-1}{ slope } $, $ \mathcal{N} $, $ \mathcal{C}_w $}
-            \State $ e_{s^1} = $ \Call{DeriveEdge}{$ slope $, $ e_{p}.a $, $ \mathcal{C}_l $, $ True $}
-            \State $ e_{s^2} = $ \Call{DeriveEdge}{$ slope $, $ e_{p}.b $, $ \mathcal{C}_l $, $ True $}
-            \State $ corridor \gets
+            \State $ \EdgeParallelB \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNpP $, $ -\frac{\CorridorWidth}{2} $}
+
+            \State $ \Corridor \gets
                 \begin{bmatrix}
-                    e_{p}.a &
-                    e_{p}.b \\
+                    \EdgeParallelA.start &
+                    \EdgeParallelA.end \\
 
-                    e_{s^1}.a &
-                    e_{s^2}.b \\
+                    \EdgeParallelB.start &
+                    \EdgeParallelB.end \\
                 \end{bmatrix} $
 
-            \ForEach{$ {n}_{in}^i $ inside $ corridor $}
-                \State $ e_{d} = $ \Call{DeriveEdge}{$ slope $, $ {n}_{in}^i $, $ \mathcal{D} $}
+            \ForEach{$ \nodeInCorridorEach $ inside $ \Corridor $}
 
-                \State TranslateNode ($ {n}_{in}^i, e_{d}.b $)
+                \State $ \Vector{\nodeInCorridorEach ~\nodeInCorridorEachT} = \nodeVectorPC $
+
+                \State $ \nodeInCorridorEach(x,y) \gets \nodeInCorridorEachT(x,y) $
+
             \EndFor
         \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-
-%\end{noindent}
-
-% \begin{noindent}
-
-\begin{algorithm}[tb!]
-    \caption{The procedure to derive an edge based on a slope and a point.}\label{alg:derive corridor point}
-    \textbf{Input:} \\
-    $ Slope \gets $ the slope used to derive an edge \\
-    $ Point \gets $ the point used to derive an edge \\
-    $ Length \gets $ the length of the derived edge \\
-    $ IsSideEdge \gets $ the boolean used to determine the edge's type \\
-
-    \textbf{Output:} \\
-    An edge that passes through a given point with the given slope. \\
-
-    \textbf{Local variables:} \\
-    $ a,b \gets $ variables used to store coordinates \\
-    $ \Delta x, \Delta y \gets $ the differences in $ x, y $ \\
-
-    \begin{algorithmic}[1]
-        \Procedure{DeriveEdge}{$ Slope, Point, Length, IsSideEdge $}
-
-        \Switch{$Slope$}
-            \Case{$0$}
-                \If{$ IsSideEdge = True $}
-                    \State $ a.x \gets Point.x $
-                \Else
-                    \State $ a.x \gets Point.x + Length $
-                \EndIf
-                \State $ a.y \gets Point.y $
-                \State $ b.x \gets Point.x - Length $,~$ b.y \gets Point.y $
-            \EndCase
-            \Case{$ \infty $ or $ -\infty $}
-                \State $ a.x \gets Point.x $
-
-                \If{$ IsSideEdge = True $}
-                    \State $ a.y \gets Point.y $
-                \Else
-                    \State $ a.y \gets Point.y + Length $
-                \EndIf
-
-                \State $ b.x \gets Point.x $,~$ b.y \gets Point.y - Length $
-            \EndCase
-            \Default
-                \State $ \Delta x = \sqrt{\frac{Length}{{1+Slope^2}}}$,~ $ \Delta y = Slope \cdot \Delta x $
-                \If{$ IsSideEdge = True $}
-                    \State $ a.x \gets Point.x $,~$ a.y \gets Point.y $
-                \Else
-                    \State $ a.x \gets Point.x + \Delta x $,~$ a.y \gets Point.y + \Delta y $
-                \EndIf
-                
-                \State $ b.x \gets Point.x - \Delta x $,~$ b.y \gets Point.y - \Delta y $
-            \EndDefault
-
-        \EndSwitch
-
-        \State \Return{$ a, b $}
-
-        \EndProcedure
-
     \end{algorithmic}
 \end{algorithm}
 
