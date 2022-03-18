@@ -7,17 +7,19 @@
 % UpdateNodePosition
 
 \newcommand{\nodeList}{\bm{L}}
-\newcommand{\nodeListEach}{\node^i}
+\newcommand{\nodeListEach}{\node}
+% \newcommand{\nodeListEach}{\node^i}
 
 \newcommand{\nodeListEachStalemate}{\nodeListEach.stalemate}
 \newcommand{\nodeListEachPrevious}{\nodeListEach_{p}}
-\newcommand{\nodeListVPSC}{\bm{L}'}
-\newcommand{\nodeListVPSCEach}{\node^{i'}}
+\newcommand{\nodeListVPSC}{\bm{L}_t}
+% \newcommand{\nodeListVPSCEach}{\node^{i'}}
+\newcommand{\nodeListVPSCEach}{\node_t}
 
 \newcommand{\nodeListVPSCEachLine}{\Line{\nodeListEach\nodeListVPSCEach}}
 \newcommand{\nodeSize}{s}
 \newcommand{\nodeSizeMax}{s_{max}}
-\newcommand{\stalemateMax}{t}
+\newcommand{\stalemateMax}{w}
 \newcommand{\nodeCross}{\node.cross}
 \newcommand{\nodeListCross}{\nodeList.cross}
 
@@ -27,12 +29,15 @@
 \newcommand{\nodePrevious}{\node_{p}}
 \newcommand{\nodeVectorPC}{\Vector{\nodePrevious\node}}
 \newcommand{\nodeVectorCP}{\Vector{\node\nodePrevious}}
-\newcommand{\nodeVPSC}{\node'}
+\newcommand{\nodeVPSC}{\node_t}
+\newcommand{\nodeVectorNC}{\Vector{\nodeVPSC\node}}
+\newcommand{\nodeVectorCN}{\Vector{\node\nodeVPSC}}
 
 % check river crossing
 
 \newcommand{\riverEdgeList}{\bm{R}}
-\newcommand{\riverEdgeListEach}{r^i}
+% \newcommand{\riverEdgeListEach}{r^i}
+\newcommand{\riverEdgeListEach}{\bm{r}}
 \newcommand{\riverEdgeListEachLine}{\Line{\riverEdgeListEach}}
 \newcommand{\nodeBoundingBox}{b_n}
 \newcommand{\riverEdgeBoundingBoxEach}{b_{\riverEdgeListEach}}
@@ -58,12 +63,14 @@
 \newcommand{\nodeLinePN}{\Line{\nodePrevious\node}}
 \newcommand{\nodeVectorNpP}{\Vector{\nodePrevious\PointP}}
 \newcommand{\nodeLineNpP}{\Line{\nodePrevious\PointP}}
-\newcommand{\nodeLineWidthNpP}{\Width{\nodePrevious\PointP}}
+\newcommand{\nodeLineWidthNtP}{\Width{\nodeVPSC\PointP}}
 \newcommand{\nodeLineWidthNpN}{\Width{\nodePrevious\node}}
 \newcommand{\nodeInCorridor}{\node_{in}}
 \newcommand{\nodeInCorridorT}{\node_{in_t}}
-\newcommand{\nodeInCorridorEach}{\nodeInCorridor^i}
-\newcommand{\nodeInCorridorEachT}{\nodeInCorridorT^i}
+\newcommand{\nodeInCorridorEach}{\nodeInCorridor}
+% \newcommand{\nodeInCorridorEach}{\nodeInCorridor^i}
+\newcommand{\nodeInCorridorEachT}{\nodeInCorridorT}
+% \newcommand{\nodeInCorridorEachT}{\nodeInCorridorT^i}
 \newcommand{\nodeInCorridorEachDx}{\Delta x_{\nodeInCorridorEach}}
 \newcommand{\nodeInCorridorEachDy}{\Delta y_{\nodeInCorridorEach}}
 

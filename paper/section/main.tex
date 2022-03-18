@@ -13,12 +13,12 @@
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{figure/flowchart.png}
-    \caption{A flowchart showing the abstraction of our layout algorithm.}
+    \caption{A flowchart showing our layout algorithm.}
     \label{fig:flowchart}
 \end{figure}
 }
 
-\algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of our algorithm. \textbf{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a small unit size square node with $ \nodeSize $ as the initial size. \textbf{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (VPSC) algorithm \cite{dwyer2006fast} to remove overlaps. We chose VPSC over other node overlap removal algorithms since VPSC is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. \new{The size growing process provides a stability in the layout and minimizes geographical errors.}
+\algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of our algorithm. \textbf{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a small unit size square node with initial size, $ \nodeSize $. We start with small unit size squares because they do not overlap initially. \textbf{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (VPSC) algorithm \cite{dwyer2006fast} to remove overlaps. We chose VPSC over other node overlap removal algorithms because VPSC is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in size can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
 
 % \begin{noindent}
 
@@ -32,9 +32,9 @@
 
     \textbf{Local variables:} \\
     $ \nodeListVPSC \gets $ a list of nodes representing CCGs after VPSC \\
-    $ \nodeListCross \gets True $ if any node in the list crossed a river \\
-    $ \nodeCross \gets True $ if the node crossed a river \\
-    $ \nodeListEach \gets $ a node in $ \nodeList $ \\
+    $ \nodeListCross \gets True $ if any node in the list crosses a river \\
+    $ \nodeCross \gets True $ if node crosses a river \\
+    % $ \nodeListEach \gets $ a node in $ \nodeList $ \\
     $ \nodeListEachPrevious \gets $ the previous position of $ \nodeListEach $\\
     $ \nodeListVPSCEach \gets $ a node in $ \nodeListVPSC $, which is the position of $ \nodeListEach $ after VPSC \\
 
@@ -44,6 +44,7 @@
 
             \While{$ \nodeListCross = True $}
 
+                \State \Comment{We should merge two lists into one}
                 \State $ \nodeListCross \gets False $
                 \State $ \nodeListVPSC \gets $ RemoveOverlap ($ \nodeList $)
 
@@ -115,7 +116,7 @@
 
 \subsection{River Intersection Testing}
 
-We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of edges is reduced from 10,170 to 65. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection detections required.
+We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of edges is reduced from its original 10,170 to 65. We do not require a pixel-level river resolution as Demers cartograms do not represent geography at this level od detail, instead a resolution that matches the nodes is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection detections required.
 
 
 {
@@ -168,13 +169,13 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Th
 
 \subsection{Detecting Stalemates}
 
-As the VPSC always tries to produce an optimal node layout where node distribution and translation are minimized, a node's translation path might be repeatedly intersecting a river due to congestion, creating a stalemate situation, as shown in \figref{fig:stalemate}. If a node is translated between two positions for $ \stalemateMax $ iterations, a corridor is derived to break up the congestion. A corridor, $ c $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNpP $ (See \figref{fig:corridor}C and D). All enclosed nodes are then translated by $ \nodeVectorPC $ to alleviate the congestion (See \figref{fig:corridor}D).
+As the VPSC always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path might be repeatedly intersecting a river due to congestion, creating a stalemate situation, as shown in \figref{fig:stalemate}. If a node is translated between two positions for $ \stalemateMax $ iterations, a corridor is constructed to break up the congestion. A corridor, $ c $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNpP $ (See \figref{fig:corridor}C and D). All enclosed nodes are then translated by $ \nodeVectorNC $ to alleviate the congestion (See \figref{fig:corridor}D).
 
 {
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{figure/stalemate.png}
-    \caption{A stalemate situation is when a node's translation path $ \nodeVectorCP $ intersects a river for $ \stalemateMax $ times. A stalemate often occurs when the area is congested and the node is unable to move to a position that is not intersecting a river.}
+    \caption{A stalemate situation is when a node's translation path $ \nodeVectorCN $ intersects a river for $ \stalemateMax $ times. A stalemate often occurs when the area is congested and the node is unable to move to a position that is not intersecting a river.}
     \label{fig:stalemate}
 \end{figure}
 }
@@ -183,7 +184,7 @@ As the VPSC always tries to produce an optimal node layout where node distributi
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{figure/corridor.png}
-    \caption{A stalemate occurs when a node's translation path $ \nodeVectorCP $ intersects a river for $ \stalemateMax $ times, as shown in A. To address the issue, we derive a corridor (orange rectangle in D) based on $ \node $ and $ \nodePrevious $. All nodes within the corridor are translated based on $ \nodeVectorPC $, such that $ \nodeVectorPC = \nodeVectorNNn = \nodeVectorNinNinn $. In order to show a clear illustration, we place nodes sparsely in this figure.}
+    \caption{A stalemate occurs when a node's translation path $ \nodeVectorCN $ intersects a river for $ \stalemateMax $ times, as shown in A. To address the issue, we derive a corridor (orange rectangle in D) based on $ \node $ and $ \nodeVPSC $. All nodes within the corridor are translated based on $ \nodeVectorNC $, such that $ \nodeVectorNNn = \nodeVectorNinNinn $. In order to show a clear illustration, we place nodes sparsely in this figure.}
     \label{fig:corridor}
 \end{figure}
 }
@@ -202,8 +203,8 @@ As the VPSC always tries to produce an optimal node layout where node distributi
 
     \textbf{Local variables:} \\
     $ \Corridor \gets $ the corridor \\
-    $ \nodePrevious \gets $ the previous position of $ \node $ \\
-    $ \PointP \gets $ the point extending $ \nodeVectorPC $ such that $ \nodeLineWidthNpP = \CorridorLength $\\
+    $ \nodePrevious \gets $ the previous position of $ \node $ (this here is confusing because $ \nodePrevious $ is actually $ \nodeVPSC $ in the previous iteration)\\
+    $ \PointP \gets $ the point extending $ \nodeVectorNC $ such that $ \nodeLineWidthNtP = \CorridorLength $\\
     $ \EdgeParallelA, \EdgeParallelB \gets $ the edges parallel to $ \nodeLineNpP $ \\
     $ corridor \gets $ a rectangle formed by $ \EdgeParallelA $ and $ \EdgeParallelB $ \\
 
