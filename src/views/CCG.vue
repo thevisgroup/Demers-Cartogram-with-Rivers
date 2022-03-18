@@ -523,11 +523,7 @@ export default {
 
             return res;
           })
-          .attr("stroke-width", () => {
-            return node.attr("nodeXCount") || node.attr("riverX")
-              ? __VM.node.nodeX.stroke_width
-              : "0.3";
-          })
+          .attr("stroke-width", "0.3")
           //.attr("fill", __VM.colorVariant[__VM.node.color])
           .transition()
           .attr("x", x_new)
@@ -619,15 +615,12 @@ export default {
 
         tempPoint[1] = pSlope * (tempPoint[0] - previous[0]) + previous[1];
 
-        const current = [
-          Number(node.attr("x")),
-          Number(node.attr("y")),
-          __VM.node.size,
-        ];
+        const current = history[0];
 
         const sizeDiff = previous[2] - current[2];
 
         const derivePoint = (previous, current, length) => {
+          console.log(previous, current, length);
           const dx = current[0] - previous[0] + sizeDiff;
           const dy = current[1] - previous[1] + sizeDiff;
 
@@ -699,8 +692,9 @@ export default {
           ];
 
           return [
-            [dx + start[0], dy + start[1]],
-            [dx + end[0], dy + end[1]],
+            // returns size here as it's needed for calculating the vector constant
+            [dx + start[0], dy + start[1], __VM.node.size],
+            [dx + end[0], dy + end[1], __VM.node.size],
           ];
         };
 
@@ -769,7 +763,9 @@ export default {
             node.attr("fill", node.attr("original_fill"));
           }
 
-          node.transition().attr("x", newPos[0]).attr("y", newPos[1]);
+          if (position_diff) {
+            node.transition().attr("x", newPos[0]).attr("y", newPos[1]);
+          }
 
           newPos[2] = __VM.node.size;
           __VM.moveCentroid(node, newPos);
@@ -783,11 +779,19 @@ export default {
             node.attr("stroke", "pink");
           }
 
+          // returns a vector constant for moving enclosed nodes in the corridor
           return [newPos[0] - x_c + sizeDiff, newPos[1] - y_c + sizeDiff];
+          // return [newPos[0] - x_c + sizeDiff, newPos[1] - y_c + sizeDiff];
         };
 
+        // const position_diff = moveNodeInCorridor(node);
+
         // a vector for the position diff of n, we use this vector to move all nodes in corridor
-        const position_diff = moveNodeInCorridor(node);
+        const tempVector = derivePoint(p1[0], p1[1], __VM.node.size).next;
+        const position_diff = [
+          tempVector[0] - p1[0][0],
+          tempVector[1] - p1[0][1],
+        ];
 
         // here we can derive the bounding box of the corridor to reduce the number of nodes to be checked
         for (let [i, node_local] of d3
@@ -796,15 +800,16 @@ export default {
           node_local = d3.select(node_local);
 
           // do not move the node if it's being moved by its own corridor
-          if (node_local.attr("fill") === "blue") {
-            continue;
-          }
 
           const x_in = Number(node_local.attr("x")) + __VM.getHalfNodeSize;
           const y_in = Number(node_local.attr("y")) + __VM.getHalfNodeSize;
 
           if (pip.isInside([x_in, y_in], corridor)) {
-            moveNodeInCorridor(node_local, position_diff);
+            // do not move the node in focus itself
+            if (node_local.attr("nodeXCount") === null) {
+              moveNodeInCorridor(node_local, position_diff);
+            }
+            //  moveNodeInCorridor(node_local, position_diff);
           }
         }
 
@@ -848,7 +853,7 @@ export default {
                 .append("path")
                 .attr("class", "river-crossing-path")
                 .attr("d", line)
-                .attr("stroke", "red")
+                .attr("stroke", "none")
                 .attr("stroke-width", "1")
                 .attr("fill", "none");
             }
@@ -881,7 +886,6 @@ export default {
 
         node
           .attr("stroke", "blue")
-          .attr("stroke-width", __VM.node.nodeX.stroke_width)
           .attr("nodeXCount", nodeXCount)
           .attr("XRiver", result[1])
           .transition()
