@@ -4,19 +4,19 @@
 % bold \mathcal{}
 \DeclareMathAlphabet{\mathbcal}{OMS}{cmsy}{b}{n}
 
+% wrapper for math symbols
+\newcommand{\Vector}[1]{\protect\overrightarrow{#1}}
+\newcommand{\Line}[1]{\protect\overline{#1}}
+\newcommand{\dx}{\Delta x}
+\newcommand{\dy}{\Delta y}
+\newcommand{\Width}[1]{\lvert #1 \rvert}
+
 % UpdateNodePosition
-
 \newcommand{\nodeList}{\bm{L}}
-\newcommand{\nodeListEach}{\node}
-% \newcommand{\nodeListEach}{\node^i}
 
-\newcommand{\nodeListEachStalemate}{\nodeListEach.stalemate}
-\newcommand{\nodeListEachPrevious}{\nodeListEach_{p}}
-\newcommand{\nodeListVPSC}{\bm{L}_t}
-% \newcommand{\nodeListVPSCEach}{\node^{i'}}
-\newcommand{\nodeListVPSCEach}{\node_t}
+\newcommand{\nodeStalemate}{\node.stalemate}
 
-\newcommand{\nodeListVPSCEachLine}{\Line{\nodeListEach\nodeListVPSCEach}}
+\newcommand{\nodeFNORLine}{\Line{\node\nodeFNOR}}
 \newcommand{\nodeSize}{s}
 \newcommand{\nodeSizeMax}{s_{max}}
 \newcommand{\stalemateMax}{w}
@@ -27,20 +27,18 @@
 
 \newcommand{\node}{\bm{n}}
 \newcommand{\nodePrevious}{\node_{p}}
-\newcommand{\nodeVectorPC}{\Vector{\nodePrevious\node}}
-\newcommand{\nodeVectorCP}{\Vector{\node\nodePrevious}}
-\newcommand{\nodeVPSC}{\node_t}
-\newcommand{\nodeVectorNC}{\Vector{\nodeVPSC\node}}
-\newcommand{\nodeVectorCN}{\Vector{\node\nodeVPSC}}
+\newcommand{\nodeFNOR}{\node_t}
+
+\newcommand{\nodeVectorTC}{\Vector{\nodeFNOR\node}}
+\newcommand{\nodeVectorCT}{\Vector{\node\nodeFNOR}}
 
 % check river crossing
 
+\newcommand{\riverEdge}{\bm{r}}
 \newcommand{\riverEdgeList}{\bm{R}}
-% \newcommand{\riverEdgeListEach}{r^i}
-\newcommand{\riverEdgeListEach}{\bm{r}}
-\newcommand{\riverEdgeListEachLine}{\Line{\riverEdgeListEach}}
+\newcommand{\riverEdgeLine}{\Line{\riverEdge}}
 \newcommand{\nodeBoundingBox}{b_n}
-\newcommand{\riverEdgeBoundingBoxEach}{b_{\riverEdgeListEach}}
+\newcommand{\riverEdgeBoundingBox}{b_{\riverEdge}}
 \newcommand{\boundingBoxInt}{b_{int.}}
 \newcommand{\nodeEdge}{e_n}
 \newcommand{\edgeBoxInt}{e_{int.}}
@@ -58,33 +56,18 @@
 \newcommand{\EdgeParallelB}{\Line{e_{p^2}}}
 \newcommand{\Distance}{d}
 \newcommand{\nodeVectorNP}{\Vector{\node\PointP}}
-\newcommand{\nodeVectorNV}{\Vector{\node\nodeVPSC}}
-\newcommand{\nodeLineNV}{\Line{\node\nodeVPSC}}
+\newcommand{\nodeVectorNV}{\Vector{\node\nodeFNOR}}
+\newcommand{\nodeLineNV}{\Line{\node\nodeFNOR}}
 \newcommand{\nodeLinePN}{\Line{\nodePrevious\node}}
-\newcommand{\nodeVectorNpP}{\Vector{\nodePrevious\PointP}}
-\newcommand{\nodeLineNpP}{\Line{\nodePrevious\PointP}}
-\newcommand{\nodeLineWidthNtP}{\Width{\nodeVPSC\PointP}}
-\newcommand{\nodeLineWidthNpN}{\Width{\nodePrevious\node}}
+\newcommand{\nodeVectorNtP}{\Vector{\nodeFNOR\PointP}}
+\newcommand{\nodeLineNtNc}{\Line{\nodeFNOR\PointP}}
+\newcommand{\nodeLineWidthNtP}{\Width{\nodeFNOR\PointP}}
 \newcommand{\nodeInCorridor}{\node_{in}}
 \newcommand{\nodeInCorridorT}{\node_{in_t}}
-\newcommand{\nodeInCorridorEach}{\nodeInCorridor}
-% \newcommand{\nodeInCorridorEach}{\nodeInCorridor^i}
-\newcommand{\nodeInCorridorEachT}{\nodeInCorridorT}
-% \newcommand{\nodeInCorridorEachT}{\nodeInCorridorT^i}
-\newcommand{\nodeInCorridorEachDx}{\Delta x_{\nodeInCorridorEach}}
-\newcommand{\nodeInCorridorEachDy}{\Delta y_{\nodeInCorridorEach}}
 
 
 % derive corridor point
 \newcommand{\Scale}{scale}
-\newcommand{\dx}{\Delta x}
-\newcommand{\dy}{\Delta y}
-\newcommand{\Vector}[1]{\protect\overrightarrow{#1}}
-\newcommand{\Line}[1]{\protect\overline{#1}}
-
-
-\newcommand{\Width}[1]{\lvert #1 \rvert}
-
 
 % figure fig:corridor
 
