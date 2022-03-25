@@ -108,7 +108,7 @@
                   <!-- <b-button
                     block
                     :variant="node.nodeMapToColor ? 'danger' : 'primary'"
-                    v-on:click="setRectColor()"
+                    v-on:click="setNodeColor()"
                     >Map to
                     {{ node.nodeMapToColor ? "Size" : "Color" }}</b-button
                   > -->
@@ -173,9 +173,9 @@
                     Continous mode: {{ step.continous }}
                   </b-form-checkbox>
 
-                  <b-form-checkbox v-model="debug" name="check-button" switch>
+                  <!-- <b-form-checkbox v-model="debug" name="check-button" switch>
                     Debug mode: {{ debug }}
-                  </b-form-checkbox>
+                  </b-form-checkbox> -->
 
                   <!-- <b-button block variant="info">
                     Iteration limit: {{ iteration.limit
@@ -435,7 +435,7 @@ export default {
             .style("left", e.pageX + 20 + "px");
         })
         .on("mouseout", function () {
-          // __VM.setRectColor(this);
+          // __VM.setNodeColor(this);
           tooltip.style("visibility", "hidden");
         });
 
@@ -492,7 +492,7 @@ export default {
       // remove overlaps
       cola.removeOverlaps(nodeToORA);
 
-      const timer = 20 * __VM.timer * __VM.node.size;
+      const timer = __VM.timer * __VM.node.size;
 
       // draw river crossing edges
       for (let [i, node] of d3
@@ -557,7 +557,7 @@ export default {
 
       const crossingCount = d3.selectAll(`.river-crossing-path`)._groups[0]
         .length;
-
+      console.log(crossingCount);
       __VM.delay(timer * 1.1).then(() => {
         if (crossingCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
@@ -566,7 +566,7 @@ export default {
             );
 
             __VM.iteration.current = 0;
-            __VM.delay(20 * __VM.timer * __VM.node.size).then(() => {
+            __VM.delay(__VM.timer * __VM.node.size).then(() => {
               __VM.processStalemate();
             });
           } else {
@@ -598,7 +598,7 @@ export default {
         .selectAll(`#map rect[nodeXCount="${__VM.iteration.limit + 1}"]`)
         ._groups[0].entries();
 
-      const timer = 100 * __VM.timer;
+      const timer = 10 * __VM.timer;
 
       for (let [i, node] of nodes) {
         // redraw nodes using new coordinates
@@ -643,36 +643,36 @@ export default {
               (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length,
           ];
 
-          if (__VM.debug) {
-            d3.selectAll(".debug").remove();
+          // if (__VM.debug) {
+          //   d3.selectAll(".debug").remove();
 
-            __VM.svg
-              .append("circle")
-              .attr("class", "debug")
-              .attr("cx", Number(pointP[0]))
-              .attr("cy", Number(pointP[1]))
-              .attr("p", previous[2])
-              .attr("r", 0.5)
-              .attr("fill", "red");
+          //   __VM.svg
+          //     .append("circle")
+          //     .attr("class", "debug")
+          //     .attr("cx", Number(pointP[0]))
+          //     .attr("cy", Number(pointP[1]))
+          //     .attr("p", previous[2])
+          //     .attr("r", 0.5)
+          //     .attr("fill", "red");
 
-            __VM.svg
-              .append("circle")
-              .attr("class", "debug")
-              .attr("cx", Number(pointC[0]))
-              .attr("cy", Number(pointC[1]))
-              .attr("p", current[2])
-              .attr("r", 0.5)
-              .attr("fill", "green");
+          //   __VM.svg
+          //     .append("circle")
+          //     .attr("class", "debug")
+          //     .attr("cx", Number(pointC[0]))
+          //     .attr("cy", Number(pointC[1]))
+          //     .attr("p", current[2])
+          //     .attr("r", 0.5)
+          //     .attr("fill", "green");
 
-            __VM.svg
-              .append("circle")
-              .attr("class", "debug")
-              .attr("cx", Number(point[0]))
-              .attr("cy", Number(point[1]))
-              .attr("p", current[2])
-              .attr("r", 0.5)
-              .attr("fill", "purple");
-          }
+          //   __VM.svg
+          //     .append("circle")
+          //     .attr("class", "debug")
+          //     .attr("cx", Number(point[0]))
+          //     .attr("cy", Number(point[1]))
+          //     .attr("p", current[2])
+          //     .attr("r", 0.5)
+          //     .attr("fill", "purple");
+          // }
           return {
             next: [
               point[0] - __VM.getHalfNodeSize,
@@ -784,41 +784,43 @@ export default {
           // return [newPos[0] - x_c + sizeDiff, newPos[1] - y_c + sizeDiff];
         };
 
-        // const position_diff = moveNodeInCorridor(node);
-
         // a vector for the position diff of n, we use this vector to move all nodes in corridor
         const tempVector = derivePoint(p1[0], p1[1], __VM.node.size).next;
         const position_diff = [
           tempVector[0] - p1[0][0],
           tempVector[1] - p1[0][1],
         ];
+        // move the node itself
+        moveNodeInCorridor(node, position_diff);
+        node.attr("fill", node.attr("original_fill"));
 
         // here we can derive the bounding box of the corridor to reduce the number of nodes to be checked
-        for (let [i, node_local] of d3
+        for (let [i, node_in_c] of d3
           .selectAll(".node-layer > g > rect")
           ._groups[0].entries()) {
-          node_local = d3.select(node_local);
+          node_in_c = d3.select(node_in_c);
 
           // do not move the node if it's being moved by its own corridor
 
-          const x_in = Number(node_local.attr("x")) + __VM.getHalfNodeSize;
-          const y_in = Number(node_local.attr("y")) + __VM.getHalfNodeSize;
+          const x_in = Number(node_in_c.attr("x")) + __VM.getHalfNodeSize;
+          const y_in = Number(node_in_c.attr("y")) + __VM.getHalfNodeSize;
 
           if (pip.isInside([x_in, y_in], corridor)) {
             // do not move the node in focus itself
-            if (node_local.attr("nodeXCount") === null) {
-              moveNodeInCorridor(node_local, position_diff);
+            if (node_in_c.attr("nodeXCount") === null) {
+              moveNodeInCorridor(node_in_c, position_diff);
             }
-            //  moveNodeInCorridor(node_local, position_diff);
+            //  moveNodeInCorridor(node_in_c, position_diff);
           }
         }
 
         __VM.delay(timer).then(() => {
-          // d3.select(".corridor").remove();
+          d3.select(".corridor").remove();
         });
       }
       __VM.delay(timer).then(() => {
-        // __VM.removeOverlap(true);
+        d3.selectAll(".river-crossing-path").remove();
+        __VM.removeOverlap(true);
         __VM.step.button_disabled = false;
       });
     },
@@ -846,17 +848,14 @@ export default {
 
           if (result[0]) {
             result[1] = river;
-            if (__VM.debug) {
-              d3.selectAll(".river-crossing-path").remove();
 
-              __VM.svg
-                .append("path")
-                .attr("class", "river-crossing-path")
-                .attr("d", line)
-                .attr("stroke", "none")
-                .attr("stroke-width", "1")
-                .attr("fill", "none");
-            }
+            __VM.svg
+              .append("path")
+              .attr("class", "river-crossing-path")
+              .attr("d", line)
+              .attr("stroke", "none")
+              .attr("stroke-width", "1")
+              .attr("fill", "none");
 
             __VM.river.rivers[river].translate.x +=
               current[0] - previous[0] + sizeDiff;
@@ -990,7 +989,7 @@ export default {
           return Number(d3.select(this).attr("y")) - sizeDiff;
         });
     },
-    setRectColor(singleRect) {
+    setNodeColor(singleRect) {
       const __VM = this;
       const changeColor = (r, color) => {
         d3.select(r).attr("fill", color);
@@ -1117,15 +1116,15 @@ export default {
           .attr("stroke-width", `${__VM.river.width}px`)
           .attr("fill", "none");
 
-        river_layer
-          .selectAll("circle")
-          .data(res)
-          .enter()
-          .append("circle")
-          .attr("fill", "red")
-          .attr("cx", (d) => d[0])
-          .attr("cy", (d) => d[1])
-          .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
+        // river_layer
+        //   .selectAll("circle")
+        //   .data(res)
+        //   .enter()
+        //   .append("circle")
+        //   .attr("fill", "red")
+        //   .attr("cx", (d) => d[0])
+        //   .attr("cy", (d) => d[1])
+        //   .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
 
         let timer = 0;
 
@@ -1370,13 +1369,13 @@ export default {
           __VM.region.ouse.push(first);
         }
 
-        __VM.svg
-          .append("path")
-          .attr("class", "river-region")
-          .attr("d", d3.line()(__VM.region[river]))
-          .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          .attr("stroke-width", "2px")
-          .attr("fill", "none");
+        // __VM.svg
+        //   .append("path")
+        //   .attr("class", "river-region")
+        //   .attr("d", d3.line()(__VM.region[river]))
+        //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+        //   .attr("stroke-width", "2px")
+        //   .attr("fill", "none");
       });
 
       __VM.runPIP();
@@ -1549,9 +1548,9 @@ export default {
         success: "rgb(92, 184, 92, 45%)",
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
-        thames: "rgb(20, 84, 140, 45%)",
-        trent: "rgb(240, 173, 78, 45%)",
-        ouse: "	rgb(132, 196, 224, 45%)",
+        thames: "rgb(20, 84, 140, 75%)",
+        trent: "rgb(240, 173, 78, 75%)",
+        ouse: "	rgb(132, 196, 224, 75%)",
         blueRegion: "#ba68c8",
       },
     };
