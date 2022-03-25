@@ -166,11 +166,11 @@
                   >
 
                   <b-form-checkbox
-                    v-model="step.continous"
+                    v-model="step.continuous"
                     name="check-button"
                     switch
                   >
-                    Continous mode: {{ step.continous }}
+                    continuous mode: {{ step.continuous }}
                   </b-form-checkbox>
 
                   <!-- <b-form-checkbox v-model="debug" name="check-button" switch>
@@ -585,7 +585,7 @@ export default {
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
 
-          if (repeat && __VM.step.continous) {
+          if (repeat && __VM.step.continuous) {
             __VM.removeOverlap();
           }
         }
@@ -1444,7 +1444,7 @@ export default {
     return {
       step: {
         button_disabled: false,
-        continous: true,
+        continuous: true,
       },
       iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
       timer: 10,
