@@ -289,6 +289,7 @@ import * as pip from "point-in-svg-polygon";
 import * as topojson from "topojson-client";
 import * as cola from "webcola";
 import * as flattener from "../helper/flattener";
+import * as river_vector from "../helper/river_vector";
 import findPathIntersections from "path-intersection";
 
 export default {
@@ -557,7 +558,6 @@ export default {
 
       const crossingCount = d3.selectAll(`.river-crossing-path`)._groups[0]
         .length;
-      console.log(crossingCount);
       __VM.delay(timer * 1.1).then(() => {
         if (crossingCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
@@ -604,23 +604,135 @@ export default {
         // redraw nodes using new coordinates
 
         node = d3.select(node);
-        const XRiver = node.attr("XRiver");
-        const pSlope = -1 / __VM.river.rivers[XRiver].slope;
 
         const history = __VM.getNodeHistory(node);
 
+        const current = history[0];
         const previous = history[1];
+        const sizeDiff = previous[2] - current[2];
 
-        const tempPoint = [500, 500, __VM.node.size];
+        // used in derivedPoints
+        let tempPoint = [500, 500, __VM.node.size];
+
+        const XRiver = node.attr("XRiver");
+        let pSlope;
+
+        // assign pSlope based on the river name
+        switch (XRiver) {
+          // ouse has 2 sections
+          case "ouse":
+            // check which section the node is in
+            if (
+              river_vector.bounding_box(
+                __VM.river.rivers[XRiver].start,
+                __VM.river.rivers[XRiver].section[0],
+                current
+              )
+            ) {
+              pSlope =
+                -1 /
+                river_vector.cal_slope(
+                  __VM.river.rivers[XRiver].start,
+                  __VM.river.rivers[XRiver].section[0]
+                );
+            } else {
+              pSlope =
+                -1 /
+                river_vector.cal_slope(
+                  __VM.river.rivers[XRiver].section[0],
+                  __VM.river.rivers[XRiver].end
+                );
+            }
+
+            // use the right reference point based on the side
+            if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
+              tempPoint = [430, 320, __VM.node.size];
+            } else {
+              tempPoint = [490, 350, __VM.node.size];
+            }
+            break;
+
+          // trent has 3 sections
+          case "trent":
+            // check which section the node is in
+            tempPoint = [360, 280, __VM.node.size];
+
+            if (
+              river_vector.bounding_box(
+                __VM.river.rivers[XRiver].start,
+                __VM.river.rivers[XRiver].section[0],
+                current
+              )
+            ) {
+              console.log("section 1");
+              pSlope =
+                -1 /
+                river_vector.cal_slope(
+                  __VM.river.rivers[XRiver].start,
+                  __VM.river.rivers[XRiver].section[0]
+                );
+
+              // use the right reference point based on the side
+              if (
+                !river_vector.is_upper_side(node, __VM.colorVariant[XRiver])
+              ) {
+                tempPoint = [430, 300, __VM.node.size];
+              }
+            } else if (
+              river_vector.bounding_box(
+                __VM.river.rivers[XRiver].section[0],
+                __VM.river.rivers[XRiver].section[1],
+                current
+              )
+            ) {
+              console.log("section 2");
+              pSlope =
+                -1 /
+                river_vector.cal_slope(
+                  __VM.river.rivers[XRiver].section[0],
+                  __VM.river.rivers[XRiver].section[1]
+                );
+
+              // use the right reference point based on the side
+              if (
+                !river_vector.is_upper_side(node, __VM.colorVariant[XRiver])
+              ) {
+                tempPoint = [400, 350, __VM.node.size];
+              }
+            } else {
+              console.log("section 3");
+              pSlope =
+                -1 /
+                river_vector.cal_slope(
+                  __VM.river.rivers[XRiver].section[1],
+                  __VM.river.rivers[XRiver].end
+                );
+              // use the right reference point based on the side
+              if (
+                !river_vector.is_upper_side(node, __VM.colorVariant[XRiver])
+              ) {
+                tempPoint = [300, 350, __VM.node.size];
+              }
+            }
+
+            break;
+
+          // trent has 1 section
+          case "thames":
+            pSlope = -1 / __VM.river.rivers[XRiver].slope;
+
+            if (!river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
+              tempPoint = [500, 500, __VM.node.size];
+            } else {
+              tempPoint = [420, 460, __VM.node.size];
+            }
+
+            break;
+        }
 
         tempPoint[1] = pSlope * (tempPoint[0] - previous[0]) + previous[1];
 
-        const current = history[0];
-
-        const sizeDiff = previous[2] - current[2];
-
         const derivePoint = (previous, current, length) => {
-          console.log(previous, current, length);
           const dx = current[0] - previous[0] + sizeDiff;
           const dy = current[1] - previous[1] + sizeDiff;
 
@@ -793,6 +905,8 @@ export default {
         // move the node itself
         moveNodeInCorridor(node, position_diff);
         node.attr("fill", node.attr("original_fill"));
+
+        // TODO: when a node cross a river section, it uses the wrong bounding box to check itself
 
         // here we can derive the bounding box of the corridor to reduce the number of nodes to be checked
         for (let [i, node_in_c] of d3
@@ -1116,15 +1230,15 @@ export default {
           .attr("stroke-width", `${__VM.river.width}px`)
           .attr("fill", "none");
 
-        // river_layer
-        //   .selectAll("circle")
-        //   .data(res)
-        //   .enter()
-        //   .append("circle")
-        //   .attr("fill", "red")
-        //   .attr("cx", (d) => d[0])
-        //   .attr("cy", (d) => d[1])
-        //   .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
+        river_layer
+          .selectAll("circle")
+          .data(res)
+          .enter()
+          .append("circle")
+          .attr("fill", "red")
+          .attr("cx", (d) => d[0])
+          .attr("cy", (d) => d[1])
+          .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
 
         let timer = 0;
 
@@ -1518,9 +1632,13 @@ export default {
               finalY: 0,
               finalYOld: 0,
             },
-            start: [421.57027396650403, 285.2932749819865],
-            end: [347.65206051385206, 417.3280256468014],
-            slope: -0.5460223491545525,
+            start: [421.95559914523204, 284.39009883603944],
+            end: [341.19219722341234, 322.06244605320074],
+            section: [
+              [415.1557430500323, 321.9094162078742],
+              [364.91991729782876, 345.3079796168287],
+            ],
+            slope: -1.7862275682486464,
           },
           ouse: {
             visibility: true,
@@ -1536,7 +1654,8 @@ export default {
             },
             start: [463.77093643287986, 338.09757337526446],
             end: [381.6475632920202, 391.79904674408465],
-            slope: -0.5603770457959354,
+            section: [[455.1011199115002, 372.2082259570797]],
+            slope: -0.6539121728074947,
           },
         },
       },
