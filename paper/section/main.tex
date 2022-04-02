@@ -16,16 +16,9 @@
         \caption{A flowchart illustration of our layout algorithm. See also \algoref{alg:UpdateNodePosition} for more detail.}
         \label{fig:flowchart}
     \end{figure}
-
-    \begin{figure}[tb!]
-        \centering
-        \includegraphics[width=\columnwidth]{figure/flowchart2.png}
-        \caption{An awesome flowchart illustration of our layout algorithm. See also \algoref{alg:UpdateNodePosition} for more detail.}
-        \label{fig:flowchart2}
-    \end{figure}
 }
 
-\algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of the process. \textbf{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a small unit size square node with initial size, $ \nodeSize $. We start with small unit size squares because they do not overlap initially. \textbf{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
+\algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of the process. \textbf{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a small unit size square node with initial size, $ \nodeSize $. We start with small unit size squares because they do not overlap initially. \textbf{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. If a node oscillates across a river, we process this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
 
 % \begin{noindent}
 
@@ -39,9 +32,9 @@
     $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
 
     \textbf{Local variables:} \\
-    $ \node \gets $ a node is an object with the following property: \\
+    $ \node \gets $ a node is an object with the following properties: \\
     \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
-    \-\hspace{1em} $ \nodeCross \gets True $ if $ \node $ crosses a river \\
+    \-\hspace{1em} $ \nodeCross \gets $ the counter for river crosses for $ \node $ \\
     \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
     \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
 
@@ -49,7 +42,7 @@
     \begin{algorithmic}[1]
         \Procedure{UpdateNodePosition}{}
         \While{$ \nodeSize < \nodeSizeMax $}
-
+            \State $ \nodeListCross \gets True $
             \While{$ \nodeListCross = True $}
 
                 \State $ \nodeListCross \gets False $
@@ -60,21 +53,19 @@
                     \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
                         
                         \State $ \node(x,y) \gets \nodeFNOR(x,y) $
-                        \State $ \nodeCross \gets $ \Call{TestRiverIntersection}{$ \nodeFNORLine $}
 
-                        \If{$ \nodeCross = True $}
-
+                        \If{ \Call{TestIntersection}{$ \nodeFNORLine $} $ = True $}
+                            \State $ \nodeCross \gets \nodeCross ++ $
                             \State $ \nodeListCross \gets True $
-                            \State $ \nodeStalemate \gets \nodeStalemate + 1 $
 
-                            \If{$ \nodeStalemate < \stalemateMax $}
-                                \State \hskip-2em \Comment{Transalte back to previous position}
+                            \If{$ \nodeCross < \stalemateMax $}
+                                \State \hskip-2em \Comment{Translate back to previous position}
                                 \State $ \node(x,y) \gets \nodePrevious(x,y) $
 
                             \Else
 
                                 \State \Call{ProcessStalemate}{$ \node, \nodeFNOR $}
-                                \State $ \nodeStalemate \gets 0 $ \Comment{Reset counter}
+                                \State $ \nodeCross \gets 0 $ \Comment{Reset counter}
 
                             \EndIf
                             
@@ -99,7 +90,7 @@
 
 \subsection{River Intersection Testing}
 
-We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of edges is reduced from its original 10,170 to 65. We do not require a pixel-level river resolution as Demers cartograms do not represent geography at this level od detail. Instead a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
+We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of edges is reduced from its original 10,170 to 65. We do not require a pixel-level river resolution as Demers cartograms do not need to represent geography at this level od detail. Instead a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
 
 
 {
@@ -131,7 +122,7 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Th
     % $ \edgeBoxInt \gets $ boolean indicating $ \nodeEdge $ intersects $ \riverEdgeListEach $ \\
 
     \begin{algorithmic}[1]
-        \Procedure{TestRiverIntersection}{$ \nodeLineNV $}
+        \Procedure{TestIntersection}{$ \nodeLineNV $}
         
         \ForEach{$ \riverEdgeLine \in \riverEdgeList $}
             \State $ \nodeBoundingBox \gets $ GetBoundingBox ($ \nodeLineNV $)
@@ -150,13 +141,13 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Th
 
 \subsection{Detecting Stalemates}
 
-As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path might repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \figref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations, we introduce a heuristic solution: constructing a corridor to break up the congestion. A corridor, $ c $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNtNc $ (See \figref{fig:corridor}C and D). All enclosed nodes are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \figref{fig:corridor}D).
+As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path might repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \figref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations (a user-adjustable parameter), we introduce a heuristic solution: constructing a corridor to break up the congestion. A corridor, $ c $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNtNc $ (See \figref{fig:corridor}C and D). All enclosed nodes are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \figref{fig:corridor}D).
 
 {
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{figure/stalemate.png}
-    \caption{A stalemate situation is when a node's translation path $ \nodeVectorCT $ (in iteration 1) intersects a river for $ \stalemateMax $ times. The node is translated back to its previous position (iteration 2). A stalemate often occurs when the area is congested and the node is unable to translate to a position without intersecting a river.}
+    \caption{A stalemate situation is when a node's translation path $ \nodeVectorCT $ (in iteration 1) intersects a river $ \stalemateMax $ times. The node is translated back to its previous position (iteration 2). A stalemate often occurs when the area is congested and the node is unable to translate to a new position without intersecting a river.}
     \label{fig:stalemate}
 \end{figure}
 }

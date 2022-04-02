@@ -4,12 +4,12 @@ Cartograms are representations of hybrid geographical and abstract data based on
 
 Among the four types of cartograms categorized by \citea{nusrat2016State} (contiguous, non-contiguous, rectangular, and Dorling), a trade-off between types of accuracy is made (See \tableref{table:accuracy}). For this project we focus on non-contiguous cartograms like Demers cartograms, because they facilitate statistical comparison between regions and they can make good use of screen space. Building on Demers cartograms \cite{ian2002Cartogram}, we introduce and develop novel dynamic topological features, such as rivers, aiming to improve the readability and geographical accuracy without sacrificing statistical accuracy. We implement a new cartographic layout algorithm that includes these topological features into the layout of the nodes representing geographical regions. To minimize geographical errors and make efficient use of screen space, the algorithm also updates the position of rivers to accommodate the node layout. We then apply the algorithm to a real world case-study using an Electronic Health Records (EHR) dataset to evaluate of our algorithm. We also present a user study demonstrating its effectiveness.
 
-\new{Our contributions include:}
+Our contributions include:
 
 \begin{itemize}
-    \item A new variant of Demers cartograms that incorporates dynamic topological features to improve readability and recognizability.
-    \item A novel layout algorithm that preserves node positions relative to dynamic topological features such as rivers.
-    \item A user study evaluation of the technique with an application to EHRs
+    \item A new variant of Demers cartograms that incorporates dynamic topological features to improve readability and recognizability,
+    \item A novel layout algorithm that preserves node positions relative to dynamic topological features such as rivers,
+    \item A user study evaluation of the technique with an application to EHRs.
 \end{itemize}
 
-\new{One of the major challenges involves is how to develop a layout algorithm that handles different shapes. In other words, the layout algorithm is novel because it handles different types of nodes: rectangular representing regions and polylines representing rivers. Another challenge we overcome in developing the algorithm is to revolve stalemate situations introduced by dynamic topological features while minimizing the geographical error.}
+One of the major challenges involved is how to develop a layout algorithm that handles different shapes. In other words, the layout algorithm is novel because it handles different types of nodes -- rectangular representing regions and polylines representing rivers. Another challenge we overcome in developing the algorithm is to resolve stalemate situations introduced by dynamic topological features while minimizing the geographical error.

@@ -1,5 +1,24 @@
 \appendix
 
+\section{Reproject Coordinate Reference System (CRS) of Shapefiles}
+Shapefiles obtained use different CRS for projections. The river shapefiles use EPSG:4326 (WGS-84), whereas the CCG shapefile uses EPSG:27700 (OSGB36 - British National Grid). We first load all three river shapefiles into QGIS, followed by the CCG shapefile. QGIS automatically prompts to transform the latter into WGS-84, see \figref{fig:reproject}. The reprojection result is shown in \figref{fig:all_rivers}.
+
+{
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/qgis/reproject.png}
+    \caption{QGIS interface. A window prompt to transform the CCG shapefile's CRS into WGS-84.}
+    \label{fig:reproject}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/qgis/all_rivers.png}
+    \caption{The reprojection result produced by \figref{fig:reproject}, which includes the River Trent (red), River Great Ouse (green), and River Thames (orange).}
+    \label{fig:all_rivers}
+\end{figure}
+}
+
 \section{Procedure: DerivePoint}
 
 % \begin{noindent}

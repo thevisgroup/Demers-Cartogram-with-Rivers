@@ -1,6 +1,6 @@
 \section{Data Description}
 
-Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved \cite{wang2021EHRa}. The data acquisition involves multiple steps. The first step is to obtain both geospatial boundaries and EHR data that match one another. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms.
+Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved \cite{wang2021EHRa}. The first step is to obtain both geospatial boundaries and EHR data that match one another. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms.
 
 \subsection{Geospatial Data}
 
@@ -9,7 +9,7 @@ Geospatial boundaries, or shapefiles, were obtained from the sources described b
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
-    \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography portalx \cite{opengeographyportalxOpen}.}
+    \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography portalx \cite{opengeographyportalxOpen} with EPSG:27700 (OSGB36 - British National Grid) as the Coordinate Reference System (CRS).}
     \label{fig:ccg}
 \end{figure}
 }
@@ -22,6 +22,8 @@ We first obtain a relation ID by searching for a river, e.g. River Thames, on Op
 
 \begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via the Overpass Turbo API.}, label={overpass},captionpos=b]
     relation(2263653);>>;
+    // River Great Ouse: 2798097
+    // River Trent: 2863468
     out skel;
 \end{lstlisting}
 
