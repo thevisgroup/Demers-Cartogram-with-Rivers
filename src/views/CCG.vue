@@ -585,8 +585,10 @@ export default {
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
 
-          if (repeat && __VM.step.continuous) {
-            __VM.removeOverlap();
+          if (__VM.step.continuous) {
+            __VM.delay(__VM.timer).then(() => {
+              __VM.removeOverlap();
+            });
           }
         }
       });
@@ -849,6 +851,7 @@ export default {
 
           if (position_diff) {
             newPos = [x_c + position_diff[0], y_c + position_diff[1]];
+            node.transition().attr("x", newPos[0]).attr("y", newPos[1]);
           } else {
             const x = Number(history[1][0]);
             const y = Number(history[1][1]);
@@ -873,10 +876,6 @@ export default {
 
             // reset stalemate fill color
             node.attr("fill", node.attr("original_fill"));
-          }
-
-          if (position_diff) {
-            node.transition().attr("x", newPos[0]).attr("y", newPos[1]);
           }
 
           newPos[2] = __VM.node.size;
@@ -1669,7 +1668,7 @@ export default {
         danger: "rgb(217, 83, 79)",
         thames: "rgb(20, 84, 140, 75%)",
         trent: "rgb(240, 173, 78, 75%)",
-        ouse: "	rgb(132, 196, 224, 75%)",
+        ouse: "rgb(132, 196, 224, 75%)",
         blueRegion: "#ba68c8",
       },
     };
