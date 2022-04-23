@@ -1,9 +1,9 @@
 const bounding_box = (topLeft, bottomRight, point) => {
   return (
-    topLeft[0] <= point[0] &&
-    point[0] <= bottomRight[0] &&
-    topLeft[1] <= point[1] &&
-    point[1] <= bottomRight[1]
+    topLeft.x <= point.x &&
+    point.x <= bottomRight.x &&
+    topLeft.y <= point.y &&
+    point.y <= bottomRight.y
   );
 };
 

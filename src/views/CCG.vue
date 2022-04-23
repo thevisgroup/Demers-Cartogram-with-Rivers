@@ -284,6 +284,7 @@
 
 <script>
 // @ is an alias to /src
+import _ from "lodash";
 import * as d3 from "d3";
 import * as pip from "point-in-svg-polygon";
 import * as topojson from "topojson-client";
@@ -291,6 +292,8 @@ import * as cola from "webcola";
 import * as flattener from "../helper/flattener";
 import * as river_vector from "../helper/river_vector";
 import findPathIntersections from "path-intersection";
+import LinkedList from "../model/LinkedList";
+import Point from "../model/Point";
 
 export default {
   name: "Home",
@@ -397,7 +400,15 @@ export default {
       nodes
         .append("rect")
         .attr("colormap", (d) => colormap(getIndicatorRate(d) / 100))
-        .attr("x", (d) => path.centroid(d)[0] - __VM.getHalfNodeSize)
+        .attr("x", (d) => {
+          const centroid = path.centroid(d);
+
+          __VM.node.history[d.properties.id].insertLast(
+            new Point(centroid[0], centroid[1], __VM.node.size)
+          );
+
+          return centroid[0] - __VM.getHalfNodeSize;
+        })
         .attr("y", (d) => path.centroid(d)[1] - __VM.getHalfNodeSize)
         .attr("history", (d) =>
           JSON.stringify([
@@ -415,12 +426,8 @@ export default {
         .attr("height", __VM.node.size)
         .attr("stroke", "black")
         .attr("stroke-width", "0.3")
-        .attr("fill", (d) => {
-          return __VM.colorVariant[__VM.node.color];
-        })
-        .attr("original_fill", (d) => {
-          return __VM.colorVariant[__VM.node.color];
-        })
+        .attr("fill", __VM.colorVariant[__VM.node.color])
+        .attr("original_fill", __VM.colorVariant[__VM.node.color])
         .on("mouseover", function (e, d) {
           tooltip
             .style("visibility", "visible")
@@ -503,8 +510,12 @@ export default {
 
         node = d3.select(node);
 
-        const x_new = nodeToORA[i].x;
-        const y_new = nodeToORA[i].y;
+        const p_new = new Point(
+          nodeToORA[i].x,
+          nodeToORA[i].y,
+          __VM.node.size,
+          true
+        );
 
         node
           .attr("stroke", () => {
@@ -527,13 +538,11 @@ export default {
           .attr("stroke-width", "0.3")
           //.attr("fill", __VM.colorVariant[__VM.node.color])
           .transition()
-          .attr("x", x_new)
-          .attr("y", y_new);
+          .attr("x", p_new.xRect)
+          .attr("y", p_new.yRect);
 
-        const new_position = [x_new, y_new, __VM.node.size];
-
-        __VM.moveCentroid(node, new_position);
-        __VM.testRiverCross(node, new_position);
+        __VM.moveCentroid(node, p_new);
+        __VM.testRiverCross(node, p_new);
       }
 
       let translate = false;
@@ -609,12 +618,12 @@ export default {
 
         const history = __VM.getNodeHistory(node);
 
-        const current = history[0];
-        const previous = history[1];
-        const sizeDiff = previous[2] - current[2];
+        const p_current = history.last.value;
+        const p_previous = history.secondLast.value;
+        const sizeDiff = p_previous.size - p_current.size;
 
         // used in derivedPoints
-        let tempPoint = [500, 500, __VM.node.size];
+        let tempPoint = new Point(500, 500, __VM.node.size);
 
         const XRiver = node.attr("XRiver");
         let pSlope;
@@ -628,7 +637,7 @@ export default {
               river_vector.bounding_box(
                 __VM.river.rivers[XRiver].start,
                 __VM.river.rivers[XRiver].section[0],
-                current
+                p_current
               )
             ) {
               pSlope =
@@ -648,25 +657,25 @@ export default {
 
             // use the right reference point based on the side
             if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-              tempPoint = [430, 320, __VM.node.size];
+              tempPoint = new Point(430, 320, __VM.node.size);
             } else {
-              tempPoint = [490, 350, __VM.node.size];
+              tempPoint = new Point(450, 460, __VM.node.size);
             }
+
             break;
 
           // trent has 3 sections
           case "trent":
             // check which section the node is in
-            tempPoint = [360, 280, __VM.node.size];
+            tempPoint = new Point(360, 280, __VM.node.size);
 
             if (
               river_vector.bounding_box(
                 __VM.river.rivers[XRiver].start,
                 __VM.river.rivers[XRiver].section[0],
-                current
+                p_current
               )
             ) {
-              console.log("section 1");
               pSlope =
                 -1 /
                 river_vector.cal_slope(
@@ -678,16 +687,15 @@ export default {
               if (
                 !river_vector.is_upper_side(node, __VM.colorVariant[XRiver])
               ) {
-                tempPoint = [430, 300, __VM.node.size];
+                tempPoint = new Point(430, 300, __VM.node.size);
               }
             } else if (
               river_vector.bounding_box(
                 __VM.river.rivers[XRiver].section[0],
                 __VM.river.rivers[XRiver].section[1],
-                current
+                p_current
               )
             ) {
-              console.log("section 2");
               pSlope =
                 -1 /
                 river_vector.cal_slope(
@@ -699,10 +707,9 @@ export default {
               if (
                 !river_vector.is_upper_side(node, __VM.colorVariant[XRiver])
               ) {
-                tempPoint = [400, 350, __VM.node.size];
+                tempPoint = new Point(400, 350, __VM.node.size);
               }
             } else {
-              console.log("section 3");
               pSlope =
                 -1 /
                 river_vector.cal_slope(
@@ -713,7 +720,7 @@ export default {
               if (
                 !river_vector.is_upper_side(node, __VM.colorVariant[XRiver])
               ) {
-                tempPoint = [300, 350, __VM.node.size];
+                tempPoint = new Point(300, 350, __VM.node.size);
               }
             }
 
@@ -724,80 +731,75 @@ export default {
             pSlope = -1 / __VM.river.rivers[XRiver].slope;
 
             if (!river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-              tempPoint = [500, 500, __VM.node.size];
+              tempPoint = new Point(500, 500, __VM.node.size);
             } else {
-              tempPoint = [420, 460, __VM.node.size];
+              tempPoint = new Point(420, 460, __VM.node.size);
             }
 
             break;
         }
 
-        tempPoint[1] = pSlope * (tempPoint[0] - previous[0]) + previous[1];
+        tempPoint.y = pSlope * (tempPoint.x - p_previous.x) + p_previous.y;
 
         const derivePoint = (previous, current, length) => {
-          const dx = current[0] - previous[0] + sizeDiff;
-          const dy = current[1] - previous[1] + sizeDiff;
+          const dx = current.x - previous.x + sizeDiff;
+          const dy = current.y - previous.y + sizeDiff;
+          const p_next = new Point(
+            previous.x + (dx / Math.sqrt(dx ** 2 + dy ** 2)) * length,
+            previous.y + (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length,
+            __VM.node.size
+          );
 
-          const pointP = [
-            previous[0] + previous[2] / 2,
-            previous[1] + previous[2] / 2,
-          ];
+          __VM.debug = true;
+          if (__VM.debug) {
+            d3.selectAll(".debug").remove();
 
-          const pointC = [
-            current[0] + current[2] / 2,
-            current[1] + current[2] / 2,
-          ];
+            __VM.svg
+              .append("circle")
+              .attr("class", "debug")
+              .attr("cx", p_previous.x)
+              .attr("cy", p_previous.y)
+              .attr("p", p_previous.size)
+              .attr("r", 0.5)
+              .attr("fill", "red");
 
-          const point = [
-            previous[0] +
-              previous[2] / 2 +
-              (dx / Math.sqrt(dx ** 2 + dy ** 2)) * length,
-            previous[1] +
-              previous[2] / 2 +
-              (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length,
-          ];
+            // __VM.svg
+            //   .append("circle")
+            //   .attr("class", "debug")
+            //   .attr("cx", Number(pointC[0]))
+            //   .attr("cy", Number(pointC[1]))
+            //   .attr("p", current[2])
+            //   .attr("r", 0.5)
+            //   .attr("fill", "green");
+            __VM.svg
+              .append("circle")
+              .attr("class", "debug")
+              .attr("cx", p_next.x)
+              .attr("cy", p_next.y)
+              .attr("p", current.size)
+              .attr("r", 0.5)
+              .attr("fill", "purple");
 
-          // if (__VM.debug) {
-          //   d3.selectAll(".debug").remove();
-
-          //   __VM.svg
-          //     .append("circle")
-          //     .attr("class", "debug")
-          //     .attr("cx", Number(pointP[0]))
-          //     .attr("cy", Number(pointP[1]))
-          //     .attr("p", previous[2])
-          //     .attr("r", 0.5)
-          //     .attr("fill", "red");
-
-          //   __VM.svg
-          //     .append("circle")
-          //     .attr("class", "debug")
-          //     .attr("cx", Number(pointC[0]))
-          //     .attr("cy", Number(pointC[1]))
-          //     .attr("p", current[2])
-          //     .attr("r", 0.5)
-          //     .attr("fill", "green");
-
-          //   __VM.svg
-          //     .append("circle")
-          //     .attr("class", "debug")
-          //     .attr("cx", Number(point[0]))
-          //     .attr("cy", Number(point[1]))
-          //     .attr("p", current[2])
-          //     .attr("r", 0.5)
-          //     .attr("fill", "purple");
-          // }
-          return {
-            next: [
-              point[0] - __VM.getHalfNodeSize,
-              point[1] - __VM.getHalfNodeSize,
-            ],
-          };
+            __VM.svg
+              .append("path")
+              .attr(
+                "d",
+                d3.line()([
+                  [p_previous.x, p_previous.y],
+                  [p_next.x, p_next.y],
+                ])
+              )
+              .attr("class", "debug")
+              .attr("stroke", "red")
+              .attr("stroke-width", "1")
+              .attr("fill", "none");
+          }
+          return p_next;
         };
 
         const deriveParallelEdge = (start, end, distance) => {
-          const x_diff = start[0] - end[0] + sizeDiff;
-          const y_diff = start[1] - end[1] + sizeDiff;
+          const x_diff = start.x - end.x + sizeDiff;
+          const y_diff = start.y - end.y + sizeDiff;
 
           const scale = distance / Math.sqrt(x_diff ** 2 + y_diff ** 2);
           const [dx, dy] = [
@@ -806,30 +808,35 @@ export default {
           ];
 
           return [
-            // returns size here as it's needed for calculating the vector constant
-            [dx + start[0], dy + start[1], __VM.node.size],
-            [dx + end[0], dy + end[1], __VM.node.size],
+            new Point(dx + start.x, dy + start.y, __VM.node.size),
+            new Point(dx + end.x, dy + end.y, __VM.node.size),
           ];
         };
 
         const derivedPoints = derivePoint(
-          previous,
+          p_previous,
           tempPoint,
           __VM.corridor.length
         );
 
-        const p1 = deriveParallelEdge(
-          previous,
-          derivedPoints.next,
+        const parallelEdge1 = deriveParallelEdge(
+          p_previous,
+          derivedPoints,
           __VM.node.size / 2
         );
-        const p2 = deriveParallelEdge(
-          previous,
-          derivedPoints.next,
+        const parallelEdge2 = deriveParallelEdge(
+          p_previous,
+          derivedPoints,
           -__VM.node.size / 2
         );
 
-        const corridor = d3.line()([p1[0], p1[1], p2[1], p2[0], p1[0]]);
+        const corridor = d3.line()([
+          parallelEdge1[0].coordRect,
+          parallelEdge1[1].coordRect,
+          parallelEdge2[1].coordRect,
+          parallelEdge2[0].coordRect,
+          parallelEdge1[0].coordRect,
+        ]);
 
         d3.select(".corridor").remove();
 
@@ -844,44 +851,42 @@ export default {
         const moveNodeInCorridor = (node, position_diff) => {
           const history = __VM.getNodeHistory(node);
 
-          let newPos;
+          let p_next;
 
-          const x_c = Number(node.attr("x"));
-          const y_c = Number(node.attr("y"));
+          const p_current = new Point(
+            Number(node.attr("x")),
+            Number(node.attr("y")),
+            __VM.node.size,
+            true
+          );
 
           if (position_diff) {
-            newPos = [x_c + position_diff[0], y_c + position_diff[1]];
-            node.transition().attr("x", newPos[0]).attr("y", newPos[1]);
+            p_next = new Point(
+              p_current.x + position_diff[0],
+              p_current.y + position_diff[1],
+              __VM.node.size,
+              true
+            );
+
+            node.transition().attr("x", p_next.xRect).attr("y", p_next.yRect);
           } else {
-            const x = Number(history[1][0]);
-            const y = Number(history[1][1]);
+            const p_previous = history.secondLast.value;
 
-            newPos = derivePoint(
-              [x, y, Number(history[1][2])],
-              [derivedPoints.next[0], derivedPoints.next[1], __VM.node.size],
-              Math.hypot(x - x_c, y - y_c) * 2
-            ).next;
-
-            // const tra = d3.line()([[x, y], newPos]);
-
-            // d3.selectAll(".tra").remove();
-
-            // __VM.svg
-            //   .append("path")
-            //   .attr("d", tra)
-            //   .attr("class", "tra")
-            //   .attr("stroke", "black")
-            //   .attr("stroke-width", "1")
-            //   .attr("fill", "none");
+            p_next = derivePoint(
+              p_previous,
+              derivedPoints,
+              Math.hypot(
+                p_previous.x - p_current.x,
+                p_previous.y - p_current.y
+              ) * 2
+            );
 
             // reset stalemate fill color
             node.attr("fill", node.attr("original_fill"));
           }
 
-          newPos[2] = __VM.node.size;
-          __VM.moveCentroid(node, newPos);
-
-          __VM.testRiverCross(node, newPos);
+          __VM.moveCentroid(node, p_next);
+          __VM.testRiverCross(node, p_next);
 
           // set stroke color for nodeC
           if (node.attr("nodeXCount")) {
@@ -891,15 +896,21 @@ export default {
           }
 
           // returns a vector constant for moving enclosed nodes in the corridor
-          return [newPos[0] - x_c + sizeDiff, newPos[1] - y_c + sizeDiff];
-          // return [newPos[0] - x_c + sizeDiff, newPos[1] - y_c + sizeDiff];
+          return [
+            p_next.x - p_current.x + sizeDiff,
+            p_next.y - p_current.y + sizeDiff,
+          ];
         };
 
         // a vector for the position diff of n, we use this vector to move all nodes in corridor
-        const tempVector = derivePoint(p1[0], p1[1], __VM.node.size).next;
+        const tempVector = derivePoint(
+          parallelEdge1[0],
+          parallelEdge1[1],
+          __VM.node.size
+        );
         const position_diff = [
-          tempVector[0] - p1[0][0],
-          tempVector[1] - p1[0][1],
+          tempVector.x - parallelEdge1[0].x,
+          tempVector.y - parallelEdge1[0].y,
         ];
         // move the node itself
         moveNodeInCorridor(node, position_diff);
@@ -938,13 +949,14 @@ export default {
       });
     },
     // write new position into history, and check if the node crossed a river
-    testRiverCross(node, current) {
+    testRiverCross(node, p) {
       const __VM = this;
 
-      const previous = __VM.getNodeHistory(node)[0];
-      const sizeDiff = previous[2] - current[2];
+      const p_last = __VM.getNodeHistory(node).last.value;
 
-      __VM.writeNodeHistory(node, current);
+      const sizeDiff = p_last.size - p.size;
+
+      __VM.writeNodeHistory(node, p);
 
       const checkIntersect = (line) => {
         let result = [false, ""];
@@ -966,14 +978,12 @@ export default {
               .append("path")
               .attr("class", "river-crossing-path")
               .attr("d", line)
-              .attr("stroke", "none")
+              .attr("stroke", "black")
               .attr("stroke-width", "1")
               .attr("fill", "none");
 
-            __VM.river.rivers[river].translate.x +=
-              current[0] - previous[0] + sizeDiff;
-            __VM.river.rivers[river].translate.y +=
-              current[1] - previous[1] + sizeDiff;
+            __VM.river.rivers[river].translate.x += p.x - p_last.x + sizeDiff;
+            __VM.river.rivers[river].translate.y += p.y - p_last.y + sizeDiff;
 
             break;
           }
@@ -983,8 +993,8 @@ export default {
       };
 
       const riverCrossingLine = d3.line()([
-        [previous[0] + previous[2] / 2, previous[1] + previous[2] / 2],
-        [current[0] + current[2] / 2, current[1] + current[2] / 2],
+        [p_last.x, p_last.y],
+        [p.x, p.y],
       ]);
 
       const result = checkIntersect(riverCrossingLine);
@@ -1001,26 +1011,11 @@ export default {
           .attr("nodeXCount", nodeXCount)
           .attr("XRiver", result[1])
           .transition()
-          .attr("x", previous[0])
-          .attr("y", previous[1]);
+          .attr("x", p_last.xRect)
+          .attr("y", p_last.yRect);
 
-        __VM.moveCentroid(node, previous);
-
-        __VM.writeNodeHistory(node, previous);
-
-        // d3.select(`.river-edge`)
-        //   .append("path")
-        //   .attr(
-        //     "d",
-        //     d3.line()([
-        //       [previous[0] + previous[2] / 2, previous[1] + previous[2] / 2],
-        //       [current[0] + current[2] / 2, current[1] + current[2] / 2],
-        //     ])
-        //   )
-        //   .attr("stroke", "black")
-        //   .attr("stroke-width", "1px")
-        //   .attr("fill", "none")
-        //   .attr("marker-end", "url(#arrow)");
+        __VM.moveCentroid(node, p_last);
+        __VM.writeNodeHistory(node, p_last);
 
         if (nodeXCount > __VM.iteration.limit) {
           // a stalemate nodeX
@@ -1520,34 +1515,25 @@ export default {
         d3.line()(__VM.region[river])
       );
     },
-    moveCentroid(node, position) {
+    moveCentroid(node, p) {
       node
         .select(function () {
           return this.nextElementSibling;
         })
         .transition()
-        .attr("cx", Number(position[0] + position[2] / 2))
-        .attr("cy", Number(position[1] + position[2] / 2));
+        .attr("cx", p.x)
+        .attr("cy", p.y);
     },
-    writeNodeHistory(node, position) {
-      const __VM = this;
-      let history = __VM.getNodeHistory(node);
+    writeNodeHistory(node, p) {
+      const last = this.node.history[node.attr("id")].last.value;
 
-      // only write a new history when the position is different
-      if (history[0].toString() === position.toString()) {
-        return;
+      // only insert when the position is not the same as the last one
+      if (!_.isEqual(p, last)) {
+        this.node.history[node.attr("id")].insertLast(p);
       }
-
-      history.unshift(position);
-
-      while (history.length > 4) {
-        history.pop();
-      }
-
-      node.attr("history", JSON.stringify(history));
     },
     getNodeHistory(node) {
-      return JSON.parse(node.attr("history"));
+      return this.node.history[node.attr("id")];
     },
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -1562,7 +1548,7 @@ export default {
       iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
       timer: 10,
       log: "",
-      debug: true,
+      debug: false,
       corridor: {
         length: 30,
       },
@@ -1581,6 +1567,7 @@ export default {
         nodeX: {
           stroke_width: "0.7",
         },
+        history: {},
       },
       river: {
         translation: {
@@ -1708,6 +1695,10 @@ export default {
         .feature(__VM.shapefile, __VM.shapefile.objects.CCG)
         .features.filter((e) => e.geometry && e.geometry.type)
     );
+
+    __VM.ccg_list.forEach((ccg) => {
+      __VM.node.history[ccg.properties.id] = new LinkedList();
+    });
 
     // __VM.river_list = [];
     // __VM.river_list.push(
