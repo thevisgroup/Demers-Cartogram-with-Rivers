@@ -14,7 +14,7 @@ Geospatial boundaries, or shapefiles, were obtained from the sources described b
 \end{figure}
 }
 
-\bobgraph{Clinical Commissioning Groups Shapefile:} Clinical Commissioning Groups (CCGs) are the primary administrative and geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to the NHS re-organization. The most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, because there is still no public EHR data published based on the latest CCG re-organization that took place in 2021.
+\bobgraph{Clinical Commissioning Groups Shapefile:} Clinical Commissioning Groups (CCGs) are the primary administrative and geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to the NHS re-organization. The most up-to-date shapefile is available from the Open Geography portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, due to the absence of public EHR data published based on the latest CCG re-organization that took place in 2021.
 
 \bobgraph{River Features:} We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent and River Great Ouse in England. These rivers were chosen as they are well-known rivers and pass through regions with dense population, and provide informative geographical and topological cues. 
 
@@ -27,7 +27,7 @@ We first obtain a relation ID by searching for a river, e.g. River Thames, on Op
     out skel;
 \end{lstlisting}
 
-After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections, translations and scales, and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to convert the merged shapefile into a TopoJSON \cite{TopoJSON} file. TopoJSON eliminates redundant coordinates in the data, this improves the rendering speed of our implementation.
+After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections, translations and scales, and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to convert the merged shapefile into a TopoJSON \cite{TopoJSON} file. TopoJSON eliminates redundant coordinates in the data, improving the rendering speed of our implementation.
 
 \subsection{EHR Data}
 
