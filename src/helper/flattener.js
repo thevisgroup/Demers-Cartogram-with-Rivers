@@ -5,7 +5,7 @@ const flatten_path = (pathData, translate) => {
     result += pair.type;
     result += pair.values[0] + translate[0];
     result += ",";
-    result += pair.values[1] += translate[1];
+    result += pair.values[1] + translate[1];
   });
   return result;
 };
