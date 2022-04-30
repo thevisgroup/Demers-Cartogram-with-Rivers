@@ -90,12 +90,12 @@
             <tbody>
               <tr>
                 <td>
-                  <!-- <b-button
+                  <b-button
                     block
                     :variant="(node.visibility ? '' : 'outline-') + node.color"
                     v-on:click="toggleFeatureVisibility('node')"
-                    >Rectangle</b-button
-                  > -->
+                    >Node</b-button
+                  >
 
                   <!-- <b-button
                     block
@@ -527,13 +527,10 @@ export default {
 
             return res;
           })
-          .attr("stroke-width", "0.3")
-          //.attr("fill", __VM.colorVariant[__VM.node.color])
-          .transition()
-          .attr("x", p_new.xRect)
-          .attr("y", p_new.yRect);
+          .attr("stroke-width", "0.3");
+        //.attr("fill", __VM.colorVariant[__VM.node.color])
 
-        __VM.moveCentroid(node, p_new);
+        __VM.moveNode(node, p_new);
         __VM.testRiverCross(node, p_new);
       }
 
@@ -638,6 +635,13 @@ export default {
                   __VM.river.rivers[XRiver].start,
                   __VM.river.rivers[XRiver].section[0]
                 );
+
+              // use the right reference point based on the side
+              if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
+                tempPoint = new Point(400, 340, __VM.node.size);
+              } else {
+                tempPoint = new Point(500, 350, __VM.node.size);
+              }
             } else {
               pSlope =
                 -1 /
@@ -645,13 +649,13 @@ export default {
                   __VM.river.rivers[XRiver].section[0],
                   __VM.river.rivers[XRiver].end
                 );
-            }
 
-            // use the right reference point based on the side
-            if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-              tempPoint = new Point(430, 320, __VM.node.size);
-            } else {
-              tempPoint = new Point(450, 460, __VM.node.size);
+              // use the right reference point based on the side
+              if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
+                tempPoint = new Point(400, 300, __VM.node.size);
+              } else {
+                tempPoint = new Point(435, 415, __VM.node.size);
+              }
             }
 
             break;
@@ -676,9 +680,9 @@ export default {
 
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(330, 285, __VM.node.size);
+                tempPoint = new Point(290, 270, __VM.node.size);
               } else {
-                tempPoint = new Point(430, 300, __VM.node.size);
+                tempPoint = new Point(430, 305, __VM.node.size);
               }
             } else if (
               river_vector.bounding_box(
@@ -696,7 +700,7 @@ export default {
 
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(370, 270, __VM.node.size);
+                tempPoint = new Point(360, 280, __VM.node.size);
               } else {
                 tempPoint = new Point(400, 350, __VM.node.size);
               }
@@ -850,12 +854,7 @@ export default {
         const moveNodeInCorridor = (node, position_diff, self = false) => {
           let p_next;
 
-          const p_current = new Point(
-            Number(node.attr("x")),
-            Number(node.attr("y")),
-            __VM.node.size,
-            true
-          );
+          const p_current = __VM.getNodeHistory(node).last.value;
 
           p_next = new Point(
             p_current.x + position_diff[0],
@@ -863,9 +862,7 @@ export default {
             __VM.node.size
           );
 
-          node.transition().attr("x", p_next.xRect).attr("y", p_next.yRect);
-
-          __VM.moveCentroid(node, p_next);
+          __VM.moveNode(node, p_next);
           __VM.testRiverCross(node, p_next);
 
           // set stroke color for nodeC
@@ -904,10 +901,9 @@ export default {
 
           // do not move the node if it's being moved by its own corridor
 
-          const x_in = Number(node_in_c.attr("x")) + __VM.getHalfNodeSize;
-          const y_in = Number(node_in_c.attr("y")) + __VM.getHalfNodeSize;
+          const p_last = __VM.getNodeHistory(node_in_c).last.value;
 
-          if (pip.isInside([x_in, y_in], corridor)) {
+          if (pip.isInside([p_last.x, p_last.y], corridor)) {
             // do not move the node in focus itself
             if (node_in_c.attr("nodeXCount") === null) {
               moveNodeInCorridor(node_in_c, position_diff);
@@ -1000,12 +996,9 @@ export default {
         node
           .attr("stroke", "blue")
           .attr("nodeXCount", nodeXCount)
-          .attr("XRiver", result[1])
-          .transition()
-          .attr("x", p_last.xRect)
-          .attr("y", p_last.yRect);
+          .attr("XRiver", result[1]);
 
-        __VM.moveCentroid(node, p_last);
+        __VM.moveNode(node, p_last);
         __VM.writeNodeHistory(node, p_last);
 
         if (nodeXCount > __VM.iteration.limit) {
@@ -1149,9 +1142,14 @@ export default {
           __VM.shapefile.objects[river]
         ).coordinates;
 
-        points = [].concat(...points).sort(([a, b], [c, d]) => {
-          return c - a;
-        });
+        points = [].concat(...points);
+
+        // sort by x first
+        // points = [].concat(...points).sort(([a, b], [c, d]) => {
+        //   console.log(a, b, c, d);
+        //   return c - a;
+        //   // return d - b;
+        // });
 
         let spacing = Number(__VM.river.spacing);
 
@@ -1193,9 +1191,15 @@ export default {
           resolution.splice(closest_index, 1, [0, 0]);
 
           if (closest.toString() !== "0,0") {
-            if (distance(closest) < 15 || river === "trent") {
-              res.push(closest);
-              current = closest;
+            // smoothing the river
+            if (distance(closest) > 3) {
+              if (river !== "trent" && distance(closest) < 15) {
+                res.push(closest);
+                current = closest;
+              } else if (river === "trent") {
+                res.push(closest);
+                current = closest;
+              }
             }
           }
         }
@@ -1230,7 +1234,6 @@ export default {
           timer = 100 * __VM.timer;
           river_layer
             .transition()
-            .duration(timer)
             .attr(
               "transform",
               `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
@@ -1238,7 +1241,6 @@ export default {
         }
         __VM.delay(timer).then(() => __VM.detectRiverXNodes());
       });
-
       __VM.mapNodeColorToRegion();
     },
     calculateRiverTranslation() {
@@ -1437,13 +1439,13 @@ export default {
           ]);
 
           // render river vector
-          __VM.svg
-            .append("path")
-            .attr("class", "river-vector")
-            .attr("d", riverVector)
-            .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-            .attr("stroke-width", "2px")
-            .attr("fill", "none");
+          // __VM.svg
+          //   .append("path")
+          //   .attr("class", "river-vector")
+          //   .attr("d", riverVector)
+          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          //   .attr("stroke-width", "2px")
+          //   .attr("fill", "none");
         }
 
         if (river === "trent") {
@@ -1587,12 +1589,14 @@ export default {
         d3.line()(__VM.region[river])
       );
     },
-    moveCentroid(node, p) {
+    moveNode(node, p) {
+      node.attr("x", p.xRect).attr("y", p.yRect);
+
+      // move the centroid
       node
         .select(function () {
           return this.nextElementSibling;
         })
-        .transition()
         .attr("cx", p.x)
         .attr("cy", p.y);
     },
