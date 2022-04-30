@@ -12,13 +12,24 @@
 {
     \begin{figure}[tb!]
         \centering
-        \includegraphics[width=\columnwidth]{figure/flowchart.png}
-        \caption{A flowchart illustration of our layout algorithm. See also \algoref{alg:UpdateNodePosition} for more detail.}
+        \includegraphics[width=0.8\columnwidth]{figure/flowchart.png}
+        \caption{A flowchart illustration of our layout algorithm.See \figref{fig:flowchart-stalemate} for the flow of processing stalemate. See also \algoref{alg:UpdateNodePosition} for more detail.}
         \label{fig:flowchart}
+    \end{figure}
+
+    \begin{figure}[tb!]
+        \centering
+        \includegraphics[width=0.9\columnwidth]{figure/flowchart stalemate.png}
+        \caption{A flowchart illustration of stalemate processing.}
+        \label{fig:flowchart-stalemate}
     \end{figure}
 }
 
-\algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of the process. \textbf{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a small unit size square node, $ \node $, with initial size, $ \nodeSize $. We start with small unit size squares because they do not overlap initially. \textbf{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. If a node oscillates across a river, we process this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
+\algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of the process.
+
+\bobgraph{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $. \new{We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next closest vertex. This rendering approach enables us to adjust the river resolution as shown in \figref{fig:river resolution}. We further apply a smoothing logic by removing vertices that are too close to each other.}
+
+\bobgraph{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. If a node oscillates across a river, we process this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
 
 % \begin{noindent}
 
@@ -90,14 +101,14 @@
 
 \subsection{River Intersection Testing}
 
-We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of edges is reduced from its original 10,170 to 65. We do not require a pixel-level river resolution as Demers cartograms do not need to represent geography at this level of detail. Instead a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
+We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
 
 
 {
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{figure/river_resolution.png}
-    \caption{The resolution of rivers can be dynamically adjusted by the user. The top figure shows River Thames at its original resolution with 10,170 edges. The bottom figure shows the river at a  reduced resolution of 65 edges. The reduced resolution preserves the majority of River Thames' original shape and improves the performance of our river intersection tests.}
+    \caption{The resolution of rivers can be dynamically adjusted by the user. A shows River Thames at its original resolution with 10,170 edges. B shows the river at a reduced resolution of 49 edges. \new{We further smooth the river by removing vertices in dense areas, as shown in C.} The reduced resolution preserves the majority of River Thames' original shape and improves the performance of our river intersection tests.}
     \label{fig:river resolution}
 \end{figure}
 }
