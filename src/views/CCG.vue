@@ -583,7 +583,7 @@ export default {
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
 
-          if (__VM.step.continuous) {
+          if (__VM.step.continuous & (__VM.node.size < __VM.node.maxSize)) {
             __VM.delay(__VM.timer).then(() => {
               __VM.removeOverlap();
             });
