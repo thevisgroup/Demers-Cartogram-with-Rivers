@@ -680,7 +680,7 @@ export default {
 
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(290, 270, __VM.node.size);
+                tempPoint = new Point(370, 270, __VM.node.size);
               } else {
                 tempPoint = new Point(430, 305, __VM.node.size);
               }
@@ -718,14 +718,6 @@ export default {
                 tempPoint = new Point(300, 350, __VM.node.size);
               }
             }
-
-            // console.log(
-            //   "upperside: ",
-            //   river_vector.is_upper_side(node, __VM.colorVariant[XRiver])
-            // );
-
-            // console.log("tempPoint: ", tempPoint);
-            // console.log("pSlope: ", pSlope);
 
             break;
 
@@ -945,11 +937,6 @@ export default {
 
           result[0] = findPathIntersections(river_path, line, true);
 
-          // TODO: double crossing bug
-          if (result[0] > 1) {
-            console.log("double crossing", result[0]);
-          }
-
           if (result[0]) {
             result[1] = river;
 
@@ -971,7 +958,7 @@ export default {
         return result;
       };
 
-      const result = checkIntersect(
+      const crossings = checkIntersect(
         d3.line()([
           [p_last.x, p_last.y],
           [p.x, p.y],
@@ -979,7 +966,8 @@ export default {
       );
 
       // move node back
-      if (result[0]) {
+      // ignore double crossing
+      if ((crossings[0].length % 2 !== 0) & crossings[0]) {
         // if (
         //   river_vector.is_upper_side(
         //     node,
@@ -996,7 +984,7 @@ export default {
         node
           .attr("stroke", "blue")
           .attr("nodeXCount", nodeXCount)
-          .attr("XRiver", result[1]);
+          .attr("XRiver", crossings[1]);
 
         __VM.moveNode(node, p_last);
         __VM.writeNodeHistory(node, p_last);
@@ -1622,7 +1610,7 @@ export default {
         continuous: true,
       },
       iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
-      timer: 10,
+      timer: 1,
       log: "",
       debug: false,
       corridor: {
@@ -1697,7 +1685,7 @@ export default {
             start: [421.95559914523204, 284.39009883603944],
             end: [341.19219722341234, 322.06244605320074],
             section: [
-              [415.1557430500323, 321.9094162078742],
+              [415.1557430500323, 321],
               [364.91991729782876, 345.3079796168287],
             ],
             slope: -1.7862275682486464,
