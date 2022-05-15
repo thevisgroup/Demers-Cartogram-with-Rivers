@@ -261,7 +261,7 @@
                       min="100"
                       max="230"
                       step="5"
-                      @change="translateRiver()"
+                      @change="adjustRiver()"
                     ></b-form-input
                   ></b-button>
                 </td>
@@ -449,16 +449,35 @@ export default {
       // original river layer
       const river_layer = svg.append("g").attr("class", "river-layer");
       for (const river of Object.keys(__VM.river.rivers)) {
-        __VM.river.rivers[river].translate.finalX = 0;
-        __VM.river.rivers[river].translate.finalY = 0;
         const r = river_layer.append("g").attr("class", `${river}`);
         r.append("g").attr("class", "river");
         r.append("g").attr("class", "river-edge");
       }
 
-      __VM.translateRiver();
+      __VM.adjustRiver();
     },
-    removeOverlap(repeat = false) {
+    runFNOR() {
+      const __VM = this;
+      // prepare an array for webcola
+      const nodes = Array.from(
+        d3.selectAll(".node-layer > g > rect")._groups[0]
+      ).map((r) => {
+        r = d3.select(r);
+
+        const x = Number(r.attr("x")),
+          y = Number(r.attr("y")),
+          w = __VM.node.size,
+          h = __VM.node.size;
+
+        return new cola.Rectangle(x, x + w, y, y + h);
+      });
+
+      // remove overlaps
+      cola.removeOverlaps(nodes);
+
+      return nodes;
+    },
+    removeOverlap(firstPass = true, repeat = false) {
       const __VM = this;
       __VM.step.button_disabled = true;
 
@@ -475,26 +494,12 @@ export default {
       // preparation before redrawing nodes and edges
       d3.selectAll(".river-edge > path").remove();
 
-      // prepare an array for webcola
-      const nodeToORA = Array.from(
-        d3.selectAll(".node-layer > g > rect")._groups[0]
-      ).map((r) => {
-        r = d3.select(r);
-
-        const x = Number(r.attr("x")),
-          y = Number(r.attr("y")),
-          w = __VM.node.size,
-          h = __VM.node.size;
-
-        return new cola.Rectangle(x, x + w, y, y + h);
-      });
-
-      // remove overlaps
-      cola.removeOverlaps(nodeToORA);
+      // get nodes with ORAed positions via FNOR
+      const nodes = __VM.runFNOR();
 
       const timer = __VM.timer * __VM.node.size;
 
-      // draw river crossing edges
+      // the first pass of ORA is to translate rivers
       for (let [i, node] of d3
         .selectAll(".node-layer > g > rect")
         ._groups[0].entries()) {
@@ -502,13 +507,9 @@ export default {
 
         node = d3.select(node);
 
-        const p_new = new Point(
-          nodeToORA[i].x,
-          nodeToORA[i].y,
-          __VM.node.size,
-          true
-        );
+        const p_new = new Point(nodes[i].x, nodes[i].y, __VM.node.size, true);
 
+        // assgin node border color
         node
           .attr("stroke", () => {
             let res = "black";
@@ -530,32 +531,39 @@ export default {
           .attr("stroke-width", "0.3");
         //.attr("fill", __VM.colorVariant[__VM.node.color])
 
-        __VM.moveNode(node, p_new);
-        __VM.testRiverCross(node, p_new);
+        if (firstPass) {
+          __VM.testRiverCross(node, p_new, true);
+        } else {
+          __VM.moveNode(node, p_new);
+          __VM.testRiverCross(node, p_new, false);
+        }
       }
 
-      let translate = false;
+      let translateRiver = firstPass;
 
-      if (!__VM.getRiverTranslationStatic) {
-        //non-repeating ORA
-        translate = !repeat;
-
-        //repeating ORA
+      if (__VM.getRiverTranslationRepeat) {
+        // if it's a repeating ORA
         if (repeat) {
           //not first iteration
           if (__VM.iteration.current > 0) {
             //if repeat ORA is allowed
-            translate = __VM.getRiverTranslationRepeat;
+            translateRiver = false;
           }
         }
       }
 
-      if (translate) {
+      if (translateRiver) {
         __VM.calculateRiverTranslation();
+
+        for (const river of Object.keys(__VM.river.rivers)) {
+          __VM.moveRiver(river);
+        }
       }
 
+      // get the count with nodeX (node crossings)
       const crossingCount = d3.selectAll(`.river-crossing-path`)._groups[0]
         .length;
+
       __VM.delay(timer * 1.1).then(() => {
         if (crossingCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
@@ -573,8 +581,12 @@ export default {
             );
 
             __VM.iteration.current++;
-            __VM.removeOverlap(true);
+            __VM.removeOverlap(false, true);
           }
+        } else if (firstPass) {
+          // the first pass of ORA is to translate rivers
+          // after the first pass, the second pass is to move nodes
+          __VM.removeOverlap(false, false);
         } else {
           __VM.updateLog(
             `Overlap removal iteration: ${__VM.iteration.current} finished, no more nodeX. \n`
@@ -584,9 +596,7 @@ export default {
           __VM.step.button_disabled = false;
 
           if (__VM.step.continuous & (__VM.node.size < __VM.node.maxSize)) {
-            __VM.delay(__VM.timer).then(() => {
-              __VM.removeOverlap();
-            });
+            __VM.removeOverlap(true, false);
           }
         }
       });
@@ -855,7 +865,7 @@ export default {
           );
 
           __VM.moveNode(node, p_next);
-          __VM.testRiverCross(node, p_next);
+          __VM.testRiverCross(node, p_next, false);
 
           // set stroke color for nodeC
           if (node.attr("nodeXCount")) {
@@ -900,7 +910,6 @@ export default {
             if (node_in_c.attr("nodeXCount") === null) {
               moveNodeInCorridor(node_in_c, position_diff);
             }
-            //  moveNodeInCorridor(node_in_c, position_diff);
           }
         }
 
@@ -910,19 +919,20 @@ export default {
       }
       __VM.delay(timer).then(() => {
         d3.selectAll(".river-crossing-path").remove();
-        __VM.removeOverlap(true);
+        __VM.removeOverlap(false, true);
         __VM.step.button_disabled = false;
       });
     },
-    // write new position into history, and check if the node crossed a river
-    testRiverCross(node, p) {
+    // check if the node crossed a river
+    // if firstPass is true, compute the average distance for translating rivers, and do not move nodes
+    testRiverCross(node, p, firstPass) {
       const __VM = this;
 
-      const p_last = __VM.getNodeHistory(node).last.value;
+      const p_last = firstPass
+        ? __VM.getNodeHistory(node).last.value
+        : __VM.getNodeHistory(node).secondLast.value;
 
       const sizeDiff = p_last.size - p.size;
-
-      __VM.writeNodeHistory(node, p);
 
       const checkIntersect = (line) => {
         let result = [false, ""];
@@ -937,7 +947,7 @@ export default {
 
           result[0] = findPathIntersections(river_path, line, true);
 
-          if (result[0]) {
+          if (result[0] > 0) {
             result[1] = river;
 
             __VM.svg
@@ -947,10 +957,6 @@ export default {
               .attr("stroke", "black")
               .attr("stroke-width", "1")
               .attr("fill", "none");
-
-            __VM.river.rivers[river].translate.x += p.x - p_last.x + sizeDiff;
-            __VM.river.rivers[river].translate.y += p.y - p_last.y + sizeDiff;
-
             break;
           }
         }
@@ -958,6 +964,8 @@ export default {
         return result;
       };
 
+      // crossings[0] is the number of river crossings
+      // crossings[1] is the river name
       const crossings = checkIntersect(
         d3.line()([
           [p_last.x, p_last.y],
@@ -965,42 +973,58 @@ export default {
         ])
       );
 
-      // move node back
-      // ignore double crossing
-      if ((crossings[0].length % 2 !== 0) & crossings[0]) {
-        // if (
-        //   river_vector.is_upper_side(
-        //     node,
-        //     __VM.colorVariant[node.attr("XRiver")]
-        //   )
-        // ) {
-        // }
-
-        const nodeXCount =
-          Number(node.attr("nodeXCount")) > 0
-            ? Number(node.attr("nodeXCount")) + 1
-            : 1;
-
-        node
-          .attr("stroke", "blue")
-          .attr("nodeXCount", nodeXCount)
-          .attr("XRiver", crossings[1]);
-
-        __VM.moveNode(node, p_last);
-        __VM.writeNodeHistory(node, p_last);
-
-        if (nodeXCount > __VM.iteration.limit) {
-          // a stalemate nodeX
-          node.attr("fill", "blue");
-          node.attr("nodeXCount", __VM.iteration.limit + 1);
-        } else {
-          // reset fill color for non-stalemate nodeX
-          node.attr("fill", node.attr("original_fill").trim());
+      // if there is a crossing
+      if (crossings[0] > 0) {
+        // if it's the first pass, calculate the distance for river translations
+        // do not move the node after testing
+        if (firstPass) {
+          const distance = Math.hypot(
+            p.x - p_last.x + sizeDiff,
+            p.y - p_last.y + sizeDiff
+          );
+          // add the distance for compouting average river translation distance
+          __VM.river.rivers[crossings[1]].translate.x +=
+            p.x - p_last.x + sizeDiff;
+          __VM.river.rivers[crossings[1]].translate.y +=
+            p.y - p_last.y + sizeDiff;
+          __VM.river.rivers[crossings[1]].translate.nodeXCount++;
         }
-      } else {
-        if (node.attr("nodeXCount")) {
-          node.attr("nodeXCount", 0);
-          node.attr("XRiver", null);
+
+        // not the first pass, move the node
+        else {
+          // ignore double crossing
+          if (crossings[0] % 2 !== 0) {
+            const nodeXCount =
+              Number(node.attr("nodeXCount")) > 0
+                ? Number(node.attr("nodeXCount")) + 1
+                : 1;
+
+            node
+              .attr("stroke", "blue")
+              .attr("nodeXCount", nodeXCount)
+              .attr("XRiver", crossings[1]);
+
+            __VM.moveNode(node, p_last);
+
+            if (nodeXCount > __VM.iteration.limit) {
+              // a stalemate nodeX
+              node.attr("fill", "blue");
+              node.attr("nodeXCount", __VM.iteration.limit + 1);
+
+              // calculate the distance between two postitions
+            } else {
+              // reset fill color for non-stalemate nodeX
+              node.attr("fill", node.attr("original_fill").trim());
+            }
+          }
+          // do not move the node
+          // reset nodeXCount
+          else {
+            if (node.attr("nodeXCount")) {
+              node.attr("nodeXCount", 0);
+              node.attr("XRiver", null);
+            }
+          }
         }
       }
     },
@@ -1121,7 +1145,7 @@ export default {
         `${__VM.river.width > 4 ? 4 : __VM.river.width}`
       );
     },
-    translateRiver() {
+    adjustRiver() {
       const __VM = this;
 
       Object.keys(__VM.river.rivers).forEach((river) => {
@@ -1165,9 +1189,7 @@ export default {
           );
 
           const distance = (p) =>
-            Math.sqrt(
-              Math.pow(current[0] - p[0], 2) + Math.pow(current[1] - p[1], 2)
-            );
+            Math.hypot(current[0] - p[0], current[1] - p[1]);
 
           const closest = resolution.reduce((a, b) =>
             distance(a) < distance(b) ? a : b
@@ -1216,18 +1238,10 @@ export default {
           .attr("cy", (d) => d[1])
           .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
 
-        let timer = 0;
-
         if (!__VM.getRiverTranslationStatic) {
-          timer = 100 * __VM.timer;
-          river_layer
-            .transition()
-            .attr(
-              "transform",
-              `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
-            );
+          __VM.moveRiver(river);
+          __VM.delay(__VM.timer).then(() => __VM.detectRiverXNodes());
         }
-        __VM.delay(timer).then(() => __VM.detectRiverXNodes());
       });
       __VM.mapNodeColorToRegion();
     },
@@ -1237,35 +1251,37 @@ export default {
         const x = __VM.river.rivers[river].translate.x;
         const y = __VM.river.rivers[river].translate.y;
 
+        // old x,y are used to draw riverX regions
         __VM.river.rivers[river].translate.finalXOld =
           __VM.river.rivers[river].translate.finalX;
 
         __VM.river.rivers[river].translate.finalYOld =
           __VM.river.rivers[river].translate.finalY;
 
-        const size = __VM.node.size;
-
         if (x > 0) {
-          __VM.river.rivers[river].translate.finalX += size;
+          __VM.river.rivers[river].translate.finalX +=
+            x / __VM.river.rivers[river].translate.nodeXCount;
         }
 
         if (x < 0) {
-          __VM.river.rivers[river].translate.finalX -= size;
+          __VM.river.rivers[river].translate.finalX -=
+            x / __VM.river.rivers[river].translate.nodeXCount;
         }
 
         if (y > 0) {
-          __VM.river.rivers[river].translate.finalY += size;
+          __VM.river.rivers[river].translate.finalY +=
+            y / __VM.river.rivers[river].translate.nodeXCount;
         }
 
         if (y < 0) {
-          __VM.river.rivers[river].translate.finalY -= size;
+          __VM.river.rivers[river].translate.finalY -=
+            y / __VM.river.rivers[river].translate.nodeXCount;
         }
 
         __VM.river.rivers[river].translate.x = 0;
         __VM.river.rivers[river].translate.y = 0;
+        __VM.river.rivers[river].translate.nodeXCount = 0;
       }
-
-      __VM.translateRiver();
     },
     detectRiverXNodes() {
       const __VM = this;
@@ -1458,39 +1474,39 @@ export default {
           ]);
 
           // render river vector
-          __VM.svg
-            .append("path")
-            .attr("class", "river-vector")
-            .attr("d", riverVector)
-            .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-            .attr("stroke-width", "2px")
-            .attr("fill", "none");
+          // __VM.svg
+          //   .append("path")
+          //   .attr("class", "river-vector")
+          //   .attr("d", riverVector)
+          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          //   .attr("stroke-width", "2px")
+          //   .attr("fill", "none");
 
-          riverVector = d3.line()([
-            __VM.river.rivers[river].section[0],
-            __VM.river.rivers[river].section[1],
-          ]);
+          // riverVector = d3.line()([
+          //   __VM.river.rivers[river].section[0],
+          //   __VM.river.rivers[river].section[1],
+          // ]);
 
-          __VM.svg
-            .append("path")
-            .attr("class", "river-vector")
-            .attr("d", riverVector)
-            .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-            .attr("stroke-width", "2px")
-            .attr("fill", "none");
+          // __VM.svg
+          //   .append("path")
+          //   .attr("class", "river-vector")
+          //   .attr("d", riverVector)
+          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          //   .attr("stroke-width", "2px")
+          //   .attr("fill", "none");
 
-          riverVector = d3.line()([
-            __VM.river.rivers[river].section[1],
-            __VM.river.rivers[river].end,
-          ]);
+          // riverVector = d3.line()([
+          //   __VM.river.rivers[river].section[1],
+          //   __VM.river.rivers[river].end,
+          // ]);
 
-          __VM.svg
-            .append("path")
-            .attr("class", "river-vector")
-            .attr("d", riverVector)
-            .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-            .attr("stroke-width", "2px")
-            .attr("fill", "none");
+          // __VM.svg
+          //   .append("path")
+          //   .attr("class", "river-vector")
+          //   .attr("d", riverVector)
+          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          //   .attr("stroke-width", "2px")
+          //   .attr("fill", "none");
         }
 
         if (river === "ouse") {
@@ -1517,26 +1533,26 @@ export default {
           ]);
 
           // render river vector
-          __VM.svg
-            .append("path")
-            .attr("class", "river-vector")
-            .attr("d", riverVector)
-            .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-            .attr("stroke-width", "2px")
-            .attr("fill", "none");
+          // __VM.svg
+          //   .append("path")
+          //   .attr("class", "river-vector")
+          //   .attr("d", riverVector)
+          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          //   .attr("stroke-width", "2px")
+          //   .attr("fill", "none");
 
-          riverVector = d3.line()([
-            __VM.river.rivers[river].section[0],
-            __VM.river.rivers[river].end,
-          ]);
+          // riverVector = d3.line()([
+          //   __VM.river.rivers[river].section[0],
+          //   __VM.river.rivers[river].end,
+          // ]);
 
-          __VM.svg
-            .append("path")
-            .attr("class", "river-vector")
-            .attr("d", riverVector)
-            .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-            .attr("stroke-width", "2px")
-            .attr("fill", "none");
+          // __VM.svg
+          //   .append("path")
+          //   .attr("class", "river-vector")
+          //   .attr("d", riverVector)
+          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
+          //   .attr("stroke-width", "2px")
+          //   .attr("fill", "none");
         }
 
         // render river regions
@@ -1578,6 +1594,9 @@ export default {
       );
     },
     moveNode(node, p) {
+      const __VM = this;
+      __VM.writeNodeHistory(node, p);
+
       node.attr("x", p.xRect).attr("y", p.yRect);
 
       // move the centroid
@@ -1587,6 +1606,15 @@ export default {
         })
         .attr("cx", p.x)
         .attr("cy", p.y);
+    },
+    moveRiver(river) {
+      const __VM = this;
+      d3.select(`.${river} .river`)
+        .transition()
+        .attr(
+          "transform",
+          `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
+        );
     },
     writeNodeHistory(node, p) {
       const last = this.node.history[node.attr("id")].last.value;
@@ -1635,18 +1663,18 @@ export default {
       },
       river: {
         translation: {
-          checked: ["static"],
+          checked: [],
           options: [
             {
               text: "Disable River Translation",
               value: "static",
               disabled: false,
             },
-            {
-              text: "Repeat River Translation",
-              value: "repeat",
-              disabled: true,
-            },
+            // {
+            //   text: "Repeat River Translation",
+            //   value: "repeat",
+            //   disabled: false,
+            // },
           ],
         },
         visibility: true,
@@ -1665,6 +1693,7 @@ export default {
               finalXOld: 0,
               finalY: 0,
               finalYOld: 0,
+              nodeXCount: 0,
             },
             start: [479.02905797094195, 425.36659340425064],
             end: [347.65206051385206, 417.3280256468014],
@@ -1681,6 +1710,7 @@ export default {
               finalXOld: 0,
               finalY: 0,
               finalYOld: 0,
+              nodeXCount: 0,
             },
             start: [421.95559914523204, 284.39009883603944],
             end: [341.19219722341234, 322.06244605320074],
@@ -1701,6 +1731,7 @@ export default {
               finalXOld: 0,
               finalY: 0,
               finalYOld: 0,
+              nodeXCount: 0,
             },
             start: [463.77093643287986, 338.09757337526446],
             end: [381.6475632920202, 391.79904674408465],

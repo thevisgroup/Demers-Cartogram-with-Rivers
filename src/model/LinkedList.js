@@ -40,6 +40,10 @@ export default class LinkedList {
     this.insertAt(this.size, value);
   }
 
+  removeLast(value) {
+    this.removeAt(this.size);
+  }
+
   getAt(index) {
     return this.nodes[index];
   }
