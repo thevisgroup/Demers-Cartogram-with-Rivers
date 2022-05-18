@@ -20,6 +20,7 @@
 \newcommand{\stalemateMax}{w}
 \newcommand{\nodeCross}{\node.cross}
 \newcommand{\nodeListCross}{\nodeList.cross}
+\newcommand{\nodeListCrossCount}{\nodeList.count}
 
 % move position
 
@@ -32,11 +33,11 @@
 
 % check river crossing
 
-\newcommand{\riverEdge}{\bm{r}}
-\newcommand{\riverEdgeList}{\bm{R}}
-\newcommand{\riverEdgeLine}{\Line{\riverEdge}}
-\newcommand{\nodeBoundingBox}{b_n}
-\newcommand{\riverEdgeBoundingBox}{b_{\riverEdge}}
+\newcommand{\river}{\bm{r}}
+\newcommand{\riverVector}{\Vector{v_{\river}}}
+\newcommand{\riverList}{\bm{R}}
+\newcommand{\nodeBoundingBox}{b_{\Line{n}}}
+\newcommand{\riverEdgeBoundingBox}{b_{\Edge}}
 \newcommand{\boundingBoxInt}{b_{int.}}
 \newcommand{\nodeEdge}{e_n}
 \newcommand{\edgeBoxInt}{e_{int.}}

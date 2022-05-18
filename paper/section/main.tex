@@ -27,7 +27,7 @@
 
 \algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of the process.
 
-\bobgraph{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $. \new{We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next closest vertex. This rendering approach enables us to adjust the river resolution as shown in \figref{fig:river resolution}. We further apply a smoothing logic by removing vertices that are too close to each other.}
+\bobgraph{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next closest vertex. This rendering approach enables us to adjust the river resolution as shown in \figref{fig:river resolution}. We further apply a smoothing logic by removing vertices that are too close to each other.
 
 \bobgraph{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. If a node oscillates across a river, we process this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
 
@@ -99,6 +99,94 @@
 
 %\end{noindent}
 
+% \begin{noindent}
+
+    \begin{algorithm}[tb!]
+        \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers.}\label{alg:UpdateLayout}
+        \textbf{Global variables:} \\
+        $ \nodeList \gets $ a list of $ \node $ representing CCGs with the following properties: \\
+        \-\hspace{1em}  \textcolor{blue}{$\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river} \\
+        $ \nodeSize \gets $ the current size of all nodes \\
+        $ \nodeSizeMax \gets $ the maximum size of a node \\
+        \textcolor{blue}{ $ \riverList \gets $ a list of $ \river $ representing river features} \\
+        $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
+
+        \textbf{Local variables:} \\
+        $ \node \gets $ a node is an object with the following properties: \\
+        \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
+        \-\hspace{1em} $ \nodeCross \gets $ the counter for river crosses for $ \node $ \\
+        \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
+        \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+
+        \begin{algorithmic}[1]
+            \Procedure{UpdateLayout}{}
+            \While{$ \nodeSize < \nodeSizeMax $}
+                \State \textcolor{blue}{$ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}}
+                \While{$ \nodeListCross > 0 $}
+
+                    \State $ \nodeListCross \gets 0 $
+                    \State $ \nodeList \gets $ RemoveOverlap ($ \nodeList $)
+                    \color{blue}
+                    \ForEach {$ \river \in \riverList $}
+                        \State $ \riverVector \gets (0,0) $ \Comment{Hold the sum of vectors $ \nodeVectorCT $}
+                        \ForEach {$ \node \in \nodeList $}
+
+                            \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
+                                \If{ \Call{TestIntersection}{$ \nodeFNORLine $, $ \river $} $ = True $}
+                                \State $ \riverVector \gets \riverVector + \nodeVectorCT$
+                                \State $ \nodeListCross \gets \nodeListCross ++ $
+                                \EndIf
+
+                            \EndIf
+
+                        \EndFor
+
+                        \State Translate river $ \river $ by the average vector $ \frac{\riverVector}{\nodeListCross} $
+                        \State $ \nodeListCross \gets 0 $ \Comment{Clear the counter}
+                    \EndFor
+
+
+                    \color{black}
+                    \ForEach {$ \node \in \nodeList $}
+    
+                        \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
+                            
+                            \State $ \node(x,y) \gets \nodeFNOR(x,y) $
+    
+                            \If{ \Call{TestIntersection}{$ \nodeFNORLine $} $ = True $}
+                                \State $ \nodeCross \gets \nodeCross ++ $
+                                \State $ \nodeListCross \gets \nodeListCross++ $
+    
+                                \If{$ \nodeCross < \stalemateMax $}
+                                    \State \hskip-2em \Comment{Translate back to previous position}
+                                    \State $ \node(x,y) \gets \nodePrevious(x,y) $
+    
+                                \Else
+    
+                                    \State \Call{ProcessStalemate}{$ \node, \nodeFNOR $}
+                                    \State $ \nodeCross \gets 0 $ \Comment{Reset counter}
+    
+                                \EndIf
+                                
+                            \EndIf
+    
+                        \EndIf
+    
+                    \EndFor
+    
+                \EndWhile
+    
+                \State $ \nodeSize \gets \nodeSize ++$
+    
+            \EndWhile
+    
+            \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+    
+    
+%\end{noindent}
+
 \subsection{River Intersection Testing}
 
 We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
@@ -108,7 +196,7 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Th
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth]{figure/river_resolution.png}
-    \caption{The resolution of rivers can be dynamically adjusted by the user. A shows River Thames at its original resolution with 10,170 edges. B shows the river at a reduced resolution of 49 edges. \new{We further smooth the river by removing vertices in dense areas, as shown in C.} The reduced resolution preserves the majority of River Thames' original shape and improves the performance of our river intersection tests.}
+    \caption{The resolution of rivers can be dynamically adjusted by the user. A shows River Thames at its original resolution with 10,170 edges. B shows the river at a reduced resolution of 49 edges. We further smooth the river by removing vertices in dense areas, as shown in C. The reduced resolution preserves the majority of River Thames' original shape and improves the performance of our river intersection tests.}
     \label{fig:river resolution}
 \end{figure}
 }
@@ -118,29 +206,24 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Th
     \caption{Procedure to test if a node's translation path, $ \nodeLineNV $ intersects a river.}\label{alg:check river intersection}
     \textbf{Input:} \\
     $ \nodeLineNV \gets $ the node's translation path \\
+    $ \river \gets $ a river feature \\
 
     \textbf{Output:} \\
     Returns $ True $ if the node crosses a river. \\
 
-    \textbf{Global variables:} \\
-    $ \riverEdgeList \gets $ a list of river edges \\
-
     \textbf{Local variables:} \\
-    $ \riverEdgeLine \gets $ a river edge in $ \riverEdgeList $ \\ 
-    $ \nodeBoundingBox, \riverEdgeBoundingBox \gets $ the bounding boxes for $ \nodeLineNV $ and $ \riverEdgeLine $ \\
-    % $ \boundingBoxInt \gets $ boolean indicating $ \nodeBoundingBox $ intersects $ \riverEdgeBoundingBox $ \\
-    % $ \nodeEdge \gets $ the edge for $ \node $\\
-    % $ \edgeBoxInt \gets $ boolean indicating $ \nodeEdge $ intersects $ \riverEdgeListEach $ \\
+    $ \nodeBoundingBox, \riverEdgeBoundingBox \gets $ the bounding boxes for $ \nodeLineNV $ and $ \Edge $ \\
+    $ \Edge \gets $ an edge of $ \river $ \\
 
     \begin{algorithmic}[1]
-        \Procedure{TestIntersection}{$ \nodeLineNV $}
+        \Procedure{TestIntersection}{$ \nodeLineNV $, $ \river $}
         
-        \ForEach{$ \riverEdgeLine \in \riverEdgeList $}
+        \ForEach{$ \Edge \in \river $}
             \State $ \nodeBoundingBox \gets $ GetBoundingBox ($ \nodeLineNV $)
-            \State $ \riverEdgeBoundingBox \gets $ GetBoundingBox ($ \riverEdgeLine $)
+            \State $ \riverEdgeBoundingBox \gets $ GetBoundingBox ($ \Edge $)
 
             \If{$ \nodeBoundingBox ~intersect~ \riverEdgeBoundingBox = True $}
-                \State \Return{$ \nodeLineNV ~intersect~ \riverEdgeLine $}
+                \State \Return{$ \nodeLineNV ~intersect~ \Edge $}
                 \EndIf
         \EndFor
         
