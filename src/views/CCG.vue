@@ -864,6 +864,24 @@ export default {
 
           const p_current = __VM.getNodeHistory(node).last.value;
 
+          const max = 3;
+
+          if (position_diff[0] > 0 && position_diff[0] > max) {
+            position_diff[0] = max;
+          }
+
+          if (position_diff[0] < 0 && position_diff[0] < -max) {
+            position_diff[0] = -max;
+          }
+
+          if (position_diff[1] > 0 && position_diff[1] > max) {
+            position_diff[1] = max;
+          }
+
+          if (position_diff[0] < 0 && position_diff[1] < -max) {
+            position_diff[1] = -max;
+          }
+
           p_next = new Point(
             p_current.x + position_diff[0],
             p_current.y + position_diff[1],
@@ -897,6 +915,7 @@ export default {
           (tempVector.x - parallelEdge1[0].x) / 2,
           (tempVector.y - parallelEdge1[0].y) / 2,
         ];
+
         // move the node itself
         moveNodeInCorridor(node, position_diff, true);
         node.attr("fill", node.attr("original_fill"));
