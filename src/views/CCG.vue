@@ -129,8 +129,9 @@
                       :max="node.maxSize > 0 ? node.maxSize : 100"
                       step="0.25"
                       @change="setNodeSize(node.size, $event)"
-                    ></b-form-input
-                  ></b-button>
+                    >
+                    </b-form-input>
+                  </b-button>
 
                   <b-button block variant="info">
                     Node size increment: {{ node.sizeStep
@@ -141,8 +142,8 @@
                       min="0.25"
                       max="10"
                       step="0.25"
-                    ></b-form-input
-                  ></b-button>
+                    ></b-form-input>
+                  </b-button>
 
                   <b-row>
                     <b-col sm="5">Max node size:</b-col>
@@ -216,9 +217,9 @@
                       v-on:click="toggleFeatureVisibility('river', r.color)"
                       >{{ r.name }}
                       {{
-                        getRiverTranslation(r.color)[0] +
+                        getRiverTranslation(r.color)[0].toFixed(2) +
                         "," +
-                        getRiverTranslation(r.color)[1]
+                        getRiverTranslation(r.color)[1].toFixed(2)
                       }}
                       <br />
                       <span
@@ -237,7 +238,8 @@
                       type="range"
                       min="5"
                       max="20"
-                    ></b-form-input>
+                    >
+                    </b-form-input>
                   </b-button>
 
                   <b-button block variant="info">
@@ -262,8 +264,8 @@
                       max="230"
                       step="5"
                       @change="adjustRiver()"
-                    ></b-form-input
-                  ></b-button>
+                    ></b-form-input>
+                  </b-button>
                 </td>
               </tr>
             </tbody>
@@ -275,7 +277,8 @@
             rows="5"
             max-rows="5"
             disabled
-          ></b-form-textarea>
+          >
+          </b-form-textarea>
         </div>
       </b-col>
     </b-row>
@@ -539,6 +542,10 @@ export default {
         }
       }
 
+      if (firstPass) {
+        __VM.calculateRiverTranslation();
+      }
+
       let translateRiver = firstPass;
 
       if (__VM.getRiverTranslationRepeat) {
@@ -553,10 +560,9 @@ export default {
       }
 
       if (translateRiver) {
-        __VM.calculateRiverTranslation();
-
         for (const river of Object.keys(__VM.river.rivers)) {
           __VM.moveRiver(river);
+          __VM.delay(__VM.timer).then(() => __VM.detectRiverXNodes());
         }
       }
 
@@ -755,7 +761,7 @@ export default {
             __VM.node.size
           );
 
-          __VM.debug = true;
+          __VM.debug = false;
           if (__VM.debug) {
             d3.selectAll(".debug").remove();
 
@@ -888,12 +894,13 @@ export default {
           __VM.node.size
         );
         const position_diff = [
-          tempVector.x - parallelEdge1[0].x,
-          tempVector.y - parallelEdge1[0].y,
+          (tempVector.x - parallelEdge1[0].x) / 2,
+          (tempVector.y - parallelEdge1[0].y) / 2,
         ];
         // move the node itself
         moveNodeInCorridor(node, position_diff, true);
         node.attr("fill", node.attr("original_fill"));
+        node.attr("nodeXCount", 0);
 
         // here we can derive the bounding box of the corridor to reduce the number of nodes to be checked
         for (let [i, node_in_c] of d3
@@ -978,16 +985,29 @@ export default {
         // if it's the first pass, calculate the distance for river translations
         // do not move the node after testing
         if (firstPass) {
-          const distance = Math.hypot(
-            p.x - p_last.x + sizeDiff,
-            p.y - p_last.y + sizeDiff
-          );
+          const river = crossings[1];
           // add the distance for compouting average river translation distance
-          __VM.river.rivers[crossings[1]].translate.x +=
-            p.x - p_last.x + sizeDiff;
-          __VM.river.rivers[crossings[1]].translate.y +=
-            p.y - p_last.y + sizeDiff;
-          __VM.river.rivers[crossings[1]].translate.nodeXCount++;
+          let { translate } = __VM.river.rivers[river];
+
+          let x = p.x - p_last.x + sizeDiff;
+          let y = p.y - p_last.y + sizeDiff;
+
+          if (river === "thames") {
+            if (river_vector.is_upper_side(node, __VM.colorVariant[river])) {
+              x = -x;
+              y = -y;
+            }
+          } else {
+            if (river_vector.is_upper_side(node, __VM.colorVariant[river])) {
+              x = -x;
+              y = -y;
+            }
+          }
+          translate.x += x;
+          translate.y += y;
+          translate.nodeXCount += 1;
+
+          __VM.river.rivers[river].translate = translate;
         }
 
         // not the first pass, move the node
@@ -1237,10 +1257,8 @@ export default {
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
           .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
-
         if (!__VM.getRiverTranslationStatic) {
           __VM.moveRiver(river);
-          __VM.delay(__VM.timer).then(() => __VM.detectRiverXNodes());
         }
       });
       __VM.mapNodeColorToRegion();
@@ -1248,39 +1266,25 @@ export default {
     calculateRiverTranslation() {
       const __VM = this;
       for (const river of Object.keys(__VM.river.rivers)) {
-        const x = __VM.river.rivers[river].translate.x;
-        const y = __VM.river.rivers[river].translate.y;
+        let { translate } = __VM.river.rivers[river];
+        let { x, y, nodeXCount } = translate;
 
-        // old x,y are used to draw riverX regions
-        __VM.river.rivers[river].translate.finalXOld =
-          __VM.river.rivers[river].translate.finalX;
+        if (nodeXCount > 0) {
+          // old x,y are used to draw riverX regions
+          translate.finalXOld = translate.finalX;
 
-        __VM.river.rivers[river].translate.finalYOld =
-          __VM.river.rivers[river].translate.finalY;
+          translate.finalYOld = translate.finalY;
 
-        if (x > 0) {
-          __VM.river.rivers[river].translate.finalX +=
-            x / __VM.river.rivers[river].translate.nodeXCount;
+          translate.finalX += x / nodeXCount;
+
+          translate.finalY += y / nodeXCount;
+
+          translate.x = 0;
+          translate.y = 0;
+          translate.nodeXCount = 0;
         }
 
-        if (x < 0) {
-          __VM.river.rivers[river].translate.finalX -=
-            x / __VM.river.rivers[river].translate.nodeXCount;
-        }
-
-        if (y > 0) {
-          __VM.river.rivers[river].translate.finalY +=
-            y / __VM.river.rivers[river].translate.nodeXCount;
-        }
-
-        if (y < 0) {
-          __VM.river.rivers[river].translate.finalY -=
-            y / __VM.river.rivers[river].translate.nodeXCount;
-        }
-
-        __VM.river.rivers[river].translate.x = 0;
-        __VM.river.rivers[river].translate.y = 0;
-        __VM.river.rivers[river].translate.nodeXCount = 0;
+        __VM.river.rivers[river].translate = translate;
       }
     },
     detectRiverXNodes() {
@@ -1298,13 +1302,13 @@ export default {
 
         // draw river crossed areas
         if (JSON.stringify(resCurrent) !== JSON.stringify(resOld)) {
-          d3.selectAll(`.${river}.crossedArea`).remove();
-
           const crossedRegion = d3.line()([
             ...resCurrent,
             ...resOld.reverse(),
             resCurrent[0],
           ]);
+
+          d3.selectAll(`.${river}.crossedArea`).remove();
 
           d3.select("#map")
             .append("path")
@@ -1314,18 +1318,52 @@ export default {
             .attr("stroke-width", "1px")
             .attr("fill", "none");
 
-          for (const [i, node] of d3
+          for (let [i, node] of d3
             .selectAll(".node-layer > g > rect")
             ._groups[0].entries()) {
+            node = d3.select(node);
+            const p_current = __VM.getNodeHistory(node).last.value;
+
             const inside = pip.isInside(
-              [d3.select(node).attr("x"), d3.select(node).attr("y")],
+              [p_current.x, p_current.y],
               crossedRegion
             );
             if (inside) {
-              d3.select(node)
+              node
                 .attr("stroke", "red")
                 .attr("stroke-width", "0.5")
                 .attr("riverX", true);
+
+              // let x, y;
+
+              // if (river === "thames") {
+
+              //   if (!river_vector.is_upper_side(node, __VM.colorVariant[river])) {
+              //     x = -translate.finalX;
+              //     y = -translate.finalY;
+
+              //     console.log(translate.finalX, translate.finalY);
+              //   } else {
+              //     x = translate.finalX;
+              //     y = translate.finalY;
+              //   }
+              // } else {
+              //   if (river_vector.is_upper_side(node, __VM.colorVariant[river])) {
+              //     x = -translate.finalX;
+              //     y = -translate.finalY;
+              //   } else {
+              //     x = translate.finalX;
+              //     y = translate.finalY;
+              //   }
+              // }
+
+              // let p_next = new Point(
+              //   p_current.x + x,
+              //   p_current.y + y,
+              //   __VM.node.size
+              // );
+
+              // __VM.moveNode(node, p_next);
             }
           }
         }
@@ -1450,9 +1488,7 @@ export default {
           //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           //   .attr("stroke-width", "2px")
           //   .attr("fill", "none");
-        }
-
-        if (river === "trent") {
+        } else if (river === "trent") {
           __VM.region.trent = [];
           __VM.region.trent.push(...trentRes);
 
@@ -1507,9 +1543,7 @@ export default {
           //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
           //   .attr("stroke-width", "2px")
           //   .attr("fill", "none");
-        }
-
-        if (river === "ouse") {
+        } else if (river === "ouse") {
           __VM.region.ouse = [];
           __VM.region.ouse.push(...ouseRes);
 
@@ -1609,6 +1643,7 @@ export default {
     },
     moveRiver(river) {
       const __VM = this;
+
       d3.select(`.${river} .river`)
         .transition()
         .attr(
@@ -1816,6 +1851,7 @@ export default {
   border-radius: 2px;
   opacity: 10 !important;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
