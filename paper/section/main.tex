@@ -3,29 +3,29 @@
  {
   \begin{figure}[tb!]
       \centering
-      \includegraphics[width=\columnwidth]{example-image-a}
+      \includegraphics[width=\columnwidth,keepaspectratio]{example-image-a}
       \caption{An screenshot of \software. Figure TBA.}
       \label{fig:overview}
   \end{figure}
  }
 
  {
-  \begin{figure}[tb!]
+  \begin{figure*}[tb!]
       \centering
-      \includegraphics[width=0.8\columnwidth]{figure/flowchart.png}
-      \caption{A flowchart illustration of our layout algorithm.See \figref{fig:flowchart-stalemate} for the flow of processing stalemate. See also \algoref{alg:UpdateNodePosition} for more detail.}
+      \includegraphics[width=\textwidth,height=0.95\textheight,keepaspectratio]{figure/flowchart.png}
+      \caption{A flowchart illustration of our layout algorithm.See \figref{fig:flowchart-stalemate} for the flow of processing stalemate. See also \algoref{alg:UpdateLayout} for more detail.}
       \label{fig:flowchart}
-  \end{figure}
+  \end{figure*}
 
   \begin{figure}[tb!]
       \centering
-      \includegraphics[width=0.9\columnwidth]{figure/flowchart stalemate.png}
+      \includegraphics[width=0.9\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
       \caption{A flowchart illustration of stalemate processing.}
       \label{fig:flowchart-stalemate}
   \end{figure}
  }
 
-\algoref{alg:UpdateNodePosition} and \figref{fig:flowchart} provide an overview of the process.
+\algoref{alg:UpdateLayout} and \figref{fig:flowchart} provide an overview of the process.
 
 \bobgraph{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next closest vertex. This rendering approach enables us to adjust the river resolution as shown in \figref{fig:river resolution}. We further apply a smoothing logic by removing vertices that are too close to each other.
 
@@ -181,7 +181,7 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Th
     {
         \begin{figure}[tb!]
             \centering
-            \includegraphics[width=\columnwidth]{figure/river_resolution.png}
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/river_resolution.png}
             \caption{The resolution of rivers can be dynamically adjusted by the user. A shows River Thames at its original resolution with 10,170 edges. B shows the river at a reduced resolution of 49 edges. We further smooth the river by removing vertices in dense areas, as shown in C. The reduced resolution preserves the majority of River Thames' original shape and improves the performance of our river intersection tests.}
             \label{fig:river resolution}
         \end{figure}
@@ -226,7 +226,7 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
     {
         \begin{figure}[tb!]
             \centering
-            \includegraphics[width=\columnwidth]{figure/stalemate.png}
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/stalemate.png}
             \caption{A stalemate situation is when a node's translation path $ \nodeVectorCT $ (in iteration 1) intersects a river $ \stalemateMax $ times. The node is translated back to its previous position (iteration 2). A stalemate often occurs when the area is congested and the node is unable to translate to a new position without intersecting a river.}
             \label{fig:stalemate}
         \end{figure}
@@ -235,7 +235,7 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
     {
         \begin{figure}[tb!]
             \centering
-            \includegraphics[width=\columnwidth]{figure/corridor.png}
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/corridor.png}
             \caption{A stalemate occurs when a node's translation path $ \nodeVectorCT $ intersects a river for $ \stalemateMax $ times, as shown in A. To address the issue, we derive a corridor (orange rectangle in E) based on $ \node $ and $ \nodeFNOR $. All nodes within the corridor are translated based on $ \nodeVectorTC $, such that $ \nodeVectorNNn = \nodeVectorNinNinn $. In order to show a clear illustration, we place nodes sparsely in this figure.}
             \label{fig:corridor}
         \end{figure}
