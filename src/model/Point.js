@@ -24,4 +24,8 @@ export default class Point {
   get coordRect() {
     return [this.xRect, this.yRect];
   }
+
+  set crossedRiver(river) {
+    this.crossedRiver = river;
+  }
 }

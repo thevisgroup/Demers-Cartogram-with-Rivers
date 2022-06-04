@@ -125,7 +125,7 @@
                       id="slider-node-size"
                       :value="node.size"
                       type="range"
-                      min="0.25"
+                      min="1"
                       :max="node.maxSize > 0 ? node.maxSize : 100"
                       step="0.25"
                       @change="setNodeSize(node.size, $event)"
@@ -139,9 +139,9 @@
                       id="slider-node-size"
                       v-model="node.sizeStep"
                       type="range"
-                      min="0.25"
-                      max="10"
-                      step="0.25"
+                      min="0.1"
+                      max="0.5"
+                      step="0.1"
                     ></b-form-input>
                   </b-button>
 
@@ -500,8 +500,6 @@ export default {
       // get nodes with ORAed positions via FNOR
       const nodes = __VM.runFNOR();
 
-      const timer = __VM.timer * __VM.node.size;
-
       // the first pass of ORA is to translate rivers
       for (let [i, node] of d3
         .selectAll(".node-layer > g > rect")
@@ -537,8 +535,14 @@ export default {
         if (firstPass) {
           __VM.testRiverCross(node, p_new, true);
         } else {
+          if (node.attr("id") === "E38000049" && __VM.node.size > 17.8) {
+            let a = "b";
+          }
+
           __VM.moveNode(node, p_new);
+          // if (!node.attr("riverX")) {
           __VM.testRiverCross(node, p_new, false);
+          // }
         }
       }
 
@@ -570,7 +574,7 @@ export default {
       const crossingCount = d3.selectAll(`.river-crossing-path`)._groups[0]
         .length;
 
-      __VM.delay(timer * 1.1).then(() => {
+      __VM.delay(__VM.timer).then(() => {
         if (crossingCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
             __VM.updateLog(
@@ -578,7 +582,7 @@ export default {
             );
 
             __VM.iteration.current = 0;
-            __VM.delay(__VM.timer * __VM.node.size).then(() => {
+            __VM.delay(__VM.timer).then(() => {
               __VM.processStalemate();
             });
           } else {
@@ -614,8 +618,6 @@ export default {
         .selectAll(`#map rect[nodeXCount="${__VM.iteration.limit + 1}"]`)
         ._groups[0].entries();
 
-      const timer = 10 * __VM.timer;
-
       for (let [i, node] of nodes) {
         // redraw nodes using new coordinates
 
@@ -632,6 +634,7 @@ export default {
 
         const XRiver = node.attr("XRiver");
         let pSlope;
+        let derivePointUp = -1;
 
         // assign pSlope based on the river name
         switch (XRiver) {
@@ -651,11 +654,11 @@ export default {
                   __VM.river.rivers[XRiver].start,
                   __VM.river.rivers[XRiver].section[0]
                 );
-
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(400, 340, __VM.node.size);
               } else {
+                derivePointUp = 1;
                 tempPoint = new Point(500, 350, __VM.node.size);
               }
             } else {
@@ -665,12 +668,12 @@ export default {
                   __VM.river.rivers[XRiver].section[0],
                   __VM.river.rivers[XRiver].end
                 );
-
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(400, 300, __VM.node.size);
+                derivePointUp = 1;
               } else {
-                tempPoint = new Point(435, 415, __VM.node.size);
+                tempPoint = new Point(480, 415, __VM.node.size);
               }
             }
 
@@ -679,7 +682,6 @@ export default {
           // trent has 3 sections
           case "trent":
             // check which section the node is in
-
             if (
               river_vector.bounding_box(
                 __VM.river.rivers[XRiver].start,
@@ -693,10 +695,10 @@ export default {
                   __VM.river.rivers[XRiver].start,
                   __VM.river.rivers[XRiver].section[0]
                 );
-
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(370, 270, __VM.node.size);
+                derivePointUp = 1;
               } else {
                 tempPoint = new Point(430, 305, __VM.node.size);
               }
@@ -710,14 +712,14 @@ export default {
               pSlope =
                 -1 /
                 river_vector.cal_slope(
-                  __VM.river.rivers[XRiver].section[0],
-                  __VM.river.rivers[XRiver].section[1]
+                  __VM.river.rivers[XRiver].section[1],
+                  __VM.river.rivers[XRiver].end
                 );
-
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(360, 280, __VM.node.size);
               } else {
+                derivePointUp = 1;
                 tempPoint = new Point(400, 350, __VM.node.size);
               }
             } else {
@@ -731,20 +733,22 @@ export default {
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(415, 285, __VM.node.size);
               } else {
+                derivePointUp = 1;
                 tempPoint = new Point(300, 350, __VM.node.size);
               }
             }
 
             break;
 
-          // trent has 1 section
+          // thames has 1 section
           case "thames":
             pSlope = -1 / __VM.river.rivers[XRiver].slope;
-
-            if (!river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-              tempPoint = new Point(500, 500, __VM.node.size);
-            } else {
+            if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
+              pSlope = 1 / __VM.river.rivers[XRiver].slope;
               tempPoint = new Point(420, 460, __VM.node.size);
+            } else {
+              derivePointUp = 1;
+              tempPoint = new Point(500, 500, __VM.node.size);
             }
 
             break;
@@ -761,7 +765,7 @@ export default {
             __VM.node.size
           );
 
-          __VM.debug = false;
+          __VM.debug = true;
           if (__VM.debug) {
             d3.selectAll(".debug").remove();
 
@@ -827,7 +831,9 @@ export default {
         const derivedPoint = derivePoint(
           p_previous,
           tempPoint,
-          __VM.corridor.length
+          Math.abs(derivePointUp * __VM.node.size * 3) > 25
+            ? 25
+            : derivePointUp * __VM.node.size * 3
         );
 
         const parallelEdge1 = deriveParallelEdge(
@@ -849,7 +855,7 @@ export default {
           parallelEdge1[0].coordRect,
         ]);
 
-        // d3.select(".corridor").remove();
+        d3.select(".corridor").remove();
 
         __VM.svg
           .append("path")
@@ -864,24 +870,6 @@ export default {
 
           const p_current = __VM.getNodeHistory(node).last.value;
 
-          const max = 3;
-
-          if (position_diff[0] > 0 && position_diff[0] > max) {
-            position_diff[0] = max;
-          }
-
-          if (position_diff[0] < 0 && position_diff[0] < -max) {
-            position_diff[0] = -max;
-          }
-
-          if (position_diff[1] > 0 && position_diff[1] > max) {
-            position_diff[1] = max;
-          }
-
-          if (position_diff[0] < 0 && position_diff[1] < -max) {
-            position_diff[1] = -max;
-          }
-
           p_next = new Point(
             p_current.x + position_diff[0],
             p_current.y + position_diff[1],
@@ -889,8 +877,9 @@ export default {
           );
 
           __VM.moveNode(node, p_next);
+          // if (!self) {
           __VM.testRiverCross(node, p_next, false);
-
+          // }
           // set stroke color for nodeC
           if (node.attr("nodeXCount")) {
             node.attr("stroke", "blue");
@@ -939,11 +928,11 @@ export default {
           }
         }
 
-        __VM.delay(timer).then(() => {
+        __VM.delay(__VM.timer).then(() => {
           d3.select(".corridor").remove();
         });
       }
-      __VM.delay(timer).then(() => {
+      __VM.delay(__VM.timer).then(() => {
         d3.selectAll(".river-crossing-path").remove();
         __VM.removeOverlap(false, true);
         __VM.step.button_disabled = false;
@@ -1001,6 +990,9 @@ export default {
 
       // if there is a crossing
       if (crossings[0] > 0) {
+        if (node.attr("id") === "E38000102") {
+          let a = "b";
+        }
         // if it's the first pass, calculate the distance for river translations
         // do not move the node after testing
         if (firstPass) {
@@ -1017,7 +1009,7 @@ export default {
               y = -y;
             }
           } else {
-            if (river_vector.is_upper_side(node, __VM.colorVariant[river])) {
+            if (!river_vector.is_upper_side(node, __VM.colorVariant[river])) {
               x = -x;
               y = -y;
             }
@@ -1294,9 +1286,19 @@ export default {
 
           translate.finalYOld = translate.finalY;
 
-          translate.finalX += x / nodeXCount;
+          translate.finalX +=
+            Math.abs(x / nodeXCount) > __VM.river.translation.limit
+              ? __VM.river.translation.limit
+              : x / nodeXCount;
 
-          translate.finalY += y / nodeXCount;
+          translate.finalY +=
+            Math.abs(y / nodeXCount) > __VM.river.translation.limit
+              ? __VM.river.translation.limit
+              : y / nodeXCount;
+
+          if (river === "ouse") {
+            let a = "b";
+          }
 
           translate.x = 0;
           translate.y = 0;
@@ -1313,6 +1315,8 @@ export default {
         const { resolution, translate } = __VM.river.rivers[river];
         const resCurrent = [];
         const resOld = [];
+
+        const riverMovingUp = translate.finalY > 0;
 
         resolution.forEach((r) => {
           resCurrent.push([r[0] + translate.finalX, r[1] + translate.finalY]);
@@ -1341,6 +1345,14 @@ export default {
             .selectAll(".node-layer > g > rect")
             ._groups[0].entries()) {
             node = d3.select(node);
+
+            if (
+              riverMovingUp !==
+              river_vector.is_upper_side(node, __VM.colorVariant[river])
+            ) {
+              continue;
+            }
+
             const p_current = __VM.getNodeHistory(node).last.value;
 
             const inside = pip.isInside(
@@ -1348,41 +1360,49 @@ export default {
               crossedRegion
             );
             if (inside) {
+              if (node.attr("id") === "E38000010") {
+                console.log(
+                  riverMovingUp,
+                  translate.finalY,
+                  river_vector.is_upper_side(node, __VM.colorVariant[river])
+                );
+              }
+
               node
                 .attr("stroke", "red")
                 .attr("stroke-width", "0.5")
                 .attr("riverX", true);
 
-              // let x, y;
+              let x, y;
 
-              // if (river === "thames") {
+              if (river === "thames") {
+                if (
+                  !river_vector.is_upper_side(node, __VM.colorVariant[river])
+                ) {
+                  x = -translate.finalX;
+                  y = -translate.finalY;
+                } else {
+                  x = translate.finalX;
+                  y = translate.finalY;
+                }
+              } else {
+                if (
+                  river_vector.is_upper_side(node, __VM.colorVariant[river])
+                ) {
+                  x = translate.finalX;
+                  y = translate.finalY;
+                } else {
+                  x = -translate.finalX;
+                  y = -translate.finalY;
+                }
+              }
 
-              //   if (!river_vector.is_upper_side(node, __VM.colorVariant[river])) {
-              //     x = -translate.finalX;
-              //     y = -translate.finalY;
-
-              //     console.log(translate.finalX, translate.finalY);
-              //   } else {
-              //     x = translate.finalX;
-              //     y = translate.finalY;
-              //   }
-              // } else {
-              //   if (river_vector.is_upper_side(node, __VM.colorVariant[river])) {
-              //     x = -translate.finalX;
-              //     y = -translate.finalY;
-              //   } else {
-              //     x = translate.finalX;
-              //     y = translate.finalY;
-              //   }
-              // }
-
-              // let p_next = new Point(
-              //   p_current.x + x,
-              //   p_current.y + y,
-              //   __VM.node.size
-              // );
-
-              // __VM.moveNode(node, p_next);
+              let p_next = new Point(
+                p_current.x + x,
+                p_current.y + y,
+                __VM.node.size
+              );
+              __VM.moveNode(node, p_next);
             }
           }
         }
@@ -1692,7 +1712,7 @@ export default {
         continuous: true,
       },
       iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
-      timer: 1,
+      timer: 10,
       log: "",
       debug: false,
       corridor: {
@@ -1707,9 +1727,9 @@ export default {
         visibility: true,
         color: "success",
         previousSize: 0,
-        size: 5,
+        size: 1,
         maxSize: 20,
-        sizeStep: 0.25,
+        sizeStep: 0.1,
         nodeX: {
           stroke_width: "0.7",
         },
@@ -1717,6 +1737,7 @@ export default {
       },
       river: {
         translation: {
+          limit: 2,
           checked: [],
           options: [
             {

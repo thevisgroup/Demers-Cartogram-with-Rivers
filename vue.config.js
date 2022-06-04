@@ -4,4 +4,7 @@ module.exports = {
       config.output.filename("[name].[hash].js").end();
     }
   },
+  configureWebpack: {
+    devtool: "source-map",
+  },
 };
