@@ -40,7 +40,7 @@ export default class LinkedList {
     this.insertAt(this.size, value);
   }
 
-  removeLast(value) {
+  removeLast() {
     this.removeAt(this.size);
   }
 

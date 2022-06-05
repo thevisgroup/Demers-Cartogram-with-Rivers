@@ -270,15 +270,6 @@
               </tr>
             </tbody>
           </table>
-          <b-form-textarea
-            id="ta_log"
-            v-model="log"
-            placeholder="Logs will appear here"
-            rows="5"
-            max-rows="5"
-            disabled
-          >
-          </b-form-textarea>
         </div>
       </b-col>
     </b-row>
@@ -535,10 +526,9 @@ export default {
         if (firstPass) {
           __VM.testRiverCross(node, p_new, true);
         } else {
-          if (node.attr("id") === "E38000049" && __VM.node.size > 17.8) {
+          if (node.attr("id") === "E38000102" && __VM.node.size > 18.2) {
             let a = "b";
           }
-
           __VM.moveNode(node, p_new);
           // if (!node.attr("riverX")) {
           __VM.testRiverCross(node, p_new, false);
@@ -577,19 +567,11 @@ export default {
       __VM.delay(__VM.timer).then(() => {
         if (crossingCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
-            __VM.updateLog(
-              `Overlap removal iteration: ${__VM.iteration.current} stopped, iteration limit of ${__VM.iteration.limit} reached. \n`
-            );
-
             __VM.iteration.current = 0;
             __VM.delay(__VM.timer).then(() => {
               __VM.processStalemate();
             });
           } else {
-            __VM.updateLog(
-              `Overlap removal iteration: ${__VM.iteration.current}, finished with ${crossingCount} nodeX. \n`
-            );
-
             __VM.iteration.current++;
             __VM.removeOverlap(false, true);
           }
@@ -598,10 +580,6 @@ export default {
           // after the first pass, the second pass is to move nodes
           __VM.removeOverlap(false, false);
         } else {
-          __VM.updateLog(
-            `Overlap removal iteration: ${__VM.iteration.current} finished, no more nodeX. \n`
-          );
-
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
 
@@ -630,11 +608,10 @@ export default {
         const sizeDiff = p_previous.size - p_current.size;
 
         // used in derivedPoints
-        let tempPoint = new Point(500, 500, __VM.node.size);
+        let tempPoint = new Point(1000, 1000, __VM.node.size);
 
         const XRiver = node.attr("XRiver");
         let pSlope;
-        let derivePointUp = -1;
 
         // assign pSlope based on the river name
         switch (XRiver) {
@@ -658,7 +635,6 @@ export default {
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(400, 340, __VM.node.size);
               } else {
-                derivePointUp = 1;
                 tempPoint = new Point(500, 350, __VM.node.size);
               }
             } else {
@@ -671,7 +647,6 @@ export default {
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(400, 300, __VM.node.size);
-                derivePointUp = 1;
               } else {
                 tempPoint = new Point(480, 415, __VM.node.size);
               }
@@ -698,7 +673,6 @@ export default {
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(370, 270, __VM.node.size);
-                derivePointUp = 1;
               } else {
                 tempPoint = new Point(430, 305, __VM.node.size);
               }
@@ -717,9 +691,8 @@ export default {
                 );
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(360, 280, __VM.node.size);
+                tempPoint = new Point(460, 280, __VM.node.size);
               } else {
-                derivePointUp = 1;
                 tempPoint = new Point(400, 350, __VM.node.size);
               }
             } else {
@@ -733,7 +706,6 @@ export default {
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
                 tempPoint = new Point(415, 285, __VM.node.size);
               } else {
-                derivePointUp = 1;
                 tempPoint = new Point(300, 350, __VM.node.size);
               }
             }
@@ -747,7 +719,6 @@ export default {
               pSlope = 1 / __VM.river.rivers[XRiver].slope;
               tempPoint = new Point(420, 460, __VM.node.size);
             } else {
-              derivePointUp = 1;
               tempPoint = new Point(500, 500, __VM.node.size);
             }
 
@@ -765,7 +736,7 @@ export default {
             __VM.node.size
           );
 
-          __VM.debug = true;
+          __VM.debug = false;
           if (__VM.debug) {
             d3.selectAll(".debug").remove();
 
@@ -831,9 +802,7 @@ export default {
         const derivedPoint = derivePoint(
           p_previous,
           tempPoint,
-          Math.abs(derivePointUp * __VM.node.size * 3) > 25
-            ? 25
-            : derivePointUp * __VM.node.size * 3
+          Math.abs(__VM.node.size * 3) > 25 ? 25 : __VM.node.size * 3
         );
 
         const parallelEdge1 = deriveParallelEdge(
@@ -877,9 +846,9 @@ export default {
           );
 
           __VM.moveNode(node, p_next);
-          // if (!self) {
-          __VM.testRiverCross(node, p_next, false);
-          // }
+          if (!self) {
+            __VM.testRiverCross(node, p_next, false);
+          }
           // set stroke color for nodeC
           if (node.attr("nodeXCount")) {
             node.attr("stroke", "blue");
@@ -923,6 +892,10 @@ export default {
           if (pip.isInside([p_last.x, p_last.y], corridor)) {
             // do not move the node in focus itself
             if (node_in_c.attr("nodeXCount") === null) {
+              if (node_in_c.attr("id") === "E38000246" && __VM.node.size > 17) {
+                let a = "b";
+              }
+
               moveNodeInCorridor(node_in_c, position_diff);
             }
           }
@@ -987,12 +960,8 @@ export default {
           [p.x, p.y],
         ])
       );
-
       // if there is a crossing
       if (crossings[0] > 0) {
-        if (node.attr("id") === "E38000102") {
-          let a = "b";
-        }
         // if it's the first pass, calculate the distance for river translations
         // do not move the node after testing
         if (firstPass) {
@@ -1010,8 +979,8 @@ export default {
             }
           } else {
             if (!river_vector.is_upper_side(node, __VM.colorVariant[river])) {
-              x = -x;
-              y = -y;
+              x = -Math.abs(x);
+              y = -Math.abs(y);
             }
           }
           translate.x += x;
@@ -1360,14 +1329,6 @@ export default {
               crossedRegion
             );
             if (inside) {
-              if (node.attr("id") === "E38000010") {
-                console.log(
-                  riverMovingUp,
-                  translate.finalY,
-                  river_vector.is_upper_side(node, __VM.colorVariant[river])
-                );
-              }
-
               node
                 .attr("stroke", "red")
                 .attr("stroke-width", "0.5")
@@ -1480,11 +1441,6 @@ export default {
         arrow = "&#11018;";
       }
       return [t.finalX, t.finalY, arrow];
-    },
-    updateLog(content) {
-      this.log += content;
-      const ta_log = document.querySelector("#ta_log");
-      ta_log.scrollTop = ta_log.scrollHeight;
     },
     mapNodeColorToRegion() {
       d3.selectAll(".river-region").remove();
@@ -1667,18 +1623,22 @@ export default {
       );
     },
     moveNode(node, p) {
-      const __VM = this;
-      __VM.writeNodeHistory(node, p);
+      const last = this.node.history[node.attr("id")].last.value;
 
-      node.attr("x", p.xRect).attr("y", p.yRect);
+      // only insert when the position is not the same as the last one
+      if (!_.isEqual(p, last)) {
+        this.node.history[node.attr("id")].insertLast(p);
 
-      // move the centroid
-      node
-        .select(function () {
-          return this.nextElementSibling;
-        })
-        .attr("cx", p.x)
-        .attr("cy", p.y);
+        node.attr("x", p.xRect).attr("y", p.yRect);
+
+        // move the centroid
+        node
+          .select(function () {
+            return this.nextElementSibling;
+          })
+          .attr("cx", p.x)
+          .attr("cy", p.y);
+      }
     },
     moveRiver(river) {
       const __VM = this;
@@ -1689,14 +1649,6 @@ export default {
           "transform",
           `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
         );
-    },
-    writeNodeHistory(node, p) {
-      const last = this.node.history[node.attr("id")].last.value;
-
-      // only insert when the position is not the same as the last one
-      if (!_.isEqual(p, last)) {
-        this.node.history[node.attr("id")].insertLast(p);
-      }
     },
     getNodeHistory(node) {
       return this.node.history[node.attr("id")];
@@ -1713,7 +1665,6 @@ export default {
       },
       iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
       timer: 10,
-      log: "",
       debug: false,
       corridor: {
         length: 30,
