@@ -296,13 +296,19 @@ export default {
       const __VM = this;
 
       const calculatenodesize = (d) => {
-        return getIndicatorRate(d) * 0.2;
+        return getPopulationSize(d) * 0.2;
       };
 
       const getIndicatorRate = (d) => {
         const current = __VM.indicators[d.properties.id].Person.value;
         const { range, min } = __VM.indicators.metadata.Person.value;
         return (Math.abs(current - min) / range) * 15;
+      };
+
+      const getPopulationSize = (d) => {
+        const current = d.properties.population;
+        const range = __VM.population.max - __VM.population.min;
+        return (Math.abs(current - __VM.population.min) / range) * 15;
       };
 
       d3.selectAll("#map").remove();
@@ -398,17 +404,17 @@ export default {
           const centroid = path.centroid(d);
 
           __VM.node.history[d.properties.id].insertLast(
-            new Point(centroid[0], centroid[1], __VM.node.size)
+            new Point(centroid[0], centroid[1], getIndicatorRate(d))
           );
 
-          return centroid[0] - __VM.getHalfNodeSize;
+          return centroid[0] - getIndicatorRate(d) / 2;
         })
-        .attr("y", (d) => path.centroid(d)[1] - __VM.getHalfNodeSize)
+        .attr("y", (d) => path.centroid(d)[1] - getIndicatorRate(d) / 2)
         .attr("id", (d) => d.properties.id)
-        // .attr("width", (d) => getIndicatorRate(d))
-        // .attr("height", (d) => getIndicatorRate(d))
-        .attr("width", __VM.node.size)
-        .attr("height", __VM.node.size)
+        .attr("width", (d) => getIndicatorRate(d))
+        .attr("height", (d) => getIndicatorRate(d))
+        // .attr("width", __VM.node.size)
+        // .attr("height", __VM.node.size)
         .attr("stroke", "black")
         .attr("stroke-width", "0.3")
         .attr("fill", __VM.colorVariant[__VM.node.color])
@@ -460,10 +466,9 @@ export default {
 
         const x = Number(r.attr("x")),
           y = Number(r.attr("y")),
-          w = __VM.node.size,
-          h = __VM.node.size;
+          w = Number(r.attr("width"));
 
-        return new cola.Rectangle(x, x + w, y, y + h);
+        return new cola.Rectangle(x, x + w, y, y + w);
       });
 
       // remove overlaps
@@ -482,7 +487,7 @@ export default {
       // prepration before removing overlaps
       if (!repeat) {
         // increase node size
-        __VM.setNodeSize(__VM.node.size, __VM.node.size + __VM.node.sizeStep);
+        __VM.increaseNodeSize();
       }
 
       // preparation before redrawing nodes and edges
@@ -499,7 +504,9 @@ export default {
 
         node = d3.select(node);
 
-        const p_new = new Point(nodes[i].x, nodes[i].y, __VM.node.size, true);
+        const nodeSize = node.attr("width");
+
+        const p_new = new Point(nodes[i].x, nodes[i].y, nodeSize, true);
 
         // assgin node border color
         node
@@ -526,9 +533,6 @@ export default {
         if (firstPass) {
           __VM.testRiverCross(node, p_new, true);
         } else {
-          if (node.attr("id") === "E38000102" && __VM.node.size > 18.2) {
-            let a = "b";
-          }
           __VM.moveNode(node, p_new);
           // if (!node.attr("riverX")) {
           __VM.testRiverCross(node, p_new, false);
@@ -538,22 +542,6 @@ export default {
 
       if (firstPass) {
         __VM.calculateRiverTranslation();
-      }
-
-      let translateRiver = firstPass;
-
-      if (__VM.getRiverTranslationRepeat) {
-        // if it's a repeating ORA
-        if (repeat) {
-          //not first iteration
-          if (__VM.iteration.current > 0) {
-            //if repeat ORA is allowed
-            translateRiver = false;
-          }
-        }
-      }
-
-      if (translateRiver) {
         for (const river of Object.keys(__VM.river.rivers)) {
           __VM.moveRiver(river);
           __VM.delay(__VM.timer).then(() => __VM.detectRiverXNodes());
@@ -583,8 +571,10 @@ export default {
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
 
-          if (__VM.step.continuous & (__VM.node.size < __VM.node.maxSize)) {
+          if (__VM.step.continuous) {
             __VM.removeOverlap(true, false);
+          } else {
+            d3.selectAll(".crossedArea").remove();
           }
         }
       });
@@ -601,6 +591,8 @@ export default {
 
         node = d3.select(node);
 
+        const nodeSize = node.attr("width");
+
         const history = __VM.getNodeHistory(node);
 
         const p_current = history.last.value;
@@ -608,7 +600,7 @@ export default {
         const sizeDiff = p_previous.size - p_current.size;
 
         // used in derivedPoints
-        let tempPoint = new Point(1000, 1000, __VM.node.size);
+        let tempPoint = new Point(1000, 1000, nodeSize);
 
         const XRiver = node.attr("XRiver");
         let pSlope;
@@ -633,9 +625,9 @@ export default {
                 );
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(400, 340, __VM.node.size);
+                tempPoint = new Point(400, 340, nodeSize);
               } else {
-                tempPoint = new Point(500, 350, __VM.node.size);
+                tempPoint = new Point(500, 350, nodeSize);
               }
             } else {
               pSlope =
@@ -646,9 +638,9 @@ export default {
                 );
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(400, 300, __VM.node.size);
+                tempPoint = new Point(400, 300, nodeSize);
               } else {
-                tempPoint = new Point(480, 415, __VM.node.size);
+                tempPoint = new Point(480, 415, nodeSize);
               }
             }
 
@@ -672,9 +664,9 @@ export default {
                 );
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(370, 270, __VM.node.size);
+                tempPoint = new Point(370, 270, nodeSize);
               } else {
-                tempPoint = new Point(430, 305, __VM.node.size);
+                tempPoint = new Point(430, 305, nodeSize);
               }
             } else if (
               river_vector.bounding_box(
@@ -691,9 +683,9 @@ export default {
                 );
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(460, 280, __VM.node.size);
+                tempPoint = new Point(460, 280, nodeSize);
               } else {
-                tempPoint = new Point(400, 350, __VM.node.size);
+                tempPoint = new Point(400, 350, nodeSize);
               }
             } else {
               pSlope =
@@ -704,9 +696,9 @@ export default {
                 );
               // use the right reference point based on the side
               if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
-                tempPoint = new Point(415, 285, __VM.node.size);
+                tempPoint = new Point(415, 285, nodeSize);
               } else {
-                tempPoint = new Point(300, 350, __VM.node.size);
+                tempPoint = new Point(300, 350, nodeSize);
               }
             }
 
@@ -717,9 +709,9 @@ export default {
             pSlope = -1 / __VM.river.rivers[XRiver].slope;
             if (river_vector.is_upper_side(node, __VM.colorVariant[XRiver])) {
               pSlope = 1 / __VM.river.rivers[XRiver].slope;
-              tempPoint = new Point(420, 460, __VM.node.size);
+              tempPoint = new Point(420, 460, nodeSize);
             } else {
-              tempPoint = new Point(500, 500, __VM.node.size);
+              tempPoint = new Point(500, 500, nodeSize);
             }
 
             break;
@@ -733,7 +725,7 @@ export default {
           const p_next = new Point(
             previous.x + (dx / Math.sqrt(dx ** 2 + dy ** 2)) * length,
             previous.y + (dy / Math.sqrt(dx ** 2 + dy ** 2)) * length,
-            __VM.node.size
+            nodeSize
           );
 
           __VM.debug = false;
@@ -749,14 +741,6 @@ export default {
               .attr("r", 0.5)
               .attr("fill", "red");
 
-            // __VM.svg
-            //   .append("circle")
-            //   .attr("class", "debug")
-            //   .attr("cx", Number(pointC[0]))
-            //   .attr("cy", Number(pointC[1]))
-            //   .attr("p", current[2])
-            //   .attr("r", 0.5)
-            //   .attr("fill", "green");
             __VM.svg
               .append("circle")
               .attr("class", "debug")
@@ -789,31 +773,31 @@ export default {
 
           const scale = distance / Math.sqrt(x_diff ** 2 + y_diff ** 2);
           const [dx, dy] = [
-            -y_diff * scale + __VM.getHalfNodeSize,
-            x_diff * scale + __VM.getHalfNodeSize,
+            -y_diff * scale + nodeSize / 2,
+            x_diff * scale + nodeSize / 2,
           ];
 
           return [
-            new Point(dx + start.x, dy + start.y, __VM.node.size),
-            new Point(dx + end.x, dy + end.y, __VM.node.size),
+            new Point(dx + start.x, dy + start.y, nodeSize),
+            new Point(dx + end.x, dy + end.y, nodeSize),
           ];
         };
 
         const derivedPoint = derivePoint(
           p_previous,
           tempPoint,
-          Math.abs(__VM.node.size * 3) > 25 ? 25 : __VM.node.size * 3
+          Math.abs(nodeSize * 3) > 25 ? 25 : nodeSize * 3
         );
 
         const parallelEdge1 = deriveParallelEdge(
           p_previous,
           derivedPoint,
-          __VM.node.size / 2
+          nodeSize / 2
         );
         const parallelEdge2 = deriveParallelEdge(
           p_previous,
           derivedPoint,
-          -__VM.node.size / 2
+          -nodeSize / 2
         );
 
         const corridor = d3.line()([
@@ -842,7 +826,7 @@ export default {
           p_next = new Point(
             p_current.x + position_diff[0],
             p_current.y + position_diff[1],
-            __VM.node.size
+            nodeSize
           );
 
           __VM.moveNode(node, p_next);
@@ -867,7 +851,7 @@ export default {
         const tempVector = derivePoint(
           parallelEdge1[0],
           parallelEdge1[1],
-          __VM.node.size
+          nodeSize
         );
         const position_diff = [
           (tempVector.x - parallelEdge1[0].x) / 2,
@@ -892,7 +876,7 @@ export default {
           if (pip.isInside([p_last.x, p_last.y], corridor)) {
             // do not move the node in focus itself
             if (node_in_c.attr("nodeXCount") === null) {
-              if (node_in_c.attr("id") === "E38000246" && __VM.node.size > 17) {
+              if (node_in_c.attr("id") === "E38000246" && nodeSize > 17) {
                 let a = "b";
               }
 
@@ -1074,11 +1058,11 @@ export default {
       const __VM = this;
       __VM.node.previousSize = current;
       __VM.node.size = Number(next);
-      __VM.node.nodeSizeUniformed = uniformed;
+      // __VM.node.nodeSizeUniformed = uniformed;
 
-      if (__VM.node.nodeSizeUniformed) {
-        next = 10;
-      }
+      // if (__VM.node.nodeSizeUniformed) {
+      //   next = 10;
+      // }
 
       const sizeDiff = Number((next - current) / 2);
 
@@ -1090,6 +1074,23 @@ export default {
         })
         .attr("y", function () {
           return Number(d3.select(this).attr("y")) - sizeDiff;
+        });
+    },
+    increaseNodeSize() {
+      const __VM = this;
+
+      d3.selectAll(".node-layer > g > rect")
+        .attr("width", function () {
+          return Number(d3.select(this).attr("width")) + __VM.node.sizeStep;
+        })
+        .attr("height", function () {
+          return Number(d3.select(this).attr("height")) + __VM.node.sizeStep;
+        })
+        .attr("x", function () {
+          return Number(d3.select(this).attr("x") - __VM.node.sizeStep / 2);
+        })
+        .attr("y", function () {
+          return Number(d3.select(this).attr("y") - __VM.node.sizeStep / 2);
         });
     },
     setNodeColor(singleRect) {
@@ -1252,22 +1253,20 @@ export default {
         if (nodeXCount > 0) {
           // old x,y are used to draw riverX regions
           translate.finalXOld = translate.finalX;
-
           translate.finalYOld = translate.finalY;
+
+          let xSign = x > 0 ? 1 : -1;
+          let ySign = y > 0 ? 1 : -1;
 
           translate.finalX +=
             Math.abs(x / nodeXCount) > __VM.river.translation.limit
-              ? __VM.river.translation.limit
+              ? xSign * __VM.river.translation.limit
               : x / nodeXCount;
 
           translate.finalY +=
             Math.abs(y / nodeXCount) > __VM.river.translation.limit
-              ? __VM.river.translation.limit
+              ? ySign * __VM.river.translation.limit
               : y / nodeXCount;
-
-          if (river === "ouse") {
-            let a = "b";
-          }
 
           translate.x = 0;
           translate.y = 0;
@@ -1282,18 +1281,24 @@ export default {
 
       Object.keys(__VM.river.rivers).forEach((river) => {
         const { resolution, translate } = __VM.river.rivers[river];
-        const resCurrent = [];
-        const resOld = [];
 
-        const riverMovingUp = translate.finalY > 0;
+        if (
+          translate.finalX !== translate.finalXOld ||
+          translate.finalY !== translate.finalYOld
+        ) {
+          const resCurrent = [];
+          const resOld = [];
 
-        resolution.forEach((r) => {
-          resCurrent.push([r[0] + translate.finalX, r[1] + translate.finalY]);
-          resOld.push([r[0] + translate.finalXOld, r[1] + translate.finalYOld]);
-        });
+          const riverMovingUp = translate.finalY > 0;
+          resolution.forEach((r) => {
+            resCurrent.push([r[0] + translate.finalX, r[1] + translate.finalY]);
+            resOld.push([
+              r[0] + translate.finalXOld,
+              r[1] + translate.finalYOld,
+            ]);
+          });
 
-        // draw river crossed areas
-        if (JSON.stringify(resCurrent) !== JSON.stringify(resOld)) {
+          // draw river crossed areas
           const crossedRegion = d3.line()([
             ...resCurrent,
             ...resOld.reverse(),
@@ -1328,6 +1333,7 @@ export default {
               [p_current.x, p_current.y],
               crossedRegion
             );
+
             if (inside) {
               node
                 .attr("stroke", "red")
@@ -1616,8 +1622,8 @@ export default {
       const __VM = this;
       return pip.isInside(
         [
-          Number(node.attr("x")) + __VM.getHalfNodeSize,
-          Number(node.attr("y")) + __VM.getHalfNodeSize,
+          Number(node.attr("x")) + Number(node.attr("width")) / 2,
+          Number(node.attr("y")) + Number(node.attr("width")) / 2,
         ],
         d3.line()(__VM.region[river])
       );
@@ -1663,6 +1669,10 @@ export default {
         button_disabled: false,
         continuous: true,
       },
+      population: {
+        min: 0,
+        max: 0,
+      },
       iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
       timer: 10,
       debug: false,
@@ -1679,7 +1689,7 @@ export default {
         color: "success",
         previousSize: 0,
         size: 1,
-        maxSize: 20,
+        maxSize: 15,
         sizeStep: 0.1,
         nodeX: {
           stroke_width: "0.7",
@@ -1791,9 +1801,6 @@ export default {
     getRiverTranslationRepeat: function () {
       return this.river.translation.checked.includes("repeat");
     },
-    getHalfNodeSize: function () {
-      return this.node.size / 2;
-    },
   },
   watch: {
     "river.translation.checked": {
@@ -1810,6 +1817,8 @@ export default {
 
     __VM.shapefile = await d3.json(`/data/ccg_rivers.json`);
 
+    __VM.population.data = await d3.csv(`/data/ccg_2020_population.csv`);
+
     __VM.ccg_list = [];
     __VM.ccg_list.push(
       ...topojson
@@ -1819,6 +1828,27 @@ export default {
 
     __VM.ccg_list.forEach((ccg) => {
       __VM.node.history[ccg.properties.id] = new LinkedList();
+
+      // add population to ccg
+      const count = parseInt(
+        __VM.population.data
+          .find((d) => d["CCG Code"] === ccg.properties.id)
+          ["All Ages"].replace(/,/g, "")
+      );
+
+      if (__VM.population.max === 0 || __VM.population.min === 0) {
+        __VM.population.max = count;
+        __VM.population.min = count;
+      } else {
+        if (count > __VM.population.max) {
+          __VM.population.max = count;
+        }
+        if (count < __VM.population.min) {
+          __VM.population.min = count;
+        }
+      }
+
+      ccg.properties.population = count;
     });
 
     // __VM.river_list = [];
