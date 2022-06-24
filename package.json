@@ -1,70 +1,78 @@
 {
-  "name": "GHRVis",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "bootstrap": "4.6.0",
-    "bootstrap-vue": "2.22.0",
-    "core-js": "3.23.1",
-    "d3": "6.7.0",
-    "lodash": "4.17.21",
-    "path-data-polyfill": "1.0.3",
-    "path-intersection": "2.2.1",
-    "point-in-svg-polygon": "1.0.25",
-    "topojson-client": "3.1.0",
-    "vue": "2.6.11",
-    "vue-router": "3.2.0",
-    "webcola": "3.4.0"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "4.5.0",
-    "@vue/cli-plugin-eslint": "4.5.0",
-    "@vue/cli-plugin-router": "4.5.0",
-    "@vue/cli-plugin-vuex": "4.5.0",
-    "@vue/cli-service": "4.5.0",
-    "@vue/eslint-config-prettier": "6.0.0",
-    "babel-eslint": "10.1.0",
-    "eslint": "6.7.2",
-    "eslint-plugin-prettier": "3.3.1",
-    "eslint-plugin-vue": "6.2.2",
-    "lint-staged": "9.5.0",
-    "prettier": "2.2.1",
-    "vue-template-compiler": "2.6.11"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "GHRVis",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "build": "vue-cli-service build",
+        "dev": "vue-cli-service serve",
+        "lint": "vue-cli-service lint"
     },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended",
-      "@vue/prettier"
+    "lint-staged": {
+        "*.{js,jsx,vue}": [
+            "vue-cli-service lint",
+            "git add"
+        ]
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
     ],
-    "parserOptions": {
-      "parser": "babel-eslint"
+    "prettier": {
+        "printWidth": 90,
+        "semi": true,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "trailingComma": "all",
+        "useTabs": false
     },
-    "rules": {
-      "no-unused-vars": "off"
+    "eslintConfig": {
+        "env": {
+            "node": true
+        },
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended",
+            "@vue/prettier"
+        ],
+        "rules": {
+            "no-unused-vars": "off"
+        },
+        "root": true
+    },
+    "dependencies": {
+        "bootstrap": "4.6.0",
+        "bootstrap-vue": "2.22.0",
+        "core-js": "3.23.1",
+        "d3": "6.7.0",
+        "lodash": "4.17.21",
+        "path-data-polyfill": "1.0.3",
+        "path-intersection": "2.2.1",
+        "point-in-svg-polygon": "1.0.25",
+        "topojson-client": "3.1.0",
+        "vue": "2.6.11",
+        "vue-router": "3.2.0",
+        "webcola": "3.4.0"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "4.5.0",
+        "@vue/cli-plugin-eslint": "4.5.0",
+        "@vue/cli-plugin-router": "4.5.0",
+        "@vue/cli-plugin-vuex": "4.5.0",
+        "@vue/cli-service": "4.5.0",
+        "@vue/eslint-config-prettier": "6.0.0",
+        "babel-eslint": "10.1.0",
+        "eslint": "6.7.2",
+        "eslint-plugin-prettier": "3.3.1",
+        "eslint-plugin-vue": "6.2.2",
+        "lint-staged": "9.5.0",
+        "prettier": "2.2.1",
+        "vue-template-compiler": "2.6.11"
+    },
+    "gitHooks": {
+        "pre-commit": "lint-staged"
     }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,jsx,vue}": [
-      "vue-cli-service lint",
-      "git add"
-    ]
-  }
 }
