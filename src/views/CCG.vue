@@ -3,84 +3,38 @@
     <b-row>
       <b-col cols="8">
         <div>
-          <svg
-            id="base-layer"
-            viewBox="0,0,800,800"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-          >
-            <rect
-              width="800"
-              height="800"
-              style="fill: none; stroke-width: 4; stroke: rgb(43, 222, 221)"
-            />
+          <svg id="base-layer" viewBox="0,0,800,800" stroke-linejoin="round" stroke-linecap="round">
+            <rect width="800" height="800" style="fill: none; stroke-width: 4; stroke: rgb(43, 222, 221)" />
 
             <g class="legend">
-              <rect
-                fill="green"
-                stroke="black"
-                stroke-width="2"
-                x="2"
-                y="5"
-              ></rect>
+              <rect fill="green" stroke="black" stroke-width="2" x="2" y="5"></rect>
               <text x="22" y="18">node</text>
 
-              <rect
-                fill="green"
-                stroke="pink"
-                stroke-width="2"
-                x="82"
-                y="5"
-              ></rect>
+              <rect fill="green" stroke="pink" stroke-width="2" x="82" y="5"></rect>
               <text x="102" y="18">node pushed</text>
 
-              <rect
-                fill="green"
-                stroke="red"
-                stroke-width="2"
-                x="2"
-                y="27"
-              ></rect>
+              <rect fill="green" stroke="red" stroke-width="2" x="2" y="27"></rect>
               <text x="22" y="40">riverX</text>
 
-              <rect
-                fill="green"
-                stroke="blue"
-                stroke-width="2"
-                x="2"
-                y="49"
-              ></rect>
+              <rect fill="green" stroke="blue" stroke-width="2" x="2" y="49"></rect>
               <text x="22" y="62">nodeX</text>
 
               <rect fill="blue" x="82" y="49"></rect>
               <text x="102" y="62">nodeX stalemate</text>
 
-              <rect
-                fill="green"
-                stroke="purple"
-                stroke-width="2"
-                x="2"
-                y="71"
-              ></rect>
+              <rect fill="green" stroke="purple" stroke-width="2" x="2" y="71"></rect>
               <text x="22" y="84">riverX + nodeX</text>
 
               <!-- rect y= last rect y + 17, text y = rect y +13 -->
             </g>
-            <rect
-              width="100%"
-              height="100%"
-              fill="none"
-              pointer-events="all"
-            ></rect>
+            <rect width="100%" height="100%" fill="none" pointer-events="all"></rect>
             <g id="map"></g>
           </svg>
         </div>
       </b-col>
       <b-col cols="4">
         <div class="table-responsive option_table">
-          <table
-            class="table table-bordered table-striped table-hover table-borderless"
-          >
+          <table class="table table-bordered table-striped table-hover table-borderless">
             <thead>
               <tr>
                 <th>Features</th>
@@ -90,12 +44,8 @@
             <tbody>
               <tr>
                 <td>
-                  <b-button
-                    block
-                    :variant="(node.visibility ? '' : 'outline-') + node.color"
-                    v-on:click="toggleFeatureVisibility('node')"
-                    >Node</b-button
-                  >
+                  <b-button block :variant="(node.visibility ? '' : 'outline-') + node.color"
+                    v-on:click="toggleFeatureVisibility('node')">Node</b-button>
 
                   <!-- <b-button
                     block
@@ -112,65 +62,33 @@
                     >Map to
                     {{ node.nodeMapToColor ? "Size" : "Color" }}</b-button
                   > -->
-                  <b-button
-                    block
-                    :variant="(centroid.visibility ? '' : 'outline-') + 'info'"
-                    v-on:click="toggleFeatureVisibility('centroid')"
-                    >Centroid</b-button
-                  >
+                  <b-button block :variant="(centroid.visibility ? '' : 'outline-') + 'info'"
+                    v-on:click="toggleFeatureVisibility('centroid')">Centroid</b-button>
 
                   <b-button block variant="info">
                     Node size: {{ node.size
-                    }}<b-form-input
-                      id="slider-node-size"
-                      :value="node.size"
-                      type="range"
-                      min="1"
-                      :max="node.maxSize > 0 ? node.maxSize : 100"
-                      step="0.25"
-                      @change="setNodeSize(node.size, $event)"
-                    >
+                    }}<b-form-input id="slider-node-size" :value="node.size" type="range" min="1"
+                      :max="node.maxSize > 0 ? node.maxSize : 100" step="0.25" @change="setNodeSize(node.size, $event)">
                     </b-form-input>
                   </b-button>
 
                   <b-button block variant="info">
                     Node size increment: {{ node.sizeStep
-                    }}<b-form-input
-                      id="slider-node-size"
-                      v-model="node.sizeStep"
-                      type="range"
-                      min="0.1"
-                      max="0.5"
-                      step="0.1"
-                    ></b-form-input>
+                    }}<b-form-input id="slider-node-size" v-model="node.sizeStep" type="range" min="0.1" max="0.5"
+                      step="0.1"></b-form-input>
                   </b-button>
 
-                  <b-row>
-                    <b-col sm="5">Max node size:</b-col>
-                    <b-col sm="7">
-                      <input
-                        v-model="node.maxSize"
-                        type="number"
-                        class="form-control"
-                        placeholder="Max node size allowed"
-                      />
-                    </b-col>
-                  </b-row>
+                  <b-form-group label="Node size mapping">
+                    <b-form-radio-group v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMapping"
+                      @change="init()">
+                    </b-form-radio-group>
+                  </b-form-group>
                 </td>
                 <td>
-                  <b-button
-                    block
-                    variant="primary"
-                    v-on:click="removeOverlap()"
-                    :disabled="step.button_disabled"
-                    >Remove overlaps</b-button
-                  >
+                  <b-button block variant="primary" v-on:click="removeOverlap()" :disabled="step.button_disabled">Remove
+                    overlaps</b-button>
 
-                  <b-form-checkbox
-                    v-model="step.continuous"
-                    name="check-button"
-                    switch
-                  >
+                  <b-form-checkbox v-model="step.continuous" name="check-button" switch>
                     continuous mode: {{ step.continuous }}
                   </b-form-checkbox>
 
@@ -191,80 +109,47 @@
                   ></b-button> -->
 
                   <b-form-group>
-                    <b-form-checkbox-group
-                      v-model="river.translation.checked"
-                      :options="river.translation.options"
-                      stacked
-                    ></b-form-checkbox-group>
+                    <b-form-checkbox-group v-model="river.translation.checked" :options="river.translation.options"
+                      stacked></b-form-checkbox-group>
                   </b-form-group>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <b-button
-                    block
-                    :variant="
-                      (river.visibility ? '' : 'outline-') + river.color
-                    "
-                    v-on:click="toggleFeatureVisibility('river')"
-                    >River</b-button
-                  >
+                  <b-button block :variant="
+                    (river.visibility ? '' : 'outline-') + river.color
+                  " v-on:click="toggleFeatureVisibility('river')">River</b-button>
                   <b-button-group class="d-flex mt-2">
-                    <b-button
-                      v-for="r in getRivers"
-                      :key="r.name"
+                    <b-button v-for="r in getRivers" :key="r.name"
                       :variant="(river.visibility ? '' : 'outline-') + r.color"
-                      v-on:click="toggleFeatureVisibility('river', r.color)"
-                      >{{ r.name }}
+                      v-on:click="toggleFeatureVisibility('river', r.color)">{{ r.name }}
                       {{
-                        getRiverTranslation(r.color)[0].toFixed(2) +
-                        "," +
-                        getRiverTranslation(r.color)[1].toFixed(2)
+                          getRiverTranslation(r.color)[0].toFixed(2) +
+                          "," +
+                          getRiverTranslation(r.color)[1].toFixed(2)
                       }}
                       <br />
-                      <span
-                        class="arrow"
-                        v-html="getRiverTranslation(r.color)[2]"
-                      ></span>
+                      <span class="arrow" v-html="getRiverTranslation(r.color)[2]"></span>
                     </b-button>
                   </b-button-group>
                 </td>
                 <td>
                   <b-button block variant="primary">
                     Corridor length: {{ corridor.length }}
-                    <b-form-input
-                      id="slider-corridor-length"
-                      v-model="corridor.length"
-                      type="range"
-                      min="5"
-                      max="20"
-                    >
+                    <b-form-input id="slider-corridor-length" v-model="corridor.length" type="range" min="5" max="20">
                     </b-form-input>
                   </b-button>
 
                   <b-button block variant="info">
                     River thickness: {{ river.width }}
-                    <b-form-input
-                      id="slider-river-width"
-                      v-model="river.width"
-                      type="range"
-                      min="1"
-                      max="10"
-                      @change="setRiverWidth()"
-                    ></b-form-input>
+                    <b-form-input id="slider-river-width" v-model="river.width" type="range" min="1" max="10"
+                      @change="setRiverWidth()"></b-form-input>
                   </b-button>
 
                   <b-button block variant="info">
                     River resolution: {{ river.spacing
-                    }}<b-form-input
-                      id="slider-river-space"
-                      v-model="river.spacing"
-                      type="range"
-                      min="100"
-                      max="230"
-                      step="5"
-                      @change="adjustRiver()"
-                    ></b-form-input>
+                    }}<b-form-input id="slider-river-space" v-model="river.spacing" type="range" min="100" max="230"
+                      step="5" @change="adjustRiver()"></b-form-input>
                   </b-button>
                 </td>
               </tr>
@@ -290,25 +175,36 @@ import LinkedList from "../model/LinkedList";
 import Point from "../model/Point";
 
 export default {
-  name: "Home",
+  name: "HomeView",
   methods: {
     async init() {
       const __VM = this;
 
-      const calculatenodesize = (d) => {
-        return getPopulationSize(d) * 0.2;
-      };
+      const getNodeSize = (d) => {
+        let current, range, minimum;
 
-      const getIndicatorRate = (d) => {
-        const current = __VM.indicators[d.properties.id].Person.value;
-        const { range, min } = __VM.indicators.metadata.Person.value;
-        return (Math.abs(current - min) / range) * 15;
-      };
-
-      const getPopulationSize = (d) => {
-        const current = d.properties.population;
-        const range = __VM.population.max - __VM.population.min;
-        return (Math.abs(current - __VM.population.min) / range) * 15;
+        switch (__VM.node.nodeSizeMappedTo) {
+          case "uniform":
+            current = 1;
+            range = 1;
+            minimum = 0;
+            break;
+          case "cardiovascular":
+            current = __VM.indicators[d.properties.id].Person.value;
+            range = __VM.indicators.metadata.Person.value.range;
+            minimum = __VM.indicators.metadata.Person.value.min;
+            break;
+          case "population":
+            current = d.properties.population;
+            range = __VM.population.max - __VM.population.min;
+            minimum = __VM.population.min;
+            break;
+          default:
+            break;
+        }
+        console.log(Math.abs(current - minimum) / range);
+        console.log(current, minimum, range);
+        return Math.abs(current - minimum) / range;
       };
 
       d3.selectAll("#map").remove();
@@ -326,7 +222,7 @@ export default {
           .on("zoom", zoomed)
       );
 
-      let svg = __VM.svg;
+      const svg = __VM.svg;
 
       // generate an arrow
       svg
@@ -399,20 +295,21 @@ export default {
 
       nodes
         .append("rect")
-        .attr("colormap", (d) => colormap(getIndicatorRate(d) / 100))
+        .attr("colormap", (d) => colormap(getNodeSize(d) / 100))
         .attr("x", (d) => {
           const centroid = path.centroid(d);
 
           __VM.node.history[d.properties.id].insertLast(
-            new Point(centroid[0], centroid[1], getIndicatorRate(d))
+            new Point(centroid[0], centroid[1], getNodeSize(d))
           );
 
-          return centroid[0] - getIndicatorRate(d) / 2;
+          return centroid[0] - getNodeSize(d) / 2;
         })
-        .attr("y", (d) => path.centroid(d)[1] - getIndicatorRate(d) / 2)
+        .attr("y", (d) => path.centroid(d)[1] - getNodeSize(d) / 2)
         .attr("id", (d) => d.properties.id)
-        .attr("width", (d) => getIndicatorRate(d))
-        .attr("height", (d) => getIndicatorRate(d))
+        .attr("width", (d) => getNodeSize(d))
+        .attr("height", (d) => getNodeSize(d))
+        .attr("rate", (d) => getNodeSize(d))
         // .attr("width", __VM.node.size)
         // .attr("height", __VM.node.size)
         .attr("stroke", "black")
@@ -423,9 +320,7 @@ export default {
           tooltip
             .style("visibility", "visible")
             .html(
-              `${d.properties.name} <br/>Vaccination Rate: ${getIndicatorRate(
-                d
-              )}%`
+              `${d.properties.name} <br/>Vaccination Rate: ${getNodeSize(d)}%`
             );
         })
         .on("mousemove", function (e) {
@@ -464,9 +359,9 @@ export default {
       ).map((r) => {
         r = d3.select(r);
 
-        const x = Number(r.attr("x")),
-          y = Number(r.attr("y")),
-          w = Number(r.attr("width"));
+        const x = Number(r.attr("x"));
+        const y = Number(r.attr("y"));
+        const w = Number(r.attr("width"));
 
         return new cola.Rectangle(x, x + w, y, y + w);
       });
@@ -528,7 +423,7 @@ export default {
             return res;
           })
           .attr("stroke-width", "0.3");
-        //.attr("fill", __VM.colorVariant[__VM.node.color])
+        // .attr("fill", __VM.colorVariant[__VM.node.color])
 
         if (firstPass) {
           __VM.testRiverCross(node, p_new, true);
@@ -549,7 +444,7 @@ export default {
       }
 
       // get the count with nodeX (node crossings)
-      const crossingCount = d3.selectAll(`.river-crossing-path`)._groups[0]
+      const crossingCount = d3.selectAll(".river-crossing-path")._groups[0]
         .length;
 
       __VM.delay(__VM.timer).then(() => {
@@ -582,7 +477,7 @@ export default {
     processStalemate() {
       const __VM = this;
 
-      let nodes = d3
+      const nodes = d3
         .selectAll(`#map rect[nodeXCount="${__VM.iteration.limit + 1}"]`)
         ._groups[0].entries();
 
@@ -877,7 +772,7 @@ export default {
             // do not move the node in focus itself
             if (node_in_c.attr("nodeXCount") === null) {
               if (node_in_c.attr("id") === "E38000246" && nodeSize > 17) {
-                let a = "b";
+                const a = "b";
               }
 
               moveNodeInCorridor(node_in_c, position_diff);
@@ -900,14 +795,18 @@ export default {
     testRiverCross(node, p, firstPass) {
       const __VM = this;
 
-      const p_last = firstPass
-        ? __VM.getNodeHistory(node).last.value
-        : __VM.getNodeHistory(node).secondLast.value;
+      const history = __VM.getNodeHistory(node);
+
+      let p_last = __VM.getNodeHistory(node).last.value;
+
+      if (firstPass && history.length > 1) {
+        p_last = __VM.getNodeHistory(node).secondLast.value;
+      }
 
       const sizeDiff = p_last.size - p.size;
 
       const checkIntersect = (line) => {
-        let result = [false, ""];
+        const result = [false, ""];
         for (const river of Object.keys(__VM.river.rivers)) {
           const river_path = flattener.flatten_path(
             document.querySelector(`#${river}`).getPathData(),
@@ -951,7 +850,7 @@ export default {
         if (firstPass) {
           const river = crossings[1];
           // add the distance for compouting average river translation distance
-          let { translate } = __VM.river.rivers[river];
+          const { translate } = __VM.river.rivers[river];
 
           let x = p.x - p_last.x + sizeDiff;
           let y = p.y - p_last.y + sizeDiff;
@@ -1081,16 +980,28 @@ export default {
 
       d3.selectAll(".node-layer > g > rect")
         .attr("width", function () {
-          return Number(d3.select(this).attr("width")) + __VM.node.sizeStep;
+          return (
+            Number(d3.select(this).attr("width")) +
+            __VM.node.sizeStep * Number(d3.select(this).attr("rate"))
+          );
         })
         .attr("height", function () {
-          return Number(d3.select(this).attr("height")) + __VM.node.sizeStep;
+          return (
+            Number(d3.select(this).attr("height")) +
+            __VM.node.sizeStep * Number(d3.select(this).attr("rate"))
+          );
         })
         .attr("x", function () {
-          return Number(d3.select(this).attr("x") - __VM.node.sizeStep / 2);
+          return Number(
+            d3.select(this).attr("x") -
+            (__VM.node.sizeStep * Number(d3.select(this).attr("rate"))) / 2
+          );
         })
         .attr("y", function () {
-          return Number(d3.select(this).attr("y") - __VM.node.sizeStep / 2);
+          return Number(
+            d3.select(this).attr("y") -
+            (__VM.node.sizeStep * Number(d3.select(this).attr("rate"))) / 2
+          );
         });
     },
     setNodeColor(singleRect) {
@@ -1164,7 +1075,7 @@ export default {
         //   // return d - b;
         // });
 
-        let spacing = Number(__VM.river.spacing);
+        const spacing = Number(__VM.river.spacing);
 
         const resolution = [];
 
@@ -1247,16 +1158,16 @@ export default {
     calculateRiverTranslation() {
       const __VM = this;
       for (const river of Object.keys(__VM.river.rivers)) {
-        let { translate } = __VM.river.rivers[river];
-        let { x, y, nodeXCount } = translate;
+        const { translate } = __VM.river.rivers[river];
+        const { x, y, nodeXCount } = translate;
 
         if (nodeXCount > 0) {
           // old x,y are used to draw riverX regions
           translate.finalXOld = translate.finalX;
           translate.finalYOld = translate.finalY;
 
-          let xSign = x > 0 ? 1 : -1;
-          let ySign = y > 0 ? 1 : -1;
+          const xSign = x > 0 ? 1 : -1;
+          const ySign = y > 0 ? 1 : -1;
 
           translate.finalX +=
             Math.abs(x / nodeXCount) > __VM.river.translation.limit
@@ -1364,7 +1275,7 @@ export default {
                 }
               }
 
-              let p_next = new Point(
+              const p_next = new Point(
                 p_current.x + x,
                 p_current.y + y,
                 __VM.node.size
@@ -1685,6 +1596,12 @@ export default {
       node: {
         nodeSizeUniformed: false,
         nodeMapToColor: false,
+        nodeSizeMappedTo: 'uniform',
+        nodeSizeMapping: [
+          { text: "Uniform", value: "uniform" },
+          { text: "Population", value: "population" },
+          { text: "Cardiovascular", value: "cardiovascular" },
+        ],
         visibility: true,
         color: "success",
         previousSize: 0,
@@ -1813,11 +1730,11 @@ export default {
   async mounted() {
     const __VM = this;
 
-    __VM.indicators = await d3.json(`/data/cardiovascular_00754.json`);
+    __VM.indicators = await d3.json("/data/cardiovascular_00754.json");
 
-    __VM.shapefile = await d3.json(`/data/ccg_rivers.json`);
+    __VM.shapefile = await d3.json("/data/ccg_rivers.json");
 
-    __VM.population.data = await d3.csv(`/data/ccg_2020_population.csv`);
+    __VM.population.data = await d3.csv("/data/ccg_2020_population.csv");
 
     __VM.ccg_list = [];
     __VM.ccg_list.push(
@@ -1833,7 +1750,7 @@ export default {
       const count = parseInt(
         __VM.population.data
           .find((d) => d["CCG Code"] === ccg.properties.id)
-          ["All Ages"].replace(/,/g, "")
+        ["All Ages"].replace(/,/g, "")
       );
 
       if (__VM.population.max === 0 || __VM.population.min === 0) {
@@ -1859,7 +1776,6 @@ export default {
     // );
 
     this.init();
-    this.node.nodeSizeUniformed = false;
   },
 };
 </script>
@@ -1926,7 +1842,7 @@ export default {
   font-size: 20px;
 }
 
-g.legend > rect {
+g.legend>rect {
   width: 15px;
   height: 15px;
 }
