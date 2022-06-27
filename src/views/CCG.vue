@@ -83,6 +83,7 @@
                       @change="init()">
                     </b-form-radio-group>
                   </b-form-group>
+
                 </td>
                 <td>
                   <b-button block variant="primary" v-on:click="removeOverlap()" :disabled="step.button_disabled">Remove
@@ -119,7 +120,7 @@
                   <b-button block :variant="
                     (river.visibility ? '' : 'outline-') + river.color
                   " v-on:click="toggleFeatureVisibility('river')">River</b-button>
-                  <b-button-group class="d-flex mt-2">
+                  <b-button-group class="d-flex mt-2 ">
                     <b-button v-for="r in getRivers" :key="r.name"
                       :variant="(river.visibility ? '' : 'outline-') + r.color"
                       v-on:click="toggleFeatureVisibility('river', r.color)">{{ r.name }}
@@ -132,6 +133,13 @@
                       <span class="arrow" v-html="getRiverTranslation(r.color)[2]"></span>
                     </b-button>
                   </b-button-group>
+
+                  <b-button class="mt-2" block :variant="
+                    (metric.visibility ? '' : 'outline-') + 'primary'
+                  " v-on:click="showMetric(!metric.visibility)">Show metrics</b-button>
+
+                  <p>DeltaX: {{ metric.deltaX }}</p>
+                  <p>DeltaY: {{ metric.deltaY }}</p>
                 </td>
                 <td>
                   <b-button block variant="primary">
@@ -202,8 +210,6 @@ export default {
           default:
             break;
         }
-        console.log(Math.abs(current - minimum) / range);
-        console.log(current, minimum, range);
         return Math.abs(current - minimum) / range;
       };
 
@@ -338,6 +344,8 @@ export default {
         .attr("class", "centroid-layer")
         .attr("cx", (d) => path.centroid(d)[0])
         .attr("cy", (d) => path.centroid(d)[1])
+        .attr("ox", (d) => path.centroid(d)[0])
+        .attr("oy", (d) => path.centroid(d)[1])
         .attr("fill", "black")
         .attr("r", 0.5);
 
@@ -1570,6 +1578,36 @@ export default {
     getNodeHistory(node) {
       return this.node.history[node.attr("id")];
     },
+    showMetric(show) {
+      const __VM = this;
+      __VM.metric.visibility = !__VM.metric.visibility;
+      if (show) {
+        d3.selectAll(".node-layer").selectAll("g").each((g, i, nodes) => {
+          const c = d3.select(nodes[i]).select("circle");
+
+          __VM.metric.deltaX += Number(c.attr("cx")) - Number(c.attr("ox"));
+          __VM.metric.deltaY += Number(c.attr("cy")) - Number(c.attr("oy"));
+
+          d3.select(nodes[i]).append("path")
+            .attr("class", "metric-path")
+            .attr("d", d3.line()([
+              [Number(c.attr("cx")), Number(c.attr("cy"))],
+              [Number(c.attr("ox")), Number(c.attr("oy"))],
+            ]))
+            .attr("stroke", "black")
+            .attr("stroke-width", "1px")
+            .attr("fill", "none");
+        })
+      } else {
+        d3.selectAll(".metric-path").remove()
+      }
+
+      // __VM.metric.deltaX = Number(__VM.metric.deltaX).toFixed(10);
+      // __VM.metric.deltaY = Number(__VM.metric.deltaY).toFixed(10);
+
+      console.log(+__VM.metric.deltaX);
+
+    },
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
@@ -1592,11 +1630,17 @@ export default {
       },
       centroid: {
         visibility: true,
+        deltaX: 0,
+        deltaY: 0,
+      },
+      metric: {
+        visibility: false,
+        deltaX: 0,
+        deltaY: 0,
       },
       node: {
-        nodeSizeUniformed: false,
         nodeMapToColor: false,
-        nodeSizeMappedTo: 'uniform',
+        nodeSizeMappedTo: 'population',
         nodeSizeMapping: [
           { text: "Uniform", value: "uniform" },
           { text: "Population", value: "population" },
