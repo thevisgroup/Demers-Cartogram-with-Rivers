@@ -87,7 +87,7 @@
                 </td>
                 <td>
                   <b-button block variant="primary" v-on:click="removeOverlap()" :disabled="step.button_disabled">Remove
-                    overlaps</b-button>
+                    overlaps: {{ iteration.count }}</b-button>
 
                   <b-form-checkbox v-model="step.continuous" name="check-button" switch>
                     continuous mode: {{ step.continuous }}
@@ -315,7 +315,7 @@ export default {
         .attr("id", (d) => d.properties.id)
         .attr("width", (d) => getNodeSize(d))
         .attr("height", (d) => getNodeSize(d))
-        .attr("rate", (d) => getNodeSize(d))
+        .attr("rate", (d) => 1 + getNodeSize(d))
         // .attr("width", __VM.node.size)
         // .attr("height", __VM.node.size)
         .attr("stroke", "black")
@@ -383,14 +383,16 @@ export default {
       const __VM = this;
       __VM.step.button_disabled = true;
 
+
       if (!__VM.node.visibility) {
         __VM.toggleFeatureVisibility("rect");
       }
 
       // prepration before removing overlaps
-      if (!repeat) {
+      if (!repeat && !firstPass) {
         // increase node size
         __VM.increaseNodeSize();
+        __VM.iteration.count++
       }
 
       // preparation before redrawing nodes and edges
@@ -805,16 +807,18 @@ export default {
 
       const history = __VM.getNodeHistory(node);
 
-      let p_last = __VM.getNodeHistory(node).last.value;
-
-      if (firstPass && history.length > 1) {
-        p_last = __VM.getNodeHistory(node).secondLast.value;
-      }
+      const p_last = firstPass
+        ? __VM.getNodeHistory(node).last.value
+        : __VM.getNodeHistory(node).secondLast.value;
 
       const sizeDiff = p_last.size - p.size;
 
       const checkIntersect = (line) => {
         const result = [false, ""];
+        if (node.attr("id") === "E38000113") {
+          let a = "b"
+        }
+
         for (const river of Object.keys(__VM.river.rivers)) {
           const river_path = flattener.flatten_path(
             document.querySelector(`#${river}`).getPathData(),
@@ -851,6 +855,20 @@ export default {
           [p.x, p.y],
         ])
       );
+
+
+      if (node.attr("id") === "E38000113") {
+        d3.selectAll(".crossings").remove()
+        __VM.svg.append("path")
+          .attr("d", d3.line()([[p_last.x, p_last.y], [p.x, p.y]]))
+          .attr("stroke", "red")
+          .attr("stroke-width", "1")
+          .attr("fill", "none")
+          .attr("class", "crossings");
+
+        let a = crossings;
+      }
+
       // if there is a crossing
       if (crossings[0] > 0) {
         // if it's the first pass, calculate the distance for river translations
@@ -1622,7 +1640,7 @@ export default {
         min: 0,
         max: 0,
       },
-      iteration: { current: 0, limit: 1 }, // limit - number of iterations before hit a stalemate
+      iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
       timer: 10,
       debug: false,
       corridor: {
