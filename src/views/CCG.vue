@@ -68,7 +68,8 @@
                   <b-button block variant="info">
                     Node size: {{ node.size
                     }}<b-form-input id="slider-node-size" :value="node.size" type="range" min="1"
-                      :max="node.maxSize > 0 ? node.maxSize : 100" step="0.25" @change="setNodeSize(node.size, $event)">
+                      :max="node.maxSize > 0 ? node.maxSize : 100" step="0.25" @change="setNodeSize(node.size, $event)"
+                      disabled>
                     </b-form-input>
                   </b-button>
 
@@ -476,7 +477,7 @@ export default {
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
 
-          if (__VM.step.continuous) {
+          if (__VM.step.continuous && __VM.checkAvgNodeSize() < __VM.node.maxSize) {
             __VM.removeOverlap(true, false);
           } else {
             d3.selectAll(".crossedArea").remove();
@@ -1622,9 +1623,19 @@ export default {
 
       // __VM.metric.deltaX = Number(__VM.metric.deltaX).toFixed(10);
       // __VM.metric.deltaY = Number(__VM.metric.deltaY).toFixed(10);
+    },
+    checkAvgNodeSize() {
+      const __VM = this;
 
-      console.log(+__VM.metric.deltaX);
+      const nodes = d3.selectAll(".node-layer > g > rect")._groups[0]
 
+      let size = 0;
+      for (let [i, node] of nodes.entries()) {
+        size += Number(d3.select(node).attr("width"));
+      }
+      size = size / nodes.length;
+      __VM.node.size = size;
+      return size;
     },
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
