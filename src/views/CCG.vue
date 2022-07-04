@@ -1601,6 +1601,8 @@ export default {
       const __VM = this;
       __VM.metric.visibility = !__VM.metric.visibility;
       if (show) {
+        __VM.metric.deltaX = 0
+        __VM.metric.deltaY = 0
         d3.selectAll(".node-layer").selectAll("g").each((g, i, nodes) => {
           const c = d3.select(nodes[i]).select("circle");
 
