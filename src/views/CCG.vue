@@ -390,7 +390,7 @@ export default {
       }
 
       // prepration before removing overlaps
-      if (!repeat && !firstPass) {
+      if (!repeat) {
         // increase node size
         __VM.increaseNodeSize();
         __VM.iteration.count++
