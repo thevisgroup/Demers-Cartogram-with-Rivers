@@ -449,7 +449,7 @@ export default {
         __VM.calculateRiverTranslation();
         for (const river of Object.keys(__VM.river.rivers)) {
           __VM.moveRiver(river);
-          __VM.delay(__VM.timer).then(() => __VM.detectRiverXNodes());
+          __VM.detectRiverXNodes();
         }
       }
 
@@ -804,8 +804,6 @@ export default {
     // if firstPass is true, compute the average distance for translating rivers, and do not move nodes
     testRiverCross(node, p, firstPass) {
       const __VM = this;
-
-      const history = __VM.getNodeHistory(node);
 
       const p_last = firstPass
         ? __VM.getNodeHistory(node).last.value
@@ -1257,13 +1255,16 @@ export default {
             ._groups[0].entries()) {
             node = d3.select(node);
 
-            if (
-              riverMovingUp !==
-              river_vector.is_upper_side(node, __VM.colorVariant[river])
-            ) {
-              continue;
-            }
+            // if (
+            //   riverMovingUp !==
+            //   river_vector.is_upper_side(node, __VM.colorVariant[river])
+            // ) {
+            //   continue;
+            // }
 
+            if (node.attr("id") === "E38000113" && __VM.iteration.count === 100 && river === "thames") {
+              let a = "b"
+            }
             const p_current = __VM.getNodeHistory(node).last.value;
 
             const inside = pip.isInside(
@@ -1281,13 +1282,13 @@ export default {
 
               if (river === "thames") {
                 if (
-                  !river_vector.is_upper_side(node, __VM.colorVariant[river])
+                  river_vector.is_upper_side(node, __VM.colorVariant.thames)
                 ) {
-                  x = -translate.finalX;
-                  y = -translate.finalY;
-                } else {
                   x = translate.finalX;
                   y = translate.finalY;
+                } else {
+                  x = -Math.abs(translate.finalX);
+                  y = -Math.abs(translate.finalY);
                 }
               } else {
                 if (
