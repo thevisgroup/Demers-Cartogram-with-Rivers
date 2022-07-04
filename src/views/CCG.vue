@@ -384,7 +384,6 @@ export default {
       const __VM = this;
       __VM.step.button_disabled = true;
 
-
       if (!__VM.node.visibility) {
         __VM.toggleFeatureVisibility("rect");
       }
@@ -410,7 +409,7 @@ export default {
 
         node = d3.select(node);
 
-        const nodeSize = node.attr("width");
+        const nodeSize = Number(node.attr("width"));
 
         const p_new = new Point(nodes[i].x, nodes[i].y, nodeSize, true);
 
@@ -497,7 +496,7 @@ export default {
 
         node = d3.select(node);
 
-        const nodeSize = node.attr("width");
+        const nodeSize = Number(node.attr("width"));
 
         const history = __VM.getNodeHistory(node);
 
@@ -1305,7 +1304,7 @@ export default {
               const p_next = new Point(
                 p_current.x + x,
                 p_current.y + y,
-                __VM.node.size
+                Number(__VM.node.size)
               );
               __VM.moveNode(node, p_next);
             }
