@@ -453,10 +453,12 @@ export default {
       }
 
       if (firstPass) {
-        __VM.calculateRiverTranslation();
-        for (const river of Object.keys(__VM.river.rivers)) {
-          __VM.moveRiver(river);
-          __VM.detectRiverXNodes();
+        if (!__VM.getRiverTranslationStatic) {
+          __VM.calculateRiverTranslation();
+          for (const river of Object.keys(__VM.river.rivers)) {
+            __VM.moveRiver(river);
+            __VM.detectRiverXNodes();
+          }
         }
       }
 
@@ -1713,11 +1715,11 @@ export default {
               value: "static",
               disabled: false,
             },
-            // {
-            //   text: "Repeat River Translation",
-            //   value: "repeat",
-            //   disabled: false,
-            // },
+            {
+              text: "Repeat River Translation",
+              value: "repeat",
+              disabled: false,
+            },
           ],
         },
         visibility: true,
