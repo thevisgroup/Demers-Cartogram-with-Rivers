@@ -1659,16 +1659,6 @@ export default {
         continuous: true,
       },
       indicators: {
-        population: {
-          min: 0,
-          max: 0,
-          data: null
-        },
-        cardiovascular: {
-          min: 0,
-          max: 0,
-          data: null
-        },
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
       timer: 10,
@@ -1837,6 +1827,12 @@ export default {
     const datasets = ["cardiovascular", "population"];
 
     for (const dataset of datasets) {
+      __VM.indicators[dataset] = {
+        min: 0,
+        max: 0,
+        data: null
+      }
+
       __VM.indicators[dataset].data = await d3.csv(`/data/ccg_2020_${dataset}.csv`);
 
       for (const ccg of __VM.CCG) {
