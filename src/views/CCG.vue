@@ -190,6 +190,7 @@ export default {
       const __VM = this;
 
       const getNodeSize = (d) => {
+
         let current, range, minimum;
 
         switch (__VM.node.nodeSizeMappedTo) {
@@ -199,17 +200,23 @@ export default {
             minimum = 0;
             break;
           case "cardiovascular":
-            current = __VM.indicators[d.properties.id].Person.value;
-            range = __VM.indicators.metadata.Person.value.range;
-            minimum = __VM.indicators.metadata.Person.value.min;
+            current = d.properties[__VM.node.nodeSizeMappedTo];
+            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min
+            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
             break;
           case "population":
-            current = d.properties.population;
-            range = __VM.population.max - __VM.population.min;
-            minimum = __VM.population.min;
+            current = d.properties[__VM.node.nodeSizeMappedTo];
+            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min;
+            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
             break;
           default:
             break;
+        }
+
+        const result = Math.abs(current - minimum) / range
+
+        if (isNaN(result)) {
+          console.log(d.properties);
         }
         return Math.abs(current - minimum) / range;
       };
@@ -279,7 +286,7 @@ export default {
         .attr("class", "ccg-layer")
         .attr("stroke", "#000")
         .selectAll("path")
-        .data(__VM.ccg_list)
+        .data(__VM.CCG)
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", path)
@@ -296,7 +303,7 @@ export default {
         .attr("class", "node-layer")
         // .style("visibility", "hidden")
         .selectAll("rect")
-        .data(__VM.ccg_list)
+        .data(__VM.CCG)
         .enter()
         .append("g");
 
@@ -1649,9 +1656,17 @@ export default {
         button_disabled: false,
         continuous: true,
       },
-      population: {
-        min: 0,
-        max: 0,
+      indicators: {
+        population: {
+          min: 0,
+          max: 0,
+          data: null
+        },
+        cardiovascular: {
+          min: 0,
+          max: 0,
+          data: null
+        },
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
       timer: 10,
@@ -1805,50 +1820,64 @@ export default {
   async mounted() {
     const __VM = this;
 
-    __VM.indicators = await d3.json("/data/cardiovascular_00754.json");
-
+    // load shapefile
     __VM.shapefile = await d3.json("/data/ccg_rivers.json");
 
-    __VM.population.data = await d3.csv("/data/ccg_2020_population.csv");
-
-    __VM.ccg_list = [];
-    __VM.ccg_list.push(
+    // load CCG list
+    __VM.CCG = [];
+    __VM.CCG.push(
       ...topojson
         .feature(__VM.shapefile, __VM.shapefile.objects.CCG)
         .features.filter((e) => e.geometry && e.geometry.type)
     );
 
-    __VM.ccg_list.forEach((ccg) => {
-      __VM.node.history[ccg.properties.id] = new LinkedList();
+    // load data
+    const datasets = ["cardiovascular", "population"];
 
-      // add population to ccg
-      const count = parseInt(
-        __VM.population.data
-          .find((d) => d["CCG Code"] === ccg.properties.id)
-        ["All Ages"].replace(/,/g, "")
-      );
+    for (const dataset of datasets) {
+      __VM.indicators[dataset].data = await d3.csv(`/data/ccg_2020_${dataset}.csv`);
 
-      if (__VM.population.max === 0 || __VM.population.min === 0) {
-        __VM.population.max = count;
-        __VM.population.min = count;
-      } else {
-        if (count > __VM.population.max) {
-          __VM.population.max = count;
+      for (const ccg of __VM.CCG) {
+
+        if (!__VM.node.history[ccg.properties.id]) {
+          __VM.node.history[ccg.properties.id] = new LinkedList();
         }
-        if (count < __VM.population.min) {
-          __VM.population.min = count;
+
+        let column;
+
+        switch (dataset) {
+          case "cardiovascular":
+            column = "Indicator value"
+            break;
+
+          case "population":
+            column = "All Ages"
+            break;
+
+          default:
+            break;
         }
+
+        const count = parseInt(
+          __VM.indicators[dataset].data
+            .find((d) => d["CCG Code"] === ccg.properties.id)
+          [column].replace(/,/g, "")
+        );
+
+        if (__VM.indicators[dataset].max === 0 || __VM.indicators[dataset].min === 0) {
+          __VM.indicators[dataset].max = count;
+          __VM.indicators[dataset].min = count;
+        } else {
+          if (count > __VM.indicators[dataset].max) {
+            __VM.indicators[dataset].max = count;
+          }
+          if (count < __VM.indicators[dataset].min) {
+            __VM.indicators[dataset].min = count;
+          }
+        }
+        ccg.properties[dataset] = count;
       }
-
-      ccg.properties.population = count;
-    });
-
-    // __VM.river_list = [];
-    // __VM.river_list.push(
-    //   ...topojson
-    //     .feature(__VM.shapefile, __VM.shapefile.objects.river)
-    //     .features.filter((e) => e.geometry && e.geometry.type)
-    // );
+    }
 
     this.init();
   },
