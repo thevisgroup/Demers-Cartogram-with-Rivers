@@ -37,8 +37,8 @@
           <table class="table table-bordered table-striped table-hover table-borderless">
             <thead>
               <tr>
-                <th>Features</th>
-                <th>User Options</th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -65,19 +65,20 @@
                   <b-button block :variant="(centroid.visibility ? '' : 'outline-') + 'info'"
                     v-on:click="toggleFeatureVisibility('centroid')">Centroid</b-button>
 
-                  <b-button block variant="info">
-                    Node size: {{ node.size
-                    }}<b-form-input id="slider-node-size" :value="node.size" type="range" min="1"
-                      :max="node.maxSize > 0 ? node.maxSize : 100" step="0.25" @change="setNodeSize(node.size, $event)"
-                      disabled>
-                    </b-form-input>
-                  </b-button>
+                  <div class="my-2">
+                    <b-input-group size="sm">
+                      <b-input-group-prepend is-text><b>Node Size</b></b-input-group-prepend>
+                      <b-form-input size="sm" id="slider-node-size" v-model="node.size" type="range" min="0.1"
+                        :max="node.maxSize" step="0.1"></b-form-input>
+                    </b-input-group>
 
-                  <b-button block variant="info">
-                    Node size increment: {{ node.sizeStep
-                    }}<b-form-input id="slider-node-size" v-model="node.sizeStep" type="range" min="0.1" max="0.5"
-                      step="0.1"></b-form-input>
-                  </b-button>
+                    <b-input-group size="sm">
+                      <b-input-group-prepend is-text><b>Current</b></b-input-group-prepend>
+                      <b-form-input type="number" v-model="node.size"></b-form-input>
+                      <b-input-group-prepend is-text><b>Max</b></b-input-group-prepend>
+                      <b-form-input type="number" v-model="node.maxSize"></b-form-input>
+                    </b-input-group>
+                  </div>
 
                   <b-form-group label="Node size mapping">
                     <b-form-radio-group v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMapping"
@@ -1658,6 +1659,7 @@ export default {
         button_disabled: false,
         continuous: true,
       },
+      datasets: ["cardiovascular", "population"],
       indicators: {
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
@@ -1681,8 +1683,6 @@ export default {
         nodeSizeMappedTo: 'population',
         nodeSizeMapping: [
           { text: "Uniform", value: "uniform" },
-          { text: "Population", value: "population" },
-          { text: "Cardiovascular", value: "cardiovascular" },
         ],
         visibility: true,
         color: "success",
@@ -1822,16 +1822,18 @@ export default {
         .feature(__VM.shapefile, __VM.shapefile.objects.CCG)
         .features.filter((e) => e.geometry && e.geometry.type)
     );
-
     // load data
-    const datasets = ["cardiovascular", "population"];
-
-    for (const dataset of datasets) {
+    for (const dataset of __VM.datasets) {
       __VM.indicators[dataset] = {
         min: 0,
         max: 0,
         data: null
       }
+
+      // add dataset tp node mapping options
+      __VM.node.nodeSizeMapping.push(
+        { text: dataset[0].toUpperCase() + dataset.slice(1), value: dataset }
+      )
 
       __VM.indicators[dataset].data = await d3.csv(`/data/ccg_2020_${dataset}.csv`);
 
