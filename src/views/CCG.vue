@@ -470,10 +470,7 @@ export default {
       __VM.delay(__VM.timer).then(() => {
         if (crossingCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
-            __VM.iteration.current = 0;
-            __VM.delay(__VM.timer).then(() => {
-              __VM.processStalemate();
-            });
+            __VM.processStalemate();
           } else {
             __VM.iteration.current++;
             __VM.removeOverlap(false, true);
@@ -498,8 +495,10 @@ export default {
       const __VM = this;
 
       const nodes = d3
-        .selectAll(`#map rect[nodeXCount="${__VM.iteration.limit + 1}"]`)
+        .selectAll(`#map rect[nodeXCount="${__VM.iteration.current}"]`)
         ._groups[0].entries();
+
+      __VM.iteration.current = 0;
 
       for (let [i, node] of nodes) {
         // redraw nodes using new coordinates
@@ -926,7 +925,7 @@ export default {
             if (nodeXCount > __VM.iteration.limit) {
               // a stalemate nodeX
               node.attr("fill", "blue");
-              node.attr("nodeXCount", __VM.iteration.limit + 1);
+              node.attr("nodeXCount", __VM.iteration.limit);
 
               // calculate the distance between two postitions
             } else {
