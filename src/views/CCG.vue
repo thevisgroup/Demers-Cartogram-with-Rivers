@@ -210,6 +210,11 @@ export default {
             range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min;
             minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
             break;
+          case "alcohol":
+            current = d.properties[__VM.node.nodeSizeMappedTo];
+            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min;
+            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
+            break;
           default:
             break;
         }
@@ -1658,7 +1663,7 @@ export default {
         button_disabled: false,
         continuous: true,
       },
-      datasets: ["cardiovascular", "population"],
+      datasets: ["cardiovascular", "population", "alcohol"],
       indicators: {
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
@@ -1842,13 +1847,9 @@ export default {
           __VM.node.history[ccg.properties.id] = new LinkedList();
         }
 
-        let column;
+        let column = "Indicator value";
 
         switch (dataset) {
-          case "cardiovascular":
-            column = "Indicator value"
-            break;
-
           case "population":
             column = "All Ages"
             break;

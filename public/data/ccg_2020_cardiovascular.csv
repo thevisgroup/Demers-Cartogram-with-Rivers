@@ -1,7 +1,4 @@
 Reporting period,Period of coverage,Breakdown,CCG Code,Level,Level description,Gender,Indicator value,CI lower,CI upper,Denominator,Numerator
-2019,01/01/2019 to 31/12/2019,National,E92000001,National,All registered patients in England,Person,66.4,65.7,67.1,55,001,868,33,457
-2019,01/01/2019 to 31/12/2019,National,E92000001,National,All registered patients in England,Female,41.5,40.8,42.3,27,200,365,10,626
-2019,01/01/2019 to 31/12/2019,National,E92000001,National,All registered patients in England,Male,91.3,90.1,92.5,27,801,503,22,831
 2019,01/01/2019 to 31/12/2019,CCG,E38000004,07L,NHS Barking and Dagenham CCG,Person,68.6,53.7,86.2,219,504,80
 2019,01/01/2019 to 31/12/2019,CCG,E38000006,02P,NHS Barnsley CCG,Person,87.0,75.6,99.7,240,912,208
 2019,01/01/2019 to 31/12/2019,CCG,E38000007,99E,NHS Basildon and Brentwood CCG,Person,60.8,51.2,71.6,258,395,144
