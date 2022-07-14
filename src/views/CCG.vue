@@ -1016,29 +1016,31 @@ export default {
     increaseNodeSize() {
       const __VM = this;
 
+      const conpensation = 1;
+
       d3.selectAll(".node-layer > g > rect")
         .attr("width", function () {
           return (
             Number(d3.select(this).attr("width")) +
-            __VM.node.sizeStep * Number(d3.select(this).attr("rate"))
+            __VM.node.sizeStep + Number(d3.select(this).attr("rate") - conpensation)
           );
         })
         .attr("height", function () {
           return (
             Number(d3.select(this).attr("height")) +
-            __VM.node.sizeStep * Number(d3.select(this).attr("rate"))
+            __VM.node.sizeStep + Number(d3.select(this).attr("rate") - conpensation)
           );
         })
         .attr("x", function () {
           return Number(
             d3.select(this).attr("x") -
-            (__VM.node.sizeStep * Number(d3.select(this).attr("rate"))) / 2
+            (__VM.node.sizeStep + Number(d3.select(this).attr("rate") - conpensation)) / 2
           );
         })
         .attr("y", function () {
           return Number(
             d3.select(this).attr("y") -
-            (__VM.node.sizeStep * Number(d3.select(this).attr("rate"))) / 2
+            (__VM.node.sizeStep + Number(d3.select(this).attr("rate") - conpensation)) / 2
           );
         });
     },
