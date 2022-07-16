@@ -1209,15 +1209,21 @@ export default {
           const xSign = x > 0 ? 1 : -1;
           const ySign = y > 0 ? 1 : -1;
 
-          translate.finalX +=
-            Math.abs(x / nodeXCount) > __VM.river.translation.limit
-              ? xSign * __VM.river.translation.limit
-              : x / nodeXCount;
 
-          translate.finalY +=
-            Math.abs(y / nodeXCount) > __VM.river.translation.limit
-              ? ySign * __VM.river.translation.limit
-              : y / nodeXCount;
+          // limit the translation allowed for rivers
+          if (Math.abs(translate.finalX) < __VM.river.translation.limit * 5) {
+            translate.finalX +=
+              Math.abs(x / nodeXCount) > __VM.river.translation.limit
+                ? xSign * __VM.river.translation.limit
+                : x / nodeXCount;
+          }
+
+          if (Math.abs(translate.finalY) < __VM.river.translation.limit * 5) {
+            translate.finalY +=
+              Math.abs(y / nodeXCount) > __VM.river.translation.limit
+                ? ySign * __VM.river.translation.limit
+                : y / nodeXCount;
+          }
 
           translate.x = 0;
           translate.y = 0;
@@ -1240,7 +1246,6 @@ export default {
           const resCurrent = [];
           const resOld = [];
 
-          const riverMovingUp = translate.finalY > 0;
           resolution.forEach((r) => {
             resCurrent.push([r[0] + translate.finalX, r[1] + translate.finalY]);
             resOld.push([
@@ -1604,7 +1609,6 @@ export default {
       const __VM = this;
 
       d3.select(`.${river} .river`)
-        .transition()
         .attr(
           "transform",
           `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
@@ -1686,7 +1690,7 @@ export default {
       },
       node: {
         nodeMapToColor: false,
-        nodeSizeMappedTo: 'population',
+        nodeSizeMappedTo: 'alcohol',
         nodeSizeMapping: [
           { text: "Uniform", value: "uniform" },
         ],
