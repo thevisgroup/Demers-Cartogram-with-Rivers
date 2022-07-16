@@ -814,6 +814,31 @@ export default {
         __VM.step.button_disabled = false;
       });
     },
+
+    checkIntersect(line) {
+      const __VM = this;
+      const result = [false, ""];
+
+      for (const river of Object.keys(__VM.river.rivers)) {
+        const river_path = flattener.flatten_path(
+            document.querySelector(`#${river}`).getPathData(),
+            [
+              __VM.river.rivers[river].translate.finalX,
+              __VM.river.rivers[river].translate.finalY,
+            ]
+          );
+
+          result[0] = findPathIntersections(river_path, line, true);
+
+        if (result[0] > 0) {
+          result[1] = river;
+
+          break;
+        }
+      }
+
+      return result;
+    },
     // check if the node crossed a river
     // if firstPass is true, compute the average distance for translating rivers, and do not move nodes
     testRiverCross(node, p, firstPass) {
@@ -825,61 +850,14 @@ export default {
 
       const sizeDiff = p_last.size - p.size;
 
-      const checkIntersect = (line) => {
-        const result = [false, ""];
-        if (node.attr("id") === "E38000113") {
-          let a = "b"
-        }
-
-        for (const river of Object.keys(__VM.river.rivers)) {
-          const river_path = flattener.flatten_path(
-            document.querySelector(`#${river}`).getPathData(),
-            [
-              __VM.river.rivers[river].translate.finalX,
-              __VM.river.rivers[river].translate.finalY,
-            ]
-          );
-
-          result[0] = findPathIntersections(river_path, line, true);
-
-          if (result[0] > 0) {
-            result[1] = river;
-
-            __VM.svg
-              .append("path")
-              .attr("class", "river-crossing-path")
-              .attr("d", line)
-              .attr("stroke", "black")
-              .attr("stroke-width", "1")
-              .attr("fill", "none");
-            break;
-          }
-        }
-
-        return result;
-      };
-
       // crossings[0] is the number of river crossings
       // crossings[1] is the river name
-      const crossings = checkIntersect(
+      const crossings = __VM.checkIntersect(
         d3.line()([
           [p_last.x, p_last.y],
           [p.x, p.y],
         ])
       );
-
-
-      if (node.attr("id") === "E38000113") {
-        d3.selectAll(".crossings").remove()
-        __VM.svg.append("path")
-          .attr("d", d3.line()([[p_last.x, p_last.y], [p.x, p.y]]))
-          .attr("stroke", "red")
-          .attr("stroke-width", "1")
-          .attr("fill", "none")
-          .attr("class", "crossings");
-
-        let a = crossings;
-      }
 
       // if there is a crossing
       if (crossings[0] > 0) {
