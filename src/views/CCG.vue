@@ -463,7 +463,7 @@ export default {
           __VM.calculateRiverTranslation();
           for (const river of Object.keys(__VM.river.rivers)) {
             __VM.moveRiver(river);
-            __VM.detectRiverXNodes();
+            __VM.detectRiverXNodes(river);
           }
         }
       }
@@ -747,7 +747,6 @@ export default {
             p_current.y + position_diff[1],
             nodeSize
           );
-
           __VM.moveNode(node, p_next);
           if (!self) {
             __VM.testRiverCross(node, p_next, false);
@@ -821,14 +820,14 @@ export default {
 
       for (const river of Object.keys(__VM.river.rivers)) {
         const river_path = flattener.flatten_path(
-            document.querySelector(`#${river}`).getPathData(),
-            [
-              __VM.river.rivers[river].translate.finalX,
-              __VM.river.rivers[river].translate.finalY,
-            ]
-          );
+          document.querySelector(`#${river}`).getPathData(),
+          [
+            __VM.river.rivers[river].translate.finalX,
+            __VM.river.rivers[river].translate.finalY,
+          ]
+        );
 
-          result[0] = findPathIntersections(river_path, line, true);
+        result[0] = findPathIntersections(river_path, line, true);
 
         if (result[0] > 0) {
           result[1] = river;
@@ -907,7 +906,7 @@ export default {
 
             if (nodeXCount > __VM.iteration.limit) {
               // a stalemate nodeX
-              node.attr("fill", "blue");
+              //node.attr("fill", "blue");
               node.attr("nodeXCount", __VM.iteration.limit);
 
               // calculate the distance between two postitions
@@ -1188,19 +1187,22 @@ export default {
           const ySign = y > 0 ? 1 : -1;
 
 
-          // limit the translation allowed for rivers
-          if (Math.abs(translate.finalX) < __VM.river.translation.limit * 5) {
-            translate.finalX +=
-              Math.abs(x / nodeXCount) > __VM.river.translation.limit
-                ? xSign * __VM.river.translation.limit
-                : x / nodeXCount;
+          translate.finalX +=
+            Math.abs(x / nodeXCount) > __VM.river.translation.limit
+              ? xSign * __VM.river.translation.limit
+              : x / nodeXCount;
+
+          if (Math.abs(translate.finalX) > __VM.river.translation.limit * 5) {
+            translate.finalX = translate.finalXOld
           }
 
-          if (Math.abs(translate.finalY) < __VM.river.translation.limit * 5) {
-            translate.finalY +=
-              Math.abs(y / nodeXCount) > __VM.river.translation.limit
-                ? ySign * __VM.river.translation.limit
-                : y / nodeXCount;
+          translate.finalY +=
+            Math.abs(y / nodeXCount) > __VM.river.translation.limit
+              ? ySign * __VM.river.translation.limit
+              : y / nodeXCount;
+
+          if (Math.abs(translate.finalY) > __VM.river.translation.limit * 5) {
+            translate.finalY = translate.finalYOld
           }
 
           translate.x = 0;
@@ -1211,106 +1213,106 @@ export default {
         __VM.river.rivers[river].translate = translate;
       }
     },
-    detectRiverXNodes() {
+    detectRiverXNodes(river) {
       const __VM = this;
 
-      Object.keys(__VM.river.rivers).forEach((river) => {
-        const { resolution, translate } = __VM.river.rivers[river];
+      const { resolution, translate } = __VM.river.rivers[river];
 
-        if (
-          translate.finalX !== translate.finalXOld ||
-          translate.finalY !== translate.finalYOld
-        ) {
-          const resCurrent = [];
-          const resOld = [];
+      if (
+        translate.finalX !== translate.finalXOld ||
+        translate.finalY !== translate.finalYOld
+      ) {
+        const resCurrent = [];
+        const resOld = [];
 
-          resolution.forEach((r) => {
-            resCurrent.push([r[0] + translate.finalX, r[1] + translate.finalY]);
-            resOld.push([
-              r[0] + translate.finalXOld,
-              r[1] + translate.finalYOld,
-            ]);
-          });
-
-          // draw river crossed areas
-          const crossedRegion = d3.line()([
-            ...resCurrent,
-            ...resOld.reverse(),
-            resCurrent[0],
+        resolution.forEach((r) => {
+          resCurrent.push([r[0] + translate.finalX, r[1] + translate.finalY]);
+          resOld.push([
+            r[0] + translate.finalXOld,
+            r[1] + translate.finalYOld,
           ]);
+        });
 
-          d3.selectAll(`.${river}.crossedArea`).remove();
+        // draw river crossed areas
+        const crossedRegion = d3.line()([
+          ...resCurrent,
+          ...resOld.reverse(),
+          resCurrent[0],
+        ]);
 
-          d3.select("#map")
-            .append("path")
-            .attr("class", `${river} crossedArea`)
-            .attr("d", crossedRegion)
-            .attr("stroke", "black")
-            .attr("stroke-width", "1px")
-            .attr("fill", "none");
+        d3.selectAll(`.${river}.crossedArea`).remove();
 
-          for (let [i, node] of d3
-            .selectAll(".node-layer > g > rect")
-            ._groups[0].entries()) {
-            node = d3.select(node);
+        d3.select("#map")
+          .append("path")
+          .attr("class", `${river} crossedArea`)
+          .attr("d", crossedRegion)
+          .attr("stroke", "black")
+          .attr("stroke-width", "1px")
+          .attr("fill", "none");
 
-            // if (
-            //   riverMovingUp !==
-            //   river_vector.is_upper_side(node, __VM.colorVariant[river])
-            // ) {
-            //   continue;
-            // }
+        for (let [i, node] of d3
+          .selectAll(".node-layer > g > rect")
+          ._groups[0].entries()) {
+          node = d3.select(node);
 
-            if (node.attr("id") === "E38000113" && __VM.iteration.count === 100 && river === "thames") {
-              let a = "b"
+          // if (
+          //   riverMovingUp !==
+          //   river_vector.is_upper_side(node, __VM.colorVariant[river])
+          // ) {
+          //   continue;
+          // }
+
+
+          const p_current = __VM.getNodeHistory(node).last.value;
+
+
+
+          const inside = pip.isInside(
+            [p_current.x, p_current.y],
+            crossedRegion
+          );
+
+          if (inside) {
+
+
+
+
+            node
+              .attr("stroke", "red")
+              .attr("stroke-width", "0.5")
+              .attr("riverX", true);
+
+            let x = translate.finalX - translate.finalXOld;
+            let y = translate.finalY - translate.finalYOld;
+
+            if (river === "thames") {
+              if (
+                !river_vector.is_upper_side(node, __VM.colorVariant.thames)
+              ) {
+                x = -Math.abs(translate.finalX - translate.finalXOld);
+                y = -Math.abs(translate.finalY - translate.finalYOld);
+              }
+            } else {
+              if (
+                !river_vector.is_upper_side(node, __VM.colorVariant[river])
+              ) {
+                x = -(translate.finalX - translate.finalXOld);
+                y = -(translate.finalY - translate.finalYOld);
+              }
             }
-            const p_current = __VM.getNodeHistory(node).last.value;
 
-            const inside = pip.isInside(
-              [p_current.x, p_current.y],
-              crossedRegion
+            const p_next = new Point(
+              p_current.x + x,
+              p_current.y + y,
+              Number(__VM.node.size)
             );
 
-            if (inside) {
-              node
-                .attr("stroke", "red")
-                .attr("stroke-width", "0.5")
-                .attr("riverX", true);
+            // no need to test river crossing here as it's simply impossible to do so
+            __VM.moveNode(node, p_next);
 
-              let x, y;
-
-              if (river === "thames") {
-                if (
-                  river_vector.is_upper_side(node, __VM.colorVariant.thames)
-                ) {
-                  x = translate.finalX;
-                  y = translate.finalY;
-                } else {
-                  x = -Math.abs(translate.finalX);
-                  y = -Math.abs(translate.finalY);
-                }
-              } else {
-                if (
-                  river_vector.is_upper_side(node, __VM.colorVariant[river])
-                ) {
-                  x = translate.finalX;
-                  y = translate.finalY;
-                } else {
-                  x = -translate.finalX;
-                  y = -translate.finalY;
-                }
-              }
-
-              const p_next = new Point(
-                p_current.x + x,
-                p_current.y + y,
-                Number(__VM.node.size)
-              );
-              __VM.moveNode(node, p_next);
-            }
           }
         }
-      });
+      }
     },
     getRiverTranslation(name) {
       const t = this.river.rivers[name].translate;
@@ -1568,11 +1570,14 @@ export default {
     moveNode(node, p) {
       const last = this.node.history[node.attr("id")].last.value;
 
+
+      const width = Number(node.attr("width")) / 2;
+
       // only insert when the position is not the same as the last one
       if (!_.isEqual(p, last)) {
         this.node.history[node.attr("id")].insertLast(p);
 
-        node.attr("x", p.xRect).attr("y", p.yRect);
+        node.attr("x", p.x - width).attr("y", p.y - width);
 
         // move the centroid
         node
