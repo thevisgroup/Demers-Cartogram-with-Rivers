@@ -27,7 +27,9 @@ We first obtain a relation ID by searching for a river, e.g. River Thames, on Op
     out skel;
 \end{lstlisting}
 
-After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections, translations and scales, and merge them into one shapefile. Finally, mapshaper \cite{blochMapshaper} is used to convert the merged shapefile into a TopoJSON \cite{TopoJSON} file. TopoJSON eliminates redundant coordinates in the data, improving the rendering speed of our implementation.
+After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections, and convert them into GeoJSON files. Finally, mapshaper \cite{blochMapshaper} is used to merge adn convert the GeoJSON files into a TopoJSON \cite{TopoJSON} file. TopoJSON eliminates redundant coordinates in the data, improving the rendering speed of our implementation. See \autoref{table:pre-processing_result} for the pre-processing result.
+
+We describe the above steps in detail in \autoref{app:pre-processing}.
 
 \subsection{EHR Data}
 
