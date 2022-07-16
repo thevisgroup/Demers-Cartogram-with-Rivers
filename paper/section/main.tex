@@ -13,7 +13,7 @@
   \begin{figure*}[tb!]
       \centering
       \includegraphics[width=\textwidth,height=0.95\textheight,keepaspectratio]{figure/flowchart.png}
-      \caption{A flowchart illustration of our layout algorithm. See \figref{fig:flowchart-stalemate} for the flow of processing stalemate. See also \algoref{alg:UpdateLayout} for more detail. For illustration purposes, we show the rendered views alongside the logical views representing the actual computation.}
+      \caption{A flowchart illustration of our layout algorithm. See \autoref{fig:flowchart-stalemate} for the flow of processing stalemate. See also \autoref{alg:UpdateLayout} for more detail. For illustration purposes, we show the rendered views alongside the logical views representing the actual computation.}
       \label{fig:flowchart}
   \end{figure*}
 
@@ -25,11 +25,11 @@
   \end{figure}
  }
 
-\algoref{alg:UpdateLayout} and \figref{fig:flowchart} provide an overview of the process.
+\autoref{alg:UpdateLayout} and \autoref{fig:flowchart} provide an overview of the process.
 
-\bobgraph{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next closest vertex. This rendering approach enables us to adjust the river resolution as shown in \figref{fig:river resolution}. We further apply a smoothing logic by removing vertices that are too close to each other.
+\bobgraph{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next closest vertex. This rendering approach enables us to adjust the river resolution as shown in \autoref{fig:river resolution}. We further apply a smoothing logic by removing vertices that are too close to each other.
 
-\bobgraph{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \algoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. If a node oscillates across a river, we process this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
+\bobgraph{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \autoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. If a node oscillates across a river, we process this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
 
 
 
@@ -175,7 +175,7 @@
 
 \subsection{River Intersection Testing}
 
-We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \figref{fig:river resolution}, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \algoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
+We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \autoref{fig:river resolution}, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \autoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
 
 
     {
@@ -221,7 +221,7 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Th
 
 \subsection{Detecting Stalemates}
 
-As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path can repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \figref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations (a user-adjustable parameter), we introduce a heuristic solution: constructing a corridor to alleviate the congestion. A corridor, $ \Corridor $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNtNc $ (See \figref{fig:corridor}C and D). All nodes enclosed by $ \Corridor $ are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \figref{fig:corridor}E).
+As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path can repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \autoref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations (a user-adjustable parameter), we introduce a heuristic solution: constructing a corridor to alleviate the congestion. A corridor, $ \Corridor $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNtNc $ (See \autoref{fig:corridor}C and D). All nodes enclosed by $ \Corridor $ are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \autoref{fig:corridor}E).
 
     {
         \begin{figure}[tb!]
@@ -244,7 +244,7 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
 % \begin{noindent}
 
 \begin{algorithm}[tb!]
-    \caption{Procedure to derive a corridor to translate enclosed nodes. We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \figref{fig:stalemate}).}\label{alg:derive corridor}
+    \caption{Procedure to derive a corridor to translate enclosed nodes. We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \autoref{fig:stalemate}).}\label{alg:derive corridor}
 
     \textbf{Input:} \\
     $ \node \gets $ the node used to derive the corridor \\

@@ -8,12 +8,5 @@
 \let\origsubsubsection=\subsubsection
 \renewcommand\subsubsection[1]{\origsubsubsection{#1}\label{subsubsec:{#1}}}
 
-% shortcut ref
-\newcommand{\secref}[1]{Section~\ref{#1}}
-\newcommand{\figref}[1]{Figure~\ref{#1}}
-\newcommand{\tableref}[1]{Table~\ref{#1}}
-\newcommand{\algoref}[1]{Algorithm~\ref{#1}}
-\newcommand{\phantomref}[1]{$\hyperref[#1]{\ref{#1}}$}
-
 % cite with author names
 \newcommand{\citea}[1]{\citeauthor{#1}~\cite{#1}}
