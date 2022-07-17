@@ -200,31 +200,15 @@ export default {
             range = 1;
             minimum = 0;
             break;
-          case "cardiovascular":
-            current = d.properties[__VM.node.nodeSizeMappedTo];
-            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min
-            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            break;
-          case "population":
-            current = d.properties[__VM.node.nodeSizeMappedTo];
-            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            break;
-          case "alcohol":
-            current = d.properties[__VM.node.nodeSizeMappedTo];
-            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            break;
           default:
+            current = d.properties[__VM.node.nodeSizeMappedTo];
+            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min;
+            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
             break;
         }
 
         const result = Math.abs(current - minimum) / range
-
-        if (isNaN(result)) {
-          console.log(d.properties);
-        }
-        return Math.abs(current - minimum) / range;
+        return result;
       };
 
       d3.selectAll("#map").remove();
@@ -274,12 +258,9 @@ export default {
 
       // tooltip
       // eslint-disable-next-line no-unused-vars
-      const tooltip = d3
-        .select("#map")
+      const tooltip = d3.select("body")
         .append("div")
-        .style("position", "absolute")
         .style("visibility", "hidden")
-        .style("z-index", "10")
         .attr("class", "tooltip");
 
       const path = d3.geoPath();
@@ -340,7 +321,10 @@ export default {
           tooltip
             .style("visibility", "visible")
             .html(
-              `${d.properties.name} <br/>Vaccination Rate: ${getNodeSize(d)}%`
+              `Name: ${d.properties.name} <br/> ` +
+              `Population: ${d.properties.population} <br/> ` +
+              `Cardiovascular: ${d.properties.cardiovascular} <br/> ` +
+              `Range: ${getNodeSize(d).toFixed(2)}%`
             );
         })
         .on("mousemove", function (e) {
@@ -1570,7 +1554,6 @@ export default {
     moveNode(node, p) {
       const last = this.node.history[node.attr("id")].last.value;
 
-
       const width = Number(node.attr("width")) / 2;
 
       // only insert when the position is not the same as the last one
@@ -1806,9 +1789,11 @@ export default {
     const __VM = this;
 
     // load shapefile
+    // eslint-disable-next-line require-atomic-updates
     __VM.shapefile = await d3.json("/data/ccg_rivers.json");
 
     // load CCG list
+    // eslint-disable-next-line require-atomic-updates
     __VM.CCG = [];
     __VM.CCG.push(
       ...topojson
@@ -1816,7 +1801,7 @@ export default {
         .features.filter((e) => e.geometry && e.geometry.type)
     );
     // load data
-    for (const dataset of __VM.datasets) {
+    for await (const dataset of __VM.datasets) {
       __VM.indicators[dataset] = {
         min: 0,
         max: 0,
@@ -1827,10 +1812,10 @@ export default {
       __VM.node.nodeSizeMapping.push(
         { text: dataset[0].toUpperCase() + dataset.slice(1), value: dataset }
       )
-
+      // eslint-disable-next-line require-atomic-updates
       __VM.indicators[dataset].data = await d3.csv(`/data/ccg_2020_${dataset}.csv`);
 
-      for (const ccg of __VM.CCG) {
+      for await (const ccg of __VM.CCG) {
 
         if (!__VM.node.history[ccg.properties.id]) {
           __VM.node.history[ccg.properties.id] = new LinkedList();
@@ -1868,6 +1853,7 @@ export default {
       }
     }
 
+
     this.init();
   },
 };
@@ -1880,6 +1866,8 @@ export default {
   border-style: solid;
   border-radius: 2px;
   opacity: 10 !important;
+  position: absolute;
+  z-index: 10;
 }
 
 .footer {
