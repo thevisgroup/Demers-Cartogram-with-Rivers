@@ -322,6 +322,7 @@ export default {
             .style("visibility", "visible")
             .html(
               `Name: ${d.properties.name} <br/> ` +
+              `ID: ${d.properties.id} <br/> ` +
               `Population: ${d.properties.population} <br/> ` +
               `Cardiovascular: ${d.properties.cardiovascular} <br/> ` +
               `Range: ${getNodeSize(d).toFixed(2)}%`
@@ -377,8 +378,16 @@ export default {
 
       return nodes;
     },
-    removeOverlap(firstPass = true, repeat = false) {
+    async removeOverlap(firstPass = true, repeat = false) {
       const __VM = this;
+
+      if (__VM.checkAvgNodeSize() > __VM.node.maxSize) {
+        __VM.iteration.current = 0;
+        __VM.step.button_disabled = false;
+        d3.selectAll(".crossedArea").remove();
+        return
+      }
+
       __VM.step.button_disabled = true;
 
       if (!__VM.node.visibility) {
@@ -445,9 +454,9 @@ export default {
       if (firstPass) {
         if (!__VM.getRiverTranslationStatic) {
           __VM.calculateRiverTranslation();
-          for (const river of Object.keys(__VM.river.rivers)) {
+          for await (const river of Object.keys(__VM.river.rivers)) {
             __VM.moveRiver(river);
-            __VM.detectRiverXNodes(river);
+            await __VM.detectRiverXNodes(river);
           }
         }
       }
@@ -456,7 +465,7 @@ export default {
       const crossingCount = d3.selectAll(".river-crossing-path")._groups[0]
         .length;
 
-      __VM.delay(__VM.timer).then(() => {
+      await __VM.delay(__VM.timer).then(async () => {
         if (crossingCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
             __VM.processStalemate();
@@ -467,20 +476,23 @@ export default {
         } else if (firstPass) {
           // the first pass of ORA is to translate rivers
           // after the first pass, the second pass is to move nodes
-          __VM.removeOverlap(false, false);
+          await __VM.removeOverlap(false, false);
         } else {
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
+          d3.selectAll(".crossedArea").remove();
+        }
+      });
 
-          if (__VM.step.continuous && __VM.checkAvgNodeSize() < __VM.node.maxSize) {
-            __VM.removeOverlap(true, false);
-          } else {
-            d3.selectAll(".crossedArea").remove();
+      await __VM.delay(__VM.timer).then(async () => {
+        if (__VM.checkAvgNodeSize() < __VM.node.maxSize) {
+          if (__VM.step.continuous) {
+            await __VM.removeOverlap();
           }
         }
       });
     },
-    processStalemate() {
+    async processStalemate() {
       const __VM = this;
 
       const nodes = d3
@@ -489,7 +501,7 @@ export default {
 
       __VM.iteration.current = 0;
 
-      for (let [i, node] of nodes) {
+      for await (let [i, node] of nodes) {
         // redraw nodes using new coordinates
 
         node = d3.select(node);
@@ -501,6 +513,7 @@ export default {
         const p_current = history.last.value;
         const p_previous = history.secondLast.value;
         const sizeDiff = p_previous.size - p_current.size;
+
 
         // used in derivedPoints
         let tempPoint = new Point(1000, 1000, nodeSize);
@@ -791,7 +804,7 @@ export default {
           d3.select(".corridor").remove();
         });
       }
-      __VM.delay(__VM.timer).then(() => {
+      await __VM.delay(__VM.timer).then(() => {
         d3.selectAll(".river-crossing-path").remove();
         __VM.removeOverlap(false, true);
         __VM.step.button_disabled = false;
@@ -1197,7 +1210,7 @@ export default {
         __VM.river.rivers[river].translate = translate;
       }
     },
-    detectRiverXNodes(river) {
+    async detectRiverXNodes(river) {
       const __VM = this;
 
       const { resolution, translate } = __VM.river.rivers[river];
@@ -1246,10 +1259,7 @@ export default {
           //   continue;
           // }
 
-
           const p_current = __VM.getNodeHistory(node).last.value;
-
-
 
           const inside = pip.isInside(
             [p_current.x, p_current.y],
@@ -1257,10 +1267,6 @@ export default {
           );
 
           if (inside) {
-
-
-
-
             node
               .attr("stroke", "red")
               .attr("stroke-width", "0.5")
@@ -1269,19 +1275,26 @@ export default {
             let x = translate.finalX - translate.finalXOld;
             let y = translate.finalY - translate.finalYOld;
 
-            if (river === "thames") {
-              if (
-                !river_vector.is_upper_side(node, __VM.colorVariant.thames)
-              ) {
-                x = -Math.abs(translate.finalX - translate.finalXOld);
-                y = -Math.abs(translate.finalY - translate.finalYOld);
-              }
-            } else {
-              if (
-                !river_vector.is_upper_side(node, __VM.colorVariant[river])
-              ) {
-                x = -(translate.finalX - translate.finalXOld);
-                y = -(translate.finalY - translate.finalYOld);
+            let nodeRiver = node.attr("river")
+
+            if (!nodeRiver) {
+              switch (river) {
+                case "thames":
+                  if (x > 0) {
+                    x = 0
+                  }
+                  if (y > 0) {
+                    y = 0
+                  }
+                  break;
+                default:
+                  if (x < 0) {
+                    x = 0
+                  }
+                  if (y < 0) {
+                    y = 0
+                  }
+                  break;
               }
             }
 
@@ -1293,7 +1306,6 @@ export default {
 
             // no need to test river crossing here as it's simply impossible to do so
             __VM.moveNode(node, p_next);
-
           }
         }
       }
@@ -1625,7 +1637,7 @@ export default {
       __VM.node.size = size;
       return size;
     },
-    delay(ms) {
+    async delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
   },
@@ -1656,7 +1668,7 @@ export default {
       },
       node: {
         nodeMapToColor: false,
-        nodeSizeMappedTo: 'alcohol',
+        nodeSizeMappedTo: 'population',
         nodeSizeMapping: [
           { text: "Uniform", value: "uniform" },
         ],
