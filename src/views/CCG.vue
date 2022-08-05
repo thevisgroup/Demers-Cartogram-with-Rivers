@@ -381,13 +381,6 @@ export default {
     async removeOverlap(firstPass = true, repeat = false) {
       const __VM = this;
 
-      if (__VM.checkAvgNodeSize() > __VM.node.maxSize) {
-        __VM.iteration.current = 0;
-        __VM.step.button_disabled = false;
-        d3.selectAll(".crossedArea").remove();
-        return
-      }
-
       __VM.step.button_disabled = true;
 
       if (!__VM.node.visibility) {
@@ -462,16 +455,18 @@ export default {
       }
 
       // get the count with nodeX (node crossings)
-      const crossingCount = d3.selectAll(".river-crossing-path")._groups[0]
-        .length;
+      const overlapCount = d3
+        .selectAll(`#map rect[nodeXCount="${__VM.iteration.limit}"]`)
+        ._groups[0].length;
 
       await __VM.delay(__VM.timer).then(async () => {
-        if (crossingCount > 0) {
+        if (overlapCount > 0) {
           if (__VM.iteration.current >= __VM.iteration.limit) {
-            __VM.processStalemate();
+            await __VM.processStalemate();
+            await __VM.removeOverlap(false, true);
           } else {
             __VM.iteration.current++;
-            __VM.removeOverlap(false, true);
+            await __VM.removeOverlap(false, true);
           }
         } else if (firstPass) {
           // the first pass of ORA is to translate rivers
@@ -483,18 +478,19 @@ export default {
           d3.selectAll(".crossedArea").remove();
         }
       });
-
       await __VM.delay(__VM.timer).then(async () => {
-        if (__VM.checkAvgNodeSize() < __VM.node.maxSize) {
-          if (__VM.step.continuous) {
-            await __VM.removeOverlap();
-          }
+        if (__VM.checkAvgNodeSize() > __VM.node.maxSize) {
+          __VM.iteration.current = 0;
+          __VM.step.button_disabled = false;
+          d3.selectAll(".crossedArea").remove();
+          return
+        } else {
+          await __VM.removeOverlap();
         }
       });
     },
     async processStalemate() {
       const __VM = this;
-
       const nodes = d3
         .selectAll(`#map rect[nodeXCount="${__VM.iteration.current}"]`)
         ._groups[0].entries();
@@ -776,7 +772,7 @@ export default {
         // move the node itself
         moveNodeInCorridor(node, position_diff, true);
         node.attr("fill", node.attr("original_fill"));
-        node.attr("nodeXCount", 0);
+        node.attr("nodeXCount", null);
 
         // here we can derive the bounding box of the corridor to reduce the number of nodes to be checked
         for (let [i, node_in_c] of d3
@@ -804,11 +800,7 @@ export default {
           d3.select(".corridor").remove();
         });
       }
-      await __VM.delay(__VM.timer).then(() => {
-        d3.selectAll(".river-crossing-path").remove();
-        __VM.removeOverlap(false, true);
-        __VM.step.button_disabled = false;
-      });
+
     },
 
     checkIntersect(line) {
@@ -903,10 +895,8 @@ export default {
 
             if (nodeXCount > __VM.iteration.limit) {
               // a stalemate nodeX
-              //node.attr("fill", "blue");
+              // node.attr("fill", "blue");
               node.attr("nodeXCount", __VM.iteration.limit);
-
-              // calculate the distance between two postitions
             } else {
               // reset fill color for non-stalemate nodeX
               node.attr("fill", node.attr("original_fill").trim());
@@ -1651,7 +1641,7 @@ export default {
       indicators: {
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
-      timer: 10,
+      timer: 100,
       debug: false,
       corridor: {
         length: 30,
