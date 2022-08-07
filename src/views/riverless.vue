@@ -95,72 +95,6 @@
                     continuous mode: {{ step.continuous }}
                   </b-form-checkbox>
 
-                  <!-- <b-form-checkbox v-model="debug" name="check-button" switch>
-                    Debug mode: {{ debug }}
-                  </b-form-checkbox> -->
-
-                  <!-- <b-button block variant="info">
-                    Iteration limit: {{ iteration.limit
-                    }}<b-form-input
-                      id="slider-iteration-limit"
-                      v-model="iteration.limit"
-                      type="range"
-                      min="1"
-                      max="10"
-                      step="1"
-                    ></b-form-input
-                  ></b-button> -->
-
-                  <b-form-group>
-                    <b-form-checkbox-group v-model="river.translation.checked" :options="river.translation.options"
-                      stacked></b-form-checkbox-group>
-                  </b-form-group>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <b-button block :variant="
-                    (river.visibility ? '' : 'outline-') + river.color
-                  " v-on:click="toggleFeatureVisibility('river')">River</b-button>
-                  <b-button-group class="d-flex mt-2 ">
-                    <b-button v-for="r in getRivers" :key="r.name"
-                      :variant="(river.visibility ? '' : 'outline-') + r.color"
-                      v-on:click="toggleFeatureVisibility('river', r.color)">{{ r.name }}
-                      {{
-                          getRiverTranslation(r.color)[0].toFixed(2) +
-                          "," +
-                          getRiverTranslation(r.color)[1].toFixed(2)
-                      }}
-                      <br />
-                      <span class="arrow" v-html="getRiverTranslation(r.color)[2]"></span>
-                    </b-button>
-                  </b-button-group>
-
-                  <b-button class="mt-2" block :variant="
-                    (metric.visibility ? '' : 'outline-') + 'primary'
-                  " v-on:click="showMetric(!metric.visibility)">Show metrics</b-button>
-
-                  <p>DeltaX: {{ metric.deltaX }}</p>
-                  <p>DeltaY: {{ metric.deltaY }}</p>
-                </td>
-                <td>
-                  <b-button block variant="primary">
-                    Corridor length: {{ corridor.length }}
-                    <b-form-input id="slider-corridor-length" v-model="corridor.length" type="range" min="5" max="20">
-                    </b-form-input>
-                  </b-button>
-
-                  <b-button block variant="info">
-                    River thickness: {{ river.width }}
-                    <b-form-input id="slider-river-width" v-model="river.width" type="range" min="1" max="10"
-                      @change="setRiverWidth()"></b-form-input>
-                  </b-button>
-
-                  <b-button block variant="info">
-                    River resolution: {{ river.spacing
-                    }}<b-form-input id="slider-river-space" v-model="river.spacing" type="range" min="100" max="230"
-                      step="5" @change="adjustRiver()"></b-form-input>
-                  </b-button>
                 </td>
               </tr>
             </tbody>
@@ -326,7 +260,7 @@ export default {
               `Name: ${d.properties.name} <br/> ` +
               `ID: ${d.properties.id} <br/> ` +
               `Population: ${d.properties.population} <br/> ` +
-              `Cardiovascular: ${d.properties.cardiovascular} per 100,000 <br/> ` +
+              `Cardiovascular: ${d.properties.cardiovascular} standardised mortality per 100,000 <br/> ` +
               `Alcohol: ${d.properties.alcohol} per 100,000<br/> ` +
               `Range: ${getNodeSize(d).toFixed(2)}%`
             );
@@ -351,15 +285,7 @@ export default {
         .attr("fill", "black")
         .attr("r", 0.5);
 
-      // original river layer
-      const river_layer = svg.append("g").attr("class", "river-layer");
-      for (const river of Object.keys(__VM.river.rivers)) {
-        const r = river_layer.append("g").attr("class", `${river}`);
-        r.append("g").attr("class", "river");
-        r.append("g").attr("class", "river-edge");
-      }
 
-      __VM.adjustRiver();
     },
     runFNOR() {
       const __VM = this;
@@ -437,25 +363,12 @@ export default {
           .attr("stroke-width", "0.3");
         // .attr("fill", __VM.colorVariant[__VM.node.color])
 
-        if (firstPass) {
-          __VM.testRiverCross(node, p_new, true);
-        } else {
-          __VM.moveNode(node, p_new);
-          // if (!node.attr("riverX")) {
-          __VM.testRiverCross(node, p_new, false);
-          // }
-        }
+
+        __VM.moveNode(node, p_new);
+
       }
 
-      if (firstPass) {
-        if (!__VM.getRiverTranslationStatic) {
-          __VM.calculateRiverTranslation();
-          for await (const river of Object.keys(__VM.river.rivers)) {
-            __VM.moveRiver(river);
-            await __VM.detectRiverXNodes(river);
-          }
-        }
-      }
+
 
       // get the count with nodeX (node crossings)
       const overlapCount = d3
@@ -790,6 +703,10 @@ export default {
           if (pip.isInside([p_last.x, p_last.y], corridor)) {
             // do not move the node in focus itself
             if (node_in_c.attr("nodeXCount") === null) {
+              if (node_in_c.attr("id") === "E38000246" && nodeSize > 17) {
+                const a = "b";
+              }
+
               moveNodeInCorridor(node_in_c, position_diff);
             }
           }
@@ -1636,11 +1553,7 @@ export default {
         button_disabled: false,
         continuous: true,
       },
-      datasets: [
-        // Under 75 mortality from cardiovascular disease per 100,000
-        "cardiovascular", "population",
-        // Emergency admissions for alcohol related liver disease per 100,000
-        "alcohol"],
+      datasets: ["cardiovascular", "population", "alcohol"],
       indicators: {
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
