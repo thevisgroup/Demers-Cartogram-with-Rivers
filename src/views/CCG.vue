@@ -79,14 +79,8 @@
                       <b-form-input type="number" v-model="node.maxSize"></b-form-input>
                     </b-input-group>
                   </div>
-
-                  <b-form-group label="Node size mapping">
-                    <b-form-radio-group v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMapping"
-                      @change="init()">
-                    </b-form-radio-group>
-                  </b-form-group>
-
                 </td>
+
                 <td>
                   <b-button block variant="primary" v-on:click="removeOverlap()" :disabled="step.button_disabled">Remove
                     overlaps: {{ iteration.count }}</b-button>
@@ -117,14 +111,37 @@
                   </b-form-group>
                 </td>
               </tr>
+
+              <tr>
+                <td>
+                  <b-form-group label="Node Size Mapping" label-size="lg">
+                    <b-form-radio-group v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMapping"
+                      @change="init()">
+                    </b-form-radio-group>
+                  </b-form-group>
+                </td>
+
+                <td>
+                  <b-form-group label="Node Color Mapping" label-size="lg">
+                    <b-form-radio-group v-model="node.nodeColorMappedTo" :options="node.nodeColorMapping"
+                      @change="init()">
+                    </b-form-radio-group>
+                  </b-form-group>
+                </td>
+              </tr>
+
+
               <tr>
                 <td>
                   <b-button block :variant="
                     (river.visibility ? '' : 'outline-') + river.color
                   " v-on:click="toggleFeatureVisibility('river')">River</b-button>
+                  <b-button block :variant="
+                    (vertex.visibility ? '' : 'outline-') + vertex.color
+                  " v-on:click="toggleFeatureVisibility('vertex')">Vertex</b-button>
                   <b-button-group class="d-flex mt-2 ">
                     <b-button v-for="r in getRivers" :key="r.name"
-                      :variant="(river.visibility ? '' : 'outline-') + r.color"
+                      :variant="(river.rivers[r.name.toLowerCase()].visibility ? '' : 'outline-') + r.color"
                       v-on:click="toggleFeatureVisibility('river', r.color)">{{ r.name }}
                       {{
                           getRiverTranslation(r.color)[0].toFixed(2) +
@@ -915,7 +932,6 @@ export default {
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
 
-      __VM[type].visibility = !__VM[type].visibility;
       let layer = `.${type}-layer`;
       if (type === "river") {
         // toggle the specific river
@@ -932,6 +948,8 @@ export default {
         }
         // toggle all rivers
         else {
+
+          __VM[type].visibility = !__VM[type].visibility;
           layer = ".river-layer";
 
           Object.values(__VM[type].rivers).forEach(
@@ -1055,10 +1073,10 @@ export default {
         `${__VM.river.width}px`
       );
 
-      d3.selectAll(".river > circle").attr(
-        "r",
-        `${__VM.river.width > 4 ? 4 : __VM.river.width}`
-      );
+      // d3.selectAll(".river > circle").attr(
+      //   "r",
+      //   1
+      // );
     },
     adjustRiver() {
       const __VM = this;
@@ -1148,10 +1166,12 @@ export default {
           .data(res)
           .enter()
           .append("circle")
+          .attr("class", "vertex-layer")
+          .attr("visibility", __VM.vertex.visibility ? "visible" : "hidden")
           .attr("fill", "red")
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
-          .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
+          .attr("r", 1);
         if (!__VM.getRiverTranslationStatic) {
           __VM.moveRiver(river);
         }
@@ -1644,7 +1664,7 @@ export default {
       indicators: {
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
-      timer: 10,
+      timer: 100,
       debug: false,
       corridor: {
         length: 30,
@@ -1654,6 +1674,10 @@ export default {
         deltaX: 0,
         deltaY: 0,
       },
+      vertex: {
+        visibility: false,
+        color: "info",
+      },
       metric: {
         visibility: false,
         deltaX: 0,
@@ -1662,7 +1686,11 @@ export default {
       node: {
         nodeMapToColor: false,
         nodeSizeMappedTo: 'population',
+        nodeColorMappedTo: 'cardiovascular',
         nodeSizeMapping: [
+          { text: "Uniform", value: "uniform" },
+        ],
+        nodeColorMapping: [
           { text: "Uniform", value: "uniform" },
         ],
         visibility: true,
@@ -1678,7 +1706,7 @@ export default {
       },
       river: {
         translation: {
-          limit: 2,
+          limit: 5,
           checked: [],
           options: [
             {
@@ -1694,9 +1722,9 @@ export default {
           ],
         },
         visibility: true,
-        width: 1,
+        width: 5,
         spacing: 200,
-        color: "info",
+        color: "primary",
         rivers: {
           thames: {
             visibility: true,
@@ -1764,9 +1792,12 @@ export default {
         success: "rgb(92, 184, 92, 45%)",
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
-        thames: "rgb(20, 84, 140, 75%)",
-        trent: "rgb(240, 173, 78, 75%)",
+        thames: "rgb(132, 196, 224, 75%)",
+        trent: "rgb(132, 196, 224, 75%)",
         ouse: "rgb(132, 196, 224, 75%)",
+        // thames: "rgb(20, 84, 140, 75%)",
+        // trent: "rgb(240, 173, 78, 75%)",
+        // ouse: "rgb(132, 196, 224, 75%)",
         blueRegion: "#ba68c8",
       },
     };
@@ -1815,6 +1846,9 @@ export default {
 
       // add dataset tp node mapping options
       __VM.node.nodeSizeMapping.push(
+        { text: dataset[0].toUpperCase() + dataset.slice(1), value: dataset }
+      )
+      __VM.node.nodeColorMapping.push(
         { text: dataset[0].toUpperCase() + dataset.slice(1), value: dataset }
       )
       // eslint-disable-next-line require-atomic-updates
@@ -1885,24 +1919,32 @@ export default {
 
 .btn-thames {
   color: #fff !important;
-  background-color: rgb(20, 84, 140) !important;
-  border-color: rgb(20, 84, 140) !important;
+  background-color: rgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+  /* background-color: rgb(20, 84, 140) !important;
+  border-color: rgb(20, 84, 140) !important; */
 }
 
 .btn-outline-thames {
-  color: rgb(20, 84, 140) !important;
-  border-color: rgb(20, 84, 140) !important;
+  color: rgbrgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+  /* color: rgb(20, 84, 140) !important;
+  border-color: rgb(20, 84, 140) !important; */
 }
 
 .btn-trent {
   color: #fff !important;
-  background-color: rgb(240, 173, 78) !important;
-  border-color: rgb(240, 173, 78) !important;
+  background-color: rgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+  /* background-color: rgb(240, 173, 78) !important;
+  border-color: rgb(240, 173, 78) !important; */
 }
 
 .btn-outline-trent {
-  color: rgb(240, 173, 78) !important;
-  border-color: rgb(240, 173, 78) !important;
+  color: rgbrgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+  /* color: rgb(240, 173, 78) !important;
+  border-color: rgb(240, 173, 78) !important; */
 }
 
 .btn-ouse {
