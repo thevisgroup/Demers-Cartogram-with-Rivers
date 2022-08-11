@@ -37,10 +37,10 @@
     \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers.}\label{alg:UpdateLayout}
     \textbf{Global variables:} \\
     $ \nodeList \gets $ a list of $ \node $ representing CCGs with the following properties: \\
-    \-\hspace{1em}  \textcolor{blue}{$\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river} \\
+    \-\hspace{1em}  $\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river \\
     $ \nodeSize \gets $ the current size of all nodes \\
     $ \nodeSizeMax \gets $ the maximum size of a node \\
-    \textcolor{blue}{ $ \riverList \gets $ a list of $ \river $ representing river features} \\
+    $ \riverList \gets $ a list of $ \river $ representing river features \\
     $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
 
     \textbf{Local variables:} \\
@@ -53,16 +53,13 @@
     \begin{algorithmic}[1]
         \Procedure{UpdateLayout}{}
         \While{$ \nodeSize < \nodeSizeMax $}
-            \State \textcolor{blue}{$ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}}
+            \State $ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}
             \While{$ \nodeListCross > 0 $}
 
                 \State $ \nodeListCross \gets 0 $
                 \State $ \nodeList \gets $ RemoveOverlap ($ \nodeList $)
-                \color{blue}
                 \State \Call{TranslateRiver}{$ \nodeList $}
                 \State $\nodeListCross \gets $ \Call{TranslateNode}{$ \nodeList $}
-
-                \color{black}
 
             \EndWhile
 
@@ -77,7 +74,6 @@
 
 \begin{algorithm}[tb!]
     \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
-    \color{blue}
     \textbf{Input:} \\
     $ \nodeList \gets $ a list of $ \node $ representing CCGs \\
 
@@ -118,7 +114,6 @@
 \begin{algorithm}[tb!]
     \caption{Procedure to translate node positions.}\label{alg:TranslateNode}
 
-    \color{blue}
     \textbf{Input:} \\
     $ \nodeList \gets $ a list of $ \node $ representing CCGs \\
 
