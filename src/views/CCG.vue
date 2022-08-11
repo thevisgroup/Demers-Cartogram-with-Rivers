@@ -139,7 +139,7 @@
                   <b-button block :variant="
                     (vertex.visibility ? '' : 'outline-') + vertex.color
                   " v-on:click="toggleFeatureVisibility('vertex')">Vertex</b-button>
-                  <b-button-group class="d-flex mt-2 ">
+                  <b-button-group class="d-flex mt-2">
                     <b-button v-for="r in getRivers" :key="r.name"
                       :variant="(river.rivers[r.name.toLowerCase()].visibility ? '' : 'outline-') + r.color"
                       v-on:click="toggleFeatureVisibility('river', r.color)">{{ r.name }}
@@ -944,13 +944,13 @@ export default {
             "visibility",
             __VM[type].rivers[name].visibility ? "visible" : "hidden"
           );
-          return;
         }
         // toggle all rivers
         else {
 
-          __VM[type].visibility = !__VM[type].visibility;
           layer = ".river-layer";
+
+          __VM[type].visibility = !__VM[type].visibility;
 
           Object.values(__VM[type].rivers).forEach(
             (r) => (r.visibility = __VM[type].visibility)
@@ -965,12 +965,15 @@ export default {
             );
           });
         }
-      }
+      } else {
 
-      d3.selectAll(layer).style(
-        "visibility",
-        __VM[type].visibility ? "visible" : "hidden"
-      );
+        __VM[type].visibility = !__VM[type].visibility;
+        d3.selectAll(layer).style(
+          "visibility",
+          __VM[type].visibility ? "visible" : "hidden"
+        );
+
+      }
     },
     setNodeSize(current, next, uniformed = false) {
       const __VM = this;
