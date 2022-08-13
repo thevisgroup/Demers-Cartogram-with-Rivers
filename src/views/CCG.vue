@@ -109,7 +109,7 @@
                 <td>
                   <b-form-group label="Node Color Mapping" label-size="lg">
                     <b-form-radio-group v-model="node.nodeColorMappedTo" :options="node.nodeColorMapping"
-                      @change="init()">
+                      @change="changeColormap()">
                     </b-form-radio-group>
                   </b-form-group>
                 </td>
@@ -191,26 +191,7 @@ export default {
     async init() {
       const __VM = this;
 
-      const getNodeSize = (d) => {
 
-        let current, range, minimum;
-
-        switch (__VM.node.nodeSizeMappedTo) {
-          case "uniform":
-            current = 1;
-            range = 1;
-            minimum = 0;
-            break;
-          default:
-            current = d.properties[__VM.node.nodeSizeMappedTo];
-            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            break;
-        }
-
-        const result = Math.abs(current - minimum) / range
-        return result;
-      };
 
       d3.selectAll("#map").remove();
 
@@ -266,6 +247,7 @@ export default {
         .attr("fill", "none")
         // .attr("fill_pip", (d) => getBorderingColor(d))
         .attr("ccg_id", (d) => d.properties.id)
+        .attr("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
         .on("click", function (e, d) {
           console.log(d.properties.id);
         });
@@ -282,29 +264,29 @@ export default {
 
       nodes
         .append("rect")
-        .attr("colormap", (d) => colormap(getNodeSize(d)))
         .attr("x", (d) => {
           const centroid = path.centroid(d);
 
           __VM.node.history[d.properties.id].insertLast(
-            new Point(centroid[0], centroid[1], getNodeSize(d))
+            new Point(centroid[0], centroid[1], __VM.getNodeSize(d, "size"))
           );
 
-          return centroid[0] - getNodeSize(d) / 2;
+          return centroid[0] - __VM.getNodeSize(d, "size") / 2;
         })
-        .attr("y", (d) => path.centroid(d)[1] - getNodeSize(d) / 2)
+        .attr("y", (d) => path.centroid(d)[1] - __VM.getNodeSize(d, "size") / 2)
         .attr("id", (d) => d.properties.id)
-        .attr("width", (d) => getNodeSize(d))
-        .attr("height", (d) => getNodeSize(d))
-        .attr("rate", (d) => 1 + getNodeSize(d))
+        .attr("width", (d) => __VM.getNodeSize(d, "size"))
+        .attr("height", (d) => __VM.getNodeSize(d, "size"))
+        .attr("rate", (d) => 1 + __VM.getNodeSize(d, "size"))
         // .attr("width", __VM.node.size)
         // .attr("height", __VM.node.size)
         .attr("stroke", "black")
         .attr("stroke-width", "0.3")
         // .attr("fill", __VM.colorVariant[__VM.node.color])
         // .attr("original_fill", __VM.colorVariant[__VM.node.color])
-        .attr("fill", (d) => colormap(1 - getNodeSize(d)))
-        .attr("original_fill", (d) => colormap(1 - getNodeSize(d)))
+        .attr("colormap", (d) => colormap(__VM.getNodeSize(d, "size")))
+        .attr("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
+        .attr("original_fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
         .on("mouseover", function (e, d) {
           tooltip
             .style("visibility", "visible")
@@ -314,7 +296,7 @@ export default {
               `Population: ${d.properties.population} <br/> ` +
               `Cardiovascular: ${d.properties.cardiovascular} per 100,000 <br/> ` +
               `Alcohol: ${d.properties.alcohol} per 100,000<br/> ` +
-              `Range: ${getNodeSize(d).toFixed(2)}%`
+              `Range: ${__VM.getNodeSize(d, "size").toFixed(2)}%`
             );
         })
         .on("mousemove", function (e) {
@@ -343,9 +325,57 @@ export default {
         const r = river_layer.append("g").attr("class", `${river}`);
         r.append("g").attr("class", "river");
         r.append("g").attr("class", "river-edge");
+        __VM.river.rivers[river].translate = {
+          x: 0,
+          y: 0,
+          finalX: 0,
+          finalXOld: 0,
+          finalY: 0,
+          finalYOld: 0,
+          nodeXCount: 0,
+        };
+      }
+      __VM.adjustRiver();
+    },
+    getNodeSize(d, type) {
+      const __VM = this;
+
+      let current, range, minimum, map;
+
+      if (type === "size") {
+        map = __VM.node.nodeSizeMappedTo
+      } else if (type === "color") {
+        map = __VM.node.nodeColorMappedTo
       }
 
-      __VM.adjustRiver();
+      switch (map) {
+        case "uniform":
+          current = 1;
+          range = 1;
+          minimum = 0;
+          break;
+        default:
+          current = d.properties[__VM.node.nodeColorMappedTo];
+          range = __VM.indicators[__VM.node.nodeColorMappedTo].max - __VM.indicators[__VM.node.nodeColorMappedTo].min;
+          minimum = __VM.indicators[__VM.node.nodeColorMappedTo].min;
+          break;
+      }
+
+      const result = Math.abs(current - minimum) / range
+      return result;
+    },
+    changeColormap() {
+      const __VM = this;
+
+      const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
+
+      const svg = __VM.svg;
+      svg.select(".ccg-layer").selectAll("path").attr("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
+
+      svg.select(".node-layer").selectAll("rect").attr("colormap", (d) => colormap(__VM.getNodeSize(d, "size")))
+        .attr("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
+        .attr("original_fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
+
     },
     runFNOR() {
       const __VM = this;
@@ -1047,13 +1077,6 @@ export default {
         ).coordinates;
 
         points = [].concat(...points);
-
-        // sort by x first
-        // points = [].concat(...points).sort(([a, b], [c, d]) => {
-        //   console.log(a, b, c, d);
-        //   return c - a;
-        //   // return d - b;
-        // });
 
         const spacing = Number(__VM.river.spacing);
 
