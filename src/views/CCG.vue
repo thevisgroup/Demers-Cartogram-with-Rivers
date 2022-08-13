@@ -47,21 +47,6 @@
                   <b-button block :variant="(node.visibility ? '' : 'outline-') + node.color"
                     v-on:click="toggleFeatureVisibility('node')">Node</b-button>
 
-                  <!-- <b-button
-                    block
-                    :variant="node.nodeSizeUniformed ? 'danger' : 'primary'"
-                    v-on:click="setNodeSize(!node.nodeSizeUniformed)"
-                    >{{ node.nodeSizeUniformed ? "Variable" : "Uniform" }} Rect
-                    Size</b-button
-                  > -->
-
-                  <!-- <b-button
-                    block
-                    :variant="node.nodeMapToColor ? 'danger' : 'primary'"
-                    v-on:click="setNodeColor()"
-                    >Map to
-                    {{ node.nodeMapToColor ? "Size" : "Color" }}</b-button
-                  > -->
                   <b-button block :variant="(centroid.visibility ? '' : 'outline-') + 'info'"
                     v-on:click="toggleFeatureVisibility('centroid')">Centroid</b-button>
 
@@ -149,7 +134,6 @@
                           getRiverTranslation(r.color)[1].toFixed(2)
                       }}
                       <br />
-                      <span class="arrow" v-html="getRiverTranslation(r.color)[2]"></span>
                     </b-button>
                   </b-button-group>
 
@@ -244,21 +228,6 @@ export default {
       );
 
       const svg = __VM.svg;
-
-      // generate an arrow
-      svg
-        .append("svg:defs")
-        .append("svg:marker")
-        .attr("id", "arrow")
-        .attr("refX", 1.5)
-        .attr("refY", 1.5)
-        .attr("markerWidth", 3)
-        .attr("markerHeight", 3)
-        .attr("orient", "auto-start-reverse")
-        .append("svg:path")
-        .attr("d", "M0,0 L0,3 L3,1.5")
-        .attr("stroke", "none")
-        .attr("fill", "black");
 
       function zoomed(event) {
         const { transform } = event;
@@ -1034,28 +1003,15 @@ export default {
         d3.select(r).attr("fill", color);
       };
 
-      if (__VM.node.nodeMapToColor) {
-        if (singleRect) {
-          changeColor(singleRect, d3.select(singleRect).attr("colormap"));
-        } else {
-          d3.selectAll(".node-layer > g> rect")._groups[0].forEach((r) => {
-            changeColor(r, __VM.colorVariant[__VM.node.color]);
-          });
-
-          __VM.node.nodeMapToColor = false;
-        }
+      if (singleRect) {
+        changeColor(singleRect, __VM.colorVariant[__VM.node.color]);
       } else {
-        if (singleRect) {
-          changeColor(singleRect, __VM.colorVariant[__VM.node.color]);
-        } else {
-          d3.selectAll(".node-layer > g > rect")._groups[0].forEach((r) => {
-            const colormap = d3.select(r).attr("colormap");
-            changeColor(r, colormap);
-          });
-
-          __VM.node.nodeMapToColor = true;
-        }
+        d3.selectAll(".node-layer > g > rect")._groups[0].forEach((r) => {
+          const colormap = d3.select(r).attr("colormap");
+          changeColor(r, colormap);
+        });
       }
+
     },
     highlightBorderingRegion(type) {
       const __VM = this;
@@ -1667,7 +1623,7 @@ export default {
       indicators: {
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
-      timer: 100,
+      timer: 10,
       debug: false,
       corridor: {
         length: 30,
@@ -1687,7 +1643,6 @@ export default {
         deltaY: 0,
       },
       node: {
-        nodeMapToColor: false,
         nodeSizeMappedTo: 'population',
         nodeColorMappedTo: 'cardiovascular',
         nodeSizeMapping: [
@@ -1967,10 +1922,6 @@ export default {
 
 .btn-group .btn:not(:last-child) {
   border-right: 2px solid white !important;
-}
-
-.arrow {
-  font-size: 20px;
 }
 
 g.legend>rect {
