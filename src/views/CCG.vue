@@ -336,6 +336,7 @@ export default {
         };
       }
       __VM.adjustRiver();
+      __VM.iteration = { current: 0, limit: 1, count: 0 };
     },
     getNodeSize(d, type) {
       const __VM = this;
@@ -457,18 +458,19 @@ export default {
           __VM.testRiverCross(node, p_new, true);
         } else {
           __VM.moveNode(node, p_new);
-          // if (!node.attr("riverX")) {
-          __VM.testRiverCross(node, p_new, false);
-          // }
+          __VM.testRiverCross(node, p_new, !__VM.getRiverTranslationNoCrossing);
+
         }
       }
 
       if (firstPass) {
-        if (!__VM.getRiverTranslationStatic) {
-          __VM.calculateRiverTranslation();
-          for await (const river of Object.keys(__VM.river.rivers)) {
-            __VM.moveRiver(river);
-            await __VM.detectRiverXNodes(river);
+        if (__VM.getRiverTranslationNoCrossing) {
+          if (!__VM.getRiverTranslationStatic) {
+            __VM.calculateRiverTranslation();
+            for await (const river of Object.keys(__VM.river.rivers)) {
+              __VM.moveRiver(river);
+              await __VM.detectRiverXNodes(river);
+            }
           }
         }
       }
@@ -498,11 +500,17 @@ export default {
         }
       });
 
+
       await __VM.delay(__VM.timer).then(async () => {
         if (__VM.checkAvgNodeSize() > __VM.node.maxSize) {
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
           d3.selectAll(".crossedArea").remove();
+
+          if (!__VM.getRiverTranslationNoCrossing) {
+            __VM.drawCrossedNode();
+          }
+
           return
         } else {
           if (__VM.step.continuous) {
@@ -851,6 +859,8 @@ export default {
     testRiverCross(node, p, firstPass) {
       const __VM = this;
 
+      let crossed = false;
+
       const p_last = firstPass
         ? __VM.getNodeHistory(node).last.value
         : __VM.getNodeHistory(node).secondLast.value;
@@ -868,6 +878,12 @@ export default {
 
       // if there is a crossing
       if (crossings[0] > 0) {
+        crossed = true;
+        if (!__VM.getRiverTranslationNoCrossing) {
+          node.attr("crossed", true);
+          return
+        }
+
         // if it's the first pass, calculate the distance for river translations
         // do not move the node after testing
         if (firstPass) {
@@ -931,6 +947,7 @@ export default {
           }
         }
       }
+      return crossed;
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
@@ -1619,6 +1636,40 @@ export default {
       // __VM.metric.deltaX = Number(__VM.metric.deltaX).toFixed(10);
       // __VM.metric.deltaY = Number(__VM.metric.deltaY).toFixed(10);
     },
+    drawCrossedNode() {
+      d3.selectAll(".crossed-line").remove();
+      for (let [i, node] of d3
+        .selectAll(".node-layer > g > rect[crossed='true']")
+        ._groups[0].entries()) {
+
+        node = d3.select(node);
+        const nodeX = Number(node.attr("x"));
+        const nodeY = Number(node.attr("y"));
+        const nodeSize = Number(node.attr("width"));
+
+        const g = node.select(function () { return this.parentNode; })
+
+        g.append("path")
+          .attr("class", "crossed-line")
+          .attr("d", d3.line()([
+            [nodeX, nodeY],
+            [nodeX + nodeSize, nodeY + nodeSize],
+          ]))
+          .attr("stroke", "red")
+          .attr("stroke-width", "1px")
+          .attr("fill", "none");
+
+        g.append("path")
+          .attr("class", "crossed-line")
+          .attr("d", d3.line()([
+            [nodeX + nodeSize, nodeY],
+            [nodeX, nodeY + nodeSize],
+          ]))
+          .attr("stroke", "red")
+          .attr("stroke-width", "1px")
+          .attr("fill", "none");
+      }
+    },
     checkAvgNodeSize() {
       const __VM = this;
 
@@ -1685,23 +1736,23 @@ export default {
         maxSize: 15,
         sizeStep: 0.1,
         nodeX: {
-          stroke_width: "0.7",
+          stroke_width: "1",
         },
         history: {},
       },
       river: {
         translation: {
           limit: 5,
-          checked: [],
+          checked: ["no-crossing"],
           options: [
             {
-              text: "Disable River Translation",
-              value: "static",
+              text: "Disallow River Crossing",
+              value: "no-crossing",
               disabled: false,
             },
             {
-              text: "Repeat River Translation",
-              value: "repeat",
+              text: "Disable River Translation",
+              value: "static",
               disabled: false,
             },
           ],
@@ -1794,15 +1845,15 @@ export default {
     getRiverTranslationStatic: function () {
       return this.river.translation.checked.includes("static");
     },
-    getRiverTranslationRepeat: function () {
-      return this.river.translation.checked.includes("repeat");
+    getRiverTranslationNoCrossing: function () {
+      return this.river.translation.checked.includes("no-crossing");
     },
   },
   watch: {
     "river.translation.checked": {
       deep: true,
       handler(val) {
-        this.river.translation.options[1].disabled = val.includes("static");
+        this.river.translation.options[1].disabled = !val.includes("no-crossing");
       },
     },
   },
