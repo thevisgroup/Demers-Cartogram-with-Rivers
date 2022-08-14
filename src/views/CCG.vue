@@ -497,6 +497,7 @@ export default {
           d3.selectAll(".crossedArea").remove();
         }
       });
+
       await __VM.delay(__VM.timer).then(async () => {
         if (__VM.checkAvgNodeSize() > __VM.node.maxSize) {
           __VM.iteration.current = 0;
@@ -504,7 +505,9 @@ export default {
           d3.selectAll(".crossedArea").remove();
           return
         } else {
-          await __VM.removeOverlap();
+          if (__VM.step.continuous) {
+            await __VM.removeOverlap();
+          }
         }
       });
     },
