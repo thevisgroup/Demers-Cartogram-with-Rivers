@@ -630,6 +630,7 @@ export default {
                 tempPoint = new Point(415, 285, nodeSize);
               } else {
                 tempPoint = new Point(300, 350, nodeSize);
+                tempPoint = new Point(400, 150, nodeSize);
               }
             }
 
@@ -648,7 +649,7 @@ export default {
             break;
         }
 
-        tempPoint.y = pSlope * (tempPoint.x - p_previous.x) + p_previous.y;
+        tempPoint.y = pSlope * tempPoint.x - p_previous.x + p_previous.y;
 
         const derivePoint = (previous, current, length) => {
           const dx = current.x - previous.x + sizeDiff;
