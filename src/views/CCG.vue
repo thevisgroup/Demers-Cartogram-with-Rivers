@@ -191,8 +191,6 @@ export default {
     async init() {
       const __VM = this;
 
-
-
       d3.selectAll("#map").remove();
 
       __VM.svg = d3.select("#base-layer").append("g").attr("id", "map");
@@ -861,9 +859,11 @@ export default {
 
       let crossed = false;
 
-      const p_last = firstPass
-        ? __VM.getNodeHistory(node).last.value
-        : __VM.getNodeHistory(node).secondLast.value;
+      let p_last = __VM.getNodeHistory(node).last.value;
+
+      if (p_last.x === p.x && p_last.y === p.y && __VM.getNodeHistory(node).size > 1) {
+        p_last = __VM.getNodeHistory(node).secondLast.value;
+      }
 
       const sizeDiff = p_last.size - p.size;
 
@@ -875,6 +875,10 @@ export default {
           [p.x, p.y],
         ])
       );
+
+      if (node.attr("id") === "E38000141" && firstPass) {
+        console.log(crossings);
+      }
 
       // if there is a crossing
       if (crossings[0] > 0) {
