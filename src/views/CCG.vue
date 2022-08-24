@@ -237,19 +237,7 @@ export default {
         .append("g")
         .attr("class", "ccg-layer")
         .attr("stroke", "#000")
-        .selectAll("path")
-        .data(__VM.CCG)
-        .join("path")
-        .attr("vector-effect", "non-scaling-stroke")
-        .attr("d", path)
-        .attr("fill", "none")
-        // .attr("fill_pip", (d) => getBorderingColor(d))
-        .attr("ccg_id", (d) => d.properties.id)
-        .attr("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
-        .on("click", function (e, d) {
-          console.log(d.properties.id);
-        });
-
+      __VM.initCCG()
       // CCG data layer
       const nodes = svg
         .append("g")
@@ -335,6 +323,28 @@ export default {
       }
       __VM.adjustRiver();
       __VM.iteration = { current: 0, limit: 1, count: 0 };
+    },
+    initCCG() {
+      const __VM = this;
+      const path = d3.geoPath();
+
+      const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
+      d3.select(".ccg-layer > path").remove();
+      // CCG layer
+
+      d3.select(".ccg-layer").selectAll("path")
+        .data(__VM.CCG)
+        .join("path")
+        .attr("vector-effect", "non-scaling-stroke")
+        .attr("d", path)
+        .attr("fill", "none")
+        // .attr("fill_pip", (d) => getBorderingColor(d))
+        .attr("ccg_id", (d) => d.properties.id)
+        .attr("fill", (d) => __VM.node.visibility ? "white" : colormap(1 - __VM.getNodeSize(d, "color")))
+        .on("click", function (e, d) {
+          console.log(d.properties.id);
+        });
+
     },
     getNodeSize(d, type) {
       const __VM = this;
@@ -1858,6 +1868,12 @@ export default {
       deep: true,
       handler(val) {
         this.river.translation.options[1].disabled = !val.includes("no-crossing");
+      },
+    },
+    "node.visibility": {
+      deep: true,
+      handler() {
+        this.initCCG();
       },
     },
   },
