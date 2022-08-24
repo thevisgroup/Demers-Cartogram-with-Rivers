@@ -44,6 +44,9 @@
             <tbody>
               <tr>
                 <td>
+                  <b-button block :variant="(choropleth.visibility ? '' : 'outline-') + choropleth.color"
+                    v-on:click="toggleFeatureVisibility('choropleth')">Choropleth</b-button>
+
                   <b-button block :variant="(node.visibility ? '' : 'outline-') + node.color"
                     v-on:click="toggleFeatureVisibility('node')">Node</b-button>
 
@@ -100,15 +103,14 @@
               <tr>
                 <td>
                   <b-form-group label="Node Size Mapping" label-size="lg">
-                    <b-form-radio-group v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMapping"
-                      @change="init()">
+                    <b-form-radio-group v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMap" @change="init()">
                     </b-form-radio-group>
                   </b-form-group>
                 </td>
 
                 <td>
                   <b-form-group label="Node Color Mapping" label-size="lg">
-                    <b-form-radio-group v-model="node.nodeColorMappedTo" :options="node.nodeColorMapping"
+                    <b-form-radio-group v-model="node.nodeColorMappedTo" :options="node.nodeColorMap"
                       @change="changeColormap()">
                     </b-form-radio-group>
                   </b-form-group>
@@ -235,7 +237,7 @@ export default {
       // CCG layer
       svg
         .append("g")
-        .attr("class", "ccg-layer")
+        .attr("class", "choropleth-layer")
         .attr("stroke", "#000")
       __VM.initCCG()
       // CCG data layer
@@ -329,10 +331,10 @@ export default {
       const path = d3.geoPath();
 
       const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
-      d3.select(".ccg-layer > path").remove();
+      d3.select(".choropleth-layer > path").remove();
       // CCG layer
 
-      d3.select(".ccg-layer").selectAll("path")
+      d3.select(".choropleth-layer").selectAll("path")
         .data(__VM.CCG)
         .join("path")
         .attr("vector-effect", "non-scaling-stroke")
@@ -340,7 +342,7 @@ export default {
         .attr("fill", "none")
         // .attr("fill_pip", (d) => getBorderingColor(d))
         .attr("ccg_id", (d) => d.properties.id)
-        .attr("fill", (d) => __VM.node.visibility ? "white" : colormap(1 - __VM.getNodeSize(d, "color")))
+        .attr("fill", (d) => __VM.node.visibility ? "none" : colormap(1 - __VM.getNodeSize(d, "color")))
         .on("click", function (e, d) {
           console.log(d.properties.id);
         });
@@ -350,11 +352,13 @@ export default {
       const __VM = this;
 
       let current, range, minimum, map;
-
       if (type === "size") {
-        map = __VM.node.nodeSizeMappedTo
+        map = __VM.node.nodeSizeMappedTo;
       } else if (type === "color") {
-        map = __VM.node.nodeColorMappedTo
+        map = __VM.node.nodeColorMappedTo;
+        if (map === "none") {
+          return 1;
+        }
       }
 
       switch (map) {
@@ -379,11 +383,11 @@ export default {
       const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
 
       const svg = __VM.svg;
-      svg.select(".ccg-layer").selectAll("path").attr("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
+      svg.select(".choropleth-layer").selectAll("path").attr("fill", (d) => __VM.node.visibility ? "white" : colormap(1 - __VM.getNodeSize(d, "color")))
 
-      svg.select(".node-layer").selectAll("rect").attr("colormap", (d) => colormap(__VM.getNodeSize(d, "size")))
-        .attr("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
-        .attr("original_fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
+      svg.select(".node-layer").selectAll("rect").attr("colormap", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(__VM.getNodeSize(d, "color")))
+        .attr("fill", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(1 - __VM.getNodeSize(d, "color")))
+        .attr("original_fill", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(1 - __VM.getNodeSize(d, "color")))
 
     },
     runFNOR() {
@@ -885,10 +889,6 @@ export default {
           [p.x, p.y],
         ])
       );
-
-      if (node.attr("id") === "E38000141" && firstPass) {
-        console.log(crossings);
-      }
 
       // if there is a crossing
       if (crossings[0] > 0) {
@@ -1725,6 +1725,10 @@ export default {
         deltaX: 0,
         deltaY: 0,
       },
+      choropleth: {
+        visibility: true,
+        color: "secondary",
+      },
       vertex: {
         visibility: false,
         color: "info",
@@ -1737,10 +1741,11 @@ export default {
       node: {
         nodeSizeMappedTo: 'population',
         nodeColorMappedTo: 'cardiovascular',
-        nodeSizeMapping: [
+        nodeSizeMap: [
           { text: "Uniform", value: "uniform" },
         ],
-        nodeColorMapping: [
+        nodeColorMap: [
+          { text: "None", value: "none" },
           { text: "Uniform", value: "uniform" },
         ],
         visibility: true,
@@ -1901,10 +1906,10 @@ export default {
       }
 
       // add dataset tp node mapping options
-      __VM.node.nodeSizeMapping.push(
+      __VM.node.nodeSizeMap.push(
         { text: dataset[0].toUpperCase() + dataset.slice(1), value: dataset }
       )
-      __VM.node.nodeColorMapping.push(
+      __VM.node.nodeColorMap.push(
         { text: dataset[0].toUpperCase() + dataset.slice(1), value: dataset }
       )
       // eslint-disable-next-line require-atomic-updates
