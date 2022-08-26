@@ -368,9 +368,9 @@ export default {
           minimum = 0;
           break;
         default:
-          current = d.properties[__VM.node.nodeColorMappedTo];
-          range = __VM.indicators[__VM.node.nodeColorMappedTo].max - __VM.indicators[__VM.node.nodeColorMappedTo].min;
-          minimum = __VM.indicators[__VM.node.nodeColorMappedTo].min;
+          current = d.properties[map];
+          range = __VM.indicators[map].max - __VM.indicators[map].min;
+          minimum = __VM.indicators[map].min;
           break;
       }
 
@@ -449,17 +449,17 @@ export default {
           .attr("stroke", () => {
             let res = "black";
 
-            if (node.attr("nodeXCount")) {
-              res = "blue";
-            }
+            // if (node.attr("nodeXCount")) {
+            //   res = "blue";
+            // }
 
-            if (node.attr("riverX")) {
-              res = "red";
-            }
+            // if (node.attr("riverX")) {
+            //   res = "red";
+            // }
 
-            if (node.attr("nodeXCount") && node.attr("riverX")) {
-              res = "purple";
-            }
+            // if (node.attr("nodeXCount") && node.attr("riverX")) {
+            //   res = "purple";
+            // }
 
             return res;
           })
