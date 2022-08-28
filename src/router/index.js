@@ -11,9 +11,9 @@ const routes = [
         // component: Home,
     },
     {
-        path: '/riverless',
-        name: 'Riverless',
-        component: () => import(/* webpackChunkName: "US" */ '../views/riverless.vue'),
+        path: '/T1',
+        name: 'T1',
+        component: () => import(/* webpackChunkName: "US" */ '../views/T1.vue'),
         // component: Home,
     },
 ];

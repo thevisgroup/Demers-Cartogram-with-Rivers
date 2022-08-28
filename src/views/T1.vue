@@ -1,104 +1,22 @@
 <template>
   <b-container fluid>
     <b-row>
-      <b-col cols="8">
+      <b-col cols="6">
         <div>
-          <svg id="base-layer" viewBox="0,0,800,800" stroke-linejoin="round" stroke-linecap="round">
+          <svg id="choropleth-layer" viewBox="0,0,800,800" stroke-linejoin="round" stroke-linecap="round">
             <rect width="800" height="800" style="fill: none; stroke-width: 4; stroke: rgb(43, 222, 221)" />
-
-            <g class="legend">
-              <rect fill="green" stroke="black" stroke-width="2" x="2" y="5"></rect>
-              <text x="22" y="18">node</text>
-
-              <rect fill="green" stroke="pink" stroke-width="2" x="82" y="5"></rect>
-              <text x="102" y="18">node pushed</text>
-
-              <rect fill="green" stroke="red" stroke-width="2" x="2" y="27"></rect>
-              <text x="22" y="40">riverX</text>
-
-              <rect fill="green" stroke="blue" stroke-width="2" x="2" y="49"></rect>
-              <text x="22" y="62">nodeX</text>
-
-              <rect fill="blue" x="82" y="49"></rect>
-              <text x="102" y="62">nodeX stalemate</text>
-
-              <rect fill="green" stroke="purple" stroke-width="2" x="2" y="71"></rect>
-              <text x="22" y="84">riverX + nodeX</text>
-
-              <!-- rect y= last rect y + 17, text y = rect y +13 -->
-            </g>
             <rect width="100%" height="100%" fill="none" pointer-events="all"></rect>
-            <g id="map"></g>
+            <g id="choropleth-map"></g>
           </svg>
         </div>
       </b-col>
-      <b-col cols="4">
-        <div class="table-responsive option_table">
-          <table class="table table-bordered table-striped table-hover table-borderless">
-            <thead>
-              <tr>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <b-button block :variant="(node.visibility ? '' : 'outline-') + node.color"
-                    v-on:click="toggleFeatureVisibility('node')">Node</b-button>
-
-                  <!-- <b-button
-                    block
-                    :variant="node.nodeSizeUniformed ? 'danger' : 'primary'"
-                    v-on:click="setNodeSize(!node.nodeSizeUniformed)"
-                    >{{ node.nodeSizeUniformed ? "Variable" : "Uniform" }} Rect
-                    Size</b-button
-                  > -->
-
-                  <!-- <b-button
-                    block
-                    :variant="node.nodeMapToColor ? 'danger' : 'primary'"
-                    v-on:click="setNodeColor()"
-                    >Map to
-                    {{ node.nodeMapToColor ? "Size" : "Color" }}</b-button
-                  > -->
-                  <b-button block :variant="(centroid.visibility ? '' : 'outline-') + 'info'"
-                    v-on:click="toggleFeatureVisibility('centroid')">Centroid</b-button>
-
-                  <div class="my-2">
-                    <b-input-group size="sm">
-                      <b-input-group-prepend is-text><b>Node Size</b></b-input-group-prepend>
-                      <b-form-input size="sm" id="slider-node-size" v-model="node.size" type="range" min="0.1"
-                        :max="node.maxSize" step="0.1"></b-form-input>
-                    </b-input-group>
-
-                    <b-input-group size="sm">
-                      <b-input-group-prepend is-text><b>Current</b></b-input-group-prepend>
-                      <b-form-input type="number" v-model="node.size"></b-form-input>
-                      <b-input-group-prepend is-text><b>Max</b></b-input-group-prepend>
-                      <b-form-input type="number" v-model="node.maxSize"></b-form-input>
-                    </b-input-group>
-                  </div>
-
-                  <b-form-group label="Node size mapping">
-                    <b-form-radio-group v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMapping"
-                      @change="init()">
-                    </b-form-radio-group>
-                  </b-form-group>
-
-                </td>
-                <td>
-                  <b-button block variant="primary" v-on:click="removeOverlap()" :disabled="step.button_disabled">Remove
-                    overlaps: {{ iteration.count }}</b-button>
-
-                  <b-form-checkbox v-model="step.continuous" name="check-button" switch>
-                    continuous mode: {{ step.continuous }}
-                  </b-form-checkbox>
-
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <b-col cols="6">
+        <div>
+          <svg id="base-layer" viewBox="0,0,800,800" stroke-linejoin="round" stroke-linecap="round">
+            <rect width="800" height="800" style="fill: none; stroke-width: 4; stroke: rgb(43, 222, 221)" />
+            <rect width="100%" height="100%" fill="none" pointer-events="all"></rect>
+            <g id="map"></g>
+          </svg>
         </div>
       </b-col>
     </b-row>
@@ -121,74 +39,59 @@ import Point from "../model/Point";
 export default {
   name: "HomeView",
   methods: {
-    async init() {
+    initChoropleth() {
       const __VM = this;
 
-      const getNodeSize = (d) => {
+      d3.selectAll("#choropleth-map").remove();
 
-        let current, range, minimum;
+      const svg = d3.select("#choropleth-layer").append("g").attr("id", "choropleth-map").attr("transform", "translate(-186,-183) scale(1.6)");
 
-        switch (__VM.node.nodeSizeMappedTo) {
-          case "uniform":
-            current = 1;
-            range = 1;
-            minimum = 0;
-            break;
-          default:
-            current = d.properties[__VM.node.nodeSizeMappedTo];
-            range = __VM.indicators[__VM.node.nodeSizeMappedTo].max - __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            minimum = __VM.indicators[__VM.node.nodeSizeMappedTo].min;
-            break;
-        }
+      svg
+        .append("g")
+        .attr("class", "choropleth")
+        .attr("stroke", "#000")
 
-        const result = Math.abs(current - minimum) / range
-        return result;
-      };
+      const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
+      d3.select(".choropleth > path").remove();
+      // CCG layer
+
+
+      const blink = () => {
+        d3.select("path[ccg_id='E38000243']")
+          .transition()
+          .duration(1000)
+          .style("fill", "rgb(0,0,0)")
+          .transition()
+          .duration(1000)
+          .style("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
+          .on("end", blink);
+      }
+
+      d3.select(".choropleth").selectAll("path")
+        .data(__VM.CCG)
+        .join("path")
+        .attr("vector-effect", "non-scaling-stroke")
+        .attr("d", d3.geoPath())
+        .attr("fill", "none")
+        // .attr("fill_pip", (d) => getBorderingColor(d))
+        .attr("ccg_id", (d) => d.properties.id)
+        .attr("fill", (d) => {
+          return colormap(1 - __VM.getNodeSize(d, "color"))
+        })
+        .on("click", function (e, d) {
+          console.log(d.properties.id);
+        });
+
+      blink()
+    },
+    init() {
+      const __VM = this;
 
       d3.selectAll("#map").remove();
 
-      __VM.svg = d3.select("#base-layer").append("g").attr("id", "map");
-
-      d3.select("#base-layer").call(
-        d3
-          .zoom()
-          .extent([
-            [0, 0],
-            [1000, 800],
-          ])
-          .scaleExtent([1, 15])
-          .on("zoom", zoomed)
-      );
+      __VM.svg = d3.select("#base-layer").append("g").attr("id", "map").attr("transform", "translate(-186,-183) scale(1.6)");
 
       const svg = __VM.svg;
-
-      // generate an arrow
-      svg
-        .append("svg:defs")
-        .append("svg:marker")
-        .attr("id", "arrow")
-        .attr("refX", 1.5)
-        .attr("refY", 1.5)
-        .attr("markerWidth", 3)
-        .attr("markerHeight", 3)
-        .attr("orient", "auto-start-reverse")
-        .append("svg:path")
-        .attr("d", "M0,0 L0,3 L3,1.5")
-        .attr("stroke", "none")
-        .attr("fill", "black");
-
-      function zoomed(event) {
-        const { transform } = event;
-        d3.select("#map").attr("transform", transform);
-        d3.select("#map").attr("stroke-width", 1 / transform.k);
-        __VM.zoom = transform;
-      }
-
-      // avoid resetting zoom level
-      if (__VM.zoom) {
-        d3.select("#map").attr("transform", __VM.zoom);
-        d3.select("#map").attr("stroke-width", 1 / __VM.zoom.k);
-      }
 
       // tooltip
       // eslint-disable-next-line no-unused-vars
@@ -200,23 +103,6 @@ export default {
       const path = d3.geoPath();
 
       const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
-
-      // CCG layer
-      svg
-        .append("g")
-        .attr("class", "ccg-layer")
-        .attr("stroke", "#000")
-        .selectAll("path")
-        .data(__VM.CCG)
-        .join("path")
-        .attr("vector-effect", "non-scaling-stroke")
-        .attr("d", path)
-        .attr("fill", "none")
-        // .attr("fill_pip", (d) => getBorderingColor(d))
-        .attr("ccg_id", (d) => d.properties.id)
-        .on("click", function (e, d) {
-          console.log(d.properties.id);
-        });
 
       // CCG data layer
       const nodes = svg
@@ -230,29 +116,29 @@ export default {
 
       nodes
         .append("rect")
-        .attr("colormap", (d) => colormap(getNodeSize(d)))
         .attr("x", (d) => {
           const centroid = path.centroid(d);
 
           __VM.node.history[d.properties.id].insertLast(
-            new Point(centroid[0], centroid[1], getNodeSize(d))
+            new Point(centroid[0], centroid[1], __VM.getNodeSize(d, "size"))
           );
 
-          return centroid[0] - getNodeSize(d) / 2;
+          return centroid[0] - __VM.getNodeSize(d, "size") / 2;
         })
-        .attr("y", (d) => path.centroid(d)[1] - getNodeSize(d) / 2)
+        .attr("y", (d) => path.centroid(d)[1] - __VM.getNodeSize(d, "size") / 2)
         .attr("id", (d) => d.properties.id)
-        .attr("width", (d) => getNodeSize(d))
-        .attr("height", (d) => getNodeSize(d))
-        .attr("rate", (d) => 1 + getNodeSize(d))
+        .attr("width", (d) => __VM.getNodeSize(d, "size"))
+        .attr("height", (d) => __VM.getNodeSize(d, "size"))
+        .attr("rate", (d) => 1 + __VM.getNodeSize(d, "size"))
         // .attr("width", __VM.node.size)
         // .attr("height", __VM.node.size)
         .attr("stroke", "black")
         .attr("stroke-width", "0.3")
         // .attr("fill", __VM.colorVariant[__VM.node.color])
         // .attr("original_fill", __VM.colorVariant[__VM.node.color])
-        .attr("fill", (d) => colormap(1 - getNodeSize(d)))
-        .attr("original_fill", (d) => colormap(1 - getNodeSize(d)))
+        .attr("colormap", (d) => colormap(__VM.getNodeSize(d, "size")))
+        .attr("fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
+        .attr("original_fill", (d) => colormap(1 - __VM.getNodeSize(d, "color")))
         .on("mouseover", function (e, d) {
           tooltip
             .style("visibility", "visible")
@@ -260,9 +146,9 @@ export default {
               `Name: ${d.properties.name} <br/> ` +
               `ID: ${d.properties.id} <br/> ` +
               `Population: ${d.properties.population} <br/> ` +
-              `Cardiovascular: ${d.properties.cardiovascular} standardised mortality per 100,000 <br/> ` +
+              `Cardiovascular: ${d.properties.cardiovascular} per 100,000 <br/> ` +
               `Alcohol: ${d.properties.alcohol} per 100,000<br/> ` +
-              `Range: ${getNodeSize(d).toFixed(2)}%`
+              `Range: ${__VM.getNodeSize(d, "size").toFixed(2)}%`
             );
         })
         .on("mousemove", function (e) {
@@ -273,6 +159,8 @@ export default {
         .on("mouseout", function () {
           // __VM.setNodeColor(this);
           tooltip.style("visibility", "hidden");
+        }).on("click", function (e, d) {
+          console.log(d.properties.name, d.properties.id);
         });
 
       nodes
@@ -285,6 +173,89 @@ export default {
         .attr("fill", "black")
         .attr("r", 0.5);
 
+      // original river layer
+      const river_layer = svg.append("g").attr("class", "river-layer");
+      for (const river of Object.keys(__VM.river.rivers)) {
+        const r = river_layer.append("g").attr("class", `${river}`);
+        r.append("g").attr("class", "river");
+        r.append("g").attr("class", "river-edge");
+        __VM.river.rivers[river].translate = {
+          x: 0,
+          y: 0,
+          finalX: 0,
+          finalXOld: 0,
+          finalY: 0,
+          finalYOld: 0,
+          nodeXCount: 0,
+        };
+      }
+      __VM.adjustRiver();
+      __VM.iteration = { current: 0, limit: 1, count: 0 };
+
+      __VM.removeOverlap();
+    },
+    initCCG() {
+      const __VM = this;
+      const path = d3.geoPath();
+
+      const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
+      d3.select(".choropleth-layer > path").remove();
+      // CCG layer
+
+      d3.select(".choropleth-layer").selectAll("path")
+        .data(__VM.CCG)
+        .join("path")
+        .attr("vector-effect", "non-scaling-stroke")
+        .attr("d", path)
+        .attr("fill", "none")
+        // .attr("fill_pip", (d) => getBorderingColor(d))
+        .attr("ccg_id", (d) => d.properties.id)
+        .attr("fill", (d) => __VM.node.visibility ? "none" : colormap(1 - __VM.getNodeSize(d, "color")))
+        .on("click", function (e, d) {
+          console.log(d.properties.id);
+        });
+
+    },
+    getNodeSize(d, type) {
+      const __VM = this;
+
+      let current, range, minimum, map;
+      if (type === "size") {
+        map = __VM.node.nodeSizeMappedTo;
+      } else if (type === "color") {
+        map = __VM.node.nodeColorMappedTo;
+        if (map === "none") {
+          return 1;
+        }
+      }
+
+      switch (map) {
+        case "uniform":
+          current = 1;
+          range = 1;
+          minimum = 0;
+          break;
+        default:
+          current = d.properties[map];
+          range = __VM.indicators[map].max - __VM.indicators[map].min;
+          minimum = __VM.indicators[map].min;
+          break;
+      }
+
+      const result = Math.abs(current - minimum) / range
+      return result;
+    },
+    changeColormap() {
+      const __VM = this;
+
+      const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
+
+      const svg = __VM.svg;
+      svg.select(".choropleth-layer").selectAll("path").attr("fill", (d) => __VM.node.visibility ? "white" : colormap(1 - __VM.getNodeSize(d, "color")))
+
+      svg.select(".node-layer").selectAll("rect").attr("colormap", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(__VM.getNodeSize(d, "color")))
+        .attr("fill", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(1 - __VM.getNodeSize(d, "color")))
+        .attr("original_fill", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(1 - __VM.getNodeSize(d, "color")))
 
     },
     runFNOR() {
@@ -346,29 +317,43 @@ export default {
           .attr("stroke", () => {
             let res = "black";
 
-            if (node.attr("nodeXCount")) {
-              res = "blue";
-            }
+            // if (node.attr("nodeXCount")) {
+            //   res = "blue";
+            // }
 
-            if (node.attr("riverX")) {
-              res = "red";
-            }
+            // if (node.attr("riverX")) {
+            //   res = "red";
+            // }
 
-            if (node.attr("nodeXCount") && node.attr("riverX")) {
-              res = "purple";
-            }
+            // if (node.attr("nodeXCount") && node.attr("riverX")) {
+            //   res = "purple";
+            // }
 
             return res;
           })
           .attr("stroke-width", "0.3");
         // .attr("fill", __VM.colorVariant[__VM.node.color])
 
+        if (firstPass) {
+          __VM.testRiverCross(node, p_new, true);
+        } else {
+          __VM.moveNode(node, p_new);
+          __VM.testRiverCross(node, p_new, !__VM.getRiverTranslationNoCrossing);
 
-        __VM.moveNode(node, p_new);
-
+        }
       }
 
-
+      if (firstPass) {
+        if (__VM.getRiverTranslationNoCrossing) {
+          if (!__VM.getRiverTranslationStatic) {
+            __VM.calculateRiverTranslation();
+            for await (const river of Object.keys(__VM.river.rivers)) {
+              __VM.moveRiver(river);
+              await __VM.detectRiverXNodes(river);
+            }
+          }
+        }
+      }
 
       // get the count with nodeX (node crossings)
       const overlapCount = d3
@@ -394,14 +379,23 @@ export default {
           d3.selectAll(".crossedArea").remove();
         }
       });
+
+
       await __VM.delay(__VM.timer).then(async () => {
         if (__VM.checkAvgNodeSize() > __VM.node.maxSize) {
           __VM.iteration.current = 0;
           __VM.step.button_disabled = false;
           d3.selectAll(".crossedArea").remove();
+
+          if (!__VM.getRiverTranslationNoCrossing) {
+            __VM.drawCrossedNode();
+          }
+
           return
         } else {
-          await __VM.removeOverlap();
+          if (__VM.step.continuous) {
+            await __VM.removeOverlap();
+          }
         }
       });
     },
@@ -527,6 +521,7 @@ export default {
                 tempPoint = new Point(415, 285, nodeSize);
               } else {
                 tempPoint = new Point(300, 350, nodeSize);
+                tempPoint = new Point(400, 150, nodeSize);
               }
             }
 
@@ -545,7 +540,7 @@ export default {
             break;
         }
 
-        tempPoint.y = pSlope * (tempPoint.x - p_previous.x) + p_previous.y;
+        tempPoint.y = pSlope * tempPoint.x - p_previous.x + p_previous.y;
 
         const derivePoint = (previous, current, length) => {
           const dx = current.x - previous.x + sizeDiff;
@@ -703,10 +698,6 @@ export default {
           if (pip.isInside([p_last.x, p_last.y], corridor)) {
             // do not move the node in focus itself
             if (node_in_c.attr("nodeXCount") === null) {
-              if (node_in_c.attr("id") === "E38000246" && nodeSize > 17) {
-                const a = "b";
-              }
-
               moveNodeInCorridor(node_in_c, position_diff);
             }
           }
@@ -748,9 +739,13 @@ export default {
     testRiverCross(node, p, firstPass) {
       const __VM = this;
 
-      const p_last = firstPass
-        ? __VM.getNodeHistory(node).last.value
-        : __VM.getNodeHistory(node).secondLast.value;
+      let crossed = false;
+
+      let p_last = __VM.getNodeHistory(node).last.value;
+
+      if (p_last.x === p.x && p_last.y === p.y && __VM.getNodeHistory(node).size > 1) {
+        p_last = __VM.getNodeHistory(node).secondLast.value;
+      }
 
       const sizeDiff = p_last.size - p.size;
 
@@ -765,6 +760,12 @@ export default {
 
       // if there is a crossing
       if (crossings[0] > 0) {
+        crossed = true;
+        if (!__VM.getRiverTranslationNoCrossing) {
+          node.attr("crossed", true);
+          return
+        }
+
         // if it's the first pass, calculate the distance for river translations
         // do not move the node after testing
         if (firstPass) {
@@ -828,11 +829,11 @@ export default {
           }
         }
       }
+      return crossed;
     },
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
 
-      __VM[type].visibility = !__VM[type].visibility;
       let layer = `.${type}-layer`;
       if (type === "river") {
         // toggle the specific river
@@ -845,11 +846,13 @@ export default {
             "visibility",
             __VM[type].rivers[name].visibility ? "visible" : "hidden"
           );
-          return;
         }
         // toggle all rivers
         else {
+
           layer = ".river-layer";
+
+          __VM[type].visibility = !__VM[type].visibility;
 
           Object.values(__VM[type].rivers).forEach(
             (r) => (r.visibility = __VM[type].visibility)
@@ -864,12 +867,15 @@ export default {
             );
           });
         }
-      }
+      } else {
 
-      d3.selectAll(layer).style(
-        "visibility",
-        __VM[type].visibility ? "visible" : "hidden"
-      );
+        __VM[type].visibility = !__VM[type].visibility;
+        d3.selectAll(layer).style(
+          "visibility",
+          __VM[type].visibility ? "visible" : "hidden"
+        );
+
+      }
     },
     setNodeSize(current, next, uniformed = false) {
       const __VM = this;
@@ -930,28 +936,15 @@ export default {
         d3.select(r).attr("fill", color);
       };
 
-      if (__VM.node.nodeMapToColor) {
-        if (singleRect) {
-          changeColor(singleRect, d3.select(singleRect).attr("colormap"));
-        } else {
-          d3.selectAll(".node-layer > g> rect")._groups[0].forEach((r) => {
-            changeColor(r, __VM.colorVariant[__VM.node.color]);
-          });
-
-          __VM.node.nodeMapToColor = false;
-        }
+      if (singleRect) {
+        changeColor(singleRect, __VM.colorVariant[__VM.node.color]);
       } else {
-        if (singleRect) {
-          changeColor(singleRect, __VM.colorVariant[__VM.node.color]);
-        } else {
-          d3.selectAll(".node-layer > g > rect")._groups[0].forEach((r) => {
-            const colormap = d3.select(r).attr("colormap");
-            changeColor(r, colormap);
-          });
-
-          __VM.node.nodeMapToColor = true;
-        }
+        d3.selectAll(".node-layer > g > rect")._groups[0].forEach((r) => {
+          const colormap = d3.select(r).attr("colormap");
+          changeColor(r, colormap);
+        });
       }
+
     },
     highlightBorderingRegion(type) {
       const __VM = this;
@@ -972,10 +965,10 @@ export default {
         `${__VM.river.width}px`
       );
 
-      d3.selectAll(".river > circle").attr(
-        "r",
-        `${__VM.river.width > 4 ? 4 : __VM.river.width}`
-      );
+      // d3.selectAll(".river > circle").attr(
+      //   "r",
+      //   1
+      // );
     },
     adjustRiver() {
       const __VM = this;
@@ -987,13 +980,6 @@ export default {
         ).coordinates;
 
         points = [].concat(...points);
-
-        // sort by x first
-        // points = [].concat(...points).sort(([a, b], [c, d]) => {
-        //   console.log(a, b, c, d);
-        //   return c - a;
-        //   // return d - b;
-        // });
 
         const spacing = Number(__VM.river.spacing);
 
@@ -1065,10 +1051,12 @@ export default {
           .data(res)
           .enter()
           .append("circle")
+          .attr("class", "vertex-layer")
+          .attr("visibility", __VM.vertex.visibility ? "visible" : "hidden")
           .attr("fill", "red")
           .attr("cx", (d) => d[0])
           .attr("cy", (d) => d[1])
-          .attr("r", __VM.river.width > 4 ? 4 : __VM.river.width);
+          .attr("r", 1);
         if (!__VM.getRiverTranslationStatic) {
           __VM.moveRiver(river);
         }
@@ -1530,6 +1518,40 @@ export default {
       // __VM.metric.deltaX = Number(__VM.metric.deltaX).toFixed(10);
       // __VM.metric.deltaY = Number(__VM.metric.deltaY).toFixed(10);
     },
+    drawCrossedNode() {
+      d3.selectAll(".crossed-line").remove();
+      for (let [i, node] of d3
+        .selectAll(".node-layer > g > rect[crossed='true']")
+        ._groups[0].entries()) {
+
+        node = d3.select(node);
+        const nodeX = Number(node.attr("x"));
+        const nodeY = Number(node.attr("y"));
+        const nodeSize = Number(node.attr("width"));
+
+        const g = node.select(function () { return this.parentNode; })
+
+        g.append("path")
+          .attr("class", "crossed-line")
+          .attr("d", d3.line()([
+            [nodeX, nodeY],
+            [nodeX + nodeSize, nodeY + nodeSize],
+          ]))
+          .attr("stroke", "red")
+          .attr("stroke-width", "1px")
+          .attr("fill", "none");
+
+        g.append("path")
+          .attr("class", "crossed-line")
+          .attr("d", d3.line()([
+            [nodeX + nodeSize, nodeY],
+            [nodeX, nodeY + nodeSize],
+          ]))
+          .attr("stroke", "red")
+          .attr("stroke-width", "1px")
+          .attr("fill", "none");
+      }
+    },
     checkAvgNodeSize() {
       const __VM = this;
 
@@ -1553,7 +1575,11 @@ export default {
         button_disabled: false,
         continuous: true,
       },
-      datasets: ["cardiovascular", "population", "alcohol"],
+      datasets: [
+        // Under 75 mortality from cardiovascular disease per 100,000
+        "cardiovascular", "population",
+        // Emergency admissions for alcohol related liver disease per 100,000
+        "alcohol"],
       indicators: {
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
@@ -1567,15 +1593,27 @@ export default {
         deltaX: 0,
         deltaY: 0,
       },
+      choropleth: {
+        visibility: true,
+        color: "secondary",
+      },
+      vertex: {
+        visibility: false,
+        color: "info",
+      },
       metric: {
         visibility: false,
         deltaX: 0,
         deltaY: 0,
       },
       node: {
-        nodeMapToColor: false,
         nodeSizeMappedTo: 'population',
-        nodeSizeMapping: [
+        nodeColorMappedTo: 'cardiovascular',
+        nodeSizeMap: [
+          { text: "Uniform", value: "uniform" },
+        ],
+        nodeColorMap: [
+          { text: "None", value: "none" },
           { text: "Uniform", value: "uniform" },
         ],
         visibility: true,
@@ -1585,31 +1623,31 @@ export default {
         maxSize: 15,
         sizeStep: 0.1,
         nodeX: {
-          stroke_width: "0.7",
+          stroke_width: "1",
         },
         history: {},
       },
       river: {
         translation: {
-          limit: 2,
-          checked: [],
+          limit: 5,
+          checked: ["no-crossing"],
           options: [
+            {
+              text: "Disallow River Crossing",
+              value: "no-crossing",
+              disabled: false,
+            },
             {
               text: "Disable River Translation",
               value: "static",
               disabled: false,
             },
-            {
-              text: "Repeat River Translation",
-              value: "repeat",
-              disabled: false,
-            },
           ],
         },
         visibility: true,
-        width: 1,
+        width: 5,
         spacing: 200,
-        color: "info",
+        color: "primary",
         rivers: {
           thames: {
             visibility: true,
@@ -1677,9 +1715,12 @@ export default {
         success: "rgb(92, 184, 92, 45%)",
         warning: "rgb(240, 173, 78)",
         danger: "rgb(217, 83, 79)",
-        thames: "rgb(20, 84, 140, 75%)",
-        trent: "rgb(240, 173, 78, 75%)",
+        thames: "rgb(132, 196, 224, 75%)",
+        trent: "rgb(132, 196, 224, 75%)",
         ouse: "rgb(132, 196, 224, 75%)",
+        // thames: "rgb(20, 84, 140, 75%)",
+        // trent: "rgb(240, 173, 78, 75%)",
+        // ouse: "rgb(132, 196, 224, 75%)",
         blueRegion: "#ba68c8",
       },
     };
@@ -1691,15 +1732,21 @@ export default {
     getRiverTranslationStatic: function () {
       return this.river.translation.checked.includes("static");
     },
-    getRiverTranslationRepeat: function () {
-      return this.river.translation.checked.includes("repeat");
+    getRiverTranslationNoCrossing: function () {
+      return this.river.translation.checked.includes("no-crossing");
     },
   },
   watch: {
     "river.translation.checked": {
       deep: true,
       handler(val) {
-        this.river.translation.options[1].disabled = val.includes("static");
+        this.river.translation.options[1].disabled = !val.includes("no-crossing");
+      },
+    },
+    "node.visibility": {
+      deep: true,
+      handler() {
+        this.initCCG();
       },
     },
   },
@@ -1727,7 +1774,10 @@ export default {
       }
 
       // add dataset tp node mapping options
-      __VM.node.nodeSizeMapping.push(
+      __VM.node.nodeSizeMap.push(
+        { text: dataset[0].toUpperCase() + dataset.slice(1), value: dataset }
+      )
+      __VM.node.nodeColorMap.push(
         { text: dataset[0].toUpperCase() + dataset.slice(1), value: dataset }
       )
       // eslint-disable-next-line require-atomic-updates
@@ -1771,7 +1821,7 @@ export default {
       }
     }
 
-
+    this.initChoropleth();
     this.init();
   },
 };
@@ -1798,24 +1848,32 @@ export default {
 
 .btn-thames {
   color: #fff !important;
-  background-color: rgb(20, 84, 140) !important;
-  border-color: rgb(20, 84, 140) !important;
+  background-color: rgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+  /* background-color: rgb(20, 84, 140) !important;
+  border-color: rgb(20, 84, 140) !important; */
 }
 
 .btn-outline-thames {
-  color: rgb(20, 84, 140) !important;
-  border-color: rgb(20, 84, 140) !important;
+  color: rgbrgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+  /* color: rgb(20, 84, 140) !important;
+  border-color: rgb(20, 84, 140) !important; */
 }
 
 .btn-trent {
   color: #fff !important;
-  background-color: rgb(240, 173, 78) !important;
-  border-color: rgb(240, 173, 78) !important;
+  background-color: rgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+  /* background-color: rgb(240, 173, 78) !important;
+  border-color: rgb(240, 173, 78) !important; */
 }
 
 .btn-outline-trent {
-  color: rgb(240, 173, 78) !important;
-  border-color: rgb(240, 173, 78) !important;
+  color: rgbrgb(132, 196, 224) !important;
+  border-color: rgb(132, 196, 224) !important;
+  /* color: rgb(240, 173, 78) !important;
+  border-color: rgb(240, 173, 78) !important; */
 }
 
 .btn-ouse {
@@ -1835,10 +1893,6 @@ export default {
 
 .btn-group .btn:not(:last-child) {
   border-right: 2px solid white !important;
-}
-
-.arrow {
-  font-size: 20px;
 }
 
 g.legend>rect {
