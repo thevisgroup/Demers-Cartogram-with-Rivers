@@ -57,7 +57,7 @@ export default {
 
 
       const blink = () => {
-        d3.select("path[ccg_id='E38000243']")
+        d3.select(`path[ccg_id='${__VM.blink}']`)
           .transition()
           .duration(1000)
           .style("fill", "rgb(0,0,0)")
@@ -83,6 +83,14 @@ export default {
         });
 
       blink()
+
+      const river_layer = d3.select("#choropleth-map").append("g").attr("class", "rivers");
+      for (const river of Object.keys(__VM.river.rivers)) {
+        const r = river_layer.append("g").attr("class", `${river}`);
+        r.append("g").attr("class", "river");
+      }
+
+      __VM.adjustRiver();
     },
     init() {
       const __VM = this;
@@ -245,19 +253,6 @@ export default {
       const result = Math.abs(current - minimum) / range
       return result;
     },
-    changeColormap() {
-      const __VM = this;
-
-      const colormap = d3.scaleSequential(d3.interpolateRdYlGn);
-
-      const svg = __VM.svg;
-      svg.select(".choropleth-layer").selectAll("path").attr("fill", (d) => __VM.node.visibility ? "white" : colormap(1 - __VM.getNodeSize(d, "color")))
-
-      svg.select(".node-layer").selectAll("rect").attr("colormap", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(__VM.getNodeSize(d, "color")))
-        .attr("fill", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(1 - __VM.getNodeSize(d, "color")))
-        .attr("original_fill", (d) => __VM.node.nodeColorMappedTo === "none" ? "none" : colormap(1 - __VM.getNodeSize(d, "color")))
-
-    },
     runFNOR() {
       const __VM = this;
       // prepare an array for webcola
@@ -282,10 +277,6 @@ export default {
       const __VM = this;
 
       __VM.step.button_disabled = true;
-
-      if (!__VM.node.visibility) {
-        __VM.toggleFeatureVisibility("rect");
-      }
 
       // prepration before removing overlaps
       if (!repeat) {
@@ -831,52 +822,6 @@ export default {
       }
       return crossed;
     },
-    toggleFeatureVisibility(type, name = false) {
-      const __VM = this;
-
-      let layer = `.${type}-layer`;
-      if (type === "river") {
-        // toggle the specific river
-        if (name) {
-          layer = `.${type}-layer > .${name}`;
-          __VM[type].rivers[name].visibility = !__VM[type].rivers[name]
-            .visibility;
-
-          d3.select(layer).style(
-            "visibility",
-            __VM[type].rivers[name].visibility ? "visible" : "hidden"
-          );
-        }
-        // toggle all rivers
-        else {
-
-          layer = ".river-layer";
-
-          __VM[type].visibility = !__VM[type].visibility;
-
-          Object.values(__VM[type].rivers).forEach(
-            (r) => (r.visibility = __VM[type].visibility)
-          );
-
-          Object.keys(__VM.river.rivers).forEach((river) => {
-            __VM.river.rivers[river].visibility = __VM[type].visibility;
-
-            d3.select(`.river-layer > .${river}`).style(
-              "visibility",
-              __VM[type].visibility ? "visible" : "hidden"
-            );
-          });
-        }
-      } else {
-
-        __VM[type].visibility = !__VM[type].visibility;
-        d3.selectAll(layer).style(
-          "visibility",
-          __VM[type].visibility ? "visible" : "hidden"
-        );
-
-      }
-    },
     setNodeSize(current, next, uniformed = false) {
       const __VM = this;
       __VM.node.previousSize = current;
@@ -1036,7 +981,7 @@ export default {
 
         d3.selectAll(`.${river} .river *`).remove();
 
-        const river_layer = d3.select(`.${river} .river`);
+        const river_layer = d3.selectAll(`.${river} .river`);
 
         river_layer
           .append("path")
@@ -1146,13 +1091,6 @@ export default {
           ._groups[0].entries()) {
           node = d3.select(node);
 
-          // if (
-          //   riverMovingUp !==
-          //   river_vector.is_upper_side(node, __VM.colorVariant[river])
-          // ) {
-          //   continue;
-          // }
-
           const p_current = __VM.getNodeHistory(node).last.value;
 
           const inside = pip.isInside(
@@ -1204,79 +1142,6 @@ export default {
         }
       }
     },
-    getRiverTranslation(name) {
-      const t = this.river.rivers[name].translate;
-
-      let left = false;
-      let right = false;
-      let up = false;
-      let down = false;
-
-      if (t.finalX > 0) {
-        right = true;
-      } else if (t.finalX < 0) {
-        left = true;
-      }
-
-      if (t.finalY > 0) {
-        down = true;
-      } else if (t.finalY < 0) {
-        up = true;
-      }
-
-      let arrow;
-
-      if (!(left || right || up || down)) {
-        arrow = "&#183;";
-      } else {
-        arrow = "0";
-
-        if (up) {
-          arrow = "1";
-        } else if (down) {
-          arrow = "2";
-        }
-
-        if (left) {
-          arrow += "1";
-        } else if (right) {
-          arrow += "2";
-        }
-      }
-
-      if (arrow === "01") {
-        arrow = "&#8592;";
-      }
-
-      if (arrow === "02") {
-        arrow = "&#10132;";
-      }
-
-      if (arrow === "10") {
-        arrow = "&#8593;";
-      }
-
-      if (arrow === "20") {
-        arrow = "&#10142;";
-      }
-
-      if (arrow === "11") {
-        arrow = "&#11017;";
-      }
-
-      if (arrow === "12") {
-        arrow = "&#11016;";
-      }
-
-      if (arrow === "21") {
-        arrow = "&#11019;";
-      }
-
-      if (arrow === "22") {
-        arrow = "&#11018;";
-      }
-      return [t.finalX, t.finalY, arrow];
-    },
     mapNodeColorToRegion() {
       d3.selectAll(".river-region").remove();
 
@@ -1310,14 +1175,6 @@ export default {
             __VM.river.rivers[river].end,
           ]);
 
-          // render river vector
-          // __VM.svg
-          //   .append("path")
-          //   .attr("class", "river-vector")
-          //   .attr("d", riverVector)
-          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          //   .attr("stroke-width", "2px")
-          //   .attr("fill", "none");
         } else if (river === "trent") {
           __VM.region.trent = [];
           __VM.region.trent.push(...trentRes);
@@ -1339,40 +1196,6 @@ export default {
             __VM.river.rivers[river].section[0],
           ]);
 
-          // render river vector
-          // __VM.svg
-          //   .append("path")
-          //   .attr("class", "river-vector")
-          //   .attr("d", riverVector)
-          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          //   .attr("stroke-width", "2px")
-          //   .attr("fill", "none");
-
-          // riverVector = d3.line()([
-          //   __VM.river.rivers[river].section[0],
-          //   __VM.river.rivers[river].section[1],
-          // ]);
-
-          // __VM.svg
-          //   .append("path")
-          //   .attr("class", "river-vector")
-          //   .attr("d", riverVector)
-          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          //   .attr("stroke-width", "2px")
-          //   .attr("fill", "none");
-
-          // riverVector = d3.line()([
-          //   __VM.river.rivers[river].section[1],
-          //   __VM.river.rivers[river].end,
-          // ]);
-
-          // __VM.svg
-          //   .append("path")
-          //   .attr("class", "river-vector")
-          //   .attr("d", riverVector)
-          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          //   .attr("stroke-width", "2px")
-          //   .attr("fill", "none");
         } else if (river === "ouse") {
           __VM.region.ouse = [];
           __VM.region.ouse.push(...ouseRes);
@@ -1395,38 +1218,8 @@ export default {
             __VM.river.rivers[river].start,
             __VM.river.rivers[river].section[0],
           ]);
-
-          // render river vector
-          // __VM.svg
-          //   .append("path")
-          //   .attr("class", "river-vector")
-          //   .attr("d", riverVector)
-          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          //   .attr("stroke-width", "2px")
-          //   .attr("fill", "none");
-
-          // riverVector = d3.line()([
-          //   __VM.river.rivers[river].section[0],
-          //   __VM.river.rivers[river].end,
-          // ]);
-
-          // __VM.svg
-          //   .append("path")
-          //   .attr("class", "river-vector")
-          //   .attr("d", riverVector)
-          //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-          //   .attr("stroke-width", "2px")
-          //   .attr("fill", "none");
         }
 
-        // render river regions
-        // __VM.svg
-        //   .append("path")
-        //   .attr("class", "river-region")
-        //   .attr("d", d3.line()(__VM.region[river]))
-        //   .attr("stroke", __VM.colorVariant[__VM.river.rivers[river].color])
-        //   .attr("stroke-width", "2px")
-        //   .attr("fill", "none");
       });
 
       __VM.runPIP();
@@ -1480,7 +1273,7 @@ export default {
     moveRiver(river) {
       const __VM = this;
 
-      d3.select(`.${river} .river`)
+      d3.select(`#base-layer .${river} .river`)
         .attr(
           "transform",
           `translate(${__VM.river.rivers[river].translate.finalX},${__VM.river.rivers[river].translate.finalY})`
@@ -1723,6 +1516,7 @@ export default {
         // ouse: "rgb(132, 196, 224, 75%)",
         blueRegion: "#ba68c8",
       },
+      blink: "E38000243"
     };
   },
   computed: {
