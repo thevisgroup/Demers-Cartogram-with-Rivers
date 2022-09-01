@@ -1,3 +1,4 @@
+<!-- NHS Nottingham and Nottinghamshire CCG E38000243 -->
 <template>
   <b-container fluid>
     <b-row>
@@ -67,9 +68,14 @@ export default {
           .on("end", blink);
       }
 
+      // tooltip
+      // eslint-disable-next-line no-unused-vars
+      const tooltip = d3.select(".tooltip")
+
       d3.select(".choropleth").selectAll("path")
         .data(__VM.CCG)
-        .join("path")
+        .enter()
+        .append("path")
         .attr("vector-effect", "non-scaling-stroke")
         .attr("d", d3.geoPath())
         .attr("fill", "none")
@@ -78,10 +84,29 @@ export default {
         .attr("fill", (d) => {
           return colormap(1 - __VM.getNodeSize(d, "color"))
         })
-        .on("click", function (e, d) {
-          console.log(d.properties.id);
-        });
+        .on("mouseover", function (e, d) {
+          tooltip
+            .style("visibility", "visible")
+            .html(
+              `Name: ${d.properties.name} <br/> ` +
+              `ID: ${d.properties.id} <br/> ` +
+              `Population: ${d.properties.population} <br/> ` +
+              `Cardiovascular: ${d.properties.cardiovascular} per 100,000 <br/> ` +
+              `Alcohol: ${d.properties.alcohol} per 100,000<br/> ` +
+              `Range: ${__VM.getNodeSize(d, "size").toFixed(2)}%`
+            );
 
+        })
+        .on("mousemove", function (e) {
+          return tooltip
+            .style("top", e.pageY - 20 + "px")
+            .style("left", e.pageX + 20 + "px");
+        })
+        .on("mouseout", function () {
+          tooltip.style("visibility", "hidden");
+        }).on("click", function (e, d) {
+          console.log(d.properties.name, d.properties.id, __VM.env);
+        });
       blink()
 
       const river_layer = d3.select("#choropleth-map").append("g").attr("class", "rivers");
@@ -103,10 +128,7 @@ export default {
 
       // tooltip
       // eslint-disable-next-line no-unused-vars
-      const tooltip = d3.select("body")
-        .append("div")
-        .style("visibility", "hidden")
-        .attr("class", "tooltip");
+      const tooltip = d3.select(".tooltip");
 
       const path = d3.geoPath();
 
@@ -1282,35 +1304,6 @@ export default {
     getNodeHistory(node) {
       return this.node.history[node.attr("id")];
     },
-    showMetric(show) {
-      const __VM = this;
-      __VM.metric.visibility = !__VM.metric.visibility;
-      if (show) {
-        __VM.metric.deltaX = 0
-        __VM.metric.deltaY = 0
-        d3.selectAll(".node-layer").selectAll("g").each((g, i, nodes) => {
-          const c = d3.select(nodes[i]).select("circle");
-
-          __VM.metric.deltaX += Number(c.attr("cx")) - Number(c.attr("ox"));
-          __VM.metric.deltaY += Number(c.attr("cy")) - Number(c.attr("oy"));
-
-          d3.select(nodes[i]).append("path")
-            .attr("class", "metric-path")
-            .attr("d", d3.line()([
-              [Number(c.attr("cx")), Number(c.attr("cy"))],
-              [Number(c.attr("ox")), Number(c.attr("oy"))],
-            ]))
-            .attr("stroke", "black")
-            .attr("stroke-width", "1px")
-            .attr("fill", "none");
-        })
-      } else {
-        d3.selectAll(".metric-path").remove()
-      }
-
-      // __VM.metric.deltaX = Number(__VM.metric.deltaX).toFixed(10);
-      // __VM.metric.deltaY = Number(__VM.metric.deltaY).toFixed(10);
-    },
     drawCrossedNode() {
       d3.selectAll(".crossed-line").remove();
       for (let [i, node] of d3
@@ -1516,7 +1509,7 @@ export default {
         // ouse: "rgb(132, 196, 224, 75%)",
         blueRegion: "#ba68c8",
       },
-      blink: "E38000243"
+      blink: "E38000243",
     };
   },
   computed: {
@@ -1545,8 +1538,8 @@ export default {
     },
   },
   async mounted() {
-    const __VM = this;
 
+    const __VM = this;
     // load shapefile
     // eslint-disable-next-line require-atomic-updates
     __VM.shapefile = await d3.json("/data/ccg_rivers.json");
@@ -1615,6 +1608,13 @@ export default {
       }
     }
 
+    if (process.env.NODE_ENV === "development") {
+      d3.select("body")
+        .append("div")
+        .style("visibility", "hidden")
+        .attr("class", "tooltip");
+    }
+
     this.initChoropleth();
     this.init();
   },
@@ -1630,67 +1630,5 @@ export default {
   opacity: 10 !important;
   position: absolute;
   z-index: 10;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  line-height: 60px;
-  background-color: #f5f5f5;
-}
-
-.btn-thames {
-  color: #fff !important;
-  background-color: rgb(132, 196, 224) !important;
-  border-color: rgb(132, 196, 224) !important;
-  /* background-color: rgb(20, 84, 140) !important;
-  border-color: rgb(20, 84, 140) !important; */
-}
-
-.btn-outline-thames {
-  color: rgbrgb(132, 196, 224) !important;
-  border-color: rgb(132, 196, 224) !important;
-  /* color: rgb(20, 84, 140) !important;
-  border-color: rgb(20, 84, 140) !important; */
-}
-
-.btn-trent {
-  color: #fff !important;
-  background-color: rgb(132, 196, 224) !important;
-  border-color: rgb(132, 196, 224) !important;
-  /* background-color: rgb(240, 173, 78) !important;
-  border-color: rgb(240, 173, 78) !important; */
-}
-
-.btn-outline-trent {
-  color: rgbrgb(132, 196, 224) !important;
-  border-color: rgb(132, 196, 224) !important;
-  /* color: rgb(240, 173, 78) !important;
-  border-color: rgb(240, 173, 78) !important; */
-}
-
-.btn-ouse {
-  color: #fff !important;
-  background-color: rgb(132, 196, 224) !important;
-  border-color: rgb(132, 196, 224) !important;
-}
-
-.btn-outline-ouse {
-  color: rgbrgb(132, 196, 224) !important;
-  border-color: rgb(132, 196, 224) !important;
-}
-
-.btn-group-vertical .btn:not(:last-child) {
-  border-bottom: 2px solid white !important;
-}
-
-.btn-group .btn:not(:last-child) {
-  border-right: 2px solid white !important;
-}
-
-g.legend>rect {
-  width: 15px;
-  height: 15px;
 }
 </style>
