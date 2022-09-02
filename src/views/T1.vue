@@ -1,7 +1,7 @@
 <!-- NHS Nottingham and Nottinghamshire CCG E38000243 -->
 <template>
   <b-container fluid>
-    <b-row>
+    <b-row id="row-task" style="display:none">
       <b-col cols="6">
         <div>
           <svg id="choropleth-layer" viewBox="0,0,800,800" stroke-linejoin="round" stroke-linecap="round">
@@ -19,6 +19,77 @@
             <g id="map"></g>
           </svg>
         </div>
+      </b-col>
+    </b-row>
+    <b-row class="my-3 instruction">
+      <b-col cols="8" class="mx-auto">
+        <b-row>
+          <b-col cols="12">
+            <b-card header-bg-variant="primary" header-text-variant="white" header="Instructions" header-tag="h2"
+              align="left">
+              <b-card-text>
+                <p>In this task, you are required to select <span class="text-info"><b>{{ this.target }}</b></span> in
+                  the
+                  cartogram on the right. <span class="text-info"><b>{{ this.target }}</b></span> will be blinking in
+                  the
+                  choropleth map on the left. Both visualizations will be shown after the task begins. There is no time
+                  limit for this task, but <span class="text-danger"><b>you
+                      only have one chance</b></span> to click on one square.
+                </p>
+
+                Steps:
+                <ul>
+                  <li>Click on the cartogram to choose the square that you think represents <span
+                      class="text-info"><b>{{ this.target }}</b></span>.</li>
+                  <li>Upon clicking, your answer will be shown on the screen, and the visualizations will disappear.
+                  </li>
+                  <li>Your answer will be automatically copied to your clipboard.
+                  </li>
+                  <li>Return to the survey form, and paste your answer there.</li>
+                  <li>Close this page and proceed to the next question.</li>
+                </ul>
+                <div align="center">
+
+                  When you are done reading the instructions, click
+                  <b-button id="btn-begin" variant="primary" v-on:click="showTask()" disabled>{{ beginBtnText }}
+                  </b-button> to start the task.
+                </div>
+              </b-card-text>
+            </b-card>
+
+
+
+            <b-row class="mx-auto mt-5">
+              <b-col cols="2">
+                <label>Your answer:</label>
+              </b-col>
+              <b-col cols="8">
+                <b-input-group>
+                  <b-form-textarea v-model="answer"
+                    placeholder="Your answer will appear here after clicking on the cartogram." disabled rows="2"
+                    no-resize>
+                  </b-form-textarea>
+
+                  <b-input-group-append
+                    v-show="this.answer !== '' && this.verifyAnswer !== '' && !(this.answer === this.verifyAnswer)">
+                    <b-button variant="info" :click="copyToClipboard(answer)">Copy</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-col>
+            </b-row>
+
+            <div class="mt-5" align="center">
+              <h4 v-show="this.answer !== '' && this.verifyAnswer !== '' && this.answer === this.verifyAnswer">
+                <b-badge variant="success">Answer copied</b-badge>, you can now paste it in the survey form.
+              </h4>
+
+              <h4 v-show="this.answer !== '' && this.verifyAnswer !== '' && !(this.answer === this.verifyAnswer)">
+                <b-badge variant="danger">Answer mismatch</b-badge>, please copy it manually via the <code>copy</code>.
+              </h4>
+            </div>
+          </b-col>
+        </b-row>
+
       </b-col>
     </b-row>
   </b-container>
@@ -120,6 +191,8 @@ export default {
     init() {
       const __VM = this;
 
+      __VM.countdown();
+
       d3.selectAll("#map").remove();
 
       __VM.svg = d3.select("#base-layer").append("g").attr("id", "map").attr("transform", "translate(-186,-183) scale(1.6)");
@@ -190,6 +263,9 @@ export default {
           // __VM.setNodeColor(this);
           tooltip.style("visibility", "hidden");
         }).on("click", function (e, d) {
+          if (__VM.answer === "") {
+            __VM.setAnswer(`${d.properties.name}, ${d.properties.id}`);
+          }
           console.log(d.properties.name, d.properties.id);
         });
 
@@ -722,7 +798,6 @@ export default {
       }
 
     },
-
     checkIntersect(line) {
       const __VM = this;
       const result = [false, ""];
@@ -1351,8 +1426,53 @@ export default {
       __VM.node.size = size;
       return size;
     },
+    async countdown() {
+      const __VM = this;
+
+      while (__VM.readPeriod !== 0) {
+        await __VM.delay(1000);
+        __VM.readPeriod--
+        __VM.beginBtnText = `Begin (${__VM.readPeriod})`;
+      }
+
+      __VM.beginBtnText = `Begin`;
+      d3.select("#btn-begin").attr("disabled", null).attr("class", "btn btn-primary");
+    },
+    showTask() {
+      const __VM = this;
+      __VM.timeTaken = new Date().getTime()
+
+      d3.select("#row-task").attr("style", null);
+      d3.select("#btn-begin").style("display", "none")
+    },
+    async setAnswer(text) {
+      const __VM = this;
+
+      __VM.timeTaken = new Date().getTime() - __VM.timeTaken;
+      __VM.answer = `${text}, ${__VM.timeTaken}`;
+
+      await __VM.copyToClipboard(text);
+
+      d3.select("#txt-verify").style("display", null)
+      d3.select("#row-task").style("display", "none")
+    },
     async delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
+    },
+    async copyToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        await this.pasteFromClipboard()
+      } catch (err) {
+        // do nothing
+      }
+    },
+    async pasteFromClipboard() {
+      try {
+        this.verifyAnswer = await navigator.clipboard.readText();
+      } catch (err) {
+        // do nothing
+      }
     },
   },
   data() {
@@ -1509,7 +1629,13 @@ export default {
         // ouse: "rgb(132, 196, 224, 75%)",
         blueRegion: "#ba68c8",
       },
+      beginBtnText: "Begin (10)",
+      readPeriod: 10,
+      timeTaken: 0,
+      answer: "",
+      verifyAnswer: "",
       blink: "E38000243",
+      target: "Nottingham and Nottinghamshire",
     };
   },
   computed: {
