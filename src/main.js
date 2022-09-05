@@ -12,6 +12,9 @@ Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
+import Task from "./component/Task.vue";
+Vue.component("Task", Task);
+
 new Vue({
   router,
   render: (h) => h(App),
