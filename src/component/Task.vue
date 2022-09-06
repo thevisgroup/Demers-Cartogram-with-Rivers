@@ -1500,7 +1500,7 @@ export default {
       indicators: {
       },
       iteration: { current: 0, limit: 1, count: 0 }, // limit - number of iterations before hit a stalemate
-      timer: 10,
+      timer: 1,
       debug: false,
       corridor: {
         length: 30,
@@ -1747,10 +1747,14 @@ export default {
     }
 
     __VM.node.nodeSizeMappedTo = __VM.sizeMap || 'population';
-    __VM.node.nodeColorMappedTo = __VM.colorMap || 'cardiovascular';
+    __VM.node.nodeColorMappedTo = __VM.colorMap || 'population';
 
     if (process.env.NODE_ENV === "development") {
       __VM.readPeriod = 1;
+    }
+
+    if (!window.location.href.endsWith("T1")) {
+      __VM.readPeriod = 5;
     }
 
     __VM.river.translation.checked = [__VM.allowRiverCross === "true" ? "static" : "no-crossing"];
@@ -1760,7 +1764,7 @@ export default {
 
     if (__VM.showRiver === "false") {
       d3.selectAll(".rivers, .river-layer")
-        .style("visibility", "hidden");
+
     }
   },
 };
