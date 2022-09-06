@@ -18,7 +18,7 @@ const routes = [
   },
 ];
 
-for (let i = 1; i < 11; i++) {
+for (let i = 1; i < 17; i++) {
   routes.push({
     path: "/T" + i,
     name: "T" + i,

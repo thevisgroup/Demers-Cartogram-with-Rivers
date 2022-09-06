@@ -1,6 +1,6 @@
 <template>
   <Task blink="E38000136" target="Oxfordshire" sizeMap="alcohol" colorMap="alcohol" allowRiverCross="false"
-    showRiver="true"></Task>
+    showRiver="false"></Task>
 </template>
 
 <script>

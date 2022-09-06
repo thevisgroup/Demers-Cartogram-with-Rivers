@@ -1,6 +1,6 @@
 <template>
   <Task blink="E38000244" target="South East London" sizeMap="cardiovascular" colorMap="cardiovascular"
-    showRiver="false" allowRiverCross="true"></Task>
+    allowRiverCross="true" showRiver="true"></Task>
 </template>
 
 <script>

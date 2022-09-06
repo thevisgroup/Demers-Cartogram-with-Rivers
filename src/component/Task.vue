@@ -110,7 +110,7 @@ import Point from "../model/Point";
 
 export default {
   name: "Task",
-  props: ["blink", "target", "sizeMap", "colorMap"],
+  props: ["blink", "target", "sizeMap", "colorMap", "allowRiverCross", "showRiver"],
   methods: {
     initChoropleth() {
       const __VM = this;
@@ -487,9 +487,9 @@ export default {
           __VM.step.button_disabled = false;
           d3.selectAll(".crossedArea").remove();
 
-          if (!__VM.getRiverTranslationNoCrossing) {
-            __VM.drawCrossedNode();
-          }
+          // if (!__VM.getRiverTranslationNoCrossing) {
+          //   __VM.drawCrossedNode();
+          // }
 
           return
         } else {
@@ -1545,7 +1545,6 @@ export default {
       river: {
         translation: {
           limit: 5,
-          checked: ["no-crossing"],
           options: [
             {
               text: "Disallow River Crossing",
@@ -1671,7 +1670,6 @@ export default {
     },
   },
   async mounted() {
-
     const __VM = this;
     // load shapefile
     // eslint-disable-next-line require-atomic-updates
@@ -1748,7 +1746,6 @@ export default {
         .attr("class", "tooltip");
     }
 
-
     __VM.node.nodeSizeMappedTo = __VM.sizeMap || 'population';
     __VM.node.nodeColorMappedTo = __VM.colorMap || 'cardiovascular';
 
@@ -1756,8 +1753,15 @@ export default {
       __VM.readPeriod = 1;
     }
 
+    __VM.river.translation.checked = [__VM.allowRiverCross === "true" ? "static" : "no-crossing"];
+
     this.initChoropleth();
     this.init();
+
+    if (__VM.showRiver === "false") {
+      d3.selectAll(".rivers, .river-layer")
+        .style("visibility", "hidden");
+    }
   },
 };
 </script>
