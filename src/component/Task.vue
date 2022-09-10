@@ -1763,8 +1763,7 @@ export default {
     this.init();
 
     if (__VM.showRiver === "false") {
-      d3.selectAll(".rivers, .river-layer")
-
+      d3.selectAll(".rivers, .river-layer").style("visibility", "hidden");
     }
   },
 };
