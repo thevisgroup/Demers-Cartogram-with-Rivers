@@ -28,6 +28,7 @@
             <b-card header-bg-variant="primary" header-text-variant="white" header="Instructions" header-tag="h2"
               align="left">
               <b-card-text>
+                <p v-if="isPractice==='true'"><span class="text-danger"><b>This is a practice task</b></span>.</p>
                 <p>In this task, you are required to select <span class="text-info"><b>{{ this.target }}</b></span> in
                   the
                   cartogram on the right. <span class="text-info"><b>{{ this.target }}</b></span> will be blinking in
@@ -110,7 +111,7 @@ import Point from "../model/Point";
 
 export default {
   name: "Task",
-  props: ["blink", "target", "sizeMap", "colorMap", "allowRiverCross", "showRiver"],
+  props: ["blink", "target", "sizeMap", "colorMap", "allowRiverCross", "showRiver", "isPractice"],
   methods: {
     initChoropleth() {
       const __VM = this;
@@ -1637,7 +1638,7 @@ export default {
         // ouse: "rgb(132, 196, 224, 75%)",
         blueRegion: "#ba68c8",
       },
-      beginBtnText: "Begin (10)",
+      beginBtnText: "Begin",
       readPeriod: 10,
       timeTaken: 0,
       answer: "",
@@ -1753,7 +1754,7 @@ export default {
       __VM.readPeriod = 1;
     }
 
-    if (!window.location.href.endsWith("T1")) {
+    if (!window.location.href.endsWith("P1")) {
       __VM.readPeriod = 5;
     }
 
