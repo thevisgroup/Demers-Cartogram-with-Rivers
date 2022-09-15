@@ -85,7 +85,7 @@ While we focus on rectangular and Dorling cartograms in this paper, we start wit
 }
 
 \thumbnail{rectangular}{
-	Rectangular cartograms are contiguous and do not preserve geographical accuracy \cite{raisz1934Rectangular, vankreveld2004Rectangular}. Depending on the variant, a rectangular cartogram may trade off between statistical and topological accuracy.
+	Rectangular cartograms are contiguous and do not preserve geographical accuracy \cite{raisz1934Rectangular, vankreveld2004Rectangular}. Depending on the variant, a rectangular cartogram may trade-off between statistical and topological accuracy.
 }
 
 \thumbnail{mosaic}{
@@ -95,9 +95,9 @@ While we focus on rectangular and Dorling cartograms in this paper, we start wit
 
 \subsection{Peer-reviewed Applications}
 
-\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Demers cartogram to visualize health-related data by CCG regions in England, the work introduces a novel technique to remove overlap of squares based on topological features, aiming to improve both geographical and topological accuracy. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, agriculture, and retail data in the US. See \autoref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
+\citea{warf2008Geography} use a Dorling cartogram to represent the religious diversity in the United States. \citea{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018cartograms} use a Demers cartogram to visualize health-related data by CCG regions in England, the work introduces a novel technique to remove the overlap of squares based on topological features, aiming to improve both geographical and topological accuracy. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms by using multiple datasets including demographics, agriculture, and retail data in the US. See \autoref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
 
-Our work extends the algorithm described by \citea{tong2018cartograms} which incorporates a static topological feature into Demers cartograms. Our work enhances that of \citeauthor{tong2018cartograms} in three ways. We introduce multiple features (rivers) into the layout (as opposed to a single), making topological features dynamic further improves the legibility and geographical accuracy. We improve the algorithm for resolving stalemates.  The way we evaluate the cartograms is also different. \citeauthor{tong2018cartograms} count river crossings to evaluate error. Here our focus is on readability, thus we include a preliminary user study.
+Our work extends the algorithm described by \citea{tong2018cartograms} which incorporates a static topological feature into Demers cartograms. Our work enhances that of \citeauthor{tong2018cartograms} in three ways. We introduce multiple features (rivers) into the layout (as opposed to a single), making topological features dynamic and further improving the legibility and geographical accuracy. We improve the algorithm for resolving stalemates.  The way we evaluate the cartograms is also different. \citeauthor{tong2018cartograms} count river crossings to evaluate error. Here our focus is on readability, thus we include a preliminary user study.
 
 \subsection{Implementation in Popular Media}
 
@@ -108,4 +108,4 @@ Cartograms are a popular choice of representation in covering various topics by 
 % \citea{newman2016Election} generates contiguous cartograms to present US Election results in 2012 and 2016.
 
 
-One of the disadvantages of Dorling and Demers cartograms is legibility. The layout algorithms may displace regions far from their original position and making the maps more difficult to interpret. Our work extends Demers cartograms. We introduce a new type of dynamic topological feature, a river, aiming to improve the interpretation, readability, and geographical accuracy of this class of cartograms.
+One of the disadvantages of Dorling and Demers cartograms is legibility. The layout algorithms may displace regions far from their original position and make the maps more difficult to interpret. Our work extends Demers cartograms. We introduce a new type of dynamic topological feature, a river, aiming to improve the interpretation, readability, and geographical accuracy of this class of cartograms.

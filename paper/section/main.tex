@@ -170,7 +170,7 @@
 
 \subsection{River Intersection Testing}
 
-We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \autoref{fig:river resolution}, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \autoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
+We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \autoref{fig:river resolution}, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead, a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \autoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
 
 
     {
