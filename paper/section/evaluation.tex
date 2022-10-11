@@ -12,7 +12,7 @@ We formulate the following hypotheses to evaluate the effectiveness of our appro
 
 \subsection{Participants}
 
-We recruited X participants, [add demographics here].
+We recruited X participants, [add demographic analysis here].
 
 \subsection{Datasets}
 
@@ -23,23 +23,29 @@ We used the following datasets for our evaluation:
     \item Emergency admissions for alcohol-related liver disease
 \end{itemize}
 
-Datasets are projected on a map that consists of 135 CGGs in England.
+135 CGGs are projected on the screen with a choropleth, we then generated another view with our visual design. The color in both visualizations are mapped to population. See \autoref{fig:task}.
 
-\subsection{Tasks}
+{
+    \begin{figure}[tb!]
+        \centering
+        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task.png}
+        \caption{A typical task for participants. The left shows the choropleth map, and the right shows the cartogram. Both visualizations show the three longest rivers in England, and the color is mapped to CCG population. The target CGG will be blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
+        \label{fig:task}
+    \end{figure}
+}
 
-We conducted tasks to evaluate the effectiveness of our approach.
+\subsection{User Experiment}
 
-\textbf{T1:} The participants were asked to familiarize themselves with the design, including the user options and the interaction methods.
-\textbf{T2:} The participants 
+We conducted a user experiment to evaluate the effectiveness of our approach. The experiment was designed to be conducted remotely, and participants were asked to complete the tasks on their own computers. The experiment includes four parts:
 
+\textbf{P1:} The participants were asked read instructions and trainings provided in both text and videos. The instructions were designed to help participants understand the concepts used in the tasks. Videos are available at \url{https://www.youtu.be/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
 
-\subsection{Questionnaire}
+\textbf{P2:} The participants were given three practice tasks to familiarize themselves with the experiment. A demonstration of the task is also included in the instructional video.
 
-We asked participants to complete a questionnaire to collect their feedback. The questionnaire consisted of the following questions:
+\textbf{P3:} The participants were asked to complete 16 location tasks. The response and reaction time are recorded. These 16 CCGs were carefully selected to avoid extreme cases (thus biases the result), in terms of size, color, and location.
 
-\begin{itemize}
-    \item \dots
-    \item \dots
-\end{itemize}
+\textbf{P4:} The participants were asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
+
+The user experiment is available at \url{https://osf.io/q39w7}.
 
 \color{black}

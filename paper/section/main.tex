@@ -3,8 +3,8 @@
  {
   \begin{figure}[tb!]
       \centering
-      \includegraphics[width=\columnwidth,keepaspectratio]{example-image-a}
-      \caption{An screenshot of \software. Figure TBA.}
+      \includegraphics[width=\columnwidth,keepaspectratio]{figure/UI.png}
+      \caption{An screenshot of \software. User options are provided to adjust the size, color mapping, visibility of nodes and rivers. Other options include the ability to control the overlap removal behavior: rivers can be static, dynamic, or constrained.}
       \label{fig:overview}
   \end{figure}
  }
@@ -12,14 +12,14 @@
  {
   \begin{figure*}[tb!]
       \centering
-      \includegraphics[width=\textwidth,height=0.95\textheight,keepaspectratio]{figure/flowchart.png}
+      \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figure/flowchart.png}
       \caption{A flowchart illustration of our layout algorithm. See \autoref{fig:flowchart-stalemate} for the flow of processing stalemate. See also \autoref{alg:UpdateLayout} for more detail. For illustration purposes, we show the rendered views alongside the logical views representing the actual computation.}
       \label{fig:flowchart}
   \end{figure*}
 
   \begin{figure}[tb!]
       \centering
-      \includegraphics[width=0.9\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
+      \includegraphics[width=\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
       \caption{A flowchart illustration of stalemate processing.}
       \label{fig:flowchart-stalemate}
   \end{figure}
@@ -167,7 +167,6 @@
 \color{black}
 
 
-
 \subsection{River Intersection Testing}
 
 We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \autoref{fig:river resolution}, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead, a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \autoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
@@ -222,7 +221,7 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
         \begin{figure}[tb!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/stalemate.png}
-            \caption{A stalemate situation is when a node's translation path $ \nodeVectorCT $ (in iteration 1) intersects a river $ \stalemateMax $ times. The node is translated back to its previous position (iteration 2). A stalemate often occurs when the area is congested and the node is unable to translate to a new position without intersecting a river.}
+            \caption{A stalemate situation is when a node's translation path $ \nodeVectorCT $ (iteration 1) intersects a river $ \stalemateMax $ times. The node is translated back to its previous position (iteration 2). A stalemate often occurs when the area is congested and the node is unable to translate to a new position without intersecting a river.}
             \label{fig:stalemate}
         \end{figure}
     }
