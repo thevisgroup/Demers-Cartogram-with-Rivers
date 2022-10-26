@@ -1,12 +1,7 @@
 \section{Data Description}
 
-Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved \cite{wang2021EHRa}. The first step is to obtain both geospatial boundaries and EHR data that match one another. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms.
-
-\subsection{Geospatial Data}
-
-Geospatial boundaries, or shapefiles, were obtained from the sources described below.
 {
-\begin{figure}[tb!]
+\begin{figure}[htb!]
     \centering
     \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
     \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography Portalx \cite{opengeographyportalxOpen} with EPSG:4326 (WGS84 - World Geodetic System) as the Coordinate Reference System (CRS).}
@@ -14,9 +9,15 @@ Geospatial boundaries, or shapefiles, were obtained from the sources described b
 \end{figure}
 }
 
+Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved \cite{wang2021EHRa}. The first step is to obtain both geospatial boundaries and EHR data that match one another. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms.
+
+\bobgraph{Geospatial Data}
+
+Geospatial boundaries, or shapefiles, were obtained from the sources described here.
+
 \bobgraph{Clinical Commissioning Groups Shapefile:} Clinical Commissioning Groups (CCGs) are the primary administrative and geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to the NHS re-organization. The most up-to-date shapefile is available from the Open Geography Portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, due to the absence of public EHR data published based on the latest CCG re-organizations that took place in 2021 and 2022.
 
-\bobgraph{River Features:} We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent, and River Great Ouse in England. These rivers were chosen as they are well-known rivers and pass through regions with dense populations, and provide informative geographical and topological cues.
+\bobgraph{River Features:} We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent, and River Great Ouse in England. These rivers were chosen as they are well-known rivers and pass through regions with dense populations, and provide informative geographical and topological cues. Other rivers cloud be chose, including additional and smaller rivers remains future work.
 
 We first obtain a relation ID by searching for a river, e.g. River Thames, on OpenStreetMap. The relation ID is used to construct a query (See Listing~\ref{overpass}) which enables the user to download the entire river shapefile using Overpass Turbo \cite{overpassturboOverpass}.
 
@@ -27,31 +28,14 @@ We first obtain a relation ID by searching for a river, e.g. River Thames, on Op
     out skel;
 \end{lstlisting}
 
-After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections, and convert them into GeoJSON files. Finally, mapshaper \cite{blochMapshaper} is used to merge and convert the GeoJSON files into a TopoJSON \cite{TopoJSON} file. TopoJSON eliminates redundant coordinates in the data, improving the rendering speed of our implementation. See \autoref{table:pre-processing_result} for the pre-processing result.
+After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust projections, and convert them into GeoJSON files. Finally, mapshaper \cite{blochMapshaper} is used to merge and convert the GeoJSON files into a TopoJSON \cite{TopoJSON} file. TopoJSON eliminates redundant coordinates in the data, improving the rendering speed of our implementation. See \autoref{table:pre-processing_result} on page \pageref{table:pre-processing_result} for the pre-processing result. We describe the above steps in more detail in \autoref{app:pre-processing}.
 
-We describe the above steps in detail in \autoref{app:pre-processing}.
-
-\subsection{EHR Data}
+\bobgraph{EHR Data}
 
 We obtained the Clinical Commissioning Group Outcomes Indicator Set (CCG OIS) from NHS Digital \cite{nhsdigitalClinical}. The OIS is a set of indicators that are used to measure the quality of care and the associated health outcomes in the NHS. Some datasets include:
 \begin{itemize}
-    \item Under 75 mortality
-    \begin{multicols}{2}
-        \begin{itemize}
-            \item Cardiovascular disease
-            \item Respiratory disease
-            \item Liver disease
-            \item Cancer
-        \end{itemize}
-    \end{multicols}
-    \item Emergency hospital admission
-        \begin{itemize}
-            \item Stroke
-            \item Alcohol-specific admission and readmission
-            \item Coronary heart disease
-            \item Readmissions within 30 days of discharge
-            \item Children with lower respiratory tract infections
-        \end{itemize}
+    \item Under 75 mortality: cardiovascular disease, respiratory disease, liver disease, and cancer
+    \item Emergency hospital admission: stroke, alcohol-specific admission and readmission, coronary heart disease, re-admissions within 30 days of discharge, children with lower respiratory tract infections
 \end{itemize}
 
 For all datasets, a spreadsheet including the following data is provided:

@@ -1,40 +1,31 @@
-\section{Cartograms with Dynamic Features}
+\section{Cartograms with Rivers}
+{
+    \begin{figure}[htb!]
+        \centering
+        \includegraphics[width=0.7\columnwidth,keepaspectratio]{figure/river_resolution.png}
+        \caption{The resolution of rivers can be dynamically adjusted by the user. A shows River Thames at its original resolution with 10,170 edges. B shows the river at a reduced resolution of 49 edges. We further smooth the river by removing vertices in dense areas, as shown in C. The reduced resolution preserves the majority of River Thames' original shape and improves the performance of our river intersection tests.}
+        \label{fig:river resolution}
+    \end{figure}
+}
 
- {
-  \begin{figure}[tb!]
-      \centering
-      \includegraphics[width=\columnwidth,keepaspectratio]{figure/UI.png}
-      \caption{An screenshot of \software. User options are provided to adjust the size, color mapping, visibility of nodes and rivers. Other options include the ability to control the overlap removal behavior: rivers can be static, dynamic, or constrained.}
-      \label{fig:overview}
-  \end{figure}
- }
-
- {
-  \begin{figure*}[tb!]
+{
+  \begin{figure*}[htb!]
       \centering
       \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figure/flowchart.png}
-      \caption{A flowchart illustration of our layout algorithm. See \autoref{fig:flowchart-stalemate} for the flow of processing stalemate. See also \autoref{alg:UpdateLayout} for more detail. For illustration purposes, we show the rendered views alongside the logical views representing the actual computation.}
+      \caption{A flowchart illustration of our layout algorithm. See \autoref{fig:flowchart-stalemate} for the logic of processing a stalemate. See also \autoref{alg:UpdateLayout} in \autoref{sec:{Cartograms with Rivers}} for more detail. For illustration purposes, we show the rendered views alongside the logical views representing the actual computation.}
       \label{fig:flowchart}
   \end{figure*}
 
-  \begin{figure}[tb!]
+  \begin{figure}[htb!]
       \centering
       \includegraphics[width=\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
-      \caption{A flowchart illustration of stalemate processing.}
+      \caption{A flowchart illustration of stalemate processing. See \autoref{subsec:{Detecting Stalemates}}, \autoref{fig:stalemate}, and \autoref{fig:corridor} for more detail.}
       \label{fig:flowchart-stalemate}
   \end{figure}
- }
+}
 
-\autoref{alg:UpdateLayout} and \autoref{fig:flowchart} provide an overview of the process.
-
-\bobgraph{Initialization:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next closest vertex. This rendering approach enables us to adjust the river resolution as shown in \autoref{fig:river resolution}. We further apply a smoothing logic by removing vertices that are too close to each other.
-
-\bobgraph{Node layout:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \autoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. If a node oscillates across a river, we process this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
-
-
-
-\begin{algorithm}[tb!]
-    \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers.}\label{alg:UpdateLayout}
+\begin{algorithm}[htb!]
+    \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers. See \autoref{sec:{Cartograms with Rivers}}.}\label{alg:UpdateLayout}
     \textbf{Global variables:} \\
     $ \nodeList \gets $ a list of $ \node $ representing CCGs with the following properties: \\
     \-\hspace{1em}  $\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river \\
@@ -72,7 +63,14 @@
 \end{algorithm}
 
 
-\begin{algorithm}[tb!]
+\autoref{alg:UpdateLayout} and \autoref{fig:flowchart} provide an overview of the cartogram layout process that includes rivers.
+
+\bobgraph{Initialization with Rivers:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next nearest vertex. We do not need the original river resolution to incorporate them into cartograms. We reduce their resolution to match that of the cartogram nodes in order to facilitate node-river intersection tests. This rendering approach enables us to adjust the river resolution as shown in \autoref{fig:river resolution}. We further apply smoothing by removing vertices that are too close to each other.
+
+
+\bobgraph{Node Layout and Overlap Removal:} The basic algorithm is as follows: we first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlaps. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. We gradually increase the node size by 1 unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \autoref{alg:check river intersection}) and translate nodes to their new position. Nodes that cross a river are translated back to their previous position. If a node oscillates across a river, we process this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one pixel and repeat the algorithm until the max node size $ \nodeSizeMax $ is reached. The gradual size increase process provides stability to the layout and helps minimize geographical error.
+
+\begin{algorithm}[htb!]
     \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
     \textbf{Input:} \\
     $ \nodeList \gets $ a list of $ \node $ representing CCGs \\
@@ -111,7 +109,7 @@
 
 
 
-\begin{algorithm}[tb!]
+\begin{algorithm}[htb!]
     \caption{Procedure to translate node positions.}\label{alg:TranslateNode}
 
     \textbf{Input:} \\
@@ -169,20 +167,17 @@
 
 \subsection{River Intersection Testing}
 
-We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \autoref{fig:river resolution}, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead, a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \autoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required.
+% We use rivers as topological boundaries and prevent nodes from crossing them. The resolution of rivers can be adjusted by the user, as shown in \autoref{fig:river resolution}. In this example, the number of vertices is reduced from 10,170 to 30. A pixel-level river resolution is not required as Demers cartograms do not need to represent geography at this level of detail. Instead, a resolution that matches the node size is used. Enabling river simplification reduces the number of edge intersection tests that need to be performed. %
+When a node's position changes, we test if the node's trajectory intersects any segment of a river. See \autoref{alg:check river intersection}. A bounding box intersection test between the edge defined by node translation and river edges can be performed to reduce the number of edge intersection tests required. Using the intersection test, we identify all nodes that cross the river as a result of the initial FNOR algorithm.
 
+\subsection{Translating Rivers}
 
-    {
-        \begin{figure}[tb!]
-            \centering
-            \includegraphics[width=\columnwidth,keepaspectratio]{figure/river_resolution.png}
-            \caption{The resolution of rivers can be dynamically adjusted by the user. A shows River Thames at its original resolution with 10,170 edges. B shows the river at a reduced resolution of 49 edges. We further smooth the river by removing vertices in dense areas, as shown in C. The reduced resolution preserves the majority of River Thames' original shape and improves the performance of our river intersection tests.}
-            \label{fig:river resolution}
-        \end{figure}
-    }
+For all nodes that cross a river, we compute an average vector $ \frac{\riverVector}{count} $ used to translate the corresponding river. See \autoref{alg:TranslateRiver}. This step intends to create room for the next iteration of node translation without crossing a river.
+
+During river translations, some nodes might be crossed by the trajectory of river translations. We move these nodes by the same vector.
 
 % \begin{noindent}
-\begin{algorithm}[tb!]
+\begin{algorithm}[htb!]
     \caption{Procedure to test if a node's translation path, $ \nodeLineNV $ intersects a river.}\label{alg:check river intersection}
     \textbf{Input:} \\
     $ \nodeLineNV \gets $ the node's translation path \\
@@ -218,7 +213,7 @@ We use rivers as topological boundaries and prevent nodes from crossing them. Th
 As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path can repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \autoref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations (a user-adjustable parameter), we introduce a heuristic solution: constructing a corridor to alleviate the congestion. A corridor, $ \Corridor $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNtNc $ (See \autoref{fig:corridor}C and D). All nodes enclosed by $ \Corridor $ are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \autoref{fig:corridor}E).
 
     {
-        \begin{figure}[tb!]
+        \begin{figure}[htb!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/stalemate.png}
             \caption{A stalemate situation is when a node's translation path $ \nodeVectorCT $ (iteration 1) intersects a river $ \stalemateMax $ times. The node is translated back to its previous position (iteration 2). A stalemate often occurs when the area is congested and the node is unable to translate to a new position without intersecting a river.}
@@ -227,7 +222,7 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
     }
 
     {
-        \begin{figure}[tb!]
+        \begin{figure}[htb!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/corridor.png}
             \caption{A stalemate occurs when a node's translation path $ \nodeVectorCT $ intersects a river for $ \stalemateMax $ times, as shown in A. To address the issue, we derive a corridor (orange rectangle in E) based on $ \node $ and $ \nodeFNOR $. All nodes within the corridor are translated based on $ \nodeVectorTC $, such that $ \nodeVectorNNn = \nodeVectorNinNinn $. In order to show a clear illustration, we place nodes sparsely in this figure.}
@@ -237,7 +232,7 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
 
 % \begin{noindent}
 
-\begin{algorithm}[tb!]
+\begin{algorithm}[htb!]
     \caption{Procedure to derive a corridor to translate enclosed nodes. We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \autoref{fig:stalemate}).}\label{alg:derive corridor}
 
     \textbf{Input:} \\

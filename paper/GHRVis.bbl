@@ -73,13 +73,13 @@
            given={Amor},
            giveni={A\bibinitperiod}}}%
       }
-      \strng{namehash}{a3eb1ed2bc0885dd7bf09e58f9821b05}
+      \strng{namehash}{c26ffcdcd4e2d0d6fe5e8c109106d9c1}
       \strng{fullhash}{c26ffcdcd4e2d0d6fe5e8c109106d9c1}
-      \strng{bibnamehash}{a3eb1ed2bc0885dd7bf09e58f9821b05}
-      \strng{authorbibnamehash}{a3eb1ed2bc0885dd7bf09e58f9821b05}
-      \strng{authornamehash}{a3eb1ed2bc0885dd7bf09e58f9821b05}
+      \strng{bibnamehash}{c26ffcdcd4e2d0d6fe5e8c109106d9c1}
+      \strng{authorbibnamehash}{c26ffcdcd4e2d0d6fe5e8c109106d9c1}
+      \strng{authornamehash}{c26ffcdcd4e2d0d6fe5e8c109106d9c1}
       \strng{authorfullhash}{c26ffcdcd4e2d0d6fe5e8c109106d9c1}
-      \field{labelalpha}{Arr*21}
+      \field{labelalpha}{ASA21}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{labelnamesource}{author}
@@ -240,13 +240,13 @@
            given={B.},
            giveni={B\bibinitperiod}}}%
       }
-      \strng{namehash}{44dcaafc9a14b6d15e97a6f28d2bbf6c}
+      \strng{namehash}{cdd1ace73e47810d481b0a0fa7a8a023}
       \strng{fullhash}{0889e2d503cb477532b863a2f00b29e6}
-      \strng{bibnamehash}{44dcaafc9a14b6d15e97a6f28d2bbf6c}
-      \strng{authorbibnamehash}{44dcaafc9a14b6d15e97a6f28d2bbf6c}
-      \strng{authornamehash}{44dcaafc9a14b6d15e97a6f28d2bbf6c}
+      \strng{bibnamehash}{cdd1ace73e47810d481b0a0fa7a8a023}
+      \strng{authorbibnamehash}{cdd1ace73e47810d481b0a0fa7a8a023}
+      \strng{authornamehash}{cdd1ace73e47810d481b0a0fa7a8a023}
       \strng{authorfullhash}{0889e2d503cb477532b863a2f00b29e6}
-      \field{labelalpha}{Can*15}
+      \field{labelalpha}{CBC*15}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{labelnamesource}{author}
@@ -292,13 +292,13 @@
            given={Arnaud},
            giveni={A\bibinitperiod}}}%
       }
-      \strng{namehash}{ad357f23d7bb2a299f839ce651b4a729}
+      \strng{namehash}{201623a880f7d9633de2ad442cf754fb}
       \strng{fullhash}{201623a880f7d9633de2ad442cf754fb}
-      \strng{bibnamehash}{ad357f23d7bb2a299f839ce651b4a729}
-      \strng{authorbibnamehash}{ad357f23d7bb2a299f839ce651b4a729}
-      \strng{authornamehash}{ad357f23d7bb2a299f839ce651b4a729}
+      \strng{bibnamehash}{201623a880f7d9633de2ad442cf754fb}
+      \strng{authorbibnamehash}{201623a880f7d9633de2ad442cf754fb}
+      \strng{authornamehash}{201623a880f7d9633de2ad442cf754fb}
       \strng{authorfullhash}{201623a880f7d9633de2ad442cf754fb}
-      \field{labelalpha}{Che*20}
+      \field{labelalpha}{CPPS20}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{labelnamesource}{author}
@@ -358,110 +358,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/VZTGBSA5/Cruz - 2017 - Adapted dorling cartogram on wage inequality in Po.pdf
-      \endverb
-    \endentry
-    \entry{dent2009Cartography}{book}{}
-      \name{author}{3}{}{%
-        {{hash=a1286ee4b728c47e8730bac87bd52e9d}{%
-           family={Dent},
-           familyi={D\bibinitperiod},
-           given={Borden\bibnamedelima D.},
-           giveni={B\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
-        {{hash=e99501d20a1dcc557e6e830c9a1e177d}{%
-           family={Torguson},
-           familyi={T\bibinitperiod},
-           given={Jeffrey},
-           giveni={J\bibinitperiod}}}%
-        {{hash=39f77b5ce1fcdaa565992bfed96746b5}{%
-           family={Hodler},
-           familyi={H\bibinitperiod},
-           given={T.\bibnamedelimi W.},
-           giveni={T\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {New York}%
-      }
-      \list{publisher}{1}{%
-        {McGraw-Hill Higher Education}%
-      }
-      \strng{namehash}{365b2c4d71816b45ad713c8f11956533}
-      \strng{fullhash}{28a15c57c2d9ef2baedec77075be7de6}
-      \strng{bibnamehash}{365b2c4d71816b45ad713c8f11956533}
-      \strng{authorbibnamehash}{365b2c4d71816b45ad713c8f11956533}
-      \strng{authornamehash}{365b2c4d71816b45ad713c8f11956533}
-      \strng{authorfullhash}{28a15c57c2d9ef2baedec77075be7de6}
-      \field{labelalpha}{Den*09}
-      \field{sortinit}{D}
-      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{annotation}{OCLC: ocn184827987}
-      \field{edition}{6th ed}
-      \field{isbn}{978-0-07-294382-5}
-      \field{shorttitle}{Cartography}
-      \field{title}{Cartography: Thematic Map Design}
-      \field{year}{2009}
-      \keyw{Cartography,Thematic maps}
-    \endentry
-    \entry{dorling2011Area}{incollection}{}
-      \name{author}{1}{}{%
-        {{hash=0c52e954d7bdb0fa0d93af1351f3785d}{%
-           family={Dorling},
-           familyi={D\bibinitperiod},
-           given={Daniel},
-           giveni={D\bibinitperiod}}}%
-      }
-      \name{editor}{3}{}{%
-        {{hash=0b2a765c4db43d186758680591f96504}{%
-           family={Dodge},
-           familyi={D\bibinitperiod},
-           given={Martin},
-           giveni={M\bibinitperiod}}}%
-        {{hash=0a6733829fcc127126b10855df06ec2d}{%
-           family={Kitchin},
-           familyi={K\bibinitperiod},
-           given={Rob},
-           giveni={R\bibinitperiod}}}%
-        {{hash=a438474ec4004fb3797371d773bb4bdd}{%
-           family={Perkins},
-           familyi={P\bibinitperiod},
-           given={Chris},
-           giveni={C\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Chichester, UK}%
-      }
-      \list{publisher}{1}{%
-        {John Wiley \& Sons, Ltd}%
-      }
-      \strng{namehash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{fullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{bibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{authorbibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{authornamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{authorfullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
-      \strng{editorbibnamehash}{f12ecc2fbb52188c26d559e168d81e79}
-      \strng{editornamehash}{f12ecc2fbb52188c26d559e168d81e79}
-      \strng{editorfullhash}{e7525ccb8dbe8a5f79aaa7cfa6e08a0f}
-      \field{labelalpha}{Dor11}
-      \field{sortinit}{D}
-      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{booktitle}{The {{Map Reader}}}
-      \field{isbn}{978-0-470-97958-7 978-0-470-74283-9}
-      \field{langid}{english}
-      \field{month}{4}
-      \field{shorttitle}{Area {{Cartograms}}}
-      \field{title}{Area {{Cartograms}}: {{Their Use}} and {{Creation}}}
-      \field{year}{2011}
-      \field{pages}{252\bibrangedash 260}
-      \range{pages}{9}
-      \verb{doi}
-      \verb 10.1002/9780470979587.ch33
-      \endverb
-      \verb{file}
-      \verb /Users/henry/SynologyDrive/Zotero/storage/YXMYIIUQ/Dorling - 2011 - Area Cartograms Their Use and Creation.pdf
       \endverb
     \endentry
     \entry{dwyer2006fast}{incollection}{}
@@ -575,16 +471,16 @@
       \list{publisher}{1}{%
         {Springer Berlin Heidelberg}%
       }
-      \strng{namehash}{adb206ab27ba5a989856b03384e69ed8}
+      \strng{namehash}{56cb76230fcf488ab46ac2b492aad3a4}
       \strng{fullhash}{56cb76230fcf488ab46ac2b492aad3a4}
-      \strng{bibnamehash}{adb206ab27ba5a989856b03384e69ed8}
-      \strng{authorbibnamehash}{adb206ab27ba5a989856b03384e69ed8}
-      \strng{authornamehash}{adb206ab27ba5a989856b03384e69ed8}
+      \strng{bibnamehash}{56cb76230fcf488ab46ac2b492aad3a4}
+      \strng{authorbibnamehash}{56cb76230fcf488ab46ac2b492aad3a4}
+      \strng{authornamehash}{56cb76230fcf488ab46ac2b492aad3a4}
       \strng{authorfullhash}{56cb76230fcf488ab46ac2b492aad3a4}
-      \strng{editorbibnamehash}{1878e5aaeb2ba2e2aaa5cb8a1a7cf207}
-      \strng{editornamehash}{1878e5aaeb2ba2e2aaa5cb8a1a7cf207}
+      \strng{editorbibnamehash}{0ace6dc30af10bcf15accad9d4c4dc12}
+      \strng{editornamehash}{0ace6dc30af10bcf15accad9d4c4dc12}
       \strng{editorfullhash}{896c7409ba56beae4d0d57c8873f40e6}
-      \field{labelalpha}{Dwy*06}
+      \field{labelalpha}{DMS06}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -603,58 +499,109 @@
       \verb /Users/henry/SynologyDrive/Zotero/storage/YXLZSHIP/Dwyer et al. - 2006 - Fast Node Overlap Removal.pdf
       \endverb
     \endentry
-    \entry{galluzzi2018Mapping}{article}{}
-      \name{author}{5}{}{%
-        {{hash=307f073da35a2f416d9e245a59e9d51c}{%
-           family={Galluzzi},
-           familyi={G\bibinitperiod},
-           given={Marta},
-           giveni={M\bibinitperiod}}}%
-        {{hash=9bd4f12a0a58acb47589656860aa0f73}{%
-           family={Rocchini},
-           familyi={R\bibinitperiod},
-           given={Duccio},
+    \entry{dorling2011Area}{incollection}{}
+      \name{author}{1}{}{%
+        {{hash=0c52e954d7bdb0fa0d93af1351f3785d}{%
+           family={Dorling},
+           familyi={D\bibinitperiod},
+           given={Daniel},
            giveni={D\bibinitperiod}}}%
-        {{hash=3b15cf825fde8f5641a7246bac11e1b9}{%
-           family={Canullo},
-           familyi={C\bibinitperiod},
-           given={Roberto},
-           giveni={R\bibinitperiod}}}%
-        {{hash=a96b2fca8d84ae5523665cd2fd14e9b1}{%
-           family={McRoberts},
-           familyi={M\bibinitperiod},
-           given={Ronald\bibnamedelima E.},
-           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
-        {{hash=fdd7602040694bccdd2a91e87a4468ad}{%
-           family={Chirici},
-           familyi={C\bibinitperiod},
-           given={Gherardo},
-           giveni={G\bibinitperiod}}}%
       }
-      \strng{namehash}{a86371b8757e07d766a362a63a7b6a30}
-      \strng{fullhash}{bed6b06a9a2b1a81625f9593bcfa13b2}
-      \strng{bibnamehash}{a86371b8757e07d766a362a63a7b6a30}
-      \strng{authorbibnamehash}{a86371b8757e07d766a362a63a7b6a30}
-      \strng{authornamehash}{a86371b8757e07d766a362a63a7b6a30}
-      \strng{authorfullhash}{bed6b06a9a2b1a81625f9593bcfa13b2}
-      \field{labelalpha}{Gal*18}
-      \field{sortinit}{G}
-      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \name{editor}{3}{}{%
+        {{hash=0b2a765c4db43d186758680591f96504}{%
+           family={Dodge},
+           familyi={D\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=0a6733829fcc127126b10855df06ec2d}{%
+           family={Kitchin},
+           familyi={K\bibinitperiod},
+           given={Rob},
+           giveni={R\bibinitperiod}}}%
+        {{hash=a438474ec4004fb3797371d773bb4bdd}{%
+           family={Perkins},
+           familyi={P\bibinitperiod},
+           given={Chris},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Chichester, UK}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons, Ltd}%
+      }
+      \strng{namehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{fullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{bibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authorbibnamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authornamehash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{authorfullhash}{0c52e954d7bdb0fa0d93af1351f3785d}
+      \strng{editorbibnamehash}{e7525ccb8dbe8a5f79aaa7cfa6e08a0f}
+      \strng{editornamehash}{e7525ccb8dbe8a5f79aaa7cfa6e08a0f}
+      \strng{editorfullhash}{e7525ccb8dbe8a5f79aaa7cfa6e08a0f}
+      \field{labelalpha}{Dor11}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
-      \field{issn}{15749541}
-      \field{journaltitle}{Ecological Informatics}
+      \field{booktitle}{The {{Map Reader}}}
+      \field{isbn}{978-0-470-97958-7 978-0-470-74283-9}
       \field{langid}{english}
-      \field{month}{11}
-      \field{shorttitle}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data}
-      \field{title}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data: {{From}} Standard Treatment of Diffusion to Density-Equalizing Cartograms}
-      \field{volume}{48}
-      \field{year}{2018}
-      \field{pages}{281\bibrangedash 289}
+      \field{month}{4}
+      \field{shorttitle}{Area {{Cartograms}}}
+      \field{title}{Area {{Cartograms}}: {{Their Use}} and {{Creation}}}
+      \field{year}{2011}
+      \field{pages}{252\bibrangedash 260}
       \range{pages}{9}
       \verb{doi}
-      \verb 10.1016/j.ecoinf.2018.06.005
+      \verb 10.1002/9780470979587.ch33
       \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/YXMYIIUQ/Dorling - 2011 - Area Cartograms Their Use and Creation.pdf
+      \endverb
+    \endentry
+    \entry{dent2009Cartography}{book}{}
+      \name{author}{3}{}{%
+        {{hash=a1286ee4b728c47e8730bac87bd52e9d}{%
+           family={Dent},
+           familyi={D\bibinitperiod},
+           given={Borden\bibnamedelima D.},
+           giveni={B\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=e99501d20a1dcc557e6e830c9a1e177d}{%
+           family={Torguson},
+           familyi={T\bibinitperiod},
+           given={Jeffrey},
+           giveni={J\bibinitperiod}}}%
+        {{hash=39f77b5ce1fcdaa565992bfed96746b5}{%
+           family={Hodler},
+           familyi={H\bibinitperiod},
+           given={T.\bibnamedelimi W.},
+           giveni={T\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {McGraw-Hill Higher Education}%
+      }
+      \strng{namehash}{28a15c57c2d9ef2baedec77075be7de6}
+      \strng{fullhash}{28a15c57c2d9ef2baedec77075be7de6}
+      \strng{bibnamehash}{28a15c57c2d9ef2baedec77075be7de6}
+      \strng{authorbibnamehash}{28a15c57c2d9ef2baedec77075be7de6}
+      \strng{authornamehash}{28a15c57c2d9ef2baedec77075be7de6}
+      \strng{authorfullhash}{28a15c57c2d9ef2baedec77075be7de6}
+      \field{labelalpha}{DTH09}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{OCLC: ocn184827987}
+      \field{edition}{6th ed}
+      \field{isbn}{978-0-07-294382-5}
+      \field{shorttitle}{Cartography}
+      \field{title}{Cartography: Thematic Map Design}
+      \field{year}{2009}
+      \keyw{Cartography,Thematic maps}
     \endentry
     \entry{gamio2016Election}{article}{}
       \name{author}{1}{}{%
@@ -695,6 +642,59 @@
       \verb https://www.washingtonpost.com/graphics/politics/2016-election/how-election-maps-lie/
       \endverb
     \endentry
+    \entry{galluzzi2018Mapping}{article}{}
+      \name{author}{5}{}{%
+        {{hash=307f073da35a2f416d9e245a59e9d51c}{%
+           family={Galluzzi},
+           familyi={G\bibinitperiod},
+           given={Marta},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9bd4f12a0a58acb47589656860aa0f73}{%
+           family={Rocchini},
+           familyi={R\bibinitperiod},
+           given={Duccio},
+           giveni={D\bibinitperiod}}}%
+        {{hash=3b15cf825fde8f5641a7246bac11e1b9}{%
+           family={Canullo},
+           familyi={C\bibinitperiod},
+           given={Roberto},
+           giveni={R\bibinitperiod}}}%
+        {{hash=a96b2fca8d84ae5523665cd2fd14e9b1}{%
+           family={McRoberts},
+           familyi={M\bibinitperiod},
+           given={Ronald\bibnamedelima E.},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=fdd7602040694bccdd2a91e87a4468ad}{%
+           family={Chirici},
+           familyi={C\bibinitperiod},
+           given={Gherardo},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{8733c65b1a34348b686a998b1ff3286f}
+      \strng{fullhash}{bed6b06a9a2b1a81625f9593bcfa13b2}
+      \strng{bibnamehash}{8733c65b1a34348b686a998b1ff3286f}
+      \strng{authorbibnamehash}{8733c65b1a34348b686a998b1ff3286f}
+      \strng{authornamehash}{8733c65b1a34348b686a998b1ff3286f}
+      \strng{authorfullhash}{bed6b06a9a2b1a81625f9593bcfa13b2}
+      \field{labelalpha}{GRC*18}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{15749541}
+      \field{journaltitle}{Ecological Informatics}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{shorttitle}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data}
+      \field{title}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data: {{From}} Standard Treatment of Diffusion to Density-Equalizing Cartograms}
+      \field{volume}{48}
+      \field{year}{2018}
+      \field{pages}{281\bibrangedash 289}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1016/j.ecoinf.2018.06.005
+      \endverb
+    \endentry
     \entry{gao2020Visualising}{article}{}
       \name{author}{4}{}{%
         {{hash=ed211f686471a8376b1179f7a8d4d7b6}{%
@@ -718,13 +718,13 @@
            given={Jicheng},
            giveni={J\bibinitperiod}}}%
       }
-      \strng{namehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{namehash}{bb1d3ba648321bb27c119f1512cb2f95}
       \strng{fullhash}{bb1d3ba648321bb27c119f1512cb2f95}
-      \strng{bibnamehash}{59a1a37008a9f721f532490cf51f6f0f}
-      \strng{authorbibnamehash}{59a1a37008a9f721f532490cf51f6f0f}
-      \strng{authornamehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{bibnamehash}{bb1d3ba648321bb27c119f1512cb2f95}
+      \strng{authorbibnamehash}{bb1d3ba648321bb27c119f1512cb2f95}
+      \strng{authornamehash}{bb1d3ba648321bb27c119f1512cb2f95}
       \strng{authorfullhash}{bb1d3ba648321bb27c119f1512cb2f95}
-      \field{labelalpha}{Gao*20}
+      \field{labelalpha}{GZWW20}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
@@ -765,13 +765,13 @@
            given={Chris},
            giveni={C\bibinitperiod}}}%
       }
-      \strng{namehash}{6f378d99697d36c82acabf2fcfd6c7b1}
+      \strng{namehash}{a48b93373d31a56d1503d1cdcbcefd2d}
       \strng{fullhash}{a48b93373d31a56d1503d1cdcbcefd2d}
-      \strng{bibnamehash}{6f378d99697d36c82acabf2fcfd6c7b1}
-      \strng{authorbibnamehash}{6f378d99697d36c82acabf2fcfd6c7b1}
-      \strng{authornamehash}{6f378d99697d36c82acabf2fcfd6c7b1}
+      \strng{bibnamehash}{a48b93373d31a56d1503d1cdcbcefd2d}
+      \strng{authorbibnamehash}{a48b93373d31a56d1503d1cdcbcefd2d}
+      \strng{authornamehash}{a48b93373d31a56d1503d1cdcbcefd2d}
       \strng{authorfullhash}{a48b93373d31a56d1503d1cdcbcefd2d}
-      \field{labelalpha}{Har*18}
+      \field{labelalpha}{HCB18}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{labelnamesource}{author}
@@ -811,13 +811,13 @@
            given={Clarke},
            giveni={C\bibinitperiod}}}%
       }
-      \strng{namehash}{07c9fe42ca2de5e1be8bcd002303d547}
+      \strng{namehash}{9024538167922a3ba9c4042e53cb1081}
       \strng{fullhash}{9024538167922a3ba9c4042e53cb1081}
-      \strng{bibnamehash}{07c9fe42ca2de5e1be8bcd002303d547}
-      \strng{authorbibnamehash}{07c9fe42ca2de5e1be8bcd002303d547}
-      \strng{authornamehash}{07c9fe42ca2de5e1be8bcd002303d547}
+      \strng{bibnamehash}{9024538167922a3ba9c4042e53cb1081}
+      \strng{authorbibnamehash}{9024538167922a3ba9c4042e53cb1081}
+      \strng{authornamehash}{9024538167922a3ba9c4042e53cb1081}
       \strng{authorfullhash}{9024538167922a3ba9c4042e53cb1081}
-      \field{labelalpha}{Ian*02}
+      \field{labelalpha}{ISK02}
       \field{sortinit}{I}
       \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
       \field{labelnamesource}{author}
@@ -891,13 +891,13 @@
            given={Alex},
            giveni={A\bibinitperiod}}}%
       }
-      \strng{namehash}{aea2011fa7895bccd19ff521f228efc8}
+      \strng{namehash}{faa2e336e4d2a9851327e2c314fc5a43}
       \strng{fullhash}{82eeeb35ac4b6423e340474bede0bf4f}
-      \strng{bibnamehash}{aea2011fa7895bccd19ff521f228efc8}
-      \strng{authorbibnamehash}{aea2011fa7895bccd19ff521f228efc8}
-      \strng{authornamehash}{aea2011fa7895bccd19ff521f228efc8}
+      \strng{bibnamehash}{faa2e336e4d2a9851327e2c314fc5a43}
+      \strng{authorbibnamehash}{faa2e336e4d2a9851327e2c314fc5a43}
+      \strng{authornamehash}{faa2e336e4d2a9851327e2c314fc5a43}
       \strng{authorfullhash}{82eeeb35ac4b6423e340474bede0bf4f}
-      \field{labelalpha}{McC*20}
+      \field{labelalpha}{MHR*20}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -954,6 +954,57 @@
       \endverb
       \verb{url}
       \verb https://www.nationalgeographic.com/culture/article/improved-election-map-cartograms
+      \endverb
+    \endentry
+    \entry{nusrat2020Recognition}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=c7a975a81ed7dd45d12c93db01e47c05}{%
+           family={Nusrat},
+           familyi={N\bibinitperiod},
+           given={Sabrina},
+           giveni={S\bibinitperiod}}}%
+        {{hash=17b83b55232e95915da2573edb48d0ab}{%
+           family={Alam},
+           familyi={A\bibinitperiod},
+           given={Jawaherul},
+           giveni={J\bibinitperiod}}}%
+        {{hash=123e113ab51eb0c183fe920eb804b36b}{%
+           family={Kobourov},
+           familyi={K\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Salerno Italy}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{33cad7e75082b2d5fc3057ad5d79d11e}
+      \strng{fullhash}{33cad7e75082b2d5fc3057ad5d79d11e}
+      \strng{bibnamehash}{33cad7e75082b2d5fc3057ad5d79d11e}
+      \strng{authorbibnamehash}{33cad7e75082b2d5fc3057ad5d79d11e}
+      \strng{authornamehash}{33cad7e75082b2d5fc3057ad5d79d11e}
+      \strng{authorfullhash}{33cad7e75082b2d5fc3057ad5d79d11e}
+      \field{labelalpha}{NAK20}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We investigate the memorability of two types of cartograms, both in terms of recognition of the visualization and recall of the data. A cartogram, or a value-by-area map, is a representation of a map in which geographic regions are modified to reflect a given statistic, such as population or income. Of the many different types of cartograms, the contiguous and Dorling types are among the most popular and most effective. With this in mind, we evaluate the memorability of these two cartogram types with a human-subjects study, using task-based experimental data and cartogram visualization tasks based on Bertin's map reading levels. In particular, our results indicate that Dorling cartograms are associated with better recall of general patterns and trends. This, together with additional significant differences between the two most popular cartogram types, has implications for the design and use of cartograms, in the context of memorability.}
+      \field{booktitle}{Proceedings of the {{International Conference}} on {{Advanced Visual Interfaces}}}
+      \field{isbn}{978-1-4503-7535-1}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{title}{Recognition and {{Recall}} of {{Geographic Data In Cartograms}}}
+      \field{year}{2020}
+      \field{pages}{1\bibrangedash 9}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1145/3399715.3399873
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/CZCB6RDS/Nusrat et al. - 2020 - Recognition and Recall of Geographic Data In Carto.pdf
       \endverb
     \endentry
     \entry{nhsNHS}{misc}{}
@@ -1065,57 +1116,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/KJA9SQ9V/Nusrat and Kobourov - 2016 - The State of the Art in Cartograms.pdf
-      \endverb
-    \endentry
-    \entry{nusrat2020Recognition}{inproceedings}{}
-      \name{author}{3}{}{%
-        {{hash=c7a975a81ed7dd45d12c93db01e47c05}{%
-           family={Nusrat},
-           familyi={N\bibinitperiod},
-           given={Sabrina},
-           giveni={S\bibinitperiod}}}%
-        {{hash=17b83b55232e95915da2573edb48d0ab}{%
-           family={Alam},
-           familyi={A\bibinitperiod},
-           given={Jawaherul},
-           giveni={J\bibinitperiod}}}%
-        {{hash=123e113ab51eb0c183fe920eb804b36b}{%
-           family={Kobourov},
-           familyi={K\bibinitperiod},
-           given={Stephen},
-           giveni={S\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Salerno Italy}%
-      }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{4375b69af4377d282b6cc8ae7181ecf9}
-      \strng{fullhash}{33cad7e75082b2d5fc3057ad5d79d11e}
-      \strng{bibnamehash}{4375b69af4377d282b6cc8ae7181ecf9}
-      \strng{authorbibnamehash}{4375b69af4377d282b6cc8ae7181ecf9}
-      \strng{authornamehash}{4375b69af4377d282b6cc8ae7181ecf9}
-      \strng{authorfullhash}{33cad7e75082b2d5fc3057ad5d79d11e}
-      \field{labelalpha}{Nus*20}
-      \field{sortinit}{N}
-      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{We investigate the memorability of two types of cartograms, both in terms of recognition of the visualization and recall of the data. A cartogram, or a value-by-area map, is a representation of a map in which geographic regions are modified to reflect a given statistic, such as population or income. Of the many different types of cartograms, the contiguous and Dorling types are among the most popular and most effective. With this in mind, we evaluate the memorability of these two cartogram types with a human-subjects study, using task-based experimental data and cartogram visualization tasks based on Bertin's map reading levels. In particular, our results indicate that Dorling cartograms are associated with better recall of general patterns and trends. This, together with additional significant differences between the two most popular cartogram types, has implications for the design and use of cartograms, in the context of memorability.}
-      \field{booktitle}{Proceedings of the {{International Conference}} on {{Advanced Visual Interfaces}}}
-      \field{isbn}{978-1-4503-7535-1}
-      \field{langid}{english}
-      \field{month}{9}
-      \field{title}{Recognition and {{Recall}} of {{Geographic Data In Cartograms}}}
-      \field{year}{2020}
-      \field{pages}{1\bibrangedash 9}
-      \range{pages}{9}
-      \verb{doi}
-      \verb 10.1145/3399715.3399873
-      \endverb
-      \verb{file}
-      \verb /Users/henry/SynologyDrive/Zotero/storage/CZCB6RDS/Nusrat et al. - 2020 - Recognition and Recall of Geographic Data In Carto.pdf
       \endverb
     \endentry
     \entry{opengeographyportalxOpen}{misc}{}
@@ -1242,13 +1242,13 @@
            given={Calum\bibnamedelima A.},
            giveni={C\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
       }
-      \strng{namehash}{25567ec96c3cc50cfaf586b9f5d95f81}
+      \strng{namehash}{aaddc0481ef76193ac3cc41804f2e2f4}
       \strng{fullhash}{aaddc0481ef76193ac3cc41804f2e2f4}
-      \strng{bibnamehash}{25567ec96c3cc50cfaf586b9f5d95f81}
-      \strng{authorbibnamehash}{25567ec96c3cc50cfaf586b9f5d95f81}
-      \strng{authornamehash}{25567ec96c3cc50cfaf586b9f5d95f81}
+      \strng{bibnamehash}{aaddc0481ef76193ac3cc41804f2e2f4}
+      \strng{authorbibnamehash}{aaddc0481ef76193ac3cc41804f2e2f4}
+      \strng{authornamehash}{aaddc0481ef76193ac3cc41804f2e2f4}
       \strng{authorfullhash}{aaddc0481ef76193ac3cc41804f2e2f4}
-      \field{labelalpha}{Pap*19}
+      \field{labelalpha}{PCB19}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{labelnamesource}{author}
@@ -1288,13 +1288,13 @@
            given={Jung\bibnamedelima Ok},
            giveni={J\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
       }
-      \strng{namehash}{391dfc33fd6fae83822fe9ba1c89d5a6}
+      \strng{namehash}{6a27fa184a5e01df60b1170342109a05}
       \strng{fullhash}{6a27fa184a5e01df60b1170342109a05}
-      \strng{bibnamehash}{391dfc33fd6fae83822fe9ba1c89d5a6}
-      \strng{authorbibnamehash}{391dfc33fd6fae83822fe9ba1c89d5a6}
-      \strng{authornamehash}{391dfc33fd6fae83822fe9ba1c89d5a6}
+      \strng{bibnamehash}{6a27fa184a5e01df60b1170342109a05}
+      \strng{authorbibnamehash}{6a27fa184a5e01df60b1170342109a05}
+      \strng{authornamehash}{6a27fa184a5e01df60b1170342109a05}
       \strng{authorfullhash}{6a27fa184a5e01df60b1170342109a05}
-      \field{labelalpha}{Par*20}
+      \field{labelalpha}{PLK20}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{labelnamesource}{author}
@@ -1414,13 +1414,13 @@
            given={Kate\bibnamedelima S.},
            giveni={K\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
       }
-      \strng{namehash}{7b406ba19caf2495df66339876154f6e}
+      \strng{namehash}{7b45852438bd57048b90ab746165e415}
       \strng{fullhash}{51a8d39578d43dc8ee8d995b84fa0a83}
-      \strng{bibnamehash}{7b406ba19caf2495df66339876154f6e}
-      \strng{authorbibnamehash}{7b406ba19caf2495df66339876154f6e}
-      \strng{authornamehash}{7b406ba19caf2495df66339876154f6e}
+      \strng{bibnamehash}{7b45852438bd57048b90ab746165e415}
+      \strng{authorbibnamehash}{7b45852438bd57048b90ab746165e415}
+      \strng{authornamehash}{7b45852438bd57048b90ab746165e415}
       \strng{authorfullhash}{51a8d39578d43dc8ee8d995b84fa0a83}
-      \field{labelalpha}{Roc*19}
+      \field{labelalpha}{RMA*19}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{labelnamesource}{author}
@@ -1437,6 +1437,43 @@
       \range{pages}{10}
       \verb{doi}
       \verb 10.1016/j.ecocom.2019.04.002
+      \endverb
+    \endentry
+    \entry{sandberg2018Cartogram}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=86c7cd3f53c63aadf31be2a9c8a8f46f}{%
+           family={Sandberg},
+           familyi={S\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{fullhash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{bibnamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{authorbibnamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{authornamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \strng{authorfullhash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
+      \field{labelalpha}{San18}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Readers: Last week, The New York Times published an interactive map for the 2018 Midterm Elections. The map and story were titled House Election Results: Democrats Take Control.~ You were given two\ldots}
+      \field{journaltitle}{Michael Sandberg's Data Visualization Blog}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{shorttitle}{Cartogram}
+      \field{title}{Cartogram: {{House Election Results}}: {{Democrats Take Control}} ({{The New York Times}})}
+      \field{urlday}{16}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
+      \field{year}{2018}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://datavizblog.com/2018/11/14/cartogram-house-election-results-democrats-take-control-the-new-york-times/
+      \endverb
+      \verb{url}
+      \verb https://datavizblog.com/2018/11/14/cartogram-house-election-results-democrats-take-control-the-new-york-times/
       \endverb
     \endentry
     \entry{sack2021Visualizing}{article}{}
@@ -1492,13 +1529,13 @@
            given={Peter\bibnamedelima F.},
            giveni={P\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
       }
-      \strng{namehash}{4894dee5c2e57960866a69798651e759}
+      \strng{namehash}{223fc53f30a298ad6dd599b0b67ed293}
       \strng{fullhash}{840c7e9dde235e4317c849a2a9ab2c5f}
-      \strng{bibnamehash}{4894dee5c2e57960866a69798651e759}
-      \strng{authorbibnamehash}{4894dee5c2e57960866a69798651e759}
-      \strng{authornamehash}{4894dee5c2e57960866a69798651e759}
+      \strng{bibnamehash}{223fc53f30a298ad6dd599b0b67ed293}
+      \strng{authorbibnamehash}{223fc53f30a298ad6dd599b0b67ed293}
+      \strng{authornamehash}{223fc53f30a298ad6dd599b0b67ed293}
       \strng{authorfullhash}{840c7e9dde235e4317c849a2a9ab2c5f}
-      \field{labelalpha}{Sac*21}
+      \field{labelalpha}{SGA*21}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labelnamesource}{author}
@@ -1512,43 +1549,6 @@
       \field{year}{2021}
       \verb{doi}
       \verb 10.1097/QAI.0000000000002903
-      \endverb
-    \endentry
-    \entry{sandberg2018Cartogram}{misc}{}
-      \name{author}{1}{}{%
-        {{hash=86c7cd3f53c63aadf31be2a9c8a8f46f}{%
-           family={Sandberg},
-           familyi={S\bibinitperiod},
-           given={Michael},
-           giveni={M\bibinitperiod}}}%
-      }
-      \strng{namehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
-      \strng{fullhash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
-      \strng{bibnamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
-      \strng{authorbibnamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
-      \strng{authornamehash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
-      \strng{authorfullhash}{86c7cd3f53c63aadf31be2a9c8a8f46f}
-      \field{labelalpha}{San18}
-      \field{sortinit}{S}
-      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{Readers: Last week, The New York Times published an interactive map for the 2018 Midterm Elections. The map and story were titled House Election Results: Democrats Take Control.~ You were given two\ldots}
-      \field{journaltitle}{Michael Sandberg's Data Visualization Blog}
-      \field{langid}{english}
-      \field{month}{11}
-      \field{shorttitle}{Cartogram}
-      \field{title}{Cartogram: {{House Election Results}}: {{Democrats Take Control}} ({{The New York Times}})}
-      \field{urlday}{16}
-      \field{urlmonth}{1}
-      \field{urlyear}{2022}
-      \field{year}{2018}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://datavizblog.com/2018/11/14/cartogram-house-election-results-democrats-take-control-the-new-york-times/
-      \endverb
-      \verb{url}
-      \verb https://datavizblog.com/2018/11/14/cartogram-house-election-results-democrats-take-control-the-new-york-times/
       \endverb
     \endentry
     \entry{sun2010Effectiveness}{article}{}
@@ -1731,13 +1731,13 @@
       \list{publisher}{1}{%
         {The Eurographics Association}%
       }
-      \strng{namehash}{5cbc09595524a0d72092fb91e60f59bf}
+      \strng{namehash}{3c51e8718828398e57dd37e761a46a29}
       \strng{fullhash}{3c51e8718828398e57dd37e761a46a29}
-      \strng{bibnamehash}{5cbc09595524a0d72092fb91e60f59bf}
-      \strng{authorbibnamehash}{5cbc09595524a0d72092fb91e60f59bf}
-      \strng{authornamehash}{5cbc09595524a0d72092fb91e60f59bf}
+      \strng{bibnamehash}{3c51e8718828398e57dd37e761a46a29}
+      \strng{authorbibnamehash}{3c51e8718828398e57dd37e761a46a29}
+      \strng{authornamehash}{3c51e8718828398e57dd37e761a46a29}
       \strng{authorfullhash}{3c51e8718828398e57dd37e761a46a29}
-      \field{labelalpha}{Ton*18}
+      \field{labelalpha}{TML18}
       \field{sortinit}{T}
       \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{labelnamesource}{author}
@@ -1898,8 +1898,8 @@
       \strng{authorbibnamehash}{6bb668f621d876ad955fb9127a69b45a}
       \strng{authornamehash}{6bb668f621d876ad955fb9127a69b45a}
       \strng{authorfullhash}{6bb668f621d876ad955fb9127a69b45a}
-      \strng{editorbibnamehash}{1878e5aaeb2ba2e2aaa5cb8a1a7cf207}
-      \strng{editornamehash}{1878e5aaeb2ba2e2aaa5cb8a1a7cf207}
+      \strng{editorbibnamehash}{0ace6dc30af10bcf15accad9d4c4dc12}
+      \strng{editornamehash}{0ace6dc30af10bcf15accad9d4c4dc12}
       \strng{editorfullhash}{b46a138f5dc99329df986e011dbecde3}
       \field{labelalpha}{vS04}
       \field{sortinit}{v}

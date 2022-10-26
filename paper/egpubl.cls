@@ -1,20 +1,24 @@
 %%%%%%%%%%%%%%%%%%%%%% start of egpubl.cls %%%%%%%%%%%%%%%%%%%%%%
-\def\fileversion{3.75}
-\def\filedate{2019/07/22}
-\def\docdate {2019/07/22}
+\def\fileversion{3.79}
+\def\filedate{2022/05/02}
+\def\docdate {2022/05/02}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{egpubl}[\filedate \space
                        Document Style for EG Publications v\fileversion ]
 %
 % EG Publications document style
 % (based on EG Annual Event document style, which in turn was based on CFG Journal)
-% Copyright (c) 1997-2019 D.Fellner
+% Copyright (c) 1997-2022 D.Fellner
 %
 % based on the original LaTeX ARTICLE DOCUMENT STYLE
 %    for LaTeX version 2.09 by Leslie Lamport
 % ...modifications by Sue Brooks, BUSS Ltd
 % ... and Graham White 8.ix.92
 % ...redesign for LaTeX2e and adaption to Conf. Proc. by D.Fellner
+% 22-05-02 SB  3.79 usage of CC-BY License as default
+% 21-05-19 SB  3.78 redefine \MedicalPrize as part of EuroVis instead of Eurographics Conference
+% 21-05-07 SB  3.77 introduce \WsWiP
+% 21-04-21 SB  3.76 introduce \WsPaperJointdemo and \WsPaperJointposter
 % 22-07-19 SB  3.75 introduce \WsPoster and \WsShortPaper
 % 14-12-18 SB  3.74 small modifications for using biblatex with backend=biber
 % 05-04-18 SB  3.73 added \orcid
@@ -984,16 +988,26 @@ Categories and Subject Descriptors {\small (according to ACM CCS)}: }
 %
 % --- and here are the parameterized texts defined
 %
+% CGF, Standard license
 \newcommand\p@copyrightTextLong[1]{%
 \copyright\ #1\ The Author(s)\\
 Computer Graphics Forum \copyright\ #1\ The Eurographics Association and
-John \\Wiley \& Sons Ltd. Published by John Wiley \& Sons Ltd.
-%
-}%
-% if paper is open access please use this:
+John \\Wiley \& Sons Ltd. Published by John Wiley \& Sons Ltd.}
+
+%CGF, if paper is open access please use this:   (CC-BY)
+%\newcommand\p@copyrightTextLong[1]{
+%\copyright\ #1\ The Author(s).\\ Computer Graphics Forum published by Eurographics - The European Association for Computer Graphics and John Wiley \& Sons Ltd.\\
+%This is an open access article under the terms of the Creative Commons Attribution License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited.}
+
+% CGF, if paper is open access please use this:   (CC-BY-NC)
 % \newcommand\p@copyrightTextLong[1]{
-% \copyright\ #1\ The Author(s). Computer Graphics Forum published by Eurographics - The European Association for Computer Graphics and John Wiley \& Sons Ltd.
-% This is an open access article under the terms of the Creative Commons Attribution License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited.}
+% \copyright\ #1\ The Author(s).\\ Computer Graphics Forum published by Eurographics - The European Association for Computer Graphics and John Wiley \& Sons Ltd.\\
+% This is an open access article under the terms of the Creative Commons Attribution NonCommercial License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited and is not used for commercial purposes.}
+
+% CGF, if paper is open access please use this:   (CC-BY-NC-ND)
+% \newcommand\p@copyrightTextLong[1]{
+% \copyright\ #1\ The Author(s).\\ Computer Graphics Forum published by Eurographics - The European Association for Computer Graphics and John Wiley \& Sons Ltd.\\
+% This is an open access article under the terms of the Creative Commons Attribution-NonCommercial-NoDerivs License, which permits use and distribution in any medium, provided the original work is properly cited, the use is non-commercial and no modifications or adaptations are made.}
 
 \newcommand\p@copyrightTextShort[1]{%
 \copyright\ #1\ The Author(s)
@@ -1013,22 +1027,23 @@ Computer Graphics Forum \copyright\ #1\ The Eurographics Association and John Wi
 \copyright\ #1\ The Author(s)
 }%
 
+%old
 %\newcommand\p@copyrightTextEG[1]{%
 %\copyright\ The Eurographics Association #1.%
 %}%
 
-\newcommand\p@copyrightTextEG[1]{% 
-\copyright\ #1\ The Author(s) 
-
-Eurographics Proceedings \copyright\ #1\ The Eurographics Association.
-}%
-
-% if paper is open access please use this:
+% EG publication, standard license
 %\newcommand\p@copyrightTextEG[1]{% 
 %\copyright\ #1\ The Author(s) 
 
-%Eurographics Proceedings \copyright\ #1\ The Eurographics Association. \\
-%This is an open access article under the terms of the Creative Commons Attribution License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited.}
+%Eurographics Proceedings \copyright\ #1\ The Eurographics Association.}%
+
+% EG publication, if paper is open access please use this: (CC-BY)
+\newcommand\p@copyrightTextEG[1]{% 
+\copyright\ #1\ The Author(s) 
+
+Eurographics Proceedings \copyright\ #1\ The Eurographics Association. \\
+This is an open access article under the terms of the Creative Commons Attribution License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited.}
 
 
 
@@ -1039,6 +1054,12 @@ Eurographics Proceedings \copyright\ #1\ The Eurographics Association.
 Eurographics Proceedings \copyright\ #1\ The Eurographics Association.
 \end{flushright}
 }%
+
+\newcommand\p@copyrightTextEGodd[1]{% 
+\copyright\ #1\ The Author(s) 
+
+Eurographics Proceedings \copyright\ #1\ The Eurographics Association.}%
+
 
 \newcommand\p@journalSubmissionText[1]{%
 submitted to COMPUTER GRAPHICS \textit{Forum} #1.%
@@ -1180,7 +1201,7 @@ submitted to \textit{#1}%
 \def\Tutorial{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1228,7 +1249,7 @@ submitted to \textit{#1}%
 \def\DC{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1247,7 +1268,7 @@ submitted to \textit{#1}%
 \def\Education{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1266,7 +1287,7 @@ submitted to \textit{#1}%
 \def\Poster{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1285,7 +1306,7 @@ submitted to \textit{#1}%
 \def\Areas{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1301,17 +1322,18 @@ submitted to \textit{#1}%
  \let\subsectionmark=\EmptySubsectionmark
 }}
 % -------
-\def\MedicalPrize{%
+\def\MedicalPrize{% since 2021 part of EuroVis Conference instead of Eurographics Conference
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextEGeven{\p@ConfYear}}}}} 
 \gdef\ps@titlepage{\let\@mkboth\@gobbletwo
  \def\@oddhead{\raisebox{\z@}[8pt][1pt]{\parbox{\textwidth}{\small
-   EUROGRAPHICS \p@EGyear  / \p@MedicalPrizeEditors{} \hfill {\itshape Dirk Bartz Prize}}}}
+%   EUROGRAPHICS \p@EGyear  / \p@MedicalPrizeEditors{} \hfill {\itshape Dirk Bartz Prize}}}}
+  EUROVIS  \p@EGyear  / \p@MedicalPrizeEditors{} \hfill {\itshape Dirk Bartz Prize}}}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextTitPag}}}\hfill}
  \let\@evenhead=\@oddhead
@@ -1323,7 +1345,7 @@ submitted to \textit{#1}%
 \def\ShortPresentation{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1412,7 +1434,7 @@ submitted to \textit{#1}%
 \def\WsPaper{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1436,7 +1458,7 @@ submitted to \textit{#1}%
 \def\WsShortPaper{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1460,7 +1482,7 @@ submitted to \textit{#1}%
 \def\WsPoster{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1469,6 +1491,30 @@ submitted to \textit{#1}%
  \def\@oddhead{\raisebox{\z@}[8pt][1pt]{\parbox{\textwidth}{\small
    \parbox[t]{\textwidth}{\sloppy\raggedright
      \p@ConfName{} (\p@ConfYear) \hfill {\itshape Poster} \\
+%     \p@ConfName{} (\p@ConfYear)\\
+     \p@ConfEditors{} \p@ConfEditorStrg}}%
+ }%
+}
+ \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextTitPag}}}\hfill}
+ \let\@evenhead=\@oddhead
+ \let\@evenfoot=\@oddfoot
+ \let\sectionmark=\EmptySectionmark
+ \let\subsectionmark=\EmptySubsectionmark
+}}
+% -------
+\def\WsWiP{%
+\noEGpagenumber%
+\copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
+ \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextRunPag}}}\hfill}
+\def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextEGeven{\p@ConfYear}}}}}  
+\def\ps@titlepage{\let\@mkboth\@gobbletwo
+ \def\@oddhead{\raisebox{\z@}[8pt][1pt]{\parbox{\textwidth}{\small
+   \parbox[t]{\textwidth}{\sloppy\raggedright
+     \p@ConfName{} (\p@ConfYear) \hfill {\itshape Work in Progress} \\
 %     \p@ConfName{} (\p@ConfYear)\\
      \p@ConfEditors{} \p@ConfEditorStrg}}%
  }%
@@ -1503,7 +1549,7 @@ submitted to \textit{#1}%
 \def\WsPaperJoint{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1524,10 +1570,60 @@ submitted to \textit{#1}%
  \let\subsectionmark=\EmptySubsectionmark
 }}
 % -------
+% -------    
+\def\WsPaperJointposter{%
+\noEGpagenumber%
+\copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
+ \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextRunPag}}}\hfill}
+\def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextEGeven{\p@ConfYear}}}}} 
+\def\ps@titlepage{\let\@mkboth\@gobbletwo
+ \def\@oddhead{\raisebox{\z@}[8pt][1pt]{\parbox{\textwidth}{\small
+   \parbox[t]{.7\textwidth}{\sloppy\raggedright
+%     \p@ConfName{} (\p@ConfYear), \ pp.\ \j@pStartPage--\j@pEndPage \\
+     \p@ConfNameJoint{} (\p@ConfYear) \\
+     \p@ConfEditors{} \p@ConfEditorStrg}\hfill {\itshape Poster}} %
+ }%
+}
+ \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextTitPag}}}\hfill}                   
+ \let\@evenhead=\@oddhead
+ \let\@evenfoot=\@oddfoot
+ \let\sectionmark=\EmptySectionmark
+ \let\subsectionmark=\EmptySubsectionmark
+}}
+% -------
+% -------    
+\def\WsPaperJointdemo{%
+\noEGpagenumber%
+\copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
+ \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextRunPag}}}\hfill}
+\def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextEGeven{\p@ConfYear}}}}} 
+\def\ps@titlepage{\let\@mkboth\@gobbletwo
+ \def\@oddhead{\raisebox{\z@}[8pt][1pt]{\parbox{\textwidth}{\small
+   \parbox[t]{.7\textwidth}{\sloppy\raggedright
+%     \p@ConfName{} (\p@ConfYear), \ pp.\ \j@pStartPage--\j@pEndPage \\
+     \p@ConfNameJoint{} (\p@ConfYear) \\
+     \p@ConfEditors{} \p@ConfEditorStrg}\hfill {\itshape Demo}} %
+ }%
+}
+ \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
+  \p@copyrightTextTitPag}}}\hfill}                   
+ \let\@evenhead=\@oddhead
+ \let\@evenfoot=\@oddfoot
+ \let\sectionmark=\EmptySectionmark
+ \let\subsectionmark=\EmptySubsectionmark
+}}
+% -------
 \def\Expressive{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1619,7 +1715,7 @@ submitted to \textit{#1}%
 \def\EuroVisPoster{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
@@ -1638,7 +1734,7 @@ submitted to \textit{#1}%
 \def\EuroVisShort{%
 \noEGpagenumber%
 \copyrightTextTitPag{\p@copyrightTextEG{\p@ConfYear}}
-\copyrightTextRunPag{\p@copyrightTextEG{\p@ConfYear}}
+\copyrightTextRunPag{\p@copyrightTextEGodd{\p@ConfYear}}
  \def\@oddfoot{{\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
   \p@copyrightTextRunPag}}}\hfill}
 \def\@evenfoot{\mbox{}\hfill {\tiny\raisebox{\z@}[8pt][1pt]{\parbox[t]{18pc}{\sloppy
