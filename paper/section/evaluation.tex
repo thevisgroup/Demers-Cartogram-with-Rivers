@@ -1,16 +1,19 @@
 \color{blue}
 
-\section{Evaluation}
+\newcommand{\pCount}{14 }
+\section{User-Centered Evaluation}
 
-We conducted a pilot user study to evaluate the effectiveness of our approach. 
+We conduct a preliminary user study to evaluate the effectiveness of our approach. 
 
 \subsection{User Study Tasks}
 
 We formulate the following hypotheses to design our user study:
 
-\textbf{H1:} The introduction of rivers can improve the accuracy of locating a CCG in a cartogram.
+\textbf{H1:} The introduction of rivers can improve the legibility and recognizability of cartograms.
 
 \textbf{H2:} The introduction of rivers can reduce the time needed to locate a CCG in a cartogram.
+
+We test these hypotheses using location based tasks. Given a standard choropleth on the left side of the screen and a cartogram on the right side, we ask user study participants to locate the given region in the choropleth in the cartogram.
 
 \subsection{User Study Variables}
 
@@ -18,40 +21,40 @@ We discuss the variables of our user study in this section.
 
 \subsubsection{Independant Variables}
 
-The primary independent variable is the river-crossing behavior of the nodes, which directly decides the final layout of our cartograms. We set the parameter to either allow or disallow the nodes from crossing a river. The presence of the rivers on the screen is another independent variable. \autoref{table:Independant Variables} shows the combinations we used in our user study.
+The primary independent variable is the presence of rivers in the cartograms, which directly impacts the final layout of the cartogram. We set this parameter to either render rivers or not.
 
-{
-\renewcommand{\arraystretch}{1.5}
-\begin{table}[!tb]
-	\centering
-		\begin{tabulary}{\columnwidth}{|*{2}{c|}}
-			\hline
-			\cellcolor{Mycolor2}\textbf{River Crossing} &
-			\cellcolor{Mycolor2}\textbf{River Presence} \\
-			\hline
-			Allow & Present \\
-			\hline
-			Allow & Absent \\
-			\hline
-			Disallow & Present \\
-			\hline
-			Disallow & Absent \\
-			\hline
-		\end{tabulary}
-	\caption{The combinations of independent variables.}
-	\label{table:Independant Variables}
-\end{table}
-}
+% {
+% \renewcommand{\arraystretch}{1.5}
+% \begin{table}[!tb]
+% 	\centering
+% 		\begin{tabulary}{\columnwidth}{|*{2}{c|}}
+% 			\hline
+% 			\cellcolor{Mycolor2}\textbf{River Crossing} &
+% 			\cellcolor{Mycolor2}\textbf{River Presence} \\
+% 			\hline
+% 			Allow & Present \\
+% 			\hline
+% 			Allow & Absent \\
+% 			\hline
+% 			Disallow & Present \\
+% 			\hline
+% 			Disallow & Absent \\
+% 			\hline
+% 		\end{tabulary}
+% 	\caption{The combinations of independent variables.}
+% 	\label{table:Independant Variables}
+% \end{table}
+% }
 
 
 \subsubsection{Dependant Variables}
 
-\bobgraph{Accuracy:} The is the primary dependent variable measured by the number of correct CCGs chosen by the participants.
+\bobgraph{Accuracy:} Given a CCG location in the choropleth on the left, we ask the participant to locate the corresponding node in the cartogram. The is the primary dependent variable measured by the number of correct CCGs chosen by the participants.
 
 \bobgraph{Response time:} Another dependant variable is the time taken by the participants to complete each task.
 
 \subsubsection{Control Variables}
-\bobgraph{Choice of the color map:} We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green, to depict the data in our cartograms.
+\bobgraph{Choice of color map:} We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green, to depict the data in our cartograms.
 
 \bobgraph{Communicating the target CCG to the user:} We inform the participant about the target CCG that they need to find. The target CCG is shown in the form of a non-stop blinking (between its original color and black) area on the screen, each blink is given a duration of 2 seconds.
 
@@ -59,7 +62,7 @@ The primary independent variable is the river-crossing behavior of the nodes, wh
 
 \subsubsection{Participants}
 
-We recruited X participants, ...
+We recruited \pCount participants, ...
 
 \subsubsection{Datasets}
 
@@ -72,31 +75,42 @@ We used the following datasets for our evaluation:
     \item Alcohol-specific admission and readmission
 \end{itemize}
 
-135 CGGs are projected on the screen with a choropleth, we then generated another view with our visual design. The color in both visualizations are mapped to population. See \autoref{fig:task}.
+135 CGGs are rendered on the screen as a choropleth on the left. We then generated another view on the right using cartograms. The color in both visual designs is mapped to the dataset. See \Cref{fig:task}.
 
 {
     \begin{figure}[htb!]
         \centering
         \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task.png}
-        \caption{A typical task for participants. The left shows the choropleth map, and the right shows the cartogram. Both visualizations show the three longest rivers in England, and the color is mapped to CCG population. The target CGG will be blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
+        \caption{A sample task for participants. The left shows the choropleth map, and the right shows the corresponding cartogram. Both images show the three longest rivers in England, and the color is mapped to CCG population. The target CGG is blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
         \label{fig:task}
     \end{figure}
 }
 
 \subsubsection{Procedure}
 
-The user study was designed to be conducted remotely, and participants were asked to complete the tasks on their own computers. The user study includes four parts:
+The user study is designed to be conducted online, and participants are asked to complete the tasks using their own computer. The user study includes four parts:
 
-\textbf{P1:} The participants were asked read instructions and trainings provided in both text and videos. The instructions were designed to help participants understand the concepts used in the tasks. Videos are available at \url{https://www.youtu.be/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
+\textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos. The instructions are designed to help participants understand the concepts used in the tasks. Instructional videos are available at \url{https://www.youtu.be/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
 
-\textbf{P2:} The participants were given three practice tasks to familiarize themselves with the user study. A demonstration of the task is also included in the instructional video.
+\textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design. A demonstration of three sample tasks is also included in the instructional video.
 
-\textbf{P3:} The participants were asked to complete 16 location tasks. The response and reaction time are recorded. These 16 CCGs were carefully selected to avoid extreme cases (thus biases the result), in terms of size, color, and location.
+\textbf{P3:} The participants are asked to complete 16 location tasks. The response and reaction time are recorded. These 16 CCGs were carefully selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
 
 \textbf{P4:} The participants were asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
 
-The user experiment is available at \url{https://osf.io/q39w7}.
+These are provided in the appendix, and available at \url{https://osf.io/q39w7}.
 
 \subsection{User Study Results}
+
+In this section we analyze the results of our user study. We recruited \pCount participants to perform 16 location tasks. 
+
+{
+    \begin{figure}[htb!]
+        \centering
+        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task-rt.png}
+        \caption{The scatter plot shows the response time (in seconds) and answers for each task, filtering out [add the exact number in the end] responses that took over 20 seconds.}
+        \label{fig:task-rt}
+    \end{figure}
+}
 
 \color{black}

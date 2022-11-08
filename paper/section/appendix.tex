@@ -5,7 +5,7 @@
 Shapefiles from different sources are likely to be incompatible. In our case, the NHS CCG shapefile is incompatible with the river shapefiles. The major reason for the incompatibility is the coordinate reference system (CRS). The CRS of the CCG shapefile is EPSG:27700 (OSGB36 - British National Grid). The CRS of the river shapefiles is EPSG:4326 (WGS84 - World Geodetic System). Here we provide some pre-processing steps using QGIS (version: 3.26.0-Buenos Aires) \cite{qgisWelcome} to handle the incompatibility issue and reduce shapefile size to improve performance.
 
 \subsection{Import Shapefiles into QGIS}
-We first load all three river shapefiles into QGIS \autoref{fig:import_rivers}, followed by the CCG shapefile \autoref{fig:import_ccgs}.
+We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, followed by the CCG shapefile \Cref{fig:import_ccgs}.
 
 {
     \begin{figure}[tbh!]
@@ -32,7 +32,7 @@ We first load all three river shapefiles into QGIS \autoref{fig:import_rivers}, 
 
 \subsection{Export Shapefiles in GeoJSON and Unify the Coordinate Reference System (CRS)}
 
-We then use QGIS to unify the CRS, and export both layers in the GeoJSON format. See \autoref{fig:export_rivers} and \autoref{fig:export_ccgs}. The unified layer is shown in \autoref{fig:unify_crs}.
+We then use QGIS to unify the CRS, and export both layers in the GeoJSON format. See \Cref{fig:export_rivers} and \Cref{fig:export_ccgs}. The unified layer is shown in \Cref{fig:unify_crs}.
 
 {
     \begin{figure}[tbh!]
@@ -53,7 +53,7 @@ We then use QGIS to unify the CRS, and export both layers in the GeoJSON format.
 
 \subsection{Merge Shapefiles and Reduce File Size}
 
-We then merge two layers into one layer, and export it in the TopoJSON format using Mapshaper \cite{blochMapshaper}. Mapshaper also supports the simplification of GeoJSON shapefiles. See \autoref{fig:export_topojson}.
+We then merge two layers into one layer, and export it in the TopoJSON format using Mapshaper \cite{blochMapshaper}. Mapshaper also supports the simplification of GeoJSON shapefiles. See \Cref{fig:export_topojson}.
 
 {
     \begin{figure}[tbh!]
@@ -66,7 +66,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
 \subsection{Pre-processing Result}
 
-\autoref{table:pre-processing_result} shows the pre-processing result. The reduction in file size is significant and greatly reduces the initialization time of our implementation.
+\Cref{table:pre-processing_result} shows the pre-processing result. The reduction in file size is significant and greatly reduces the initialization time of our implementation.
 
 {
 \renewcommand{\arraystretch}{1.5}
@@ -94,6 +94,40 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 }
 
 \clearpage
+
+\section{Procedure: TestIntersection}
+% \begin{noindent}
+    \begin{algorithm}[htb!]
+        \caption{Procedure to test if a node's translation path, $ \nodeLineNV $ intersects a river.}\label{alg:check river intersection}
+        \textbf{Input:} \\
+        $ \nodeLineNV \gets $ the node's translation path \\
+        $ \river \gets $ a river feature \\
+    
+        \textbf{Output:} \\
+        Returns $ True $ if the node crosses a river. \\
+    
+        \textbf{Local variables:} \\
+        $ \nodeBoundingBox, \riverEdgeBoundingBox \gets $ the bounding boxes for $ \nodeLineNV $ and $ \Edge $ \\
+        $ \Edge \gets $ an edge of $ \river $ \\
+    
+        \begin{algorithmic}[1]
+            \Procedure{TestIntersection}{$ \nodeLineNV $, $ \river $}
+            
+            \ForEach{$ \Edge \in \river $}
+                \State $ \nodeBoundingBox \gets $ GetBoundingBox ($ \nodeLineNV $)
+                \State $ \riverEdgeBoundingBox \gets $ GetBoundingBox ($ \Edge $)
+    
+                \If{$ \nodeBoundingBox ~intersect~ \riverEdgeBoundingBox = True $}
+                    \State \Return{$ \nodeLineNV ~intersect~ \Edge $}
+                    \EndIf
+            \EndFor
+            
+            \State \Return{$ False $}
+            \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+    %\end{noindent}
+    
 
 \section{Procedure: DerivePoint}
 
