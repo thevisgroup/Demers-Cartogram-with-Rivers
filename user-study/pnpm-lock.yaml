@@ -3,12 +3,20 @@ lockfileVersion: 5.4
 specifiers:
   csv: ^6.2.1
   csv-parse: ^5.3.1
+  csv-stringify: ^6.2.0
+  ttest: ^4.0.0
 
 dependencies:
   csv: 6.2.1
   csv-parse: 5.3.1
+  csv-stringify: 6.2.0
+  ttest: 4.0.0
 
 packages:
+
+  /cephes/1.2.0:
+    resolution: {integrity: sha512-twuUuJRrIrsELHz6foJtZlqrz6FC36zoHZJvvThsrM1UWPKxyoilw1Rka6Hk0AmPFKHKUoGwGfAtvNZNtNZu0g==}
+    dev: false
 
   /csv-generate/4.2.0:
     resolution: {integrity: sha512-zlIESlGQaYqIhNYwBN2pj5KXNMYbAXZYMOgNoVSoYV8MQyGZwcNWX+kx5LHxocp+zQDqzSgeKh+e+AZs+nCq4Q==}
@@ -32,6 +40,23 @@ packages:
       stream-transform: 3.2.0
     dev: false
 
+  /distributions/2.1.0:
+    resolution: {integrity: sha512-4eov7WXRip5Tu0K7Y51W1oVt+DcvkoE0EzsvbLzgedC/n4PUpYXHqk6vo/OH1HteBHp5Vm6cmfnInf9NAXM4qQ==}
+    dependencies:
+      cephes: 1.2.0
+    dev: false
+
   /stream-transform/3.2.0:
     resolution: {integrity: sha512-M22v88wNknyJiIyHYoiIYI5RPl/R7tkf92j1YNkmrbe5XRGHW0jW8n458j1njOrR4Edcj8bwbpSV0iLIWon1hg==}
+    dev: false
+
+  /summary/2.1.0:
+    resolution: {integrity: sha512-nMIjMrd5Z2nuB2RZCKJfFMjgS3fygbeyGk9PxPPaJR1RIcyN9yn4A63Isovzm3ZtQuEkLBVgMdPup8UeLH7aQw==}
+    dev: false
+
+  /ttest/4.0.0:
+    resolution: {integrity: sha512-biXJWXntqllqzhEPN0TlpwSp4d2xjY2VblchlkJaLIAmlvny9bhpiiPNAlrjyQxcJC1ehoqB8w6JD2WU2p+yUQ==}
+    dependencies:
+      distributions: 2.1.0
+      summary: 2.1.0
     dev: false
