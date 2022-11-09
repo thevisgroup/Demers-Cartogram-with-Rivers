@@ -1,6 +1,4 @@
-\color{blue}
-
-\newcommand{\pCount}{14 }
+\newcommand{\pCount}{15 }
 \section{User-Centered Evaluation}
 
 We conduct a preliminary user study to evaluate the effectiveness of our approach. 
@@ -59,14 +57,17 @@ The primary independent variable is the presence of rivers in the cartograms, wh
 \bobgraph{Communicating the target CCG to the user:} We inform the participant about the target CCG that they need to find. The target CCG is shown in the form of a non-stop blinking (between its original color and black) area on the screen, each blink is given a duration of 2 seconds.
 
 \subsection{User Study}
+In this section we describe the user study participants, datasets, and the experiment procedure.
 
-\subsubsection{Participants}
+\bobgraph{Participants:} We recruited \pCount participants.
 
-We recruited \pCount participants, ...
+\begin{itemize}
+    \item Gender:  8 females and 7 males
+    \item Age Group:   18-24 (7), 25-29 (8)
+    \item Education:   3 Bachelor's, 11 Master's, 1 PhD
+\end{itemize}
 
-\subsubsection{Datasets}
-
-We used the following datasets for our evaluation:
+\bobgraph{Datasets:} We used the following datasets for our evaluation:
 
 \begin{itemize}
     \item Population
@@ -102,15 +103,36 @@ These are provided in the appendix, and available at \url{https://osf.io/q39w7}.
 
 \subsection{User Study Results}
 
-In this section we analyze the results of our user study. We recruited \pCount participants to perform 16 location tasks. 
+In this section we analyze the results of our user study. We recruited \pCount participants to perform 16 location tasks each, in total we collected 240 responses, 59 responses that took over 20 seconds are excluded from the analysis.
 
 {
     \begin{figure}[htb!]
         \centering
         \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task-rt.png}
-        \caption{The scatter plot shows the response time (in seconds) and answers for each task, filtering out [add the exact number in the end] responses that took over 20 seconds.}
-        \label{fig:task-rt}
+        \caption{The scatter plot shows the response time (in seconds) and answers for each task. Correct answers are shown in green circle, and incorrect answers are shown in red triangle. Solid glyphs represent the task without rivers, and hollow glyphs represent the task with rivers.}
+        \label{fig:task-all}
     \end{figure}
 }
 
-\color{black}
+\bobgraph{Accuracy:} \Cref{fig:task-acc} shows the accuracy measured by the number of correct CCGs chosen by the participants. The chart shows that the introduction of rivers has improved the accuracy for two CCGs. The accuracy for the two groups differs significantly according to the two-sample unequal variance $t$-test performed, $t$(176.43) = 2.92, $p$ = 0.0039. This supports our hypothesis H1 that the introduction of rivers improves the legibility of cartogram.
+
+{
+    \begin{figure}[htb!]
+        \centering
+        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/accuracy.png}
+        \caption{The bar chart shows the accuracy of locating CCGs.}
+        \label{fig:task-acc}
+    \end{figure}
+}
+
+
+\bobgraph{Response Time:} \Cref{fig:task-rt} shows the average response time measured for four CCGs. The chart shows that the introduction of rivers has slightly reduced the time needed to locate CCGs. The two groups show no significant differences according to the two-sample unequal variance $t$-test performed, $t$(168.03) = 1.29, $p$ = 0.20.  The statistical analysis does not support our hypothesis H2, that the introduction of rivers does not reduce the response time significantly.
+
+{
+    \begin{figure}[htb!]
+        \centering
+        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/rt.png}
+        \caption{The bar chart shows the average response time for locating CCGs.}
+        \label{fig:task-rt}
+    \end{figure}
+}

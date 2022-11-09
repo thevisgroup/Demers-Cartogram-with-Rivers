@@ -88,6 +88,9 @@
 
 \usepackage{multicol}
 
+% For cover's captionof
+\usepackage[font=normalfont,labelfont=bf]{caption}
+
 \include{preamble/preamble.basic}
 \include{preamble/preamble.main}
 \include{preamble/preamble.math}
@@ -95,17 +98,21 @@
 
 \usepackage[nameinlink]{cleveref}
 
+\begin{document}
+
 \author[Q. Wang, K. Xu \& R. S. Laramee]
-{\parbox{\textwidth}{\centering Q. Wang, K. Xu
-  and R. S. Laramee
-    }
-    \\
-\parbox{\textwidth}{\centering School of Computer Science, University of Nottingham, UK}
+{
+\parbox{\textwidth}{\centering Q. Wang, K. Xu and R. S. Laramee}
+\\
+\parbox{\textwidth}{\centering School of Computer Science, University of Nottingham, UK \\ \begin{center}
+    \centering
+    \includegraphics[height=3cm,keepaspectratio]{figure/cover.png}
+    \captionof{figure}{The River Thames passing through NHS Clinical Commissioning Groups in London and surrounding areas.}
+\end{center}
+}
 }
 
 \title{Cartograms with Rivers}
-
-\begin{document}
 
 \pagestyle{plain}
 
@@ -125,20 +132,19 @@ Cartograms are hybrid representations of geographical and abstract data based on
 
 \input{section/evaluation}
 
-\section{Limitations and Future Work}
+\input{section/limitation}
 
-\section{Conclusions}
+\input{section/conclusion}
 
-\section{Acknowledgments}
-This work is funded by the grant EP/S010238/2 from the Engineering and Physical Sciences Research Council (EPSRC). EPSRC is a British Research Council that provides government funding for grants to undertake research and postgraduate degrees in engineering and the physical sciences.
-
+% \section{Acknowledgments}
+% This work is funded by the grant EP/S010238/2 from the Engineering and Physical Sciences Research Council (EPSRC). EPSRC is a British Research Council that provides government funding for grants to undertake research and postgraduate degrees in engineering and the physical sciences.
 
 \clearpage
 % reset \section command for section title "References"
 \let\section=\origsection
 \printbibliography
 
-\cleardoublepage
+\clearpage
 
 \input{section/appendix}
 

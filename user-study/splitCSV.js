@@ -50,7 +50,6 @@ function readCSV() {
     fs.createReadStream("./result.csv")
         .pipe(parse({ delimiter: ",", from_line: 1 }))
         .on("data", function (row) {
-            rowCount++;
             for (let i = 0; i < taskList.length; i++) {
                 const time = parseInt(row[i * 2 + 1]) / 1000;
 
@@ -59,6 +58,7 @@ function readCSV() {
                     continue;
                 }
 
+                rowCount++;
                 const correctAnswer = taskList[i].ccg;
                 const answer = row[i * 2];
 
@@ -95,7 +95,7 @@ function readCSV() {
 
         })
         .on("end", function () {
-
+            console.log(rowCount);
             let w = result.filter((row) => !row.allowCrossing && row.withRiver).map((row) => row.rt);
             let wo = result.filter((row) => !row.allowCrossing && !row.withRiver).map((row) => row.rt);
             tTest(w, wo, "group1");
@@ -112,6 +112,7 @@ function readCSV() {
             wo = result.filter((row) => !row.allowCrossing && !row.withRiver).map((row) => row.rt);
             tTest(w, wo, "group4");
 
+            //E38000136
             w = result.filter((row) => row.withRiver).map((row) => row.rt);
             wo = result.filter((row) => !row.withRiver).map((row) => row.rt);
             tTest(w, wo, "group5");
@@ -203,9 +204,16 @@ function computeSingleGroup() {
 }
 
 function tTest(w, wo, group) {
-    let t = ttest(w, wo)
-    // console.log(group);
-    // console.log(t.testValue());
+    let t = ttest(wo, w)
+    console.log(w);
+    console.log(wo);
+    console.log(group);
+    console.log("df:", t.freedom());
+    console.log("t:", t.testValue());
+    console.log("confidence:", t.confidence());
+    console.log("p:", t.pValue());
+    console.log("t:", t.valid());
+    console.log(t);
 }
 
 function writeCSV(name, columns, data) {
