@@ -1,12 +1,10 @@
 <template>
-  <b-container fluid>
-    <b-row>
-      <b-col cols="8">
+  <b-container fluid class="mt-1">
+    <b-row class="my-1">
+      <b-col cols="7" class="my-1">
         <div>
           <svg id="base-layer" viewBox="0,0,800,800" stroke-linejoin="round" stroke-linecap="round">
-            <rect width="800" height="800" style="fill: none; stroke-width: 4; stroke: rgb(43, 222, 221)" />
-
-            <g class="legend">
+            <!-- <g class="legend">
               <rect fill="green" stroke="black" stroke-width="2" x="2" y="5"></rect>
               <text x="22" y="18">node</text>
 
@@ -24,151 +22,198 @@
 
               <rect fill="green" stroke="purple" stroke-width="2" x="2" y="71"></rect>
               <text x="22" y="84">riverX + nodeX</text>
-
-              <!-- rect y= last rect y + 17, text y = rect y +13 -->
-            </g>
+            </g> 
+          -->
+            <!-- rect y= last rect y + 17, text y = rect y +13 -->
             <rect width="100%" height="100%" fill="none" pointer-events="all"></rect>
             <g id="map"></g>
           </svg>
         </div>
       </b-col>
-      <b-col cols="4">
-        <div class="table-responsive option_table">
-          <table class="table table-bordered table-striped table-hover table-borderless">
-            <thead>
-              <tr>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <b-button block :variant="(choropleth.visibility ? '' : 'outline-') + choropleth.color"
-                    v-on:click="toggleFeatureVisibility('choropleth')">Choropleth</b-button>
+      <b-col cols="5" class="my-1">
+        <b-card>
+          <b-row>
+            <b-col cols="6">
+              <b-button block :variant="(choropleth.visibility ? '' : 'outline-') + choropleth.color"
+                v-on:click="toggleFeatureVisibility('choropleth')">Choropleth</b-button>
 
-                  <b-button block :variant="(node.visibility ? '' : 'outline-') + node.color"
-                    v-on:click="toggleFeatureVisibility('node')">Node</b-button>
+              <b-button block :variant="(node.visibility ? '' : 'outline-') + node.color"
+                v-on:click="toggleFeatureVisibility('node')">Node</b-button>
 
-                  <b-button block :variant="(centroid.visibility ? '' : 'outline-') + 'info'"
-                    v-on:click="toggleFeatureVisibility('centroid')">Centroid</b-button>
+              <b-button block :variant="(centroid.visibility ? '' : 'outline-') + 'info'"
+                v-on:click="toggleFeatureVisibility('centroid')">Centroid</b-button>
 
-                  <div class="my-2">
-                    <b-input-group size="sm">
-                      <b-input-group-prepend is-text><b>Node Size</b></b-input-group-prepend>
+
+              <b-list-group>
+                <!-- <b-list-group-item>
+                  <b-row align-v="center">
+                    <b-col sm="4" class="col">
+                      <label>Node Size</label>
+                    </b-col>
+                    <b-col sm="8" class="col">
                       <b-form-input size="sm" id="slider-node-size" v-model="node.size" type="range" min="0.1"
-                        :max="node.maxSize" step="0.1"></b-form-input>
-                    </b-input-group>
+                        :max="node.maxSize" step="0.1">
+                      </b-form-input>
+                    </b-col>
+                  </b-row>
+                </b-list-group-item> -->
+                <b-list-group-item class="mt-2 g-2-6-4">
+                  <label>Current Size</label>
+                  <span class="right-label">{{ node.size.toFixed(2) }}</span>
+                </b-list-group-item>
+                <b-list-group-item class="g-2-6-4">
+                  <label>Max Size</label>
+                  <b-form-input size="sm" type="number" v-model="node.maxSize"></b-form-input>
+                </b-list-group-item>
+              </b-list-group>
+            </b-col>
 
-                    <b-input-group size="sm">
-                      <b-input-group-prepend is-text><b>Current</b></b-input-group-prepend>
-                      <b-form-input type="number" v-model="node.size"></b-form-input>
-                      <b-input-group-prepend is-text><b>Max</b></b-input-group-prepend>
-                      <b-form-input type="number" v-model="node.maxSize"></b-form-input>
-                    </b-input-group>
-                  </div>
-                </td>
+            <b-col cols="6">
+              <b-button block variant="danger" v-on:click="removeOverlap()" :disabled="step.button_disabled">Start
+              </b-button>
 
-                <td>
-                  <b-button block variant="primary" v-on:click="removeOverlap()" :disabled="step.button_disabled">Remove
-                    overlaps: {{ iteration.count }}</b-button>
+              <b-button block variant="warning" v-on:click="init()" :disabled="iteration.count === 0">Reset
+              </b-button>
 
-                  <b-form-checkbox v-model="step.continuous" name="check-button" switch>
-                    continuous mode: {{ step.continuous }}
+              <b-list-group class="mt-2">
+                <b-list-group-item class="g-2-6-4">
+                  <label>Current Iteration</label>
+                  <span class="right-label">{{ iteration.count }}</span>
+                </b-list-group-item>
+                <b-list-group-item class="g-2-6-4">
+                  <label>Continuous Mode</label>
+                  <b-form-checkbox class="right-label" v-model="step.continuous" name="check-button" switch>
                   </b-form-checkbox>
+                </b-list-group-item>
 
-                  <!-- <b-form-checkbox v-model="debug" name="check-button" switch>
-                    Debug mode: {{ debug }}
-                  </b-form-checkbox> -->
-
-                  <!-- <b-button block variant="info">
-                    Iteration limit: {{ iteration.limit
-                    }}<b-form-input
-                      id="slider-iteration-limit"
-                      v-model="iteration.limit"
-                      type="range"
-                      min="1"
-                      max="10"
-                      step="1"
-                    ></b-form-input
-                  ></b-button> -->
-
+                <b-list-group-item>
                   <b-form-group>
                     <b-form-checkbox-group v-model="river.translation.checked" :options="river.translation.options"
-                      stacked></b-form-checkbox-group>
+                      stacked>
+                    </b-form-checkbox-group>
                   </b-form-group>
-                </td>
-              </tr>
+                </b-list-group-item>
+              </b-list-group>
+            </b-col>
 
-              <tr>
-                <td>
-                  <b-form-group label="Node Size Mapping" label-size="lg">
-                    <b-form-radio-group v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMap" @change="init()">
-                    </b-form-radio-group>
-                  </b-form-group>
-                </td>
+          </b-row>
+        </b-card>
 
-                <td>
-                  <b-form-group label="Node Color Mapping" label-size="lg">
-                    <b-form-radio-group v-model="node.nodeColorMappedTo" :options="node.nodeColorMap"
-                      @change="changeColormap()">
-                    </b-form-radio-group>
-                  </b-form-group>
-                </td>
-              </tr>
+        <b-row class="my-1">
+          <b-col cols="6">
+            <b-card header="Node Size Mapping">
+              <b-form-radio-group class="g-2" v-model="node.nodeSizeMappedTo" :options="node.nodeSizeMap"
+                @change="init()">
+              </b-form-radio-group>
+            </b-card>
+          </b-col>
 
+          <b-col cols="6">
+            <b-card header="Node Color Mapping">
+              <b-form-radio-group class="g-2" v-model="node.nodeColorMappedTo" :options="node.nodeColorMap"
+                @change="changeColormap()">
+              </b-form-radio-group>
+            </b-card>
+          </b-col>
+        </b-row>
 
-              <tr>
-                <td>
-                  <b-button block :variant="
-                    (river.visibility ? '' : 'outline-') + river.color
-                  " v-on:click="toggleFeatureVisibility('river')">River</b-button>
-                  <b-button block :variant="
-                    (vertex.visibility ? '' : 'outline-') + vertex.color
-                  " v-on:click="toggleFeatureVisibility('vertex')">Vertex</b-button>
-                  <b-button-group class="d-flex mt-2">
-                    <b-button v-for="r in getRivers" :key="r.name"
-                      :variant="(river.rivers[r.name.toLowerCase()].visibility ? '' : 'outline-') + r.color"
-                      v-on:click="toggleFeatureVisibility('river', r.color)">{{ r.name }}
+        <b-card>
+          <b-row>
+            <b-col cols="6">
+              <b-button block :variant="
+                (river.visibility ? '' : 'outline-') + river.color
+              " v-on:click="toggleFeatureVisibility('river')">River</b-button>
+              <b-list-group class="my-2">
+                <b-list-group-item v-for="r in getRivers" :key="r.name"
+                  :variant="(river.rivers[r.name.toLowerCase()].visibility ? '' : 'outline-') + r.color"
+                  v-on:click="toggleFeatureVisibility('river', r.color)">
+                  <div class="g-3">
+                    {{ r.name }}
+                    <div class="svg-river-icon">
+
+                      <svg viewBox="0 0 100 64" fill="none" xmlns="http://www.w3.org/2000/svg" :name="r.name">
+                        <path :d="r.svg" stroke="#0072FF" stroke-width="5" />
+                      </svg>
+
+                    </div>
+                    <span class="right-label">
                       {{
                           getRiverTranslation(r.color)[0].toFixed(2) +
                           "," +
                           getRiverTranslation(r.color)[1].toFixed(2)
-                      }}
-                      <br />
-                    </b-button>
-                  </b-button-group>
+                      }}</span>
+                  </div>
+                </b-list-group-item>
+              </b-list-group>
 
-                  <b-button class="mt-2" block :variant="
-                    (metric.visibility ? '' : 'outline-') + 'primary'
-                  " v-on:click="showMetric(!metric.visibility)">Show metrics</b-button>
+              <b-button class="mt-2" block :variant="
+                (metric.visibility ? '' : 'outline-') + 'primary'
+              " v-on:click="showMetric(!metric.visibility)" :disabled="iteration.count === 0">Show Metrics</b-button>
 
-                  <p>DeltaX: {{ metric.deltaX }}</p>
-                  <p>DeltaY: {{ metric.deltaY }}</p>
-                </td>
-                <td>
-                  <b-button block variant="primary">
-                    Corridor length: {{ corridor.length }}
-                    <b-form-input id="slider-corridor-length" v-model="corridor.length" type="range" min="5" max="20">
-                    </b-form-input>
-                  </b-button>
+              <b-list-group class="mt-2">
+                <b-list-group-item class="g-2-6-4">
+                  <label>DeltaX</label>
+                  <span class="right-label">{{ metric.deltaX.toFixed(2) }}</span>
+                </b-list-group-item>
+                <b-list-group-item class="g-2-6-4">
+                  <label>DeltaY</label>
+                  <span class="right-label">{{ metric.deltaY.toFixed(2) }}</span>
+                </b-list-group-item>
+              </b-list-group>
+            </b-col>
 
-                  <b-button block variant="info">
-                    River thickness: {{ river.width }}
-                    <b-form-input id="slider-river-width" v-model="river.width" type="range" min="1" max="10"
-                      @change="setRiverWidth()"></b-form-input>
-                  </b-button>
+            <b-col cols="6">
+              <b-list-group>
+                <b-list-group-item>
+                  <div class="g-2">
+                    <span>
+                      Corridor Length
+                    </span>
+                    <span class="right-label">
+                      {{ corridor.length }}
+                    </span>
+                  </div>
+                  <b-form-input class="my-1" id="slider-corridor-length" v-model="corridor.length" type="range" min="5"
+                    max="20">
+                  </b-form-input>
+                </b-list-group-item>
+                <b-list-group-item>
+                  <div class="g-2">
+                    <span>
+                      River Thickness
+                    </span>
+                    <span class="right-label">
+                      {{ river.width }}
+                    </span>
+                  </div>
+                  <b-form-input class="my-1" id="slider-river-width" v-model="river.width" type="range" min="1" max="10"
+                    @change="setRiverWidth()">
+                  </b-form-input>
+                </b-list-group-item>
+                <b-list-group-item>
+                  <div class="g-2">
+                    <span>
+                      River Resolution
+                    </span>
+                    <span class="right-label">
+                      {{ river.spacing / 5 }}
+                    </span>
+                  </div>
 
-                  <b-button block variant="info">
-                    River resolution: {{ river.spacing
-                    }}<b-form-input id="slider-river-space" v-model="river.spacing" type="range" min="100" max="230"
-                      step="5" @change="adjustRiver()"></b-form-input>
-                  </b-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  <b-form-input class="my-1" id="slider-river-space" v-model="river.spacing" type="range" min="5"
+                    max="230" step="5" @change="adjustRiver()"></b-form-input>
+                </b-list-group-item>
+
+                <b-list-group-item class="g-2-6-4">
+                  <label>Show River Vertex</label>
+                  <b-form-checkbox class="right-label" v-model="vertex.visibility"
+                    @change="toggleFeatureVisibility('vertex')" name="check-button" switch>
+                  </b-form-checkbox>
+                </b-list-group-item>
+              </b-list-group>
+            </b-col>
+          </b-row>
+        </b-card>
       </b-col>
     </b-row>
   </b-container>
@@ -202,7 +247,7 @@ export default {
           .zoom()
           .extent([
             [0, 0],
-            [1000, 800],
+            [800, 800],
           ])
           .scaleExtent([1, 15])
           .on("zoom", zoomed)
@@ -507,16 +552,15 @@ export default {
           await __VM.removeOverlap(false, false);
         } else {
           __VM.iteration.current = 0;
-          __VM.step.button_disabled = false;
           d3.selectAll(".crossedArea").remove();
         }
-      });
+      })
 
 
       await __VM.delay(__VM.timer).then(async () => {
         if (__VM.checkAvgNodeSize() > __VM.node.maxSize) {
           __VM.iteration.current = 0;
-          __VM.step.button_disabled = false;
+          // __VM.step.button_disabled = false;
           d3.selectAll(".crossedArea").remove();
 
           if (!__VM.getRiverTranslationNoCrossing) {
@@ -529,7 +573,10 @@ export default {
             await __VM.removeOverlap();
           }
         }
+      }).then(() => {
+        __VM.step.button_disabled = false;
       });
+
     },
     async processStalemate() {
       const __VM = this;
@@ -966,6 +1013,7 @@ export default {
     toggleFeatureVisibility(type, name = false) {
       const __VM = this;
 
+      console.log(type);
       let layer = `.${type}-layer`;
       if (type === "river") {
         // toggle the specific river
@@ -1001,7 +1049,10 @@ export default {
         }
       } else {
 
-        __VM[type].visibility = !__VM[type].visibility;
+        if (type !== "vertex") {
+          __VM[type].visibility = !__VM[type].visibility;
+        }
+
         d3.selectAll(layer).style(
           "visibility",
           __VM[type].visibility ? "visible" : "hidden"
@@ -1165,6 +1216,8 @@ export default {
         }
 
         __VM.river.rivers[river].resolution = res;
+
+        console.log(river, res.length);
 
         d3.selectAll(`.${river} .river *`).remove();
 
@@ -1797,6 +1850,7 @@ export default {
             start: [479.02905797094195, 425.36659340425064],
             end: [347.65206051385206, 417.3280256468014],
             slope: 0.06118702598660611,
+            svg: "M130.259 15.3846L121.408 15.5647L113.09 17.0229L106.18 16.0718L99.9847 15.6757L95.9086 15.6067L91.3527 15.8947L87.0461 16.9389L83.99 16.3838L82.3694 19.3394L75.1426 20.5696L68.3805 15.8467L63.4506 14.1364L60.0394 12.7531L56.4959 13.6503L53.7306 16.1078L50.0814 17.038L42.2729 14.2144L42.0651 10.3106L35.9112 9.28143L37.1276 6.27185L34.079 3.4303L31.0153 5.9538L27.2905 6.62292L24.0077 7.13303L17.7405 7.71814L14.673 7.71512L10.5213 8.55231L6.8645 9.36246L0.740845 8.16522"
           },
           trent: {
             visibility: true,
@@ -1818,6 +1872,7 @@ export default {
               [364.91991729782876, 345.3079796168287],
             ],
             slope: -1.7862275682486464,
+            svg: "M86.4603 1L83.9821 6.80313L82.3275 23.1743L79.8871 39.0684L67.3036 47.5601L55.7967 51.8959L51.3579 53.4802L43.3265 54.5304L35.0647 57.51L32.3108 59.0283L28.2233 61.8759L24.8309 60.6576L18.9755 60.4716L13.6829 57.7951L11.7601 55.3586L8.42813 53.4352L5.6062 51.2568L3.53979 48.0852L5.508 43.4553L5.51932 40.1426"
           },
           ouse: {
             visibility: true,
@@ -1836,6 +1891,7 @@ export default {
             end: [381.6475632920202, 391.79904674408465],
             section: [[455.1011199115002, 372.2082259570797]],
             slope: -0.6539121728074947,
+            svg: "M83.767 1L84.1788 15.6248L84.3488 22.2591L79.1998 30.4117L75.0972 35.1106L70.4507 34.8106L64.2703 34.7746L58.8305 34.9396L52.9561 35.3357L50.6026 40.0646L46.2129 45.3066L40.1837 48.0041L33.1799 44.3734L29.4966 45.9757L25.1749 46.5519L22.4626 50.7557L18.1598 51.8749L15.7496 54.2694L12.2514 55.8897L8.09219 56.0037L4.48828 52.7571L1.65118 54.7164"
           },
         },
       },
@@ -2030,5 +2086,34 @@ export default {
 g.legend>rect {
   width: 15px;
   height: 15px;
+}
+
+.list-group-item label {
+  margin: 0;
+}
+
+.g-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.g-2-6-4 {
+  display: grid;
+  grid-template-columns: 60% 40%;
+}
+
+.g-3 {
+  display: grid;
+  grid-template-columns: 30% 30% 40%;
+}
+
+.svg-river-icon {
+  max-width: 4rem;
+}
+
+.right-label {
+  text-align: right;
+  color: #0072ff;
+  font-weight: 600;
 }
 </style>
