@@ -1262,11 +1262,10 @@ export default {
           const xSign = x > 0 ? 1 : -1;
           const ySign = y > 0 ? 1 : -1;
 
-
           translate.finalX +=
             Math.abs(x / nodeXCount) > __VM.river.translation.limit
               ? xSign * __VM.river.translation.limit
-              : x / nodeXCount;
+              : xSign * x / nodeXCount;
 
           if (Math.abs(translate.finalX) > __VM.river.translation.limit * 5) {
             translate.finalX = translate.finalXOld
@@ -1275,7 +1274,7 @@ export default {
           translate.finalY +=
             Math.abs(y / nodeXCount) > __VM.river.translation.limit
               ? ySign * __VM.river.translation.limit
-              : y / nodeXCount;
+              : ySign * y / nodeXCount;
 
           if (Math.abs(translate.finalY) > __VM.river.translation.limit * 5) {
             translate.finalY = translate.finalYOld
