@@ -8,21 +8,21 @@ Shapefiles from different sources are likely to be incompatible. In our case, th
 We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, followed by the CCG shapefile \Cref{fig:import_ccgs}.
 
 {
-\begin{figure}[tbh!]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/import_rivers.png}
     \caption{QGIS interface, with River Trent, River Great Ouse, and River Thames (from top to bottom) imported.}
     \label{fig:import_rivers}
 \end{figure}
 
-\begin{figure}[tbh!]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/import_ccgs.png}
     \caption{QGIS interface, with all NHS CCGs imported.}
     \label{fig:import_ccgs}
 \end{figure}
 
-\begin{figure}[tbh!]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/unify_crs.png}
     \caption{QGIS interface, showing the unified CRS (OSGB36) for both layers.}
@@ -35,14 +35,14 @@ We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, fol
 We then use QGIS to unify the CRS, and export both layers in the GeoJSON format. See \Cref{fig:export_rivers} and \Cref{fig:export_ccgs}. The unified layer is shown in \Cref{fig:unify_crs}.
 
 {
-\begin{figure}[tbh!]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/export_rivers.png}
     \caption{QGIS interface, exporting all rivers using the OSGB36 CRS in GeoJSON.}
     \label{fig:export_rivers}
 \end{figure}
 
-\begin{figure}[tbh!]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/export_ccgs.png}
     \caption{QGIS interface, exporting all NHS CCGs using the OSGB36 CRS in GeoJSON.}
@@ -56,7 +56,7 @@ We then use QGIS to unify the CRS, and export both layers in the GeoJSON format.
 We then merge two layers into one layer, and export it in the TopoJSON format using Mapshaper \cite{blochMapshaper}. Mapshaper also supports the simplification of GeoJSON shapefiles. See \Cref{fig:export_topojson}.
 
 {
-\begin{figure}[tbh!]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/export_topojson.png}
     \caption{Mapshaper interface, merging all rivers with NHS CCGs into one layer, and export the merged layer in TopoJSON.}
@@ -98,7 +98,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
 \section{Procedure: TranslateRiver}
 
-\begin{algorithm}[tb!]
+\begin{algorithm}[h!]
     \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
     \textbf{Input:} \\
     $ \nodeList \gets $ a list of $ \node $ representing CCGs \\
@@ -139,7 +139,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
 \section{Procedure: TestIntersection}
 % \begin{noindent}
-    \begin{algorithm}[tb!]
+    \begin{algorithm}[h!]
         \caption{Procedure to test if a node's translation path, $ \nodeLineNV $ intersects a river.}\label{alg:check river intersection}
         \textbf{Input:} \\
         $ \nodeLineNV \gets $ the node's translation path \\
@@ -175,7 +175,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
 % \begin{noindent}
 
-    \begin{algorithm}[tbh!]
+    \begin{algorithm}[h!]
         \caption{Procedure to derive a point based an edge and a distance.}\label{alg:derive corridor point}
         \textbf{Input:} \\
         $ \Edge \gets $ the edge used to derive the new point \\
@@ -210,7 +210,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
 % \begin{noindent}
 
-\begin{algorithm}[tbh!]
+\begin{algorithm}[h!]
     \caption{Procedure to derive an edge, $ \EdgeParallel $, that is parallel to $ \Edge $ with a distance of $ \Distance $.}\label{alg:derive corridor edge}
 
     \textbf{Input:} \\

@@ -213,6 +213,18 @@ The algorithm terminates when the average node size $ \nodeSizeAvg $ reaches the
 
 \subsection{User Options}
 
+\Cref{fig:overview} presents an overview of the implementation, including the user options. The user can adjust the following parameters:
+
+\bobgraph{Visibility:} The visibility of various elements, including the choropleth, rivers, nodes, and node centroids, can be toggled on and off.
+
+\bobgraph{Node Mapping:} Both size and color of the nodes can be mapped to different EHR datasets or set to uniform.
+
+\bobgraph{Overlap Removal Behavior:} The overlap removal process can be observed in a step-by-step manner, or the algorithm can be run automatically. The behavior of rivers during the process can also be adjusted by the user: 1) Disallow river crossing: this option forbids nodes from crossing rivers; 2) Disable river translation: this option disables the translation of rivers. Both options are useful for generating different layouts for observations.
+
+\bobgraph{Corridor Length:} The user can define the length of a corridor, which is used to resolve stalemate situations. A longer corridor length allows more nodes to be translated when a stalemate occurs, but may result in a less legible layout.
+
+\bobgraph{River Thickess and Resolution:} Increasing the thickness of rivers may improve the recognizability of the cartogram. Similarity, increasing the resolution of rivers, at the expense of the speed of node-river intersection test, may produce a layout with higher legibility.
+
 {
 \begin{figure*}[htb!]
     \centering
