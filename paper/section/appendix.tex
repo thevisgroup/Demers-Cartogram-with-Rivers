@@ -8,26 +8,26 @@ Shapefiles from different sources are likely to be incompatible. In our case, th
 We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, followed by the CCG shapefile \Cref{fig:import_ccgs}.
 
 {
-    \begin{figure}[tbh!]
-        \centering
-        \includegraphics[width=\columnwidth]{figure/qgis/import_rivers.png}
-        \caption{QGIS interface, with River Trent, River Great Ouse, and River Thames (from top to bottom) imported.}
-        \label{fig:import_rivers}
-    \end{figure}
+\begin{figure}[tbh!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/qgis/import_rivers.png}
+    \caption{QGIS interface, with River Trent, River Great Ouse, and River Thames (from top to bottom) imported.}
+    \label{fig:import_rivers}
+\end{figure}
 
-    \begin{figure}[tbh!]
-        \centering
-        \includegraphics[width=\columnwidth]{figure/qgis/import_ccgs.png}
-        \caption{QGIS interface, with all NHS CCGs imported.}
-        \label{fig:import_ccgs}
-    \end{figure}
+\begin{figure}[tbh!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/qgis/import_ccgs.png}
+    \caption{QGIS interface, with all NHS CCGs imported.}
+    \label{fig:import_ccgs}
+\end{figure}
 
-    \begin{figure}[tbh!]
-        \centering
-        \includegraphics[width=\columnwidth]{figure/qgis/unify_crs.png}
-        \caption{QGIS interface, showing the unified CRS (OSGB36) for both layers.}
-        \label{fig:unify_crs}
-    \end{figure}
+\begin{figure}[tbh!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/qgis/unify_crs.png}
+    \caption{QGIS interface, showing the unified CRS (OSGB36) for both layers.}
+    \label{fig:unify_crs}
+\end{figure}
 }
 
 \subsection{Export Shapefiles in GeoJSON and Unify the Coordinate Reference System (CRS)}
@@ -35,19 +35,19 @@ We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, fol
 We then use QGIS to unify the CRS, and export both layers in the GeoJSON format. See \Cref{fig:export_rivers} and \Cref{fig:export_ccgs}. The unified layer is shown in \Cref{fig:unify_crs}.
 
 {
-    \begin{figure}[tbh!]
-        \centering
-        \includegraphics[width=\columnwidth]{figure/qgis/export_rivers.png}
-        \caption{QGIS interface, exporting all rivers using the OSGB36 CRS in GeoJSON.}
-        \label{fig:export_rivers}
-    \end{figure}
+\begin{figure}[tbh!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/qgis/export_rivers.png}
+    \caption{QGIS interface, exporting all rivers using the OSGB36 CRS in GeoJSON.}
+    \label{fig:export_rivers}
+\end{figure}
 
-    \begin{figure}[tbh!]
-        \centering
-        \includegraphics[width=\columnwidth]{figure/qgis/export_ccgs.png}
-        \caption{QGIS interface, exporting all NHS CCGs using the OSGB36 CRS in GeoJSON.}
-        \label{fig:export_ccgs}
-    \end{figure}
+\begin{figure}[tbh!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/qgis/export_ccgs.png}
+    \caption{QGIS interface, exporting all NHS CCGs using the OSGB36 CRS in GeoJSON.}
+    \label{fig:export_ccgs}
+\end{figure}
 
 }
 
@@ -56,48 +56,90 @@ We then use QGIS to unify the CRS, and export both layers in the GeoJSON format.
 We then merge two layers into one layer, and export it in the TopoJSON format using Mapshaper \cite{blochMapshaper}. Mapshaper also supports the simplification of GeoJSON shapefiles. See \Cref{fig:export_topojson}.
 
 {
-    \begin{figure}[tbh!]
-        \centering
-        \includegraphics[width=\columnwidth]{figure/qgis/export_topojson.png}
-        \caption{Mapshaper interface, merging all rivers with NHS CCGs into one layer, and export the merged layer in TopoJSON.}
-        \label{fig:export_topojson}
-    \end{figure}
+\begin{figure}[tbh!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure/qgis/export_topojson.png}
+    \caption{Mapshaper interface, merging all rivers with NHS CCGs into one layer, and export the merged layer in TopoJSON.}
+    \label{fig:export_topojson}
+\end{figure}
 }
 
 \subsection{Pre-processing Result}
 
 \Cref{table:pre-processing_result} shows the pre-processing result. The reduction in file size is significant and greatly reduces the initialization time of our implementation.
 
-{
-\renewcommand{\arraystretch}{1.5}
-\begin{table}[!tb]
-	\centering
-	\resizebox{\columnwidth}{!}{
-		\begin{tabulary}{\columnwidth}{|*{4}{l|}}
-			\hhline{~|*{3}{-}}
-			\multicolumn{1}{c|}{\textbf{Shapefile}} &
-			\cellcolor{Mycolor2}\textbf{Original} &
-			\cellcolor{Mycolor2}\textbf{GeoJSON} &
-			\cellcolor{Mycolor2}\textbf{TopoJSON} \\
-			\hline
-			Rivers & 2.0 MB (GeoJSON) & 1.4 MB & -  \\
-			\hline
-			NHS CCGs & 46.6 MB (.shp, Esri vector shapefile) & 140.2 MB & -  \\
-			\hline
-			Merged & - & - & 16.3 MB \\
-			\hline
-		\end{tabulary}
-	}
-	\caption{The file size is reduced by 88.5\% from the original size.}
-	\label{table:pre-processing_result}
-\end{table}
-}
+    {
+        \renewcommand{\arraystretch}{1.5}
+        \begin{table}[!tb]
+            \centering
+            \resizebox{\columnwidth}{!}{
+                \begin{tabulary}{\columnwidth}{|*{4}{l|}}
+                    \hhline{~|*{3}{-}}
+                    \multicolumn{1}{c|}{\textbf{Shapefile}} &
+                    \cellcolor{Mycolor2}\textbf{Original} &
+                    \cellcolor{Mycolor2}\textbf{GeoJSON} &
+                    \cellcolor{Mycolor2}\textbf{TopoJSON} \\
+                    \hline
+                    Rivers & 2.0 MB (GeoJSON) & 1.4 MB & -  \\
+                    \hline
+                    NHS CCGs & 46.6 MB (.shp, Esri vector shapefile) & 140.2 MB & -  \\
+                    \hline
+                    Merged & - & - & 16.3 MB \\
+                    \hline
+                \end{tabulary}
+            }
+            \caption{The file size is reduced by 88.5\% from the original size.}
+            \label{table:pre-processing_result}
+        \end{table}
+    }
 
 \clearpage
 
+
+\section{Procedure: TranslateRiver}
+
+\begin{algorithm}[tb!]
+    \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
+    \textbf{Input:} \\
+    $ \nodeList \gets $ a list of $ \node $ representing CCGs \\
+
+    \textbf{Local variables:} \\
+    $ count \gets $ the number of river crossing nodes \\
+    $ \riverList \gets $ a list of $ \river $ representing river features \\
+    $ \node \gets $ a node is an object with the following properties: \\
+    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
+    \-\hspace{1em} $ \nodeCross \gets $ the counter for river crosses for $ \node $ \\
+    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
+    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+
+    \begin{algorithmic}[1]
+        \Procedure{TranslateRiver}{$ \nodeList $}
+        \ForEach {$ \river \in \riverList $}
+        \State $ count \gets 0 $
+        \State $ \riverVector \gets (0,0) $ \Comment{Hold the sum of vectors $ \nodeVectorCT $}
+        \ForEach {$ \node \in \nodeList $}
+
+        \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
+        \If{ \Call{TestIntersection}{$ \nodeFNORLine $, $ \river $} $ = True $}
+        \State $ \riverVector \gets \riverVector + \nodeVectorCT$
+        \State $ count ++ $
+        \EndIf
+
+        \EndIf
+
+        \EndFor
+
+        \State Translate river $ \river $ by the average vector $ \frac{\riverVector}{count} $
+        \EndFor
+
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+
 \section{Procedure: TestIntersection}
 % \begin{noindent}
-    \begin{algorithm}[htb!]
+    \begin{algorithm}[tb!]
         \caption{Procedure to test if a node's translation path, $ \nodeLineNV $ intersects a river.}\label{alg:check river intersection}
         \textbf{Input:} \\
         $ \nodeLineNV \gets $ the node's translation path \\
@@ -127,7 +169,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
         \end{algorithmic}
     \end{algorithm}
     %\end{noindent}
-    
+
 
 \section{Procedure: DerivePoint}
 

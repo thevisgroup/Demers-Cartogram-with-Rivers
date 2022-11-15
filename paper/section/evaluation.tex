@@ -1,7 +1,7 @@
-\newcommand{\pCount}{15 }
+\newcommand{\pCount}{24 }
 \section{User-Centered Evaluation}
 
-We conduct a preliminary user study to evaluate the effectiveness of our approach. 
+We conduct a preliminary user study to evaluate the effectiveness of our approach.
 
 \subsection{User Study Tasks}
 
@@ -9,17 +9,17 @@ We formulate the following hypotheses to design our user study:
 
 \textbf{H1:} The introduction of rivers can improve the legibility and recognizability of cartograms.
 
-\textbf{H2:} The introduction of rivers can reduce the time needed to locate a CCG in a cartogram.
+\textbf{H1.1:} The introduction of rivers can increase target location accuracy.
 
-We test these hypotheses using location based tasks. Given a standard choropleth on the left side of the screen and a cartogram on the right side, we ask user study participants to locate the given region in the choropleth in the cartogram.
+\textbf{H1.2:} The introduction of rivers can reduce the time needed to locate a CCG in a cartogram.
+
+We test these hypotheses using location based tasks. Given a standard choropleth on the left side of the screen and a cartogram on the right side, we ask user study participants to locate the given region in the choropleth in the cartogram. See \Cref{fig:task}.
 
 \subsection{User Study Variables}
 
 We discuss the variables of our user study in this section.
 
-\subsubsection{Independant Variables}
-
-The primary independent variable is the presence of rivers in the cartograms, which directly impacts the final layout of the cartogram. We set this parameter to either render rivers or not.
+\bobgraph{Independant Variables: }The primary independent variable is the presence of rivers in the cartograms, which directly impacts the final layout of the cartogram. We set this parameter to either render rivers or not.
 
 % {
 % \renewcommand{\arraystretch}{1.5}
@@ -45,18 +45,15 @@ The primary independent variable is the presence of rivers in the cartograms, wh
 % }
 
 
-\subsubsection{Dependant Variables}
-
-\bobgraph{Accuracy:} Given a CCG location in the choropleth on the left, we ask the participant to locate the corresponding node in the cartogram. The is the primary dependent variable measured by the number of correct CCGs chosen by the participants.
+\bobgraph{Dependant Variables: }\bobgraph{Accuracy:} Given a CCG location in the choropleth on the left, we ask the participant to locate the corresponding node in the cartogram. The is the primary dependent variable measured by the number of correct CCGs chosen by the participants.
 
 \bobgraph{Response time:} Another dependant variable is the time taken by the participants to complete each task.
 
-\subsubsection{Control Variables}
-\bobgraph{Choice of color map:} We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green, to depict the data in our cartograms.
+\bobgraph{Control Variables: }\bobgraph{Choice of color map:} We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green, to depict the data in our cartograms.
 
 \bobgraph{Communicating the target CCG to the user:} We inform the participant about the target CCG that they need to find. The target CCG is shown in the form of a non-stop blinking (between its original color and black) area on the screen, each blink is given a duration of 2 seconds.
 
-\subsection{User Study}
+\subsection{User Study Design}
 In this section we describe the user study participants, datasets, and the experiment procedure.
 
 \bobgraph{Participants:} We recruited \pCount participants.
@@ -79,60 +76,69 @@ In this section we describe the user study participants, datasets, and the exper
 135 CGGs are rendered on the screen as a choropleth on the left. We then generated another view on the right using cartograms. The color in both visual designs is mapped to the dataset. See \Cref{fig:task}.
 
 {
-    \begin{figure}[htb!]
-        \centering
-        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task.png}
-        \caption{A sample task for participants. The left shows the choropleth map, and the right shows the corresponding cartogram. Both images show the three longest rivers in England, and the color is mapped to CCG population. The target CGG is blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
-        \label{fig:task}
-    \end{figure}
+\begin{figure}[tb!]
+    \centering
+    \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task.png}
+    \caption{A sample task for participants. The left shows the choropleth map, and the right shows the corresponding cartogram. Both images show the three longest rivers in England, and the color is mapped to CCG population. The target CGG is blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
+    \label{fig:task}
+\end{figure}
 }
 
 \subsubsection{Procedure}
 
-The user study is designed to be conducted online, and participants are asked to complete the tasks using their own computer. The user study includes four parts:
+The user study is designed to be conducted online, and participants are asked to complete the tasks using their own hardware. The user study includes four parts:
 
-\textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos. The instructions are designed to help participants understand the concepts used in the tasks. Instructional videos are available at \url{https://www.youtu.be/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
+\textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos. The instructions are designed to help participants understand the concepts used in the tasks. Instructional videos are available at \URL{https://www.youtu.be/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
 
-\textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design. A demonstration of three sample tasks is also included in the instructional video.
+\textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design. These tasks also serve as a quality test to see if the users are taking the study seriously. A demonstration of three sample tasks is also included in the instructional video.
 
-\textbf{P3:} The participants are asked to complete 16 location tasks. The response and reaction time are recorded. These 16 CCGs were carefully selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
+\textbf{P3:} The participants are asked to complete 16 location tasks. The response and reaction time are recorded. These 16 CCGs were selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
 
 \textbf{P4:} The participants were asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
 
-These are provided in the appendix, and available at \url{https://osf.io/q39w7}.
+The entire study is available at \URL{https://osf.io/q39w7}.
 
 \subsection{User Study Results}
 
 In this section we analyze the results of our user study. We recruited \pCount participants to perform 16 location tasks each, in total we collected 240 responses, 59 responses that took over 20 seconds are excluded from the analysis.
 
-{
-    \begin{figure}[htb!]
-        \centering
-        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task-rt.png}
-        \caption{The scatter plot shows the response time (in seconds) and answers for each task. Correct answers are shown in green circle, and incorrect answers are shown in red triangle. Solid glyphs represent the task without rivers, and hollow glyphs represent the task with rivers.}
-        \label{fig:task-all}
-    \end{figure}
-}
+\bobgraph{Accuracy:} \Cref{fig:task-acc} shows the accuracy measured by the number of correct CCGs chosen by the participants. The chart shows that the introduction of rivers has improved the accuracy for two CCGs. The accuracy for the two groups differs significantly according to the two-sample unequal variance $t$-test performed, $t$(176.43) = 2.92, $p$ = 0.0039. This supports our hypothesis H1.1 that the introduction of rivers increases target location accuracy.
 
-\bobgraph{Accuracy:} \Cref{fig:task-acc} shows the accuracy measured by the number of correct CCGs chosen by the participants. The chart shows that the introduction of rivers has improved the accuracy for two CCGs. The accuracy for the two groups differs significantly according to the two-sample unequal variance $t$-test performed, $t$(176.43) = 2.92, $p$ = 0.0039. This supports our hypothesis H1 that the introduction of rivers improves the legibility of cartogram.
-
-{
-    \begin{figure}[htb!]
-        \centering
-        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/accuracy.png}
-        \caption{The bar chart shows the accuracy of locating CCGs.}
-        \label{fig:task-acc}
-    \end{figure}
-}
+    {
+        \begin{figure}[tb!]
+            \centering
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/accuracy.png}
+            \caption{The bar chart shows the accuracy of locating CCGs with and without rivers.}
+            \label{fig:task-acc}
+        \end{figure}
+    }
 
 
-\bobgraph{Response Time:} \Cref{fig:task-rt} shows the average response time measured for four CCGs. The chart shows that the introduction of rivers has slightly reduced the time needed to locate CCGs. The two groups show no significant differences according to the two-sample unequal variance $t$-test performed, $t$(168.03) = 1.29, $p$ = 0.20.  The statistical analysis does not support our hypothesis H2, that the introduction of rivers does not reduce the response time significantly.
+\bobgraph{Response Time:} \Cref{fig:task-rt} shows the average response time measured for four CCGs. The chart shows that the introduction of rivers has slightly reduced the time needed to locate CCGs. The two groups show no significant differences according to the two-sample unequal variance $t$-test performed, $t$(168.03) = 1.29, $p$ = 0.20. The statistical analysis does not support our hypothesis H1.2, that the introduction of rivers reduces the response time significantly.
 
-{
-    \begin{figure}[htb!]
-        \centering
-        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/rt.png}
-        \caption{The bar chart shows the average response time for locating CCGs.}
-        \label{fig:task-rt}
-    \end{figure}
-}
+    {
+        \begin{figure}[tb!]
+            \centering
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/rt.png}
+            \caption{The bar chart shows the average response time for locating CCGs with and without rivers.}
+            \label{fig:task-rt}
+        \end{figure}
+    }
+
+\bobgraph{Feedback:} \Cref{fig:likert} shows the results of the following Likert Scale questions:
+\begin{enumerate}[label=(\Alph*),align=left,leftmargin=*,labelindent=1em]
+    \item 87.50\% of participants agree that including rivers is useful.
+    \item 83.33\% of participants agree that rivers increase the legibility of a cartogram.
+    \item 95.83\% of participants agree that including rivers makes cartograms easier to understand.
+    \item 62.50\% of participants agree that including rivers makes CCGs easier to locate.
+    \item 87.50\% of participants agree that including rivers adds value to the standard cartogram.
+\end{enumerate}
+
+    {
+        \begin{figure}[b!]
+            \centering
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/likert.png}
+            \caption{The stacked bar chart shows the responses of Likert Scale questions.}
+            \label{fig:likert}
+        \end{figure}
+    }

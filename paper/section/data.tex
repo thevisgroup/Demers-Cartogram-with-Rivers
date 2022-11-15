@@ -1,17 +1,15 @@
 \section{Data Description}
 
-{
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
-    \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography Portalx \cite{opengeographyportalxOpen} with EPSG:4326 (WGS84 - World Geodetic System) as the Coordinate Reference System (CRS).}
-    \label{fig:ccg}
-\end{figure}
-}
+ {
+  \begin{figure}[tb!]
+      \centering
+      \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
+      \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography Portalx \cite{opengeographyportalxOpen} with EPSG:4326 (WGS84 - World Geodetic System) as the Coordinate Reference System (CRS).}
+      \label{fig:ccg}
+  \end{figure}
+ }
 
-Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved \cite{wang2021EHRa}. The first step is to obtain both geospatial boundaries and EHR data. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms.
-
-Geospatial boundaries, or shapefiles, were obtained from the sources described here.
+Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved \cite{wang2021EHRa}. The first step is to obtain both geospatial boundaries and EHR data. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms. Geospatial boundaries, or shapefiles, were obtained from the sources described here.
 
 \bobgraph{Clinical Commissioning Groups Shapefile:} Clinical Commissioning Groups (CCGs) are the primary administrative and geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to NHS re-organization. The most up-to-date shapefile is available from the Open Geography Portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, due to the absence of public EHR data published based on the latest CCG re-organizations that took place in 2021 and 2022.
 
@@ -19,7 +17,7 @@ Geospatial boundaries, or shapefiles, were obtained from the sources described h
 
 We first obtain a relation ID by searching for a river, e.g. River Thames, on OpenStreetMap. The relation ID is used to construct a query (See Listing~\ref{overpass}) which enables the user to download the entire river shapefile using Overpass Turbo \cite{overpassturboOverpass}.
 
-\begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via the Overpass Turbo API.}, label={overpass},captionpos=b]
+\begin{lstlisting}[float=tp,caption={The query that downloads the shapefile of River Thames from OpenStreetMap via the Overpass Turbo API.}, label={overpass},captionpos=b]
     relation(2263653);>>;
     // River Great Ouse: 2798097
     // River Trent: 2863468
@@ -34,7 +32,7 @@ After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adju
     \item Emergency hospital admission: stroke, alcohol-specific admission and readmission, coronary heart disease, re-admissions within 30 days of discharge, children with lower respiratory tract infections
 \end{itemize}
 
-For all datasets, a spreadsheet including the following data is provided:
+For all datasets, a spreadsheet including the following is provided:
 
 \begin{itemize}
     \item Reporting period: Calendar year of registration
