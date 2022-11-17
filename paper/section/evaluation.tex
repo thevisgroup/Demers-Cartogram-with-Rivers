@@ -11,7 +11,7 @@ We formulate the following hypotheses to design our user study:
 
 \textbf{H1.1:} The introduction of rivers can increase target location accuracy.
 
-\textbf{H1.2:} The introduction of rivers can reduce the time needed to locate a CCG in a cartogram.
+\textbf{H1.2:} The introduction of rivers can reduce the time needed to locate a target region in a cartogram.
 
 We test these hypotheses using location based tasks. Given a standard choropleth on the left side of the screen and a cartogram on the right side, we ask user study participants to locate the given region in the choropleth in the cartogram. See \Cref{fig:task}.
 
@@ -45,19 +45,19 @@ We discuss the variables of our user study in this section.
 % }
 
 
-\bobgraph{Dependant Variables: }\bobgraph{Accuracy:} Given a CCG location in the choropleth on the left, we ask the participant to locate the corresponding node in the cartogram. The is the primary dependent variable measured by the number of correct CCGs chosen by the participants. \bobgraph{Response time:} Another dependant variable is the time taken by the participants to complete each task.
+\bobgraph{Dependant Variables: }\textit{Accuracy:} Given a CCG location in the choropleth on the left, we ask the participant to locate the corresponding node in the cartogram. The is the primary dependent variable measured by the number of correct CCGs chosen by the participants. \textit{Response time:} Another dependant variable is the time taken by the participants to complete each task.
 
-\bobgraph{Control Variables: }\bobgraph{Choice of color map:} We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green, to depict the data in our cartograms. \bobgraph{Communicating the target CCG to the user:} We inform the participant about the target CCG that they need to find. The target CCG is shown in the form of a non-stop blinking (between its original color and black) area on the screen, each blink is given a duration of 2 seconds.
+\bobgraph{Control Variables: }\textit{Choice of color map:} We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green, to depict the data in our cartograms. \textit{Communicating the target CCG to the user:} We inform the participant about the target CCG that they need to find. The target CCG is shown in the form of a non-stop blinking (between its original color and black) area on the screen, each blink is given a duration of 2 seconds.
 
 \subsection{User Study Design}
-In this section we describe the user study participants, datasets, and the experiment procedure.
+In this section we describe the user study participants, datasets, and the experimental procedure.
 
 \bobgraph{Participants:} We recruited \pCount participants.
 
 \begin{itemize}
-    \item Gender:  10 females and 14 males
-    \item Age Group:   18-24 (16), 25-29 (8)
-    \item Education:   1 PhD, 11 Master's, 8 Bachelor's, 4 Others
+    \item Gender: 10 females and 14 males
+    \item Age Group: 18-24 (16), 25-29 (8)
+    \item Education: 1 PhD, 11 Master's, 8 Bachelor's, 4 Others
 \end{itemize}
 
 \bobgraph{Datasets:} We used the following datasets for our evaluation:
@@ -69,13 +69,13 @@ In this section we describe the user study participants, datasets, and the exper
     \item Alcohol-specific admission and readmission
 \end{itemize}
 
-135 CGGs are rendered on the screen as a choropleth on the left. We then generated another view on the right using cartograms. The color in both visual designs is mapped to the dataset. See \Cref{fig:task}.
+135 CGGs are rendered on the screen as a choropleth on the left. We then generated another view on the right using cartograms. The color in both visual designs is mapped to the dataset. See \Cref{fig:task} for an example.
 
 {
 \begin{figure}[tb!]
     \centering
     \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task.png}
-    \caption{A sample task for participants. The left shows the choropleth map, and the right shows the corresponding cartogram. Both images show the three longest rivers in England, and the color is mapped to CCG population. The target CGG is blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
+    \caption{A sample location task for participants. The left shows the choropleth map, and the right shows the corresponding cartogram. Both images show the three longest rivers in England, and the color is mapped to CCG population. The target CGG is blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
     \label{fig:task}
 \end{figure}
 }
@@ -92,36 +92,36 @@ The user study is designed to be conducted online, and participants are asked to
 
 \textbf{P4:} The participants were asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
 
-The entire study is available at \URL{https://osf.io/q39w7}.
+The materials for P1-P4 are available at \URL{https://osf.io/q39w7}.
 
 \subsection{User Study Results}
 
-In this section we analyze the results of our user study. We recruited \pCount participants to perform 16 location tasks each, in total we collected 240 responses, 59 responses that took over 20 seconds are excluded from the analysis.
+In this section we analyze the results of our preliminary user study. We recruited \pCount participants to perform 16 location tasks each, in total we collected 384 responses, 24 responses that took over 60 seconds are excluded from the analysis. We hypothesize that participants taking longer than 60 seconds to complete a task were distracted from the study.
 
-\bobgraph{Accuracy:} \Cref{fig:task-acc} shows the accuracy measured by the number of correct CCGs chosen by the participants. The chart shows that the introduction of rivers has improved the accuracy for two CCGs. The accuracy for the two groups differs significantly according to the two-sample unequal variance $t$-test performed, $t$(176.43) = 2.92, $p$ = 0.0039. This supports our hypothesis H1.1 that the introduction of rivers increases target location accuracy.
+\bobgraph{Accuracy:} \Cref{fig:task-acc} shows the accuracy measured by the number of correct CCGs chosen by the participants. The chart shows that the introduction of rivers has improved the accuracy for two CCGs. The accuracy for the two groups differs significantly according to the two-sample unequal variance $t$-test performed, $t$(262.98) = 3.76, $p$ = 0.0002. This supports our hypothesis H1.1 that the introduction of rivers increases target location accuracy.
 
     {
         \begin{figure}[tb!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/accuracy.png}
-            \caption{The bar chart shows the accuracy of locating CCGs with and without rivers.}
+            \caption{In the bar chart, the y-axis shows the average accuracy rate of locating CCGs with and without rivers, the x-axis shows the target CCGs.}
             \label{fig:task-acc}
         \end{figure}
     }
 
 
-\bobgraph{Response Time:} \Cref{fig:task-rt} shows the average response time measured for four CCGs. The chart shows that the introduction of rivers has slightly reduced the time needed to locate CCGs. The two groups show no significant differences according to the two-sample unequal variance $t$-test performed, $t$(168.03) = 1.29, $p$ = 0.20. The statistical analysis does not support our hypothesis H1.2, that the introduction of rivers reduces the response time significantly.
+\bobgraph{Response Time:} \Cref{fig:task-rt} shows the average response time measured for four CCGs. The chart indicates that the introduction of rivers has slightly reduced the time needed to locate CCGs. The two groups show no statistically significant differences according to the two-sample unequal variance $t$-test performed, $t$(356.03) = 0.87, $p$ = 0.38.
 
     {
         \begin{figure}[tb!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/rt.png}
-            \caption{The bar chart shows the average response time for locating CCGs with and without rivers.}
+            \caption{In the bar chart, the y-axis shows the average response time for locating CCGs with and without rivers, the x-axis shows the target CCGs.}
             \label{fig:task-rt}
         \end{figure}
     }
 
-\bobgraph{Feedback:} \Cref{fig:likert} shows the results of the following Likert Scale questions:
+\bobgraph{Participant Feedback:} \Cref{fig:likert} shows the results of the following Likert Scale questions:
 \begin{enumerate}[label=(\Alph*),align=left,leftmargin=*,labelindent=1em]
     \item 87.50\% of participants agree that including rivers is useful.
     \item 83.33\% of participants agree that rivers increase the legibility of a cartogram.
@@ -138,3 +138,5 @@ In this section we analyze the results of our user study. We recruited \pCount p
             \label{fig:likert}
         \end{figure}
     }
+
+The qualitative results clearly support our hypothesis H1 that rivers generally increase the legibility of cartograms.

@@ -104,32 +104,31 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
     $ \nodeList \gets $ a list of $ \node $ representing CCGs \\
 
     \textbf{Local variables:} \\
-    $ count \gets $ the number of river crossing nodes \\
     $ \riverList \gets $ a list of $ \river $ representing river features \\
     $ \node \gets $ a node is an object with the following properties: \\
     \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
-    \-\hspace{1em} $ \nodeCross \gets $ the counter for river crosses for $ \node $ \\
     \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
     \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+    $ j \gets $ the number of nodes intersecting $ \river $  \\
 
     \begin{algorithmic}[1]
         \Procedure{TranslateRiver}{$ \nodeList $}
         \ForEach {$ \river \in \riverList $}
-        \State $ count \gets 0 $
+        \State $ j \gets 0 $
         \State $ \riverVector \gets (0,0) $ \Comment{Hold the sum of vectors $ \nodeVectorCT $}
         \ForEach {$ \node \in \nodeList $}
 
         \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
         \If{ \Call{TestIntersection}{$ \nodeFNORLine $, $ \river $} $ = True $}
         \State $ \riverVector \gets \riverVector + \nodeVectorCT$
-        \State $ count ++ $
+        \State $ j ++ $
         \EndIf
 
         \EndIf
 
         \EndFor
 
-        \State Translate river $ \river $ by the average vector $ \frac{\riverVector}{count} $
+        \State Translate river $ \river $ by the average vector $ \frac{\riverVector}{j} $
         \EndFor
 
         \EndProcedure

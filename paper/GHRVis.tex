@@ -107,7 +107,7 @@
     \parbox{\textwidth}{\centering School of Computer Science, University of Nottingham, UK \\ \begin{center}
             \vspace{2em}
             \includegraphics[width=\textwidth,keepaspectratio]{figure/cover.png}
-            \captionof{figure}{The River Thames passing through NHS Clinical Commissioning Groups in London and surrounding areas.}
+            \captionof{figure}{The River Thames passing through a cartographic representation of the NHS Clinical Commissioning Groups in London and surrounding areas.}
         \end{center}
     }
 }
@@ -119,7 +119,7 @@
 \maketitle
 
 \begin{abstract}
-    Cartograms are hybrid representations of geographical and abstract data based on a value-by-area mapping technique. A relative of the Dorling cartogram, the Demers cartogram uses squares instead of circles to represent regions, enabling the comparison of regions in a more intuitive way with a higher screen space utilization. One of the disadvantages of the Dorling cartogram and its variants is that regions may be displaced from their original positions, reducing the legibility, readability, and geographical accuracy. To address this, we propose a novel cartogram layout algorithm that integrates dynamic topological features such as rivers into Demers cartograms. Rivers affect both the layout and appearance of cartograms. We evaluate the proposed layout algorithm through a user study with an application to an Electronic Health Records (EHR) dataset. The results demonstrate that the proposed layout algorithm is able to preserve some of the original properties of the cartogram, while improving the legibility, readability, and geographical accuracy of the cartogram.
+    Cartograms are representations of geographical and abstract data based on a value-by-area mapping technique. A relative of the Dorling cartogram, the Demers cartogram uses squares instead of circles to represent regions, enabling the comparison of regions in a more intuitive way with a higher screen space utilization. One of the disadvantages of the Dorling cartogram and its variants is that regions may be displaced from their original positions, reducing the legibility, readability, and geographical accuracy. To address this, we propose a novel hybrid cartogram layout algorithm that integrates dynamic topological features such as rivers into Demers cartograms. Rivers affect both the layout and appearance of cartograms. We evaluate the proposed hybrid layout algorithm through a user study with an application to an Electronic Health Records (EHR) dataset. The results demonstrate that the proposed layout algorithm is able to preserve some of the original properties of the cartogram, while improving the legibility, readability, and geographical accuracy of the cartogram.
 \end{abstract}
 
 \input{section/introduction}
@@ -139,7 +139,6 @@
 % \section{Acknowledgments}
 % This work is funded by the grant EP/S010238/2 from the Engineering and Physical Sciences Research Council (EPSRC). EPSRC is a British Research Council that provides government funding for grants to undertake research and postgraduate degrees in engineering and the physical sciences.
 
-\clearpage
 % reset \section command for section title "References"
 \let\section=\origsection
 \printbibliography
