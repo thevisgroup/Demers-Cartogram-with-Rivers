@@ -3,9 +3,9 @@
 
 We conduct a preliminary user study to evaluate the effectiveness of our approach.
 
-\subsection{User Study Tasks}
+\subsection{Study Hypothesis}
 
-We formulate the following hypotheses to design our user study:
+We formulate the following hypotheses to motivate our user study:
 
 \textbf{H1:} The introduction of rivers can improve the legibility and recognizability of cartograms.
 
@@ -13,7 +13,7 @@ We formulate the following hypotheses to design our user study:
 
 \textbf{H1.2:} The introduction of rivers can reduce the time needed to locate a target region in a cartogram.
 
-We test these hypotheses using location based tasks. Given a standard choropleth on the left side of the screen and a cartogram on the right side, we ask user study participants to locate the given region in the choropleth in the cartogram. See \Cref{fig:task}.
+We test these hypotheses using location based tasks. Given a standard choropleth on the left side of the screen and the equivalent cartogram on the right side, we ask user study participants to locate the given region in the choropleth (on the left) in the cartogram (on the right). See \Cref{fig:task}.
 
 \subsection{User Study Variables}
 
@@ -60,7 +60,7 @@ In this section we describe the user study participants, datasets, and the exper
     \item Education: 1 PhD, 11 Master's, 8 Bachelor's, 4 Others
 \end{itemize}
 
-\bobgraph{Datasets:} We used the following datasets for our evaluation:
+\bobgraph{Datasets:} We used the following EHR datasets for our evaluation:
 
 \begin{itemize}
     \item Population
@@ -71,14 +71,14 @@ In this section we describe the user study participants, datasets, and the exper
 
 135 CGGs are rendered on the screen as a choropleth on the left. We then generated another view on the right using cartograms. The color in both visual designs is mapped to the dataset. See \Cref{fig:task} for an example.
 
-{
-\begin{figure}[tb!]
-    \centering
-    \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task.png}
-    \caption{A sample location task for participants. The left shows the choropleth map, and the right shows the corresponding cartogram. Both images show the three longest rivers in England, and the color is mapped to CCG population. The target CGG is blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
-    \label{fig:task}
-\end{figure}
-}
+    {
+        \begin{figure}[tb!]
+            \centering
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/task.png}
+            \caption{A sample location task for participants. The left shows the choropleth map, and the right shows the corresponding cartogram. Both images show the three longest rivers in England, and the color is mapped to CCG population. The target CGG is blinking on the choropleth (shown in black), participants are asked to identify this CCG on the cartogram.}
+            \label{fig:task}
+        \end{figure}
+    }
 
 \subsubsection{Procedure}
 
@@ -88,11 +88,11 @@ The user study is designed to be conducted online, and participants are asked to
 
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design. These tasks also serve as a quality test to see if the users are taking the study seriously. A demonstration of three sample tasks is also included in the instructional video.
 
-\textbf{P3:} The participants are asked to complete 16 location tasks. The response and reaction time are recorded. These 16 CCGs were selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
+\textbf{P3:} The participants are asked to complete 16 location tasks. The response and reaction time are recorded. These 16 CCGs are selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
 
-\textbf{P4:} The participants were asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
+\textbf{P4:} The participants are asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
 
-The materials for P1-P4 are available at \URL{https://osf.io/q39w7}.
+The materials for P1-P4 are available on the Open Science Foundation's website at \URL{https://osf.io/q39w7}.
 
 \subsection{User Study Results}
 
@@ -104,19 +104,19 @@ In this section we analyze the results of our preliminary user study. We recruit
         \begin{figure}[tb!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/accuracy.png}
-            \caption{In the bar chart, the y-axis shows the average accuracy rate of locating CCGs with and without rivers, the x-axis shows the target CCGs.}
+            \caption{In the bar chart, the y-axis shows the average accuracy rate of locating CCGs with and without rivers for user study participants. The x-axis shows the target CCGs.}
             \label{fig:task-acc}
         \end{figure}
     }
 
 
-\bobgraph{Response Time:} \Cref{fig:task-rt} shows the average response time measured for four CCGs. The chart indicates that the introduction of rivers has slightly reduced the time needed to locate CCGs. The two groups show no statistically significant differences according to the two-sample unequal variance $t$-test performed, $t$(356.03) = 0.87, $p$ = 0.38.
+\bobgraph{Response Time:} \Cref{fig:task-rt} shows the average time to located a CCG measured for four CCGs. The chart indicates that the introduction of rivers has slightly reduced the time needed to locate CCGs. The two groups show no statistically significant differences according to the two-sample unequal variance $t$-test performed, $t$(356.03) = 0.87, $p$ = 0.38. However, the average time to locate a given CCG is reduced for 3 out of the 4 CCGs users in the study.
 
     {
         \begin{figure}[tb!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/rt.png}
-            \caption{In the bar chart, the y-axis shows the average response time for locating CCGs with and without rivers, the x-axis shows the target CCGs.}
+            \caption{In the bar chart, the y-axis shows the average response time for locating CCGs with and without rivers for user study participants. The x-axis shows the target CCGs.}
             \label{fig:task-rt}
         \end{figure}
     }
@@ -130,13 +130,13 @@ In this section we analyze the results of our preliminary user study. We recruit
     \item 87.50\% of participants agree that including rivers adds value to the standard cartogram.
 \end{enumerate}
 
-    {
-        \begin{figure}[b!]
-            \centering
-            \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/likert.png}
-            \caption{The stacked bar chart shows the responses of Likert Scale questions.}
-            \label{fig:likert}
-        \end{figure}
-    }
+{
+\begin{figure}[tb!]
+    \centering
+    \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/likert.png}
+    \caption{The stacked bar chart shows the user study participant responses of Likert Scale questions.}
+    \label{fig:likert}
+\end{figure}
+}
 
 The qualitative results clearly support our hypothesis H1 that rivers generally increase the legibility of cartograms.
