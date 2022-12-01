@@ -17,14 +17,7 @@
   \end{figure}
  }
 
- {
-  \begin{figure}[tb!]
-      \centering
-      \includegraphics[width=\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
-      \caption{A flowchart illustration of stalemate processing. See \Cref{subsec:{Process Stalemates}}, \Cref{fig:stalemate}, and \Cref{fig:corridor} for more detail.}
-      \label{fig:flowchart-stalemate}
-  \end{figure}
- }
+
 
 \begin{algorithm}[tb!]
     \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers. See \Cref{sec:{Cartograms with Rivers}}.}\label{alg:UpdateLayout}
@@ -66,10 +59,10 @@
 
 \Cref{alg:UpdateLayout} and \Cref{fig:flowchart} provide an overview of the hybrid cartogram layout process that includes rivers.
 
-\bobgraph{Initialization with Rivers:} We first load and render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $ of 1 pixel. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next nearest vertex. We do not need the original river resolution to incorporate them into cartograms. We reduce their resolution to match that of the cartogram nodes in order to facilitate node-river intersection tests. This rendering approach enables us to adjust the river resolution as shown in \Cref{fig:river resolution}. We further apply simplification by removing vertices that are too close to each other.
+\bobgraph{Initialization with Rivers:} We first load and (optionally) render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $ of 1 pixel. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next nearest vertex. We do not need the original river resolution to incorporate them into cartograms. We reduce their resolution to match that of the cartogram nodes in order to facilitate node-river intersection tests. This rendering approach enables us to adjust the river resolution as shown in \Cref{fig:river resolution}. We further apply simplification by removing vertices that are too close to each other. The initialization procedure is a one-time process that can be saved for re-use.
 
 
-\bobgraph{Node Layout and Overlap Removal:} We first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlap. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. Initialized with a pixel size of unity, we gradually increase the node size by one unit (proportional to its data) at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \Cref{alg:TranslateNode}) and translate nodes to their new position. Nodes that cross a river, denoted $ \NxR $, are translated back to their previous position. If a node oscillates across a river, we identify this as a stalemate. This procedure ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one unit and repeat the algorithm until the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. The gradual size increase process provides stability to the layout and helps minimize geographical error.
+\bobgraph{Node Layout and Overlap Removal:} We first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlap. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. Initialized with a pixel size of unity, we gradually increase the node size by one unit (proportional to its data) at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \Cref{alg:TranslateNode}) and translate nodes to their new position. Nodes that cross a river, denoted $ \NxR $, are translated back to their previous position. If a node oscillates across a river, we identify this as a stalemate. One iteration of the layout ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one unit and repeat the algorithm until the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. The gradual size increase process provides stability to the layout and helps minimize geographical error.
 
 \begin{algorithm}[tb!]
     \caption{Procedure to translate node positions.}\label{alg:TranslateNode}
@@ -131,7 +124,7 @@ The logic for translating a node's position is detailed in \Cref{alg:TranslateNo
 
 \subsection{Translating Rivers}
 
-For all nodes $ \NxR $ that cross a river, $ \river $, we compute an average vector $ \vectorAvg $ used to translate $ \river $. Whenever a node, $ \node $, crosses a river , we store a vector $ \nodeVectorNNn $ that points in the direction of the translation. We then use a heuristic to translate $ \river $ using the average vector of node intersection $ \vectorAvg = \sum_{i=1}^j \frac{\Vector{\node_i\node_{i_t}}}{j} $, where $ j $ is the number of nodes intersecting the river. This step intends to create space for the next iteration of node translation without crossing a river. The procedure for translating rivers is provided by \Cref{alg:TranslateRiver}.
+For all nodes $ \NxR $ that cross a river, $ \river $, we compute an average vector $ \vectorAvg $ used to translate $ \river $. Whenever a node, $ \node $, crosses a river, we store a vector $ \nodeVectorNNn $ that points in the direction of the translation. We then use a heuristic to translate $ \river $ using the average vector of node intersection $ \vectorAvg = \sum_{i=1}^j \frac{\Vector{\node_i\node_{i_t}}}{j} $, where $ j $ is the number of nodes intersecting the river. This step intends to create space for the next iteration of node translation without crossing a river. The detailed procedure for translating rivers is provided by \Cref{alg:TranslateRiver}.
 
 \begin{algorithm}[tbh!]
     \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
@@ -171,17 +164,26 @@ For all nodes $ \NxR $ that cross a river, $ \river $, we compute an average vec
 \end{algorithm}
 
 
-When a river, $ \river $, is translated by $ \vectorAvg $, this can trigger a scenario where the nodes are crossed by a translated river, denoted $ \RxN $. As a heuristic we also translate these nodes by $ \vectorAvg $. The reasoning behind this is that $ \vectorAvg $ indicates which direction the river needs to be translated in order to create space for nodes that are too crowded together. In practice, $ \vectorAvg $ is multiplied by a scaling factor $ \propto\vectorAvg $. Thus, we can influence how far $ \river $ is translated in each iteration of the algorithm. We can use this to ensure smooth transitions between iterations.
+When a river, $ \river $, is translated by $ \vectorAvg $, this can trigger a scenario where the nodes are crossed by a translated river, denoted $ \RxN $. As a heuristic we also translate these nodes by $ \vectorAvg $. The reasoning behind this is that $ \vectorAvg $ indicates which direction the river needs to be translated in order to create space for nodes that are too crowded together. In practice, $ \vectorAvg $ is multiplied by a scaling factor $ \propto\vectorAvg $. Thus, we can influence how far $ \river $ is translated in each iteration of the layout algorithm. We can use this to ensure smooth transitions between iterations.
 
 \subsection{Process Stalemates}
 
 As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path can repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \Cref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations (a user-adjustable parameter), we introduce a heuristic solution: constructing a corridor to alleviate the congestion. A corridor, $ \Corridor $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNtNc $ (See \Cref{fig:corridor}C and D). All nodes enclosed by $ \Corridor $ are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \Cref{fig:corridor}E). The procedure for constructing corridors is provided by \Cref{alg:derive corridor}.
 
+{
+    \begin{figure}[tb!]
+        \centering
+        \includegraphics[width=\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
+        \caption{A flowchart illustration of stalemate processing. See \Cref{subsec:{Process Stalemates}}, \Cref{fig:stalemate}, and \Cref{fig:corridor} for more detail.}
+        \label{fig:flowchart-stalemate}
+    \end{figure}
+   }
+   
     {
         \begin{figure}[tb!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/stalemate.png}
-            \caption{A stalemate situation is when a node's translation path $ \nodeVectorCT $ (iteration 1) intersects a river $ \stalemateMax $ times. The node is translated back to its previous position (iteration 2). A stalemate often occurs when the area is congested and the node is unable to translate to a new position without intersecting a river.}
+            \caption{A stalemate situation is when a node's translation path $ \nodeVectorCT $ (iteration 1) intersects a river $ \stalemateMax $ times. The node is translated back to its previous position (iteration 2). A stalemate can occur when the area is congested and the node is unable to translate to a new position without intersecting a river.}
             \label{fig:stalemate}
         \end{figure}
     }
@@ -247,11 +249,11 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
 
 \subsection{Terminating the Algorithm}
 
-The algorithm terminates when the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. At this point, the node layout is optimal where no node has crossed, or crossed by a river.
+The overall algorithm terminates when the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. At this point, the node layout is optimal where no node has crossed, or crossed by a river.
 
 \subsection{User Options}
 
-\Cref{fig:overview} presents an overview of the implementation, including the user options. The user can adjust the following parameters:
+\Cref{fig:overview} presents an overview of the application, including the user options. The user can adjust the following parameters:
 
 \bobgraph{Rendering Visibility:} The rendering visibility of various elements, including the choropleth shapefile, rivers, nodes, and node centroids, can be toggled on and off.
 

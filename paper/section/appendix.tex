@@ -1,8 +1,10 @@
 \appendix
 
+\let\origappendixsection=\section
+\renewcommand\section[1]{\origappendixsection{\textbf{#1}}}
 \section{Pre-processing Shapefiles}
 \label{app:pre-processing}
-Shapefiles from different sources are likely to be incompatible. In our case, the NHS CCG shapefile is incompatible with the river shapefiles. The major reason for the incompatibility is the coordinate reference system (CRS). The CRS of the CCG shapefile is EPSG:27700 (OSGB36 - British National Grid). The CRS of the river shapefiles is EPSG:4326 (WGS84 - World Geodetic System). Here we provide some pre-processing steps using QGIS (version: 3.26.0-Buenos Aires) \cite{qgisWelcome} to handle the incompatibility issue and reduce shapefile size to improve performance.
+Shapefiles from different sources are likely to be incompatible. In our case, the NHS CCG shapefile is incompatible with the river shapefiles. The major reason for the incompatibility is the coordinate reference system (CRS). The CRS of the CCG shapefile is EPSG:27700 (OSGB36 - British National Grid). The CRS of the river shapefiles is EPSG:4326 (WGS84 - World Geodetic System). Here we provide some pre-processing steps using QGIS (version: 3.26.0-Buenos Aires) \cite{qgisWelcome} to handle the incompatibility and reduce shapefile size to improve performance.
 
 \subsection{Import Shapefiles into QGIS}
 We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, followed by the CCG shapefile \Cref{fig:import_ccgs}.
@@ -163,7 +165,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
     \end{algorithm}
     
 %\end{noindent}
-
+\vfill\eject
 \section{Procedure: DeriveParallelEdge}
 
 % \begin{noindent}

@@ -1,7 +1,7 @@
 \newcommand{\pCount}{24 }
 \section{User-Centered Evaluation}
 
-We conduct a preliminary user study to evaluate the effectiveness of our approach.
+We conduct a preliminary user study to evaluate the effectiveness of our approach. We chose this type of evaluation because legibility is a human-centred characteristic. Many different types of statistical error metrics have been evaluated in previous work \cite{nusrat2016State}, however, our focus is more user-centric in nature.
 
 \subsection{Study Hypothesis}
 
@@ -88,7 +88,7 @@ The user study is designed to be conducted online, and participants are asked to
 
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design. These tasks also serve as a quality test to see if the users are taking the study seriously. A demonstration of three sample tasks is also included in the instructional video.
 
-\textbf{P3:} The participants are asked to complete 16 location tasks. The response and reaction time are recorded. These 16 CCGs are selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
+\textbf{P3:} The participants are asked to complete 16 location tasks involving 4 CCGs. The response and reaction time are recorded. These 4 CCGs are selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
 
 \textbf{P4:} The participants are asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
 
@@ -96,24 +96,25 @@ The materials for P1-P4 are available on the Open Science Foundation's website a
 
 \subsection{User Study Results}
 
+{
+    \begin{figure}[b!]
+        \centering
+        \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/accuracy.png}
+        \caption{In the bar chart, the y-axis shows the average accuracy rate of locating CCGs with and without rivers for user study participants. The x-axis shows the target CCGs.}
+        \label{fig:task-acc}
+    \end{figure}
+}
+
+
 In this section we analyze the results of our preliminary user study. We recruited \pCount participants to perform 16 location tasks each, in total we collected 384 responses, 24 responses that took over 60 seconds are excluded from the analysis. We hypothesize that participants taking longer than 60 seconds to complete a task were distracted from the study.
 
 \bobgraph{Accuracy:} \Cref{fig:task-acc} shows the accuracy measured by the number of correct CCGs chosen by the participants. The chart shows that the introduction of rivers has improved the accuracy for two CCGs. The accuracy for the two groups differs significantly according to the two-sample unequal variance $t$-test performed, $t$(262.98) = 3.76, $p$ = 0.0002. This supports our hypothesis H1.1 that the introduction of rivers increases target location accuracy.
-
-    {
-        \begin{figure}[tb!]
-            \centering
-            \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/accuracy.png}
-            \caption{In the bar chart, the y-axis shows the average accuracy rate of locating CCGs with and without rivers for user study participants. The x-axis shows the target CCGs.}
-            \label{fig:task-acc}
-        \end{figure}
-    }
 
 
 \bobgraph{Response Time:} \Cref{fig:task-rt} shows the average time to located a CCG measured for four CCGs. The chart indicates that the introduction of rivers has slightly reduced the time needed to locate CCGs. The two groups show no statistically significant differences according to the two-sample unequal variance $t$-test performed, $t$(356.03) = 0.87, $p$ = 0.38. However, the average time to locate a given CCG is reduced for 3 out of the 4 CCGs users in the study.
 
     {
-        \begin{figure}[tb!]
+        \begin{figure}[t!]
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{figure/evaluation/rt.png}
             \caption{In the bar chart, the y-axis shows the average response time for locating CCGs with and without rivers for user study participants. The x-axis shows the target CCGs.}
@@ -123,11 +124,11 @@ In this section we analyze the results of our preliminary user study. We recruit
 
 \bobgraph{Participant Feedback:} \Cref{fig:likert} shows the results of the following Likert Scale questions:
 \begin{enumerate}[label=(\Alph*),align=left,leftmargin=*,labelindent=1em]
-    \item 87.50\% of participants agree that including rivers is useful.
-    \item 83.33\% of participants agree that rivers increase the legibility of a cartogram.
-    \item 95.83\% of participants agree that including rivers makes cartograms easier to understand.
-    \item 62.50\% of participants agree that including rivers makes CCGs easier to locate.
-    \item 87.50\% of participants agree that including rivers adds value to the standard cartogram.
+    \item 87.5\% of participants agree that including rivers is useful.
+    \item 83.3\% of participants agree that rivers increase the legibility of a cartogram.
+    \item 95.8\% of participants agree that including rivers makes cartograms easier to understand.
+    \item 62.5\% of participants agree that including rivers makes CCGs easier to locate.
+    \item 87.5\% of participants agree that including rivers adds value to the standard cartogram.
 \end{enumerate}
 
 {
