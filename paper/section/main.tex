@@ -24,6 +24,8 @@
     \textbf{Global variables:} \\
     $ \nodeList \gets $ a list of $ \node $ representing CCGs with the following properties: \\
     \-\hspace{1em}  $\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river \\
+
+    $ \nodeSize \gets $ the initial size of all nodes \\
     $ \nodeSizeAvg \gets $ the average size of all nodes \\
     $ \nodeSizeMax \gets $ the maximum size of a node \\
     $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
@@ -37,6 +39,8 @@
 
     \begin{algorithmic}[1]
         \Procedure{UpdateLayout}{}
+
+        \State $ \nodeSize \gets 1 $
         \While{$ \nodeSizeAvg < \nodeSizeMax $}
         \State $ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}
         \While{$ \nodeListCross > 0 $}
@@ -62,7 +66,7 @@
 \bobgraph{Initialization with Rivers:} We first load and (optionally) render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $ of 1 pixel. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next nearest vertex. We do not need the original river resolution to incorporate them into cartograms. We reduce their resolution to match that of the cartogram nodes in order to facilitate node-river intersection tests. This rendering approach enables us to adjust the river resolution as shown in \Cref{fig:river resolution}. We further apply simplification by removing vertices that are too close to each other. The initialization procedure is a one-time process that can be saved for re-use.
 
 
-\bobgraph{Node Layout and Overlap Removal:} We first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006fast} in order to remove overlap. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. Initialized with a pixel size of unity, we gradually increase the node size by one unit (proportional to its data) at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \Cref{alg:TranslateNode}) and translate nodes to their new position. Nodes that cross a river, denoted $ \NxR $, are translated back to their previous position. If a node oscillates across a river, we identify this as a stalemate. One iteration of the layout ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one unit and repeat the algorithm until the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. The gradual size increase process provides stability to the layout and helps minimize geographical error.
+\bobgraph{Node Layout and Overlap Removal:} We first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006Fast} in order to remove overlap of nodes. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. Initialized with a pixel size of unity, we gradually increase the node size by one unit (proportional to its data) at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \Cref{alg:TranslateNode}) and translate nodes to their new position. Nodes that cross a river, denoted $ \NxR $, are translated back to their previous position. If a node oscillates across a river, we identify this as a stalemate. One iteration of the layout ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one unit and repeat the algorithm until the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. The gradual size increase process provides stability to the layout and helps minimize geographical error.
 
 \begin{algorithm}[tb!]
     \caption{Procedure to translate node positions.}\label{alg:TranslateNode}
@@ -249,7 +253,7 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
 
 \subsection{Terminating the Algorithm}
 
-The overall algorithm terminates when the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. At this point, the node layout is optimal where no node has crossed, or crossed by a river.
+The overall algorithm terminates when the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. At this point, the node layout is optimal where no node has crossed, or crossed by a river. Every node remains on the same side of the river as its centroid.
 
 \subsection{User Options}
 

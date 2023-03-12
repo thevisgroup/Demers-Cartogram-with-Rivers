@@ -464,7 +464,7 @@
       \verb /Users/henry/SynologyDrive/Zotero/storage/YXMYIIUQ/Dorling - 2011 - Area Cartograms Their Use and Creation.pdf
       \endverb
     \endentry
-    \entry{dwyer2006fast}{incollection}{}
+    \entry{dwyer2006Fast}{incollection}{}
       \name{author}{3}{}{%
         {{hash=8bec7f7fdfd1f8d21530db47d8d3fb8f}{%
            family={Dwyer},
@@ -1710,51 +1710,43 @@
       \verb https://www.nytimes.com/2020/11/19/learning/whats-going-on-in-this-graph-2020-presidential-election-maps.html
       \endverb
     \endentry
-    \entry{tong2018cartograms}{article}{}
+    \entry{tong2018Cartograms}{inproceedings}{}
       \name{author}{3}{}{%
         {{hash=8f66720367a9bc8ebe969bbe027c5045}{%
            family={Tong},
            familyi={T\bibinitperiod},
            given={Chao},
            giveni={C\bibinitperiod}}}%
-        {{hash=0e9375fa3535a4c5436b0e252f9ab6c3}{%
-           family={McNabb},
+        {{hash=d8876f7dd451d6b448bc7a5f83df1720}{%
+           family={Mcnabb},
            familyi={M\bibinitperiod},
            given={Liam},
            giveni={L\bibinitperiod}}}%
         {{hash=59dd071b19e76f0f77403531d0c28ad2}{%
            family={Laramee},
            familyi={L\bibinitperiod},
-           given={Robert\bibnamedelima S.},
+           given={Robert\bibnamedelima S},
            giveni={R\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
       }
-      \list{publisher}{1}{%
-        {The Eurographics Association}%
-      }
       \strng{namehash}{5cbc09595524a0d72092fb91e60f59bf}
-      \strng{fullhash}{3c51e8718828398e57dd37e761a46a29}
+      \strng{fullhash}{aad889d4510362ccdceb678cda4aa6ec}
       \strng{bibnamehash}{5cbc09595524a0d72092fb91e60f59bf}
       \strng{authorbibnamehash}{5cbc09595524a0d72092fb91e60f59bf}
       \strng{authornamehash}{5cbc09595524a0d72092fb91e60f59bf}
-      \strng{authorfullhash}{3c51e8718828398e57dd37e761a46a29}
+      \strng{authorfullhash}{aad889d4510362ccdceb678cda4aa6ec}
       \field{labelalpha}{Ton*18}
       \field{sortinit}{T}
       \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{Cartograms are a popular and useful technique for depicting geo-spatial data. Dorling style and rectangular cartograms are very good for facilitating comparisons between unit areas. Each unit area is represented by the same shape such as a circle or rectangle, and the uniformity in shapes facilitates comparative judgment. However, the layout of these more abstract shapes may also simultaneously reduce the map's legibility and increase error. When we integrate univariate data into a cartogram, the recognizability of cartogram may be reduced. There is a trade-off between information recognition and geo-information accuracy. This is the inspiration behind the work we present. We attempt to increase the map's recognizability and reduce error by introducing topological features into the cartographic map. Our goal is to include topological features such as a river in a Dorling-style or rectangular cartogram to make the visual layout more recognizable, increase map cognition and reduce geospatial error. We believe that compared to the standard Dorling and rectangular style cartogram, adding topological features provides familiar geo-spatial cues and flexibility to enhance the recognizability of a cartogram.}
-      \field{isbn}{9783038680710}
-      \field{journaltitle}{Computer Graphics and Visual Computing (CGVC)}
+      \field{abstract}{Cartograms are a popular and useful technique for depicting geo-spatial data. Dorling style and rectangular cartograms are very good for facilitating comparisons between unit areas. Each unit area is represented by the same shape such as a circle or rectangle, and the uniformity in shapes facilitates comparative judgment. However, the layout of these more abstract shapes may also simultaneously reduce the map's legibility and increase error. When we integrate univariate data into a cartogram, the recognizability of cartogram may be reduced. There is a trade-off between information recognition and geo-information accuracy. This is the inspiration behind the work we present. We attempt to increase the map's recognizability and reduce error by introducing topological features into the cartographic map. Our goal is to include topological features such as a river in a Dorling-style or rectangular cartogram to make the visual layout more recognizable, increase map cognition and reduce geo-spatial error. We believe that compared to the standard Dorling and rectangular style cartogram, adding topological features provides familiar geo-spatial cues and flexibility to enhance the recognizability of a cartogram.}
+      \field{booktitle}{Computer {{Graphics}} \& {{Visual Computing}}}
       \field{title}{Cartograms with {{Topological Features}}}
       \field{year}{2018}
-      \field{pages}{8 pages}
-      \range{pages}{-1}
-      \verb{doi}
-      \verb 10.2312/CGVC.20181217
-      \endverb
       \verb{file}
-      \verb /Users/henry/SynologyDrive/Zotero/storage/AVSEUUCM/tong2018cartograms.pdf
+      \verb /Users/henry/SynologyDrive/Zotero/storage/T3HPQDXS/Tong et al. - 2018 - Cartograms with Topological Features.pdf
       \endverb
+      \keyw{GEO}
     \endentry
     \entry{TopoJSON}{misc}{}
       \name{author}{1}{}{%
@@ -1917,7 +1909,7 @@
       \verb 10.1007/978-3-540-30140-0_64
       \endverb
     \endentry
-    \entry{wang2021EHRa}{article}{}
+    \entry{wang2021EHR}{article}{}
       \name{author}{2}{}{%
         {{hash=415d15406f27ab6319fe3dc2d7408598}{%
            family={Wang},
