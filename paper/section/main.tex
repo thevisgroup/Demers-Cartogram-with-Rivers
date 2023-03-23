@@ -28,6 +28,8 @@
     $ \nodeSize \gets $ the initial size of all nodes \\
     $ \nodeSizeAvg \gets $ the average size of all nodes \\
     $ \nodeSizeMax \gets $ the maximum size of a node \\
+    $ \nodeErrDisplacement \gets $ the current displacement error \\
+    $ \nodeErrDisplacementMax \gets $ the maximum displacement error allowed \\
     $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
 
     \textbf{Local variables:} \\
@@ -41,7 +43,7 @@
         \Procedure{UpdateLayout}{}
 
         \State $ \nodeSize \gets 1 $
-        \While{$ \nodeSizeAvg < \nodeSizeMax $}
+        \While{$ \nodeSizeAvg < \nodeSizeMax $ and $ \nodeErrDisplacement < \nodeErrDisplacementMax $}
         \State $ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}
         \While{$ \nodeListCross > 0 $}
 
