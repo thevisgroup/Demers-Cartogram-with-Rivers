@@ -253,7 +253,9 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
 
 \subsection{Terminating the Algorithm}
 
-The overall algorithm terminates when the average node size $ \nodeSizeAvg $ reaches the max node size $ \nodeSizeMax $. At this point, the node layout is optimal where no node has crossed, or crossed by a river. Every node remains on the same side of the river as its centroid.
+\new{There are two conditions that can terminate the algorithm. The first condition is when the average node size $ \nodeSizeAvg $ reaches the max node size, $ \nodeSizeMax $, set by the user. The second condition is when the displacement error, $ \nodeErrDisplacement $, reaches the max displacement error, $ \nodeErrDisplacementMax $ , allowed by the user.}
+
+When the algorithm terminates, the node layout is considered optimal where no node has crossed, or crossed by a river \new{(denoted by $ \nodeErrCrossing $ = 0)}. Every node remains on the same side of the river as its centroid.
 
 \subsection{User Options}
 
@@ -273,11 +275,13 @@ The overall algorithm terminates when the average node size $ \nodeSizeAvg $ rea
 
 \bobgraph{River Thickess and Resolution:} Increasing the thickness of rivers may improve the recognizability of the cartogram. Similarity, increasing the resolution of rivers, at the expense of the speed of node-river intersection test, may produce a layout with higher legibility.
 
+\bobgraph{Error Metrics:} \new{The displacement error metric is used to evaluate the accuracy of the layout. The user can adjust the error threshold, which is used to terminate the algorithm.}
+
 {
 \begin{figure*}[tb!]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{figure/UI.png}
-    \caption{A screenshot of the software. User options are provided to adjust the size, color mapping, visibility of nodes and rivers. Other options include the ability to control the overlap removal behavior: rivers can be static or dynamic. See \Cref{subsec:{User Options}} for more on user options.}
+    \caption{A screenshot of the software. User options are provided to adjust the terminating conditions (size and error), color mapping, visibility of nodes and rivers. Other options include the ability to control the overlap removal behavior: rivers can be static or dynamic. See \Cref{subsec:{User Options}} for more on user options. \new{In this figure, $ \nodeErrCrossing $ is reduced from 13 to 0, and $ \nodeErrDisplacement $ for X and Y axes are 59.5 and 56.56, respectively. }}
     \label{fig:overview}
 \end{figure*}
 }

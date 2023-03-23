@@ -45,7 +45,11 @@
       \field{month}{5}
       \field{shorttitle}{How {{American Media Framed}} 2016 {{Presidential Election Using Data Visualization}}}
       \field{title}{How {{American Media Framed}} 2016 {{Presidential Election Using Data Visualization}}: {{The Case Study}} of the {{New York Times}} and the {{Washington Post}}}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{year}{2021}
+      \field{urldateera}{ce}
       \field{pages}{1\bibrangedash 27}
       \range{pages}{27}
       \verb{doi}
@@ -91,8 +95,12 @@
       \field{month}{11}
       \field{number}{9}
       \field{title}{An End-User Evaluation to Analyze the Effectiveness of Cartograms for Mapping Relative Non-Motorized Accessibility}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{volume}{48}
       \field{year}{2021}
+      \field{urldateera}{ce}
       \field{pages}{2880\bibrangedash 2897}
       \range{pages}{18}
       \verb{doi}
@@ -200,7 +208,11 @@
       \field{isbn}{978-1-5386-5035-6}
       \field{month}{12}
       \field{title}{Using {{Cartograms}} to {{Visualize Population Normalized Big-Data Sets}}}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{year}{2018}
+      \field{urldateera}{ce}
       \field{pages}{3575\bibrangedash 3580}
       \range{pages}{6}
       \verb{doi}
@@ -258,8 +270,12 @@
       \field{month}{6}
       \field{number}{3}
       \field{title}{Mosaic {{Drawings}} and {{Cartograms}}}
+      \field{urlday}{15}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
       \field{volume}{34}
       \field{year}{2015}
+      \field{urldateera}{ce}
       \field{pages}{361\bibrangedash 370}
       \range{pages}{10}
       \verb{doi}
@@ -309,8 +325,12 @@
       \field{number}{4}
       \field{shorttitle}{Node {{Overlap Removal Algorithms}}}
       \field{title}{Node {{Overlap Removal Algorithms}}: An {{Extended Comparative Study}}}
+      \field{urlday}{17}
+      \field{urlmonth}{6}
+      \field{urlyear}{2021}
       \field{volume}{24}
       \field{year}{2020}
+      \field{urldateera}{ce}
       \field{pages}{683\bibrangedash 706}
       \range{pages}{24}
       \verb{doi}
@@ -350,7 +370,11 @@
       \field{langid}{english}
       \field{month}{10}
       \field{title}{Adapted Dorling Cartogram on Wage Inequality in {{Portugal}}}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{year}{2017}
+      \field{urldateera}{ce}
       \field{pages}{1\bibrangedash 5}
       \range{pages}{5}
       \verb{doi}
@@ -454,7 +478,11 @@
       \field{month}{4}
       \field{shorttitle}{Area {{Cartograms}}}
       \field{title}{Area {{Cartograms}}: {{Their Use}} and {{Creation}}}
+      \field{urlday}{5}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{year}{2011}
+      \field{urldateera}{ce}
       \field{pages}{252\bibrangedash 260}
       \range{pages}{9}
       \verb{doi}
@@ -592,8 +620,12 @@
       \field{booktitle}{Graph {{Drawing}}}
       \field{isbn}{978-3-540-31425-7 978-3-540-31667-1}
       \field{title}{Fast {{Node Overlap Removal}}}
+      \field{urlday}{17}
+      \field{urlmonth}{6}
+      \field{urlyear}{2021}
       \field{volume}{3843}
       \field{year}{2006}
+      \field{urldateera}{ce}
       \field{pages}{153\bibrangedash 164}
       \range{pages}{12}
       \verb{doi}
@@ -648,8 +680,12 @@
       \field{month}{11}
       \field{shorttitle}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data}
       \field{title}{Mapping Uncertainty of {{ICP-Forest}} Biodiversity Data: {{From}} Standard Treatment of Diffusion to Density-Equalizing Cartograms}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{volume}{48}
       \field{year}{2018}
+      \field{urldateera}{ce}
       \field{pages}{281\bibrangedash 289}
       \range{pages}{9}
       \verb{doi}
@@ -736,8 +772,12 @@
       \field{month}{6}
       \field{number}{4}
       \field{title}{Visualising the Expansion and Spread of Coronavirus Disease 2019 by Cartograms}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{volume}{52}
       \field{year}{2020}
+      \field{urldateera}{ce}
       \field{pages}{698\bibrangedash 701}
       \range{pages}{4}
       \verb{doi}
@@ -782,8 +822,12 @@
       \field{month}{1}
       \field{number}{1}
       \field{title}{Mapping the Changing Residential Geography of {{White British}} Secondary School Children in {{England}} Using Visually Balanced Cartograms and Hexograms}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{volume}{14}
       \field{year}{2018}
+      \field{urldateera}{ce}
       \field{pages}{65\bibrangedash 72}
       \range{pages}{8}
       \verb{doi}
@@ -836,6 +880,47 @@
       \endverb
       \verb{url}
       \verb http://www.ncgia.ucsb.edu/projects/Cartogram_Central/index.html
+      \endverb
+    \endentry
+    \entry{inoue2011New}{article}{}
+      \name{author}{1}{}{%
+        {{hash=e66c5fa3fe70a1900ca88e87da557191}{%
+           family={Inoue},
+           familyi={I\bibinitperiod},
+           given={Ryo},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{e66c5fa3fe70a1900ca88e87da557191}
+      \strng{fullhash}{e66c5fa3fe70a1900ca88e87da557191}
+      \strng{bibnamehash}{e66c5fa3fe70a1900ca88e87da557191}
+      \strng{authorbibnamehash}{e66c5fa3fe70a1900ca88e87da557191}
+      \strng{authornamehash}{e66c5fa3fe70a1900ca88e87da557191}
+      \strng{authorfullhash}{e66c5fa3fe70a1900ca88e87da557191}
+      \field{labelalpha}{Ino11}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{An area cartogram is a transformed map on which areas of regions are proportional to statistical data values; it is considered to be a powerful tool for the visual representation of statistical data. A circle cartogram is a type of area cartograms, on which regions are represented by circles. Its first construction algorithm is proposed by Dorling in 1996, based on the following requirements to construct visually elegant cartograms: 1) maintain the similarity of configurations between circles and regions, 2) express the contiguity of regions on cartograms if possible, and 3) avoid overlap of circles. The algorithm is widely used for its easiness to use and its ability to express a spatial distribution of data; however, the relative positions of circles on cartograms sometimes greatly differ from the geographical maps, since the algorithm does not consider the first requirements explicitly. In this paper, it is first pointed out that the construction problem of circle cartograms resembles that of distance cartograms, and the only difference is the existence of third requirement. Then a new construction method for circle cartograms is proposed based on the distance cartogram construction method; the proposed method is formulated as non-linear minimization with inequality constraint conditions. Finally its applicability is confirmed using dataset, including the comparison with the result of previous algorithm.}
+      \field{issn}{1523-0406, 1545-0465}
+      \field{journaltitle}{Cartography and Geographic Information Science}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{2}
+      \field{title}{A {{New Construction Method}} for {{Circle Cartograms}}}
+      \field{urlday}{23}
+      \field{urlmonth}{2}
+      \field{urlyear}{2023}
+      \field{volume}{38}
+      \field{year}{2011}
+      \field{urldateera}{ce}
+      \field{pages}{146\bibrangedash 152}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1559/15230406382146
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/NFM9VNBQ/Inoue - 2011 - A New Construction Method for Circle Cartograms.pdf
       \endverb
     \endentry
     \entry{mccartney20202020}{article}{}
@@ -1025,6 +1110,67 @@
       \verb https://digital.nhs.uk/data-and-information/publications/statistical/ccg-outcomes-indicator-set
       \endverb
     \endentry
+    \entry{nickel2022Multicriteria}{article}{}
+      \name{author}{6}{}{%
+        {{hash=38249e36779f7e441dac541e501aa82c}{%
+           family={Nickel},
+           familyi={N\bibinitperiod},
+           given={Soeren},
+           giveni={S\bibinitperiod}}}%
+        {{hash=d0fd77a5f281160b611874e8c6397a03}{%
+           family={Sondag},
+           familyi={S\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=eccc7dc38a5e8d8fc305bf97ad2f62e3}{%
+           family={Meulemans},
+           familyi={M\bibinitperiod},
+           given={Wouter},
+           giveni={W\bibinitperiod}}}%
+        {{hash=94f60f08e1c4d544d6ce3b9e40e1b9ce}{%
+           family={Kobourov},
+           familyi={K\bibinitperiod},
+           given={Stephen\bibnamedelima G.},
+           giveni={S\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=a14051cefe8817b817d29ffd2a5aa7ad}{%
+           family={Peltonen},
+           familyi={P\bibinitperiod},
+           given={Jaakko},
+           giveni={J\bibinitperiod}}}%
+        {{hash=835c7a2af8b8551bd2627b51aea64477}{%
+           family={Nollenburg},
+           familyi={N\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{beee14ca3d504511ceb79904db898ccc}
+      \strng{fullhash}{f9c8ddfc803c03a20b30e00e3c875aa8}
+      \strng{bibnamehash}{beee14ca3d504511ceb79904db898ccc}
+      \strng{authorbibnamehash}{beee14ca3d504511ceb79904db898ccc}
+      \strng{authornamehash}{beee14ca3d504511ceb79904db898ccc}
+      \strng{authorfullhash}{f9c8ddfc803c03a20b30e00e3c875aa8}
+      \field{labelalpha}{Nic*22}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1077-2626, 1941-0506, 2160-9306}
+      \field{journaltitle}{IEEE Transactions on Visualization and Computer Graphics}
+      \field{title}{Multicriteria {{Optimization}} for {{Dynamic Demers Cartograms}}}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 1}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1109/TVCG.2022.3151227
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/9NVLXAAV/Nickel et al. - 2022 - Multicriteria Optimization for Dynamic Demers Cart.pdf
+      \endverb
+    \endentry
     \entry{nusrat2016State}{article}{}
       \name{author}{2}{}{%
         {{hash=c7a975a81ed7dd45d12c93db01e47c05}{%
@@ -1056,8 +1202,12 @@
       \field{month}{6}
       \field{number}{3}
       \field{title}{The {{State}} of the {{Art}} in {{Cartograms}}}
+      \field{urlday}{5}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{volume}{35}
       \field{year}{2016}
+      \field{urldateera}{ce}
       \field{pages}{619\bibrangedash 642}
       \range{pages}{24}
       \verb{doi}
@@ -1108,7 +1258,11 @@
       \field{langid}{english}
       \field{month}{9}
       \field{title}{Recognition and {{Recall}} of {{Geographic Data In Cartograms}}}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{year}{2020}
+      \field{urldateera}{ce}
       \field{pages}{1\bibrangedash 9}
       \range{pages}{9}
       \verb{doi}
@@ -1259,8 +1413,12 @@
       \field{month}{4}
       \field{number}{2}
       \field{title}{Cartograms for {{Use}} in {{Forecasting Weather-Driven Natural Hazards}}}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{volume}{56}
       \field{year}{2019}
+      \field{urldateera}{ce}
       \field{pages}{134\bibrangedash 145}
       \range{pages}{12}
       \verb{doi}
@@ -1306,8 +1464,12 @@
       \field{month}{3}
       \field{number}{4}
       \field{title}{Flood {{Evacuation Mapping Using}} a {{Time}}–{{Distance}} Cartogram}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{volume}{9}
       \field{year}{2020}
+      \field{urldateera}{ce}
       \field{pages}{207}
       \range{pages}{1}
       \verb{doi}
@@ -1368,17 +1530,25 @@
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
+      \field{eprinttype}{jstor}
       \field{issn}{00167428}
       \field{journaltitle}{Geographical Review}
       \field{month}{4}
       \field{number}{2}
       \field{title}{The {{Rectangular Statistical Cartogram}}}
+      \field{urlday}{15}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
       \field{volume}{24}
       \field{year}{1934}
+      \field{urldateera}{ce}
       \field{pages}{292}
       \range{pages}{1}
       \verb{doi}
       \verb 10.2307/208794
+      \endverb
+      \verb{eprint}
+      \verb 208794
       \endverb
     \endentry
     \entry{rocchini2019Cartogramming}{article}{}
@@ -1431,8 +1601,12 @@
       \field{month}{4}
       \field{shorttitle}{Cartogramming Uncertainty in Species Distribution Models}
       \field{title}{Cartogramming Uncertainty in Species Distribution Models: {{A Bayesian}} Approach}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{volume}{38}
       \field{year}{2019}
+      \field{urldateera}{ce}
       \field{pages}{146\bibrangedash 155}
       \range{pages}{10}
       \verb{doi}
@@ -1508,8 +1682,12 @@
       \field{langid}{english}
       \field{month}{12}
       \field{title}{Visualizing the Geography of {{HIV}} Observational Cohorts with Density-Adjusted Cartograms}
+      \field{urlday}{3}
+      \field{urlmonth}{3}
+      \field{urlyear}{2022}
       \field{volume}{Publish Ahead of Print}
       \field{year}{2021}
+      \field{urldateera}{ce}
       \verb{doi}
       \verb 10.1097/QAI.0000000000002903
       \endverb
@@ -1582,8 +1760,12 @@
       \field{month}{1}
       \field{number}{1}
       \field{title}{Effectiveness of {{Cartogram}} for the {{Representation}} of {{Spatial Data}}}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{volume}{47}
       \field{year}{2010}
+      \field{urldateera}{ce}
       \field{pages}{12\bibrangedash 21}
       \range{pages}{10}
       \verb{doi}
@@ -1901,8 +2083,12 @@
       \field{booktitle}{Algorithms –{} {{ESA}} 2004}
       \field{isbn}{978-3-540-23025-0 978-3-540-30140-0}
       \field{title}{On {{Rectangular Cartograms}}}
+      \field{urlday}{2}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
       \field{volume}{3221}
       \field{year}{2004}
+      \field{urldateera}{ce}
       \field{pages}{724\bibrangedash 735}
       \range{pages}{12}
       \verb{doi}
@@ -1939,7 +2125,11 @@
       \field{month}{12}
       \field{shorttitle}{{{EHR STAR}}}
       \field{title}{{{EHR STAR}}: {{The State}}-{{Of}}-the-{{Art}} in {{Interactive EHR Visualization}}}
+      \field{urlday}{23}
+      \field{urlmonth}{1}
+      \field{urlyear}{2022}
       \field{year}{2021}
+      \field{urldateera}{ce}
       \field{pages}{cgf.14424}
       \range{pages}{-1}
       \verb{doi}
@@ -1979,8 +2169,12 @@
       \field{month}{8}
       \field{number}{3}
       \field{title}{The {{Geography}} of {{Religious Diversity}} in the {{United States}}}
+      \field{urlday}{8}
+      \field{urlmonth}{12}
+      \field{urlyear}{2021}
       \field{volume}{60}
       \field{year}{2008}
+      \field{urldateera}{ce}
       \field{pages}{413\bibrangedash 424}
       \range{pages}{12}
       \verb{doi}

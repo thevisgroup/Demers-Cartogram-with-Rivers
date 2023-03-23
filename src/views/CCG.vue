@@ -65,6 +65,10 @@
                   <label>Max Size</label>
                   <b-form-input size="sm" type="number" v-model="node.maxSize"></b-form-input>
                 </b-list-group-item>
+                <b-list-group-item class="g-2-6-4">
+                  <label>Max Displacement</label>
+                  <b-form-input size="sm" type="number"></b-form-input>
+                </b-list-group-item>
               </b-list-group>
             </b-col>
 
@@ -138,9 +142,9 @@
                     </div>
                     <span class="right-label">
                       {{
-                          getRiverTranslation(r.color)[0].toFixed(2) +
-                          "," +
-                          getRiverTranslation(r.color)[1].toFixed(2)
+                        getRiverTranslation(r.color)[0].toFixed(2) +
+                        "," +
+                        getRiverTranslation(r.color)[1].toFixed(2)
                       }}</span>
                   </div>
                 </b-list-group-item>
@@ -148,7 +152,8 @@
 
               <b-button class="mt-2" block :variant="
                 (metric.visibility ? '' : 'outline-') + 'primary'
-              " v-on:click="showMetric(!metric.visibility)" :disabled="iteration.count === 0">Show Metrics</b-button>
+              " v-on:click="showMetric(!metric.visibility)" :disabled="iteration.count === 0">Show Error
+                Metrics</b-button>
 
               <b-list-group class="mt-2">
                 <b-list-group-item class="g-2-6-4">
