@@ -9,11 +9,11 @@
   \end{figure}
  }
 
-Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved \cite{wang2021EHR}. The first step is to obtain both geospatial boundaries and EHR data. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms. Geospatial boundaries, or shapefiles, were obtained from the sources described here.
+Obtaining the heterogenous data can be challenging, especially when an EHR dataset is involved, because the data comes from multiple sources \cite{wang2021EHR}. The first step is to obtain both geospatial boundaries and EHR data. The second step is to pre-process the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms. Geospatial boundaries, or shapefiles, were obtained from the sources described here.
 
 \bobgraph{Choropleth Shapefile:} Clinical Commissioning Groups (CCGs) are the primary administrative and geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to NHS re-organization. The most up-to-date shapefile is available from the Open Geography Portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing (See \Cref{fig:ccg}), due to the absence of public EHR data published based on the latest CCG re-organizations that took place in 2021 and 2022.
 
-\bobgraph{River Shapefiles:} We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent, and River Great Ouse in England. These rivers were chosen as they are well-known rivers and pass through regions with dense populations, and provide informative geographical and topological cues. Including additional and smaller rivers remains future work, as they may create complicated stalemate situations for the algorithm to resolve.
+\bobgraph{River Shapefiles:} We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for River Thames, River Trent, and River Great Ouse in England. These rivers were chosen as they are well-known rivers and pass through regions with dense populations, and provide informative geographical and topological cues. While including smaller rivers is technically feasible it may not increase the legibility of the cartogram.
 
 We first obtain a relation ID by searching for a river, e.g. River Thames, on OpenStreetMap. The relation ID is used to construct a query (See Listing~\ref{overpass}) which enables the user to download the entire river shapefile using Overpass Turbo \cite{overpassturboOverpass}.
 

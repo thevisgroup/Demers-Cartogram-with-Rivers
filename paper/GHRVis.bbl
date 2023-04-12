@@ -19,6 +19,57 @@
 
 \refsection{0}
   \datalist[entry]{anyt/global//global/global}
+    \entry{alam2015Quantitative}{article}{}
+      \name{author}{3}{}{%
+        {{hash=da0942d43d88fa8728e69a9f3be68a5c}{%
+           family={Alam},
+           familyi={A\bibinitperiod},
+           given={Md.\bibnamedelimi Jawaherul},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=94f60f08e1c4d544d6ce3b9e40e1b9ce}{%
+           family={Kobourov},
+           familyi={K\bibinitperiod},
+           given={Stephen\bibnamedelima G.},
+           giveni={S\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=cea5dd4b41b8e6295edd58a35654dc4d}{%
+           family={Veeramoni},
+           familyi={V\bibinitperiod},
+           given={Sankar},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{0d37c8d768b59e47408bff99d7a9f26f}
+      \strng{fullhash}{b6d6ae8d4b3bd26c3ba00abc0dc0158f}
+      \strng{bibnamehash}{0d37c8d768b59e47408bff99d7a9f26f}
+      \strng{authorbibnamehash}{0d37c8d768b59e47408bff99d7a9f26f}
+      \strng{authornamehash}{0d37c8d768b59e47408bff99d7a9f26f}
+      \strng{authorfullhash}{b6d6ae8d4b3bd26c3ba00abc0dc0158f}
+      \field{labelalpha}{Ala*15}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cartograms are used to visualize geographically distributed data by scaling the regions of a map (e.g., US states) such that their areas are proportional to some data associated with them (e.g., population). Thus the cartogram computation problem can be considered as a map deformation problem where the input is a planar polygonal map M and an assignment of some positive weight for each region. The goal is to create a deformed map M , where the area of each region realizes the weight assigned to it (no cartographic error) while the overall map remains readable and recognizable (e.g., the topology, relative positions and shapes of the regions remain as close to those before the deformation as possible). Although several such measures of cartogram quality are well-known, different cartogram generation methods optimize different features and there is no standard set of quantitative metrics. In this paper we define such a set of seven quantitative measures, designed to evaluate how faithfully a cartogram represents the desired weights and to estimate the readability of the final representation. We then study several cartogram-generation algorithms and compare them in terms of these quantitative measures.}
+      \field{issn}{01677055}
+      \field{journaltitle}{Computer Graphics Forum}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{number}{3}
+      \field{title}{Quantitative {{Measures}} for {{Cartogram Generation Techniques}}}
+      \field{urlday}{23}
+      \field{urlmonth}{2}
+      \field{urlyear}{2023}
+      \field{volume}{34}
+      \field{year}{2015}
+      \field{urldateera}{ce}
+      \field{pages}{351\bibrangedash 360}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1111/cgf.12647
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/82LSKZFI/Alam et al. - 2015 - Quantitative Measures for Cartogram Generation Tec.pdf
+      \endverb
+    \endentry
     \entry{alieva2021How}{article}{}
       \name{author}{1}{}{%
         {{hash=19f0827a79dd1afbb98e4185092503f0}{%
@@ -1041,6 +1092,42 @@
       \verb https://www.nationalgeographic.com/culture/article/improved-election-map-cartograms
       \endverb
     \endentry
+    \entry{munzner2014Visualization}{book}{}
+      \name{author}{1}{}{%
+        {{hash=f49068235c8a94e721f5ac15b17aed2c}{%
+           family={Munzner},
+           familyi={M\bibinitperiod},
+           given={Tamara},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {A K Peters/CRC Press}%
+      }
+      \strng{namehash}{f49068235c8a94e721f5ac15b17aed2c}
+      \strng{fullhash}{f49068235c8a94e721f5ac15b17aed2c}
+      \strng{bibnamehash}{f49068235c8a94e721f5ac15b17aed2c}
+      \strng{authorbibnamehash}{f49068235c8a94e721f5ac15b17aed2c}
+      \strng{authornamehash}{f49068235c8a94e721f5ac15b17aed2c}
+      \strng{authorfullhash}{f49068235c8a94e721f5ac15b17aed2c}
+      \field{labelalpha}{Mun14}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{Zeroth}
+      \field{isbn}{978-0-429-08890-2}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{title}{Visualization {{Analysis}} and {{Design}}}
+      \field{urlday}{12}
+      \field{urlmonth}{4}
+      \field{urlyear}{2023}
+      \field{year}{2014}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.1201/b17511
+      \endverb
+    \endentry
     \entry{nhsNHS}{misc}{}
       \name{author}{1}{}{%
         {{hash=4459a7e783de4f93dc38a03555f4191f}{%
@@ -1149,9 +1236,11 @@
       \strng{authorbibnamehash}{beee14ca3d504511ceb79904db898ccc}
       \strng{authornamehash}{beee14ca3d504511ceb79904db898ccc}
       \strng{authorfullhash}{f9c8ddfc803c03a20b30e00e3c875aa8}
+      \field{extraname}{1}
       \field{labelalpha}{Nic*22}
       \field{sortinit}{N}
       \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extraalpha}{1}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1077-2626, 1941-0506, 2160-9306}
@@ -1169,6 +1258,74 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/9NVLXAAV/Nickel et al. - 2022 - Multicriteria Optimization for Dynamic Demers Cart.pdf
+      \endverb
+    \endentry
+    \entry{nickel2022Multicriteriaa}{article}{}
+      \name{author}{6}{}{%
+        {{hash=38249e36779f7e441dac541e501aa82c}{%
+           family={Nickel},
+           familyi={N\bibinitperiod},
+           given={Soeren},
+           giveni={S\bibinitperiod}}}%
+        {{hash=d0fd77a5f281160b611874e8c6397a03}{%
+           family={Sondag},
+           familyi={S\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=eccc7dc38a5e8d8fc305bf97ad2f62e3}{%
+           family={Meulemans},
+           familyi={M\bibinitperiod},
+           given={Wouter},
+           giveni={W\bibinitperiod}}}%
+        {{hash=123e113ab51eb0c183fe920eb804b36b}{%
+           family={Kobourov},
+           familyi={K\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+        {{hash=a14051cefe8817b817d29ffd2a5aa7ad}{%
+           family={Peltonen},
+           familyi={P\bibinitperiod},
+           given={Jaakko},
+           giveni={J\bibinitperiod}}}%
+        {{hash=835c7a2af8b8551bd2627b51aea64477}{%
+           family={Nollenburg},
+           familyi={N\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{beee14ca3d504511ceb79904db898ccc}
+      \strng{fullhash}{cdaddd7c534dd1ade8ad99613001ff3e}
+      \strng{bibnamehash}{beee14ca3d504511ceb79904db898ccc}
+      \strng{authorbibnamehash}{beee14ca3d504511ceb79904db898ccc}
+      \strng{authornamehash}{beee14ca3d504511ceb79904db898ccc}
+      \strng{authorfullhash}{cdaddd7c534dd1ade8ad99613001ff3e}
+      \field{extraname}{2}
+      \field{labelalpha}{Nic*22}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cartograms are popular for visualizing numerical data for administrative regions in thematic maps. When there are multiple data values per region (over time or from different datasets) shown as animated or juxtaposed cartograms, preserving the viewer's mental map in terms of stability between multiple cartograms is another important criterion alongside traditional cartogram criteria such as maintaining adjacencies. We present a method to compute stable stable Demers cartograms, where each region is shown as a square scaled proportionally to the given numerical data and similar data yield similar cartograms. We enforce orthogonal separation constraints using linear programming, and measure quality in terms of keeping adjacent regions close (cartogram quality) and using similar positions for a region between the different data values (stability). Our method guarantees the ability to connect most lost adjacencies with minimal-length planar orthogonal polylines. Experiments show that our method yields good quality and stability on multiple quality criteria.}
+      \field{issn}{1077-2626, 1941-0506, 2160-9306}
+      \field{journaltitle}{IEEE Transactions on Visualization and Computer Graphics}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{number}{6}
+      \field{title}{Multicriteria {{Optimization}} for {{Dynamic Demers Cartograms}}}
+      \field{urlday}{23}
+      \field{urlmonth}{2}
+      \field{urlyear}{2023}
+      \field{volume}{28}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \field{pages}{2376\bibrangedash 2387}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1109/TVCG.2022.3151227
+      \endverb
+      \verb{file}
+      \verb /Users/henry/SynologyDrive/Zotero/storage/8PPLMV6G/Nickel et al. - 2022 - Multicriteria Optimization for Dynamic Demers Cart.pdf
       \endverb
     \endentry
     \entry{nusrat2016State}{article}{}

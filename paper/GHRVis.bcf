@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bcf:controlfile version="3.8" bltxversion="3.17" xmlns:bcf="https://sourceforge.net/projects/biblatex">
+<bcf:controlfile version="3.10" bltxversion="3.19" xmlns:bcf="https://sourceforge.net/projects/biblatex">
   <!-- BIBER OPTIONS -->
   <bcf:options component="biber" type="global">
     <bcf:option type="singlevalued">
@@ -37,6 +37,11 @@
     <bcf:option type="singlevalued">
       <bcf:key>alphaothers</bcf:key>
       <bcf:value>*</bcf:value>
+    </bcf:option>
+    <bcf:option type="multivalued">
+      <bcf:key>extradatecontext</bcf:key>
+      <bcf:value order="1">labelname</bcf:value>
+      <bcf:value order="2">labeltitle</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>labelalpha</bcf:key>
@@ -135,6 +140,10 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>nosortothers</bcf:key>
+      <bcf:value>0</bcf:value>
+    </bcf:option>
+    <bcf:option type="singlevalued">
+      <bcf:key>pluralothers</bcf:key>
       <bcf:value>0</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
@@ -272,6 +281,11 @@
   </bcf:options>
   <!-- online -->
   <bcf:options component="biblatex" type="online">
+    <bcf:option type="multivalued">
+      <bcf:key>extradatecontext</bcf:key>
+      <bcf:value order="1">labelname</bcf:value>
+      <bcf:value order="2">labeltitle</bcf:value>
+    </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>labelalpha</bcf:key>
       <bcf:value>1</bcf:value>
@@ -372,11 +386,11 @@
       <bcf:value>0</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
-      <bcf:key>skiplab</bcf:key>
+      <bcf:key>skipbiblist</bcf:key>
       <bcf:value>0</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
-      <bcf:key>skipbiblist</bcf:key>
+      <bcf:key>skiplab</bcf:key>
       <bcf:value>0</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
@@ -491,6 +505,7 @@
     <bcf:option datatype="xml">sortingnamekeytemplate</bcf:option>
     <bcf:option datatype="xml">sortingtemplate</bcf:option>
     <bcf:option datatype="xml">extradatespec</bcf:option>
+    <bcf:option datatype="xml">extradatecontext</bcf:option>
     <bcf:option datatype="xml">labelnamespec</bcf:option>
     <bcf:option datatype="xml">labeltitlespec</bcf:option>
     <bcf:option datatype="xml">labeldatespec</bcf:option>
@@ -599,6 +614,7 @@
     <bcf:option datatype="boolean">labeltitle</bcf:option>
     <bcf:option datatype="boolean">labeltitleyear</bcf:option>
     <bcf:option datatype="boolean">labeldateparts</bcf:option>
+    <bcf:option datatype="boolean">pluralothers</bcf:option>
     <bcf:option datatype="boolean">nohashothers</bcf:option>
     <bcf:option datatype="boolean">nosortothers</bcf:option>
     <bcf:option datatype="boolean">noroman</bcf:option>
@@ -712,6 +728,7 @@
     <bcf:option datatype="xml">translit</bcf:option>
     <bcf:option datatype="xml">sortexclusion</bcf:option>
     <bcf:option datatype="xml">sortinclusion</bcf:option>
+    <bcf:option datatype="xml">extradatecontext</bcf:option>
     <bcf:option datatype="xml">labelnamespec</bcf:option>
     <bcf:option datatype="xml">labeltitlespec</bcf:option>
     <bcf:option datatype="xml">labeldatespec</bcf:option>
@@ -1041,7 +1058,7 @@
     <bcf:namepart order="3">given</bcf:namepart>
   </bcf:uniquenametemplate>
   <!-- SORTING NAME KEY TEMPLATES -->
-  <bcf:sortingnamekeytemplate name="global">
+  <bcf:sortingnamekeytemplate name="global" visibility="sort">
     <bcf:keypart order="1">
       <bcf:part type="namepart" order="1" use="1">prefix</bcf:part>
       <bcf:part type="namepart" order="2">family</bcf:part>
@@ -2342,167 +2359,135 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">references.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">dent2009Cartography</bcf:citekey>
-    <bcf:citekey order="1">inoue2011New</bcf:citekey>
-    <bcf:citekey order="2">harris2018Mapping</bcf:citekey>
-    <bcf:citekey order="2">arranz-lopez2021Enduser</bcf:citekey>
-    <bcf:citekey order="3">pappenberger2019Cartograms</bcf:citekey>
-    <bcf:citekey order="3">park2020Flood</bcf:citekey>
-    <bcf:citekey order="4">galluzzi2018Mapping</bcf:citekey>
-    <bcf:citekey order="4">rocchini2019Cartogramming</bcf:citekey>
-    <bcf:citekey order="5">breitzman2018Using</bcf:citekey>
-    <bcf:citekey order="5">alieva2021How</bcf:citekey>
-    <bcf:citekey order="6">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="6">sack2021Visualizing</bcf:citekey>
-    <bcf:citekey order="7">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="8">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="9">ian2002Cartogram</bcf:citekey>
-    <bcf:citekey order="10">dent2009Cartography</bcf:citekey>
-    <bcf:citekey order="11">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="12">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="13">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="14">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="15">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="16">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="17">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="18">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="19">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="20">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="21">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="22">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="23">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="24">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="25">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="26">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="27">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="28">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="29">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="30">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="31">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="32">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="33">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="34">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="35">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="36">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="37">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="38">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="39">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="40">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="41">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="42">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="43">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="44">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="45">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="46">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="47">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="48">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="49">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="50">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="51">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="52">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="53">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="54">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="55">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="56">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="57">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="58">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="59">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="60">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="61">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="62">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="63">dorling2011Area</bcf:citekey>
-    <bcf:citekey order="64">cano2015Mosaic</bcf:citekey>
-    <bcf:citekey order="65">cano2015Mosaic</bcf:citekey>
-    <bcf:citekey order="66">ian2002Cartogram</bcf:citekey>
-    <bcf:citekey order="67">raisz1934Rectangular</bcf:citekey>
-    <bcf:citekey order="67">vankreveld2004Rectangular</bcf:citekey>
-    <bcf:citekey order="68">cano2015Mosaic</bcf:citekey>
-    <bcf:citekey order="69">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="70">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="71">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="72">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="73">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="74">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="75">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="76">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="77">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="78">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="79">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="80">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="81">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="82">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="83">bearak2016Everything</bcf:citekey>
-    <bcf:citekey order="84">gamio2016Election</bcf:citekey>
-    <bcf:citekey order="85">taylor2016What</bcf:citekey>
-    <bcf:citekey order="86">miller2016Election</bcf:citekey>
-    <bcf:citekey order="87">stabe2016Search</bcf:citekey>
-    <bcf:citekey order="88">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="89">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="90">sandberg2018Cartogram</bcf:citekey>
-    <bcf:citekey order="91">sandberg2018Cartogram</bcf:citekey>
-    <bcf:citekey order="92">thelearningnetwork2020What</bcf:citekey>
-    <bcf:citekey order="93">mccartney20202020</bcf:citekey>
-    <bcf:citekey order="94">nickel2022Multicriteria</bcf:citekey>
-    <bcf:citekey order="95">nickel2022Multicriteria</bcf:citekey>
-    <bcf:citekey order="96">opengeographyportalxOpen</bcf:citekey>
-    <bcf:citekey order="97">opengeographyportalxOpen</bcf:citekey>
-    <bcf:citekey order="98">wang2021EHR</bcf:citekey>
-    <bcf:citekey order="99">nhsNHS</bcf:citekey>
-    <bcf:citekey order="100">opengeographyportalxOpen</bcf:citekey>
-    <bcf:citekey order="101">openstreetmapRelation</bcf:citekey>
-    <bcf:citekey order="102">overpassturboOverpass</bcf:citekey>
-    <bcf:citekey order="103">qgisWelcome</bcf:citekey>
-    <bcf:citekey order="104">blochMapshaper</bcf:citekey>
-    <bcf:citekey order="105">TopoJSON</bcf:citekey>
-    <bcf:citekey order="106">nhsdigitalClinical</bcf:citekey>
-    <bcf:citekey order="107">dwyer2006Fast</bcf:citekey>
-    <bcf:citekey order="108">chen2020Node</bcf:citekey>
-    <bcf:citekey order="109">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="110">qgisWelcome</bcf:citekey>
-    <bcf:citekey order="111">blochMapshaper</bcf:citekey>
-    <bcf:citekey order="112">dent2009Cartography</bcf:citekey>
-    <bcf:citekey order="113">inoue2011New</bcf:citekey>
-    <bcf:citekey order="114">harris2018Mapping</bcf:citekey>
-    <bcf:citekey order="115">arranz-lopez2021Enduser</bcf:citekey>
-    <bcf:citekey order="116">pappenberger2019Cartograms</bcf:citekey>
-    <bcf:citekey order="117">park2020Flood</bcf:citekey>
-    <bcf:citekey order="118">galluzzi2018Mapping</bcf:citekey>
-    <bcf:citekey order="119">rocchini2019Cartogramming</bcf:citekey>
-    <bcf:citekey order="120">breitzman2018Using</bcf:citekey>
-    <bcf:citekey order="121">alieva2021How</bcf:citekey>
-    <bcf:citekey order="122">gao2020Visualising</bcf:citekey>
-    <bcf:citekey order="123">sack2021Visualizing</bcf:citekey>
-    <bcf:citekey order="124">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="125">ian2002Cartogram</bcf:citekey>
-    <bcf:citekey order="126">warf2008Geography</bcf:citekey>
-    <bcf:citekey order="127">sun2010Effectiveness</bcf:citekey>
-    <bcf:citekey order="128">cruz2017Adapted</bcf:citekey>
-    <bcf:citekey order="129">tong2018Cartograms</bcf:citekey>
-    <bcf:citekey order="130">nusrat2020Recognition</bcf:citekey>
-    <bcf:citekey order="131">dorling2011Area</bcf:citekey>
-    <bcf:citekey order="132">cano2015Mosaic</bcf:citekey>
-    <bcf:citekey order="133">raisz1934Rectangular</bcf:citekey>
-    <bcf:citekey order="134">vankreveld2004Rectangular</bcf:citekey>
-    <bcf:citekey order="135">bearak2016Everything</bcf:citekey>
-    <bcf:citekey order="136">gamio2016Election</bcf:citekey>
-    <bcf:citekey order="137">taylor2016What</bcf:citekey>
-    <bcf:citekey order="138">miller2016Election</bcf:citekey>
-    <bcf:citekey order="139">stabe2016Search</bcf:citekey>
-    <bcf:citekey order="140">sandberg2018Cartogram</bcf:citekey>
-    <bcf:citekey order="141">thelearningnetwork2020What</bcf:citekey>
-    <bcf:citekey order="142">mccartney20202020</bcf:citekey>
-    <bcf:citekey order="143">nickel2022Multicriteria</bcf:citekey>
-    <bcf:citekey order="144">opengeographyportalxOpen</bcf:citekey>
-    <bcf:citekey order="145">wang2021EHR</bcf:citekey>
-    <bcf:citekey order="146">nhsNHS</bcf:citekey>
-    <bcf:citekey order="147">openstreetmapRelation</bcf:citekey>
-    <bcf:citekey order="148">overpassturboOverpass</bcf:citekey>
-    <bcf:citekey order="149">qgisWelcome</bcf:citekey>
-    <bcf:citekey order="150">blochMapshaper</bcf:citekey>
-    <bcf:citekey order="151">TopoJSON</bcf:citekey>
-    <bcf:citekey order="152">nhsdigitalClinical</bcf:citekey>
-    <bcf:citekey order="153">dwyer2006Fast</bcf:citekey>
-    <bcf:citekey order="154">chen2020Node</bcf:citekey>
+    <bcf:citekey order="1" intorder="1">dent2009Cartography</bcf:citekey>
+    <bcf:citekey order="1" intorder="2">inoue2011New</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">harris2018Mapping</bcf:citekey>
+    <bcf:citekey order="2" intorder="2">arranz-lopez2021Enduser</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">pappenberger2019Cartograms</bcf:citekey>
+    <bcf:citekey order="3" intorder="2">park2020Flood</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">galluzzi2018Mapping</bcf:citekey>
+    <bcf:citekey order="4" intorder="2">rocchini2019Cartogramming</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">breitzman2018Using</bcf:citekey>
+    <bcf:citekey order="5" intorder="2">alieva2021How</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="6" intorder="2">sack2021Visualizing</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">nusrat2016State</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">nusrat2016State</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">munzner2014Visualization</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">ian2002Cartogram</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">dent2009Cartography</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">nusrat2016State</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">nusrat2016State</bcf:citekey>
+    <bcf:citekey order="14" intorder="1">nusrat2016State</bcf:citekey>
+    <bcf:citekey order="15" intorder="1">nusrat2016State</bcf:citekey>
+    <bcf:citekey order="16" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="18" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="19" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="20" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="21" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="22" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="24" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="25" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="26" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="27" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="28" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="29" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="30" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="31" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="32" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="33" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="34" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="35" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="36" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="37" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="38" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="39" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="40" intorder="1">nickel2022Multicriteriaa</bcf:citekey>
+    <bcf:citekey order="41" intorder="1">nickel2022Multicriteriaa</bcf:citekey>
+    <bcf:citekey order="42" intorder="1">nickel2022Multicriteriaa</bcf:citekey>
+    <bcf:citekey order="43" intorder="1">nickel2022Multicriteriaa</bcf:citekey>
+    <bcf:citekey order="44" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="45" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="46" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="47" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="48" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="49" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="50" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="51" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="52" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="53" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="54" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="55" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="56" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="57" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="58" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="59" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="60" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="61" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="62" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="63" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="64" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="65" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="66" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="67" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="68" intorder="1">nickel2022Multicriteriaa</bcf:citekey>
+    <bcf:citekey order="69" intorder="1">nickel2022Multicriteriaa</bcf:citekey>
+    <bcf:citekey order="70" intorder="1">nickel2022Multicriteriaa</bcf:citekey>
+    <bcf:citekey order="71" intorder="1">nickel2022Multicriteriaa</bcf:citekey>
+    <bcf:citekey order="72" intorder="1">dorling2011Area</bcf:citekey>
+    <bcf:citekey order="73" intorder="1">cano2015Mosaic</bcf:citekey>
+    <bcf:citekey order="74" intorder="1">cano2015Mosaic</bcf:citekey>
+    <bcf:citekey order="75" intorder="1">ian2002Cartogram</bcf:citekey>
+    <bcf:citekey order="76" intorder="1">raisz1934Rectangular</bcf:citekey>
+    <bcf:citekey order="76" intorder="2">vankreveld2004Rectangular</bcf:citekey>
+    <bcf:citekey order="77" intorder="1">cano2015Mosaic</bcf:citekey>
+    <bcf:citekey order="78" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="79" intorder="1">warf2008Geography</bcf:citekey>
+    <bcf:citekey order="80" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="81" intorder="1">sun2010Effectiveness</bcf:citekey>
+    <bcf:citekey order="82" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="83" intorder="1">gao2020Visualising</bcf:citekey>
+    <bcf:citekey order="84" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="85" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="86" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="87" intorder="1">nusrat2020Recognition</bcf:citekey>
+    <bcf:citekey order="88" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="89" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="90" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="91" intorder="1">tong2018Cartograms</bcf:citekey>
+    <bcf:citekey order="92" intorder="1">bearak2016Everything</bcf:citekey>
+    <bcf:citekey order="93" intorder="1">gamio2016Election</bcf:citekey>
+    <bcf:citekey order="94" intorder="1">taylor2016What</bcf:citekey>
+    <bcf:citekey order="95" intorder="1">miller2016Election</bcf:citekey>
+    <bcf:citekey order="96" intorder="1">stabe2016Search</bcf:citekey>
+    <bcf:citekey order="97" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="98" intorder="1">cruz2017Adapted</bcf:citekey>
+    <bcf:citekey order="99" intorder="1">sandberg2018Cartogram</bcf:citekey>
+    <bcf:citekey order="100" intorder="1">sandberg2018Cartogram</bcf:citekey>
+    <bcf:citekey order="101" intorder="1">thelearningnetwork2020What</bcf:citekey>
+    <bcf:citekey order="102" intorder="1">mccartney20202020</bcf:citekey>
+    <bcf:citekey order="103" intorder="1">nickel2022Multicriteria</bcf:citekey>
+    <bcf:citekey order="104" intorder="1">nickel2022Multicriteria</bcf:citekey>
+    <bcf:citekey order="105" intorder="1">opengeographyportalxOpen</bcf:citekey>
+    <bcf:citekey order="106" intorder="1">opengeographyportalxOpen</bcf:citekey>
+    <bcf:citekey order="107" intorder="1">wang2021EHR</bcf:citekey>
+    <bcf:citekey order="108" intorder="1">nhsNHS</bcf:citekey>
+    <bcf:citekey order="109" intorder="1">opengeographyportalxOpen</bcf:citekey>
+    <bcf:citekey order="110" intorder="1">openstreetmapRelation</bcf:citekey>
+    <bcf:citekey order="111" intorder="1">overpassturboOverpass</bcf:citekey>
+    <bcf:citekey order="112" intorder="1">qgisWelcome</bcf:citekey>
+    <bcf:citekey order="113" intorder="1">blochMapshaper</bcf:citekey>
+    <bcf:citekey order="114" intorder="1">TopoJSON</bcf:citekey>
+    <bcf:citekey order="115" intorder="1">nhsdigitalClinical</bcf:citekey>
+    <bcf:citekey order="116" intorder="1">dwyer2006Fast</bcf:citekey>
+    <bcf:citekey order="117" intorder="1">chen2020Node</bcf:citekey>
+    <bcf:citekey order="118" intorder="1">alam2015Quantitative</bcf:citekey>
+    <bcf:citekey order="119" intorder="1">alam2015Quantitative</bcf:citekey>
+    <bcf:citekey order="120" intorder="1">nusrat2016State</bcf:citekey>
+    <bcf:citekey order="121" intorder="1">qgisWelcome</bcf:citekey>
+    <bcf:citekey order="122" intorder="1">blochMapshaper</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="anyt">
