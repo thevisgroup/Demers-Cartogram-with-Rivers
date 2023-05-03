@@ -1236,11 +1236,9 @@
       \strng{authorbibnamehash}{beee14ca3d504511ceb79904db898ccc}
       \strng{authornamehash}{beee14ca3d504511ceb79904db898ccc}
       \strng{authorfullhash}{f9c8ddfc803c03a20b30e00e3c875aa8}
-      \field{extraname}{1}
       \field{labelalpha}{Nic*22}
       \field{sortinit}{N}
       \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
-      \field{extraalpha}{1}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1077-2626, 1941-0506, 2160-9306}
@@ -1258,74 +1256,6 @@
       \endverb
       \verb{file}
       \verb /Users/henry/SynologyDrive/Zotero/storage/9NVLXAAV/Nickel et al. - 2022 - Multicriteria Optimization for Dynamic Demers Cart.pdf
-      \endverb
-    \endentry
-    \entry{nickel2022Multicriteriaa}{article}{}
-      \name{author}{6}{}{%
-        {{hash=38249e36779f7e441dac541e501aa82c}{%
-           family={Nickel},
-           familyi={N\bibinitperiod},
-           given={Soeren},
-           giveni={S\bibinitperiod}}}%
-        {{hash=d0fd77a5f281160b611874e8c6397a03}{%
-           family={Sondag},
-           familyi={S\bibinitperiod},
-           given={Max},
-           giveni={M\bibinitperiod}}}%
-        {{hash=eccc7dc38a5e8d8fc305bf97ad2f62e3}{%
-           family={Meulemans},
-           familyi={M\bibinitperiod},
-           given={Wouter},
-           giveni={W\bibinitperiod}}}%
-        {{hash=123e113ab51eb0c183fe920eb804b36b}{%
-           family={Kobourov},
-           familyi={K\bibinitperiod},
-           given={Stephen},
-           giveni={S\bibinitperiod}}}%
-        {{hash=a14051cefe8817b817d29ffd2a5aa7ad}{%
-           family={Peltonen},
-           familyi={P\bibinitperiod},
-           given={Jaakko},
-           giveni={J\bibinitperiod}}}%
-        {{hash=835c7a2af8b8551bd2627b51aea64477}{%
-           family={Nollenburg},
-           familyi={N\bibinitperiod},
-           given={Martin},
-           giveni={M\bibinitperiod}}}%
-      }
-      \strng{namehash}{beee14ca3d504511ceb79904db898ccc}
-      \strng{fullhash}{cdaddd7c534dd1ade8ad99613001ff3e}
-      \strng{bibnamehash}{beee14ca3d504511ceb79904db898ccc}
-      \strng{authorbibnamehash}{beee14ca3d504511ceb79904db898ccc}
-      \strng{authornamehash}{beee14ca3d504511ceb79904db898ccc}
-      \strng{authorfullhash}{cdaddd7c534dd1ade8ad99613001ff3e}
-      \field{extraname}{2}
-      \field{labelalpha}{Nic*22}
-      \field{sortinit}{N}
-      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
-      \field{extraalpha}{2}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Cartograms are popular for visualizing numerical data for administrative regions in thematic maps. When there are multiple data values per region (over time or from different datasets) shown as animated or juxtaposed cartograms, preserving the viewer's mental map in terms of stability between multiple cartograms is another important criterion alongside traditional cartogram criteria such as maintaining adjacencies. We present a method to compute stable stable Demers cartograms, where each region is shown as a square scaled proportionally to the given numerical data and similar data yield similar cartograms. We enforce orthogonal separation constraints using linear programming, and measure quality in terms of keeping adjacent regions close (cartogram quality) and using similar positions for a region between the different data values (stability). Our method guarantees the ability to connect most lost adjacencies with minimal-length planar orthogonal polylines. Experiments show that our method yields good quality and stability on multiple quality criteria.}
-      \field{issn}{1077-2626, 1941-0506, 2160-9306}
-      \field{journaltitle}{IEEE Transactions on Visualization and Computer Graphics}
-      \field{langid}{english}
-      \field{month}{6}
-      \field{number}{6}
-      \field{title}{Multicriteria {{Optimization}} for {{Dynamic Demers Cartograms}}}
-      \field{urlday}{23}
-      \field{urlmonth}{2}
-      \field{urlyear}{2023}
-      \field{volume}{28}
-      \field{year}{2022}
-      \field{urldateera}{ce}
-      \field{pages}{2376\bibrangedash 2387}
-      \range{pages}{12}
-      \verb{doi}
-      \verb 10.1109/TVCG.2022.3151227
-      \endverb
-      \verb{file}
-      \verb /Users/henry/SynologyDrive/Zotero/storage/8PPLMV6G/Nickel et al. - 2022 - Multicriteria Optimization for Dynamic Demers Cart.pdf
       \endverb
     \endentry
     \entry{nusrat2016State}{article}{}
