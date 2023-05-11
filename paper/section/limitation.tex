@@ -1,8 +1,8 @@
 \section{Limitations and Future Work}
 
-In this section we discuss some limitations of our work and future research directions.
-Because this is a new concept it opens the door for many future research directions.
-The first limitation is the color map we use to depict the data in our cartograms. 
+In this section, we discuss some limitations of our work and future research directions.
+Because this is a new concept, it opens the door for many future research directions.
+The first limitation is the color map that we use to depict the data in our cartograms. 
 We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green.
 However, we believe that the choice of color map can have a significant impact on the legibility of cartograms.
 In the user study, we carefully avoid extreme values where the location or color of the CCG makes it easier to locate the target.
@@ -19,10 +19,10 @@ We plan to explore the impact of different color maps on the legibility of carto
 }
 
 Another limitation is the overlap removal algorithm (FNOR) we use.
-We believe that developing a new algorithm with built-in constraint support can significantly reduce the time needed to generate cartograms with rivers. Currently, the runtime our layout algorithm is approximately 30 milliseconds for each iteration.
+We believe that developing a new algorithm with built-in constraint support can significantly reduce the time required to generate cartograms with rivers. Currently, the runtime of our layout algorithm is approximately 30 milliseconds for each iteration.
 
-Future work also includes generalizations and extensions of the algorithm, e.g., the use of other features in the cartogram layout such as additional rivers, major highways, lakes, coastlines etc.
-We also consider if increasing the length of the rivers as the size of the nodes increases would be a useful option.
-We would like to explore the case of river-river intersections and testing out more geographies such as the U.S. and Europe which have more complex rivers.
+Future work also includes generalizations and extensions of the algorithm, e.g., the use of other features in the cartogram layout such as additional rivers, major highways, lakes, coastlines, etc.
+We also consider whether increasing the length of the rivers as the size of the nodes increases would be a useful option.
+We would like to explore the case of river-river intersections and testing out more geographies such as the U.S. and Europe, which have more complex rivers.
 We also considered the idea of deforming the rivers as part of the layout algorithm, however, this idea is open to future work.
 Furture work also includes adding rivers to dorling-style cartograms.
