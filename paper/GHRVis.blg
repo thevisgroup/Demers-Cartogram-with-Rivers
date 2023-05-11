@@ -1,20 +1,19 @@
 [0] Config.pm:307> INFO - This is Biber 2.19
 [0] Config.pm:310> INFO - Logfile is 'GHRVis.blg'
-[40] biber-darwin:340> INFO - === Tue May  2, 2023, 19:57:57
-[50] Biber.pm:419> INFO - Reading 'GHRVis.bcf'
-[107] Biber.pm:979> INFO - Found 45 citekeys in bib section 0
-[114] Biber.pm:4419> INFO - Processing section 0
-[122] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
-[126] bibtex.pm:1713> INFO - LaTeX decoding ...
-[175] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[393] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[393] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[393] Biber.pm:4239> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
-[393] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
-[421] bbl.pm:660> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
-[447] bbl.pm:763> INFO - Output to GHRVis.bbl
-[447] Biber.pm:131> WARN - Duplicate entry key: 'nickel2022Multicriteria' in file 'references.bib', skipping ...
-[447] Biber.pm:131> WARN - ISBN '978-0-470-97958-7 978-0-470-74283-9' in entry 'dorling2011Area' is invalid - run biber with '--validate_datamodel' for details.
-[447] Biber.pm:131> WARN - ISBN '978-3-540-23025-0 978-3-540-30140-0' in entry 'vankreveld2004Rectangular' is invalid - run biber with '--validate_datamodel' for details.
-[447] Biber.pm:131> WARN - ISBN '978-3-540-31425-7 978-3-540-31667-1' in entry 'dwyer2006Fast' is invalid - run biber with '--validate_datamodel' for details.
-[447] Biber.pm:133> INFO - WARNINGS: 4
+[39] biber-darwin:340> INFO - === Thu May 11, 2023, 10:51:24
+[48] Biber.pm:419> INFO - Reading 'GHRVis.bcf'
+[102] Biber.pm:979> INFO - Found 45 citekeys in bib section 0
+[110] Biber.pm:4419> INFO - Processing section 0
+[116] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
+[120] bibtex.pm:1713> INFO - LaTeX decoding ...
+[165] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[349] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[349] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[349] Biber.pm:4239> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
+[349] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[376] bbl.pm:660> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
+[400] bbl.pm:763> INFO - Output to GHRVis.bbl
+[400] Biber.pm:131> WARN - ISBN '978-0-470-97958-7 978-0-470-74283-9' in entry 'dorling2011Area' is invalid - run biber with '--validate_datamodel' for details.
+[400] Biber.pm:131> WARN - ISBN '978-3-540-23025-0 978-3-540-30140-0' in entry 'vankreveld2004Rectangular' is invalid - run biber with '--validate_datamodel' for details.
+[400] Biber.pm:131> WARN - ISBN '978-3-540-31425-7 978-3-540-31667-1' in entry 'dwyer2006Fast' is invalid - run biber with '--validate_datamodel' for details.
+[400] Biber.pm:133> INFO - WARNINGS: 3

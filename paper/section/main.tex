@@ -3,7 +3,8 @@
   \begin{figure*}[tb!]
       \centering
       \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figure/flowchart.png}
-      \caption{An overview of our hybrid layout algorithm incorporating rivers. See also \Cref{alg:UpdateLayout} in \Cref{sec:{Demers Cartogram with Rivers}} for more detail. See \Cref{fig:flowchart-stalemate} for the logic of processing a stalemate. For illustration purposes, we show the rendered views alongside the logical views representing the actual computation.}
+      \caption{An overview of our hybrid layout algorithm incorporating rivers. See also \Cref{alg:UpdateLayout} in \Cref{sec:{Demers Cartogram with Rivers}} for more detail. % See \Cref{fig:flowchart-stalemate} for the logic of processing a stalemate.
+       For illustration purposes, we show the rendered views alongside the logical views representing the actual computation.}
       \label{fig:flowchart}
   \end{figure*}
  }
@@ -17,110 +18,12 @@
   \end{figure}
  }
 
-
-
-\begin{algorithm}[tb!]
-    \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers. See \Cref{sec:{Demers Cartogram with Rivers}}.}\label{alg:UpdateLayout}
-    \textbf{Global variables:} \\
-    $ \nodeList \gets $ a list of $ \node $ representing regions with the following properties: \\
-    \-\hspace{1em}  $\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river \\
-
-    $ \nodeSize \gets $ the initial size of all nodes \\
-    $ \nodeCartographicError \gets $ the average cartographic error of all nodes \\
-    $ \nodeCartographicErrorMax \gets $ the maximum cartographic error of all nodes \\
-    $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
-
-    \textbf{Local variables:} \\
-    $ \node \gets $ a node is an object with the following properties: \\
-    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
-    \-\hspace{1em} $ \nodeCross \gets $ the number of times that $ \node $ crosses a river \\
-    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
-    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
-
-    \begin{algorithmic}[1]
-        \Procedure{UpdateLayout}{}
-
-        \State $ \nodeSize \gets 1 $
-        \While{$ \nodeCartographicError < \nodeCartographicErrorMax $}
-        \State $ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}
-        \While{$ \nodeListCross > 0 $}
-
-        \State $ \nodeListCross \gets 0 $
-        \State $ \nodeList \gets $ RemoveOverlap ($ \nodeList $)
-        \State \Call{TranslateRiver}{$ \nodeList $}
-        \State $\nodeListCross \gets $ \Call{TranslateNode}{$ \nodeList $}
-
-        \EndWhile
-
-        \State $ \nodeSize ++ $
-
-        \EndWhile
-
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-
-
 \Cref{alg:UpdateLayout} and \Cref{fig:flowchart} provide an overview of the hybrid cartogram layout process that includes rivers.
 
 \bobgraph{Initialization with Rivers:} We first load and (optionally) render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $ =1 pixel. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next nearest vertex. We do not need the original river resolution to incorporate them into cartograms. We reduce their resolution to match that of the cartogram nodes in order to facilitate node-river intersection tests. This rendering approach enables us to adjust the river resolution as shown in \Cref{fig:river resolution}. We further apply simplification by removing vertices that are too close to each other. The initialization procedure is a one-time process that can be saved for re-use.
 
 
 \bobgraph{Node Layout and Overlap Removal:} We first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006Fast} in order to remove overlap between square nodes. We chose FNOR over other node overlap removal algorithms because FNOR is able to provide spread minimization and node movement minimization while maintaining a good level of global shape preservation \cite{chen2020Node}. Initialized with a pixel size of unity, we gradually increase the node size by one unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \Cref{alg:TranslateNode}) and translate nodes to their new position. Nodes that cross a river, denoted $ \NxR $, are translated back to their previous position. If a node oscillates across a river, we identify this as a stalemate. One iteration of the layout ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one unit and repeat the algorithm until the average cartographic error, $ \nodeCartographicError $, a measure set by the user, reaches its maximum value $ \nodeCartographicErrorMax $. The gradual size increase process provides stability to the layout, as can be seen in the accompanying video.
-
-\begin{algorithm}[tb!]
-    \caption{Procedure to translate node positions.}\label{alg:TranslateNode}
-
-    \textbf{Input:} \\
-    $ \nodeList \gets $ a list of $ \node $ representing regions \\
-
-    \textbf{Output:} \\
-    $ \nodeTopologicalError \gets $ the number of river crossing nodes in the input \\
-
-    \textbf{Global variables:} \\
-    $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
-
-    \textbf{Local variables:} \\
-    $ \node \gets $ a node is an object with the following properties: \\
-    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
-    \-\hspace{1em} $ \nodeCross \gets $ the number of times that $ \node $ crosses a river  \\
-    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
-    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
-
-    \begin{algorithmic}[1]
-        \Procedure{TranslateNode}{$ \nodeList $}
-        \State $ \nodeTopologicalError \gets 0 $
-        \ForEach {$ \node \in \nodeList $}
-
-        \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
-
-        \State $ \node(x,y) \gets \nodeFNOR(x,y) $
-
-        \If{ \Call{TestIntersection}{$ \nodeFNORLine $} $ = True $}
-        \State $ \nodeCross ++ $
-        \State $ \nodeTopologicalError ++ $
-
-        \If{$ \nodeCross < \stalemateMax $}
-        \State \hskip-2em \Comment{Translate back to previous position}
-        \State $ \node(x,y) \gets \nodePrevious(x,y) $
-
-        \Else
-
-        \State \Call{ProcessStalemate}{$ \node, \nodeFNOR $}
-        \State $ \nodeCross \gets 0 $ \Comment{Reset counter}
-
-        \EndIf
-
-        \EndIf
-
-        \EndIf
-
-        \EndFor
-        \State \Return{$ \nodeTopologicalError $}
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-
 
 \subsection{River Intersection Testing}
 
@@ -130,43 +33,6 @@ The logic for translating a node's position is detailed in \Cref{alg:TranslateNo
 
 For all nodes $ \NxR $ that cross a river, $ \river $, we compute an average vector $ \vectorAvg $ used to translate $ \river $. Whenever a node, $ \node $, crosses a river, we store a vector $ \nodeVectorNNn $ that points in the direction of the translation. We then use a heuristic to translate $ \river $ using the average vector of node intersection $$ \vectorAvg = \sum_{i=1}^{\nodeTopologicalError} \frac{\Vector{\node_i\node_{i_t}}}{\nodeTopologicalError} $$, where $ \nodeTopologicalError $ is the number of nodes intersecting the river. This step intends to create space for the next iteration of node translation without crossing a river. The detailed procedure for translating rivers is provided by \Cref{alg:TranslateRiver}.
 
-\begin{algorithm}[tbh!]
-    \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
-    \textbf{Input:} \\
-    $ \nodeList \gets $ a list of $ \node $ representing regions \\
-
-    \textbf{Local variables:} \\
-    $ \riverList \gets $ a list of $ \river $ representing river features \\
-    $ \node \gets $ a node is an object with the following properties: \\
-    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
-    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
-    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
-    $ \nodeTopologicalError \gets $ the number of nodes intersecting $ \river $  \\
-
-    \begin{algorithmic}[1]
-        \Procedure{TranslateRiver}{$ \nodeList $}
-        \ForEach {$ \river \in \riverList $}
-        \State $ \nodeTopologicalError \gets 0 $
-        \State $ \riverVector \gets (0,0) $ \Comment{Hold the sum of vectors $ \nodeVectorCT $}
-        \ForEach {$ \node \in \nodeList $}
-
-        \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
-        \If{ \Call{TestIntersection}{$ \nodeFNORLine $, $ \river $} $ = True $}
-        \State $ \riverVector \gets \riverVector + \nodeVectorCT$
-        \State $ \nodeTopologicalError ++ $
-        \EndIf
-
-        \EndIf
-
-        \EndFor
-
-        \State Translate river $ \river $ by the average vector $ \frac{\riverVector}{\nodeTopologicalError} $
-        \EndFor
-
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-
 
 When a river, $ \river $, is translated by $ \vectorAvg $, this can trigger a scenario where the nodes are crossed by a translated river, denoted $ \RxN $. As a heuristic we also translate these nodes by $ \vectorAvg $. The reasoning behind this is that $ \vectorAvg $ indicates which direction the river needs to be translated in order to create space for nodes that are too crowded together. In practice, $ \vectorAvg $ is multiplied by a scaling factor $ \propto\vectorAvg $. Thus, we can influence how far $ \river $ is translated in each iteration of the layout algorithm. We can use this to ensure smooth transitions between iterations.
 
@@ -174,14 +40,14 @@ When a river, $ \river $, is translated by $ \vectorAvg $, this can trigger a sc
 
 As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path can repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \Cref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations (a user-adjustable parameter), we introduce a heuristic solution: constructing a corridor to alleviate the congestion. A corridor, $ \Corridor $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNtNc $ (See \Cref{fig:corridor}C and D). All nodes enclosed by $ \Corridor $ are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \Cref{fig:corridor}E). The procedure for constructing corridors is provided by \Cref{alg:derive corridor}.
 
-{
-    \begin{figure}[tb!]
-        \centering
-        \includegraphics[width=\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
-        \caption{A flowchart illustration of stalemate processing. See \Cref{subsec:{Process Stalemates}}, \Cref{fig:stalemate}, and \Cref{fig:corridor} for more detail.}
-        \label{fig:flowchart-stalemate}
-    \end{figure}
-   }
+% {
+%     \begin{figure}[tb!]
+%         \centering
+%         \includegraphics[width=\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
+%         \caption{A flowchart illustration of stalemate processing. See \Cref{subsec:{Process Stalemates}}, \Cref{fig:stalemate}, and \Cref{fig:corridor} for more detail.}
+%         \label{fig:flowchart-stalemate}
+%     \end{figure}
+%    }
    
     {
         \begin{figure}[tb!]
@@ -201,55 +67,6 @@ As the FNOR always attempts to produce an optimal node layout where node distrib
         \end{figure}
     }
 
-% \begin{noindent}
-
-\begin{algorithm}[tb!]
-    \caption{Procedure to derive a corridor to translate enclosed nodes. We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \Cref{fig:stalemate}).}\label{alg:derive corridor}
-
-    \textbf{Input:} \\
-    $ \node \gets $ the node used to derive the corridor \\
-
-    \textbf{Global variables:} \\
-    $ \CorridorLength \gets $ the length of a corridor \\
-    $ \CorridorWidth \gets $ the width of a corridor \\
-
-    \textbf{Local variables:} \\
-    $ \Corridor \gets $ the corridor \\
-    $ \PointP \gets $ the point extending $ \nodeVectorTC $ such that $ \nodeLineWidthNtP = \CorridorLength $\\
-    $ \EdgeParallelA, \EdgeParallelB \gets $ the edges parallel to $ \nodeLineNtNc $ \\
-    $ corridor \gets $ a rectangle formed by $ \EdgeParallelA $ and $ \EdgeParallelB $ \\
-
-    \begin{algorithmic}[1]
-        \Procedure{ProcessStalemate}{$ \node $}
-            \State $ \node(x,y) \gets \nodePrevious(x,y) $
-
-            \State $ \PointP \gets $ \Call{DerivePoint}{$ \nodeVectorTC $, $ \CorridorLength $}
-
-            \State $ \EdgeParallelA \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNtP $, $ \frac{\CorridorWidth}{2} $}
-
-            \State $ \EdgeParallelB \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNtP $, $ -\frac{\CorridorWidth}{2} $}
-
-            \State $ \Corridor \gets
-                \begin{bmatrix}
-                    \EdgeParallelA.start &
-                    \EdgeParallelA.end \\
-
-                    \EdgeParallelB.start &
-                    \EdgeParallelB.end \\
-                \end{bmatrix} $
-
-            \ForEach{$ \nodeInCorridor $ inside $ \Corridor $}
-
-                \State $ \Vector{\nodeInCorridor ~\nodeInCorridorT} = \nodeVectorTC $
-
-                \State $ \nodeInCorridor(x,y) \gets \nodeInCorridorT(x,y) $
-
-            \EndFor
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-
-%\end{noindent}
 
 \subsection{Terminating the Algorithm}
 
@@ -282,7 +99,7 @@ When the algorithm terminates, the node layout is considered optimal where no no
 {
 \begin{figure*}[tb!]
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{figure/UI.png}
+    \includegraphics[width=0.7\textwidth,keepaspectratio]{figure/UI.png}
     \caption{A screenshot of the user interface. User options are provided to adjust the terminating conditions (size and error), color mapping, visibility of nodes and rivers. Other options include the ability to control the overlap removal behavior: rivers can be static or dynamic. See \Cref{subsec:{User Options}} for more on user options. In this figure, $ \nodeCartographicErrorMax $ = 1.875\%, and an $ \nodeTopologicalError $ of 9.63\% is eliminated.}
     \label{fig:overview}
 \end{figure*}

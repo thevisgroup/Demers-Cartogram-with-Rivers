@@ -2,6 +2,15 @@
 
 \let\origappendixsection=\section
 \renewcommand\section[1]{\origappendixsection{\textbf{#1}}}
+
+\section{Obtaining Shapefile}
+\label{obtaining-shapefile}
+\begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via the Overpass Turbo API.}, label={overpass},captionpos=b]
+    relation(2263653);>>;
+    // River Great Ouse: 2798097
+    // River Trent: 2863468
+    out skel;
+\end{lstlisting}
 \section{Pre-processing Shapefiles}
 \label{app:pre-processing}
 Shapefiles from different sources are likely to be incompatible. In our case, the NHS CCG shapefile is incompatible with the river shapefiles. The major reason for the incompatibility is the coordinate reference system (CRS). The CRS of the CCG shapefile is EPSG:27700 (OSGB36 - British National Grid). The CRS of the river shapefiles is EPSG:4326 (WGS84 - World Geodetic System). Here we provide some pre-processing steps using QGIS (version: 3.26.0-Buenos Aires) \cite{qgisWelcome} to handle the incompatibility and reduce shapefile size to improve performance.
@@ -10,21 +19,21 @@ Shapefiles from different sources are likely to be incompatible. In our case, th
 We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, followed by the CCG shapefile \Cref{fig:import_ccgs}.
 
 {
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/import_rivers.png}
     \caption{QGIS interface, with River Trent, River Great Ouse, and River Thames (from top to bottom) imported.}
     \label{fig:import_rivers}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/import_ccgs.png}
     \caption{QGIS interface, with all NHS CCGs imported.}
     \label{fig:import_ccgs}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/unify_crs.png}
     \caption{QGIS interface, showing the unified CRS (OSGB36) for both layers.}
@@ -37,14 +46,14 @@ We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, fol
 We then use QGIS to unify the CRS, and export both layers in the GeoJSON format. See \Cref{fig:export_rivers} and \Cref{fig:export_ccgs}. The unified layer is shown in \Cref{fig:unify_crs}.
 
 {
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/export_rivers.png}
     \caption{QGIS interface, exporting all rivers using the OSGB36 CRS in GeoJSON.}
     \label{fig:export_rivers}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/export_ccgs.png}
     \caption{QGIS interface, exporting all NHS CCGs using the OSGB36 CRS in GeoJSON.}
@@ -58,7 +67,7 @@ We then use QGIS to unify the CRS, and export both layers in the GeoJSON format.
 We then merge two layers into one layer, and export it in the TopoJSON format using Mapshaper \cite{blochMapshaper}. Mapshaper also supports the simplification of GeoJSON shapefiles. See \Cref{fig:export_topojson}.
 
 {
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{figure/qgis/export_topojson.png}
     \caption{Mapshaper interface, merging all rivers with NHS CCGs into one layer, and export the merged layer in TopoJSON.}
@@ -72,7 +81,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
     {
         \renewcommand{\arraystretch}{1.5}
-        \begin{table}[!tb]
+        \begin{table}[H]
             \centering
             \resizebox{\columnwidth}{!}{
                 \begin{tabulary}{\columnwidth}{|*{4}{l|}}
@@ -97,9 +106,197 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
 \clearpage
 
+\section{Procedure: TranslateNode}
+
+\begin{algorithm}[H]
+    \caption{Procedure to translate node positions.}\label{alg:TranslateNode}
+
+    \textbf{Input:} \\
+    $ \nodeList \gets $ a list of $ \node $ representing regions \\
+
+    \textbf{Output:} \\
+    $ \nodeTopologicalError \gets $ the number of river crossing nodes in the input \\
+
+    \textbf{Global variables:} \\
+    $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
+
+    \textbf{Local variables:} \\
+    $ \node \gets $ a node is an object with the following properties: \\
+    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
+    \-\hspace{1em} $ \nodeCross \gets $ the number of times that $ \node $ crosses a river  \\
+    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
+    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+
+    \begin{algorithmic}[1]
+        \Procedure{TranslateNode}{$ \nodeList $}
+        \State $ \nodeTopologicalError \gets 0 $
+        \ForEach {$ \node \in \nodeList $}
+
+        \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
+
+        \State $ \node(x,y) \gets \nodeFNOR(x,y) $
+
+        \If{ \Call{TestIntersection}{$ \nodeFNORLine $} $ = True $}
+        \State $ \nodeCross ++ $
+        \State $ \nodeTopologicalError ++ $
+
+        \If{$ \nodeCross < \stalemateMax $}
+        \State \hskip-2em \Comment{Translate back to previous position}
+        \State $ \node(x,y) \gets \nodePrevious(x,y) $
+
+        \Else
+
+        \State \Call{ProcessStalemate}{$ \node, \nodeFNOR $}
+        \State $ \nodeCross \gets 0 $ \Comment{Reset counter}
+
+        \EndIf
+
+        \EndIf
+
+        \EndIf
+
+        \EndFor
+        \State \Return{$ \nodeTopologicalError $}
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\section{Procedure: UpdateLayout}
+
+\begin{algorithm}[H]
+    \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers. See \Cref{sec:{Demers Cartogram with Rivers}}.}\label{alg:UpdateLayout}
+    \textbf{Global variables:} \\
+    $ \nodeList \gets $ a list of $ \node $ representing regions with the following properties: \\
+    \-\hspace{1em}  $\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river \\
+
+    $ \nodeSize \gets $ the initial size of all nodes \\
+    $ \nodeCartographicError \gets $ the average cartographic error of all nodes \\
+    $ \nodeCartographicErrorMax \gets $ the maximum cartographic error of all nodes \\
+    $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
+
+    \textbf{Local variables:} \\
+    $ \node \gets $ a node is an object with the following properties: \\
+    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
+    \-\hspace{1em} $ \nodeCross \gets $ the number of times that $ \node $ crosses a river \\
+    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
+    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+
+    \begin{algorithmic}[1]
+        \Procedure{UpdateLayout}{}
+
+        \State $ \nodeSize \gets 1 $
+        \While{$ \nodeCartographicError < \nodeCartographicErrorMax $}
+        \State $ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}
+        \While{$ \nodeListCross > 0 $}
+
+        \State $ \nodeListCross \gets 0 $
+        \State $ \nodeList \gets $ RemoveOverlap ($ \nodeList $)
+        \State \Call{TranslateRiver}{$ \nodeList $}
+        \State $\nodeListCross \gets $ \Call{TranslateNode}{$ \nodeList $}
+
+        \EndWhile
+
+        \State $ \nodeSize ++ $
+
+        \EndWhile
+
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\section{Procedure: TranslateRiver}
+
+\begin{algorithm}[H]
+    \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
+    \textbf{Input:} \\
+    $ \nodeList \gets $ a list of $ \node $ representing regions \\
+
+    \textbf{Local variables:} \\
+    $ \riverList \gets $ a list of $ \river $ representing river features \\
+    $ \node \gets $ a node is an object with the following properties: \\
+    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
+    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
+    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+    $ \nodeTopologicalError \gets $ the number of nodes intersecting $ \river $  \\
+
+    \begin{algorithmic}[1]
+        \Procedure{TranslateRiver}{$ \nodeList $}
+        \ForEach {$ \river \in \riverList $}
+        \State $ \nodeTopologicalError \gets 0 $
+        \State $ \riverVector \gets (0,0) $ \Comment{Hold the sum of vectors $ \nodeVectorCT $}
+        \ForEach {$ \node \in \nodeList $}
+
+        \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
+        \If{ \Call{TestIntersection}{$ \nodeFNORLine $, $ \river $} $ = True $}
+        \State $ \riverVector \gets \riverVector + \nodeVectorCT$
+        \State $ \nodeTopologicalError ++ $
+        \EndIf
+
+        \EndIf
+
+        \EndFor
+
+        \State Translate river $ \river $ by the average vector $ \frac{\riverVector}{\nodeTopologicalError} $
+        \EndFor
+
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\section{Procedure: ProcessStalemate}
+
+% \begin{noindent}
+
+    \begin{algorithm}[H]
+        \caption{Procedure to derive a corridor to resolve stalemate. We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \Cref{fig:stalemate}).}\label{alg:derive corridor}
+    
+        \textbf{Input:} \\
+        $ \node \gets $ the node used to derive the corridor \\
+    
+        \textbf{Global variables:} \\
+        $ \CorridorLength \gets $ the length of a corridor \\
+        $ \CorridorWidth \gets $ the width of a corridor \\
+    
+        \textbf{Local variables:} \\
+        $ \Corridor \gets $ the corridor \\
+        $ \PointP \gets $ the point extending $ \nodeVectorTC $ such that $ \nodeLineWidthNtP = \CorridorLength $\\
+        $ \EdgeParallelA, \EdgeParallelB \gets $ the edges parallel to $ \nodeLineNtNc $ \\
+        $ corridor \gets $ a rectangle formed by $ \EdgeParallelA $ and $ \EdgeParallelB $ \\
+    
+        \begin{algorithmic}[1]
+            \Procedure{ProcessStalemate}{$ \node $}
+                \State $ \node(x,y) \gets \nodePrevious(x,y) $
+    
+                \State $ \PointP \gets $ \Call{DerivePoint}{$ \nodeVectorTC $, $ \CorridorLength $}
+    
+                \State $ \EdgeParallelA \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNtP $, $ \frac{\CorridorWidth}{2} $}
+    
+                \State $ \EdgeParallelB \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNtP $, $ -\frac{\CorridorWidth}{2} $}
+    
+                \State $ \Corridor \gets
+                    \begin{bmatrix}
+                        \EdgeParallelA.start &
+                        \EdgeParallelA.end \\
+    
+                        \EdgeParallelB.start &
+                        \EdgeParallelB.end \\
+                    \end{bmatrix} $
+    
+                \ForEach{$ \nodeInCorridor $ inside $ \Corridor $}
+    
+                    \State $ \Vector{\nodeInCorridor ~\nodeInCorridorT} = \nodeVectorTC $
+    
+                    \State $ \nodeInCorridor(x,y) \gets \nodeInCorridorT(x,y) $
+    
+                \EndFor
+            \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+    
+    %\end{noindent}
 \section{Procedure: TestIntersection}
 % \begin{noindent}
-    \begin{algorithm}[h!]
+    \begin{algorithm}[H]
         \caption{Procedure to test if a node's translation path, $ \nodeLineNV $ intersects a river.}\label{alg:check river intersection}
         \textbf{Input:} \\
         $ \nodeLineNV \gets $ the node's translation path \\
@@ -131,11 +328,14 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
     %\end{noindent}
 
 
-\section{Procedure: DerivePoint}
+
+
+
+    \section{Procedure: DerivePoint}
 
 % \begin{noindent}
 
-    \begin{algorithm}[h!]
+    \begin{algorithm}[H]
         \caption{Procedure to derive a point based an edge and a distance.}\label{alg:derive corridor point}
         \textbf{Input:} \\
         $ \Edge \gets $ the edge used to derive the new point \\
@@ -170,7 +370,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
 % \begin{noindent}
 
-\begin{algorithm}[h!]
+\begin{algorithm}[H]
     \caption{Procedure to derive an edge, $ \EdgeParallel $, that is parallel to $ \Edge $ with a distance of $ \Distance $.}\label{alg:derive corridor edge}
 
     \textbf{Input:} \\

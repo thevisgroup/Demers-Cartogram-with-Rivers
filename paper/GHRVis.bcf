@@ -92,19 +92,19 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxalphanames</bcf:key>
-      <bcf:value>2</bcf:value>
+      <bcf:value>4</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxbibnames</bcf:key>
-      <bcf:value>2</bcf:value>
+      <bcf:value>4</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxcitenames</bcf:key>
-      <bcf:value>2</bcf:value>
+      <bcf:value>4</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxsortnames</bcf:key>
-      <bcf:value>2</bcf:value>
+      <bcf:value>4</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxitems</bcf:key>
@@ -112,19 +112,19 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minalphanames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minbibnames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>mincitenames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minsortnames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minitems</bcf:key>
@@ -327,19 +327,19 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxalphanames</bcf:key>
-      <bcf:value>2</bcf:value>
+      <bcf:value>4</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxbibnames</bcf:key>
-      <bcf:value>2</bcf:value>
+      <bcf:value>4</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxcitenames</bcf:key>
-      <bcf:value>2</bcf:value>
+      <bcf:value>4</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxsortnames</bcf:key>
-      <bcf:value>2</bcf:value>
+      <bcf:value>4</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxitems</bcf:key>
@@ -347,19 +347,19 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minalphanames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minbibnames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>mincitenames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minsortnames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minitems</bcf:key>
@@ -2470,24 +2470,22 @@
     <bcf:citekey order="102" intorder="1">mccartney20202020</bcf:citekey>
     <bcf:citekey order="103" intorder="1">nickel2022Multicriteria</bcf:citekey>
     <bcf:citekey order="104" intorder="1">nickel2022Multicriteria</bcf:citekey>
-    <bcf:citekey order="105" intorder="1">opengeographyportalxOpen</bcf:citekey>
-    <bcf:citekey order="106" intorder="1">opengeographyportalxOpen</bcf:citekey>
-    <bcf:citekey order="107" intorder="1">wang2021EHR</bcf:citekey>
-    <bcf:citekey order="108" intorder="1">nhsNHS</bcf:citekey>
-    <bcf:citekey order="109" intorder="1">opengeographyportalxOpen</bcf:citekey>
-    <bcf:citekey order="110" intorder="1">openstreetmapRelation</bcf:citekey>
-    <bcf:citekey order="111" intorder="1">overpassturboOverpass</bcf:citekey>
-    <bcf:citekey order="112" intorder="1">qgisWelcome</bcf:citekey>
-    <bcf:citekey order="113" intorder="1">blochMapshaper</bcf:citekey>
-    <bcf:citekey order="114" intorder="1">TopoJSON</bcf:citekey>
-    <bcf:citekey order="115" intorder="1">nhsdigitalClinical</bcf:citekey>
-    <bcf:citekey order="116" intorder="1">dwyer2006Fast</bcf:citekey>
-    <bcf:citekey order="117" intorder="1">chen2020Node</bcf:citekey>
-    <bcf:citekey order="118" intorder="1">alam2015Quantitative</bcf:citekey>
-    <bcf:citekey order="119" intorder="1">alam2015Quantitative</bcf:citekey>
-    <bcf:citekey order="120" intorder="1">nusrat2016State</bcf:citekey>
-    <bcf:citekey order="121" intorder="1">qgisWelcome</bcf:citekey>
-    <bcf:citekey order="122" intorder="1">blochMapshaper</bcf:citekey>
+    <bcf:citekey order="105" intorder="1">wang2021EHR</bcf:citekey>
+    <bcf:citekey order="106" intorder="1">nhsNHS</bcf:citekey>
+    <bcf:citekey order="107" intorder="1">opengeographyportalxOpen</bcf:citekey>
+    <bcf:citekey order="108" intorder="1">openstreetmapRelation</bcf:citekey>
+    <bcf:citekey order="109" intorder="1">overpassturboOverpass</bcf:citekey>
+    <bcf:citekey order="110" intorder="1">qgisWelcome</bcf:citekey>
+    <bcf:citekey order="111" intorder="1">blochMapshaper</bcf:citekey>
+    <bcf:citekey order="112" intorder="1">TopoJSON</bcf:citekey>
+    <bcf:citekey order="113" intorder="1">nhsdigitalClinical</bcf:citekey>
+    <bcf:citekey order="114" intorder="1">dwyer2006Fast</bcf:citekey>
+    <bcf:citekey order="115" intorder="1">chen2020Node</bcf:citekey>
+    <bcf:citekey order="116" intorder="1">alam2015Quantitative</bcf:citekey>
+    <bcf:citekey order="117" intorder="1">alam2015Quantitative</bcf:citekey>
+    <bcf:citekey order="118" intorder="1">nusrat2016State</bcf:citekey>
+    <bcf:citekey order="119" intorder="1">qgisWelcome</bcf:citekey>
+    <bcf:citekey order="120" intorder="1">blochMapshaper</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="anyt">
