@@ -13,7 +13,7 @@
 \end{lstlisting}
 \section{Pre-processing Shapefiles}
 \label{app:pre-processing}
-Shapefiles from different sources are likely to be incompatible. In our case, the NHS CCG shapefile is incompatible with the river shapefiles. The major reason for the incompatibility is the coordinate reference system (CRS). The CRS of the CCG shapefile is EPSG:27700 (OSGB36 - British National Grid). The CRS of the river shapefiles is EPSG:4326 (WGS84 - World Geodetic System). Here we provide some pre-processing steps using QGIS (version: 3.26.0-Buenos Aires) \cite{qgisWelcome} to handle the incompatibility and reduce shapefile size to improve performance.
+Shapefiles from different sources are likely to be incompatible. In our case, the NHS CCG shapefile is incompatible with the river shapefiles. The major reason for the incompatibility is the coordinate reference system (CRS). The CRS of the CCG shapefile is EPSG:27700 (OSGB36 - British National Grid). The CRS of the river shapefiles is EPSG:4326 (WGS84 - World Geodetic System). Here, we provide some pre-processing steps using QGIS (version: 3.26.0-Buenos Aires) \cite{qgisWelcome} to handle the incompatibility and reduce shapefile size to improve performance.
 
 \subsection{Import Shapefiles into QGIS}
 We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, followed by the CCG shapefile \Cref{fig:import_ccgs}.
@@ -43,7 +43,7 @@ We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, fol
 
 \subsection{Export Shapefiles in GeoJSON and Unify the Coordinate Reference System (CRS)}
 
-We then use QGIS to unify the CRS, and export both layers in the GeoJSON format. See \Cref{fig:export_rivers} and \Cref{fig:export_ccgs}. The unified layer is shown in \Cref{fig:unify_crs}.
+We then use QGIS to unify the CRS, and export both layers in GeoJSON format. See \Cref{fig:export_rivers} and \Cref{fig:export_ccgs}. The unified layer is shown in \Cref{fig:unify_crs}.
 
 {
 \begin{figure}[H]
@@ -77,7 +77,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
 \subsection{Pre-processing Result}
 
-\Cref{table:pre-processing_result} shows the pre-processing result. The reduction in file size is significant and greatly reduces the initialization time of our implementation.
+\Cref{table:pre-processing_result} shows the preprocessing result. The reduction in file size is significant and greatly reduces the initialization time of our implementation.
 
     {
         \renewcommand{\arraystretch}{1.5}
@@ -115,7 +115,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
     $ \nodeList \gets $ a list of $ \node $ representing regions \\
 
     \textbf{Output:} \\
-    $ \nodeTopologicalError \gets $ the number of river crossing nodes in the input \\
+    $ \nodeTopologicalError \gets $ the number of nodes crossing the river in the input \\
 
     \textbf{Global variables:} \\
     $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
