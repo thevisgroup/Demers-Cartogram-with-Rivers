@@ -7,37 +7,7 @@ This section introduces the characteristics of various cartogram styles, describ
 \citea{nusrat2016State} define and summarize three major accuracy dimensions for cartograms: statistical, geographical, and topological. Each cartogram design may make various types of accuracy trade-offs between dimensions. We provide a comparison of these trade-offs as introduced by \citea{nusrat2016State} in Table \ref{table:accuracy}. In addition, we include the Demers as it is the focus of our work.
 
 
-{
-\renewcommand{\arraystretch}{1.5}
-\begin{table}[!tb]
-	\centering
-	\resizebox{\columnwidth}{!}{
-		\begin{tabulary}{\columnwidth}{|*{5}{l|}}
-			\hhline{~|*{3}{-}|~}
-			\multicolumn{1}{c|}{} & \multicolumn{3}{c|}{\cellcolor{Mycolor2} \textbf{Accuracy}} \\
-			\hhline{~|*{4}{-}}
-			\multicolumn{1}{c|}{\textbf{Cartogram Variant}} &
-			\textbf{Statistical} &
-			\textbf{Geographical} &
-			\textbf{Topological} &
-			\textbf{Contiguity} \\
-			\hline
-			Contiguous & \cellcolor{Mycolor3}Variable & \cellcolor{Mycolor3}Variable & Accurate & Yes \\
-			\hline
-			Non-contiguous & \cellcolor{Mycolor5}\textcolor{white}{Accurate} & \cellcolor{Mycolor5}\textcolor{white}{Shape is accurate} &\cellcolor{Mycolor6}Inaccurate & No   \\
-			\hline
-			Rectangular & \cellcolor{Mycolor3}Variable & Shape is inaccurate & \cellcolor{Mycolor3}Variable & Yes   \\
-			\hline
-			Dorling & Accurate & \cellcolor{Mycolor6}Inaccurate & \cellcolor{Mycolor3}Variable & No  \\
-			\hline
-			Demers & Accurate & \cellcolor{Mycolor6}Inaccurate & \cellcolor{Mycolor3}Variable & No  \\
-			\hline
-		\end{tabulary}
-	}
-	\caption{\coloredsquare[Mycolor3]{0.25cm}{0.25cm} Trade-off between dimensions. \coloredsquare[Mycolor6]{0.25cm}{0.25cm} Dimension sacrificed in order to improve \coloredsquare[Mycolor5]{0.25cm}{0.25cm} target dimension's accuracy.}
-	\label{table:accuracy}
-\end{table}
-}
+
 
 
 {
@@ -100,6 +70,37 @@ This section introduces the characteristics of various cartogram styles, describ
 	Mosaic cartograms usually use square or hexagonal tiles to depict regions, and are contiguous and sacrifice statistical accuracy to preserve some level of geographical accuracy \cite{cano2015Mosaic}. Some variants are able to preserve topological accuracy as well.
 }
 
+{
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[!tb]
+	\centering
+	\resizebox{\columnwidth}{!}{
+		\begin{tabulary}{\columnwidth}{|*{5}{l|}}
+			\hhline{~|*{3}{-}|~}
+			\multicolumn{1}{c|}{} & \multicolumn{3}{c|}{\cellcolor{Mycolor2} \textbf{Accuracy}} \\
+			\hhline{~|*{4}{-}}
+			\multicolumn{1}{c|}{\textbf{Cartogram Variant}} &
+			\textbf{Statistical} &
+			\textbf{Geographical} &
+			\textbf{Topological} &
+			\textbf{Contiguity} \\
+			\hline
+			Contiguous & \cellcolor{Mycolor3}Variable & \cellcolor{Mycolor3}Variable & Accurate & Yes \\
+			\hline
+			Non-contiguous & \cellcolor{Mycolor5}\textcolor{white}{Accurate} & \cellcolor{Mycolor5}\textcolor{white}{Shape is accurate} &\cellcolor{Mycolor6}Inaccurate & No   \\
+			\hline
+			Rectangular & \cellcolor{Mycolor3}Variable & Shape is inaccurate & \cellcolor{Mycolor3}Variable & Yes   \\
+			\hline
+			Dorling & Accurate & \cellcolor{Mycolor6}Inaccurate & \cellcolor{Mycolor3}Variable & No  \\
+			\hline
+			Demers & Accurate & \cellcolor{Mycolor6}Inaccurate & \cellcolor{Mycolor3}Variable & No  \\
+			\hline
+		\end{tabulary}
+	}
+	\caption{\coloredsquare[Mycolor3]{0.25cm}{0.25cm} Trade-off between dimensions. \coloredsquare[Mycolor6]{0.25cm}{0.25cm} Dimension sacrificed in order to improve \coloredsquare[Mycolor5]{0.25cm}{0.25cm} target dimension's accuracy.}
+	\label{table:accuracy}
+\end{table}
+}
 
 \bobgraph{Peer-reviewed Applications: }\citea{warf2008Geography} use a Dorling cartogram to represent religious diversity in the US. \citea{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms. \citea{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China. \citea{tong2018Cartograms} use a Demers cartogram to visualize health-related data by Clinical Commissioning Group (CCG) regions in England, the work introduces a novel technique to remove the overlap of squares based on topological features, aiming to improve both geographical and topological accuracy. \citea{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms using multiple data sets that include demographic, agriculture, and retail data in the US. See \Cref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
 

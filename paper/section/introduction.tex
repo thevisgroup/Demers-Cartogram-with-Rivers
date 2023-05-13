@@ -11,7 +11,7 @@ Standard Demers cartograms are composed of square nodes. As such, this can reduc
 We implement a new hybrid cartographic layout algorithm that combines rivers with the placement of the nodes representing geo-referenced regions. 
 We hypothesize that introducing rivers improves the overall legibility of a cartogram. 
 By \textit{legibility} we mean readability and ability to interpret the cartogram.  
-We test this by asking user-study participants to perform correspondence and location tasks.
+To assess this hypothesis, we designed an experimental setup where participants engaged in correspondence and location tasks as part of a user study.
 To reduce error and make efficient use of screen space, the algorithm also updates the position of rivers to accommodate the node layout.
 We then apply the algorithm to a real-world case study using EHR data to evaluate the result.
 We present a user study that demonstrates its effectiveness.
@@ -24,4 +24,7 @@ Our contributions include:
     \item A user study evaluation of the technique with an application to EHRs.
 \end{itemize}
 
-The results of the user study indicate that rivers can improve the legibility of cartograms. One of the major challenges involved is developing a layout algorithm that handles different shapes. In other words, the hybrid layout algorithm is novel because it handles different types of elements: square representing regions and polylines representing rivers. Another challenge we overcome in developing the algorithm is to resolve stalemate situations introduced by rivers while minimizing error.
+The results of the user study indicate that rivers can improve the legibility of cartograms.
+One of the major challenges involved is developing a layout algorithm that handles different shapes.
+In other words, the hybrid layout algorithm is novel because it handles different types of elements: square representing regions and polylines representing rivers.
+Another challenge we overcome in developing the algorithm is to resolve stalemate situations introduced by rivers while minimizing error.
