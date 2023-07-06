@@ -1,7 +1,18 @@
 \section{Introduction and Motivation}
 
+\begin{samepage}
+
 Cartograms are representations of geographical and abstract data based on a value-by-area mapping combining statistical and geographical information \cite{dent2009Cartography,inoue2011New}. 
 Various styles of cartograms have been proposed and implemented for applications such as urban planning \cite{harris2018Mapping, arranz-lopez2021Enduser}, natural hazard forecasting \cite{pappenberger2019Cartograms, park2020Flood}, conservation and environmental planning \cite{galluzzi2018Mapping, rocchini2019Cartogramming}, political and social demographics \cite{breitzman2018Using, alieva2021How}, and decision-making for public health \cite{gao2020Visualising, sack2021Visualizing}.
+
+\begin{figure}[b!]
+    \centering
+    \includegraphics[width=\linewidth,keepaspectratio]{figure/cover.png}
+    \caption{The River Thames passing through a cartographic representation of the NHS CCGs in London and surrounding areas.}
+    \label{fig:cover}
+\end{figure}
+
+\end{samepage}
 
 Among the four types of cartogram categorized in a survey by \citet{nusrat2016State} (See \Cref{sec:RelatedWork} for definitions of contiguous, non-contiguous, rectangular, and Dorling), a trade-off is made between types of accuracy (See \Cref{table:accuracy}).
 For this project, we focus on non-contiguous cartograms like Demers cartograms because they facilitate statistical comparison between regions, they can make good use of screen space, and comparison of regions is useful when studying Electronic Health Records (EHR) data.
