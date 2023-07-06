@@ -1,19 +1,55 @@
-[0] Config.pm:307> INFO - This is Biber 2.19
-[0] Config.pm:310> INFO - Logfile is 'GHRVis.blg'
-[39] biber-darwin:340> INFO - === Thu May 11, 2023, 10:51:24
-[48] Biber.pm:419> INFO - Reading 'GHRVis.bcf'
-[102] Biber.pm:979> INFO - Found 45 citekeys in bib section 0
-[110] Biber.pm:4419> INFO - Processing section 0
-[116] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
-[120] bibtex.pm:1713> INFO - LaTeX decoding ...
-[165] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[349] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[349] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[349] Biber.pm:4239> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
-[349] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
-[376] bbl.pm:660> INFO - Writing 'GHRVis.bbl' with encoding 'UTF-8'
-[400] bbl.pm:763> INFO - Output to GHRVis.bbl
-[400] Biber.pm:131> WARN - ISBN '978-0-470-97958-7 978-0-470-74283-9' in entry 'dorling2011Area' is invalid - run biber with '--validate_datamodel' for details.
-[400] Biber.pm:131> WARN - ISBN '978-3-540-23025-0 978-3-540-30140-0' in entry 'vankreveld2004Rectangular' is invalid - run biber with '--validate_datamodel' for details.
-[400] Biber.pm:131> WARN - ISBN '978-3-540-31425-7 978-3-540-31667-1' in entry 'dwyer2006Fast' is invalid - run biber with '--validate_datamodel' for details.
-[400] Biber.pm:133> INFO - WARNINGS: 3
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: GHRVis.aux
+The style file: plainnat.bst
+Database file #1: references.bib
+Warning--empty year in blochMapshaper
+Warning--empty year in nhsNHS
+Warning--empty year in nhsdigitalClinical
+Warning--empty year in opengeographyportalxOpen
+Warning--empty year in openstreetmapRelation
+Warning--empty year in overpassturboOverpass
+Warning--empty year in qgisWelcome
+Warning--empty year in TopoJSON
+You've used 45 entries,
+            2773 wiz_defined-function locations,
+            942 strings with 15659 characters,
+and the built_in function-call counts, 21647 in all, are:
+= -- 1993
+> -- 1236
+< -- 38
++ -- 424
+- -- 379
+* -- 1762
+:= -- 3383
+add.period$ -- 202
+call.type$ -- 45
+change.case$ -- 249
+chr.to.int$ -- 45
+cite$ -- 98
+duplicate$ -- 961
+empty$ -- 1698
+format.name$ -- 436
+if$ -- 4548
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 37
+newline$ -- 294
+num.names$ -- 186
+pop$ -- 482
+preamble$ -- 1
+purify$ -- 204
+quote$ -- 0
+skip$ -- 744
+stack$ -- 0
+substring$ -- 648
+swap$ -- 154
+text.length$ -- 11
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 485
+warning$ -- 8
+while$ -- 191
+width$ -- 0
+write$ -- 703
+(There were 8 warnings)

@@ -1,13 +1,13 @@
 \section{Data Description}
 
-%  {
-%   \begin{figure}[b!]
-%       \centering
-%       \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
-%       \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography Portalx \cite{opengeographyportalxOpen} with EPSG:4326 (WGS84 - World Geodetic System) as the Coordinate Reference System (CRS).}
-%       \label{fig:ccg}
-%   \end{figure}
-%  }
+ {
+  \begin{figure}[b!]
+      \centering
+      \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
+      \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography Portalx \cite{opengeographyportalxOpen} with EPSG:4326 (WGS84 - World Geodetic System) as the Coordinate Reference System (CRS).}
+      \label{fig:ccg}
+  \end{figure}
+ }
 
 Obtaining heterogeneous data can be challenging, especially when an EHR dataset is involved, because the data comes from multiple sources \cite{wang2021EHR}. The first step is to obtain both geospatial boundaries and EHR data. The second step is to preprocess the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms. Geospatial boundaries, or shapefiles, were obtained from the sources described here.
 
@@ -21,6 +21,7 @@ After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adju
 
 \bobgraph{EHR Data: }We obtained the Clinical Commissioning Group Outcomes Indicator Set (CCG OIS) from NHS Digital \cite{nhsdigitalClinical}. The OIS is a set of indicators that are used to measure the quality of care and the associated health outcomes in the NHS. Some datasets include:
 \begin{itemize}
+    \setlength\itemsep{0px}
     \item Under 75 mortality: cardiovascular disease, respiratory disease, liver disease, and cancer
     \item Emergency hospital admission: stroke, alcohol-specific admission and readmission, coronary heart disease, re-admissions within 30 days of discharge, children with lower respiratory tract infections
 \end{itemize}
@@ -28,6 +29,7 @@ After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adju
 For all datasets, a spreadsheet including the following is provided:
 
 \begin{itemize}
+    \setlength\itemsep{0px}
     \item Reporting period: Calendar year of registration
     \item Period of coverage: Start and end date or reporting period
     \item Breakdown: Organization type

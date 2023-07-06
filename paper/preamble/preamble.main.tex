@@ -1,6 +1,3 @@
-% Bob's dream paragraph style
-\newcommand{\bobgraph}[1]{ \noindent\textbf{#1} \phantomsection \label{bobgraph:{#1}}}
-
 \definecolor{Mycolor1}{HTML}{4C5866} %#4C5866
 \definecolor{Mycolor2}{HTML}{A6B6D2} %#A6B6D2
 \definecolor{Mycolor3}{HTML}{67daff} %#67daff
@@ -9,12 +6,14 @@
 \definecolor{Mycolor6}{HTML}{ffbb93} %#ffbb93
 \newcommand{\mycolorbox}[2]{\begingroup\setlength{\fboxsep}{2pt}\colorbox{#1}{#2}\endgroup}
 
-% customized table headers
-\newcommand{\theaderR}[1]{\multicolumn{1}{c|}{\cellcolor{Mycolor3} \textbf{\rotatebox{90}{#1 \phantom{-} }}}}
-\newcommand{\theaderP}[1]{\cellcolor{Mycolor3} \textbf{#1}}
+\newcommand{\bobgraph}[1]{\noindent\textbf{#1}}
 
-\newcommand{\note}[1]{\textcolor{blue}{#1}}
+% cite with author names
+\newcommand{\citea}[1]{\citeauthor{#1}~\cite{#1}}
 
+% draw a colored square
+% color, width, height
+\newcommand\coloredsquare[3][black]{\textcolor{#1}{\rule{#2}{#3}}} 
 
 % thumbnail image
 \usepackage{wrapfig}

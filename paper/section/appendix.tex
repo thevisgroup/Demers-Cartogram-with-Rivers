@@ -1,7 +1,5 @@
+\section{Appendix}
 \appendix
-
-\let\origappendixsection=\section
-\renewcommand\section[1]{\origappendixsection{\textbf{#1}}}
 
 \section{Obtaining Shapefile}
 \label{obtaining-shapefile}
@@ -164,7 +162,7 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 \section{Procedure: UpdateLayout}
 
 \begin{algorithm}[H]
-    \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers. See \Cref{sec:{Demers Cartogram with Rivers}}.}\label{alg:UpdateLayout}
+    \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers. See \Cref{sec:main}.}\label{alg:UpdateLayout}
     \textbf{Global variables:} \\
     $ \nodeList \gets $ a list of $ \node $ representing regions with the following properties: \\
     \-\hspace{1em}  $\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river \\

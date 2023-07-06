@@ -1,9 +1,9 @@
 \newcommand{\pCount}{24 }
-\section{User-Centered Evaluation}
+\section{User-Centered Evaluation}\label{sec:{User-Centered Evaluation}}
 
 We conduct a user study to evaluate the effectiveness of our approach. We chose this type of evaluation because legibility is a human-centred characteristic. Many different types of statistical error metrics have been evaluated in previous work \cite{nusrat2016State}, however, our focus is more user-centric in nature.
 
-\subsection{Study Hypothesis}
+\subsection{Study Hypothesis}\label{subsec:{Study Hypothesis}}
 
 We formulate the following hypotheses to motivate our user study:
 
@@ -15,7 +15,7 @@ We formulate the following hypotheses to motivate our user study:
 
 We test these hypotheses using location-based tasks. Given a standard choropleth on the left side of the screen and the equivalent cartogram on the right side, we ask user study participants to locate the given region in the choropleth (on the left) in the cartogram (on the right). See \Cref{fig:task}.
 
-\subsection{User Study Variables}
+\subsection{User Study Variables}\label{subsec:{User Study Variables}}
 
 In this section, we discuss the variables of our user study.
 
@@ -49,12 +49,14 @@ In this section, we discuss the variables of our user study.
 
 \bobgraph{Control Variables: }\textit{Choice of color map:} We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green, to depict the data in our cartograms. \textit{Communicating the target CCG to the user:} We inform the participant about the target CCG they need to find. The target CCG is shown in the form of a nonstop blinking (between its original color and black) area on the screen, each blink is given a duration of 2 seconds.
 
-\subsection{User Study Design}
+\subsection{User Study Design}\label{subsec:{User Study Design}}
+
 In this section we describe the user study participants, datasets, and the experimental procedure.
 
 \bobgraph{Participants:} We recruited \pCount participants.
 
 \begin{itemize}
+    \setlength\itemsep{0px}
     \item Gender: 10 females and 14 males
     \item Age Group: 18-24 (16), 25-29 (8)
     \item Education: 1 PhD, 11 Master's, 8 Bachelor's, 4 Others
@@ -63,6 +65,7 @@ In this section we describe the user study participants, datasets, and the exper
 \bobgraph{Datasets:} We used the following EHR datasets for our evaluation:
 
 \begin{itemize}
+    \setlength\itemsep{0px}
     \item Population
     \item Under 75 mortality from cardiovascular disease
     \item Emergency admissions for alcohol-related liver disease
@@ -81,10 +84,11 @@ In this section we describe the user study participants, datasets, and the exper
     }
 
 \subsubsection{Procedure}
+\label{subsec:{Procedure}}
 
 The user study is designed to be conducted online, and participants are asked to complete the tasks using their own hardware. The user study includes four parts:
 
-\textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos. The instructions are designed to help participants understand the concepts used in the tasks. Instructional videos are available at \URL{https://www.youtu.be/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
+\textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos. The instructions are designed to help participants understand the concepts used in the tasks. Instructional videos are available at \url{https://www.youtu.be/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
 
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design. These tasks also serve as a quality test to see whether users are taking the study seriously. A demonstration of three sample tasks is also included in the instructional video.
 
@@ -92,9 +96,10 @@ The user study is designed to be conducted online, and participants are asked to
 
 \textbf{P4:} The participants are asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
 
-The materials for P1-P4 are available on the Open Science Foundation website at \URL{https://osf.io/q39w7}.
+The materials for P1-P4 are available on the Open Science Foundation website at \url{https://osf.io/q39w7}.
 
 \subsection{User Study Results}
+\label{subsec:{User Study Results}}
 
 {
     \begin{figure}[b!]
