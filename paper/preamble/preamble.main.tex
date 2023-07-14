@@ -18,15 +18,35 @@
 % thumbnail image
 \usepackage{wrapfig}
 \newcommand{\thumbnail}[2]{
+    \begin{samepage}
+
       \setlength{\intextsep}{3pt}
       \setlength{\columnsep}{3pt}
-      \begin{wrapfigure}{r}{0.2\columnwidth}
+      \begin{wrapfigure}{r}{0.4\columnwidth}
+        \vspace{-15pt}
         \begin{center}
-          \includegraphics[width=0.2\columnwidth]{figure/related/"#1".png}
+          \includegraphics[width=0.38\columnwidth]{figure/related/"#1".png}
         \end{center}
       \end{wrapfigure}
       #2
+      
+    \end{samepage}
 }
+
+% \newcommand{\thumbnail}[2]{
+%   \setlength{\intextsep}{2pt}
+%   \setlength{\columnsep}{2pt}
+
+%   \noindent\begin{minipage}[t]{0.4\columnwidth}
+%     \vspace{-10pt}
+%     \begin{center}
+%       \includegraphics[width=0.98\columnwidth]{figure/related/#1.png}
+%     \end{center}
+%   \end{minipage}%
+%   \begin{minipage}[t]{0.6\columnwidth}
+%     \noindent\leftskip=0pt  #2
+%   \end{minipage}
+% }
 
 
 \usepackage{algpseudocode}
