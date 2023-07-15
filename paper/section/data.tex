@@ -15,7 +15,7 @@ Obtaining heterogeneous data can be challenging, especially when an EHR dataset 
 
 \bobgraph{River Shapefiles:} We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for the Thames River, the Trent River, and the Great Ouse River in England. These rivers were chosen as they are well-known rivers, pass through regions with dense populations, and provide informative geographical and topological cues. Although including smaller rivers is technically feasible, it may not increase the legibility of the cartogram. This is an open question for future work.
 
-We first obtain a relation ID by searching for a river, e.g. River Thames, on OpenStreetMap. The relation ID is used to construct a query (See \cref{obtaining-shapefile}) which enables the user to download the entire river shapefile using Overpass Turbo \cite{overpassturboOverpass}.
+We first obtain a relation ID by searching for a river, e.g. River Thames, on OpenStreetMap. The relation ID is used to construct a query (See \Cref{obtaining-shapefile}) which enables the user to download the entire river shapefile using Overpass Turbo \cite{overpassturboOverpass}.
 
 After acquiring the shapefiles, we used QGIS \cite{qgisWelcome} to manually adjust the projections and convert them into GeoJSON files. Finally, mapshaper \cite{blochMapshaper} is used to merge and convert the GeoJSON files into a TopoJSON file \cite{TopoJSON}. TopoJSON eliminates redundant coordinates in the data, improving the rendering speed of our implementation. See \Cref{table:pre-processing_result} on page \pageref{table:pre-processing_result} for the preprocessing result. We describe the one-time preprocessing steps in more detail in \Cref{app:pre-processing}.
 
