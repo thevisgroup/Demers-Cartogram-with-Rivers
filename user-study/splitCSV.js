@@ -54,7 +54,7 @@ function readCSV() {
                 const time = parseInt(row[i * 2 + 1]) / 1000;
 
                 // exclude invalid data, RT >= 20s
-                if (time >= 20) {
+                if (time >= 60) {
                     continue;
                 }
 

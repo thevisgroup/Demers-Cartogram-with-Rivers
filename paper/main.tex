@@ -1,5 +1,8 @@
 \documentclass[Afour,sagev,times]{sagej}
 
+\newcommand{\new}[1]{\textcolor{blue}{#1}}
+
+
 \usepackage{moreverb,url}
 \usepackage{float,hhline,array,tabulary,tabularx,etoolbox,multirow, multicol}
 
@@ -195,7 +198,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \title{Demers Cartogram with Rivers}
 
 \begin{abstract}
-    Cartograms serve as representations of geographical and abstract data, employing a value-by-area mapping technique. A relative of the Dorling cartogram, the Demers cartogram, utilizing squares instead of circles to represent regions. This alternative approach allows for a more intuitive comparison of regions, utilizing screen space more efficiently. However, a drawback of the Dorling cartogram and its variants lies in the potential displacement of regions from their original positions, ultimately compromising legibility, readability, and accuracy. To tackle this limitation, we propose a novel hybrid cartogram layout algorithm that incorporates dynamic topological elements, such as rivers, into Demers cartograms. The presence of rivers significantly impacts both the layout and visual appearance of the cartograms. Through a user study conducted on an Electronic Health Records (EHR) dataset, we evaluate the efficacy of the proposed hybrid layout algorithm. The obtained results illustrate that this approach successfully retains key aspects of the original cartogram while enhancing legibility, readability, and overall accuracy.
+    Cartograms serve as representations of geographical and abstract data, employing a value-by-area mapping technique. \new{As a variant of} the Dorling cartogram, the Demers cartogram utilizes squares instead of circles to represent regions. This alternative approach allows for a more intuitive comparison of regions, utilizing screen space more efficiently. However, a drawback of the Dorling cartogram and its variants lies in the potential displacement of regions from their original positions, ultimately compromising legibility, readability, and accuracy. To tackle this limitation, we propose a novel hybrid cartogram layout algorithm that incorporates dynamic topological elements, such as rivers, into Demers cartograms. The presence of rivers significantly impacts both the layout and visual appearance of the cartograms. Through a user study conducted on an Electronic Health Records (EHR) dataset, we evaluate the efficacy of the proposed hybrid layout algorithm. The obtained results illustrate that this approach successfully retains key aspects of the original cartogram while enhancing legibility, readability, and overall accuracy.
 \end{abstract}
 
 \keywords{Cartogram, Demers Cartogram}
@@ -242,8 +245,8 @@ Our contributions include:
 
 The results of the user study indicate that rivers can improve the legibility of cartograms.
 One of the major challenges involved is developing a layout algorithm that handles different shapes.
-In other words, the hybrid layout algorithm is novel because it handles different types of elements: square representing regions and polylines representing rivers.
-Another challenge we overcome in developing the algorithm is to resolve stalemate situations introduced by rivers while minimizing error.
+In other words, the hybrid layout algorithm is novel because it handles different types of elements: square node representing regions and polylines representing rivers.
+Another challenge we overcome in developing the algorithm is to resolve \new{stalemate situations where nodes become congested due to constraints imposed by rivers, while ensuring error minimization.}
 
 \section{Related Work}
 \label{sec:RelatedWork}
@@ -280,9 +283,9 @@ This section introduces the characteristics of various cartogram styles, describ
                     \hline
                     \citet{gao2020Visualising} & Dorling & China & 34 & \citeyear{gao2020Visualising} \\
                     \hline
-                    \citet{nusrat2020Recognition} & Contiguous, Dorling & Portugal & 49 & \citeyear{nusrat2020Recognition} \\
+                    \citet{nusrat2020Recognition} & Contiguous, Dorling & US & 49 & \citeyear{nusrat2020Recognition} \\
                     \hline
-                    \citet{nickel2022Multicriteria} & Contiguous, Demers & US, Netherlands, World & 49 - 342 & \citeyear{nickel2022Multicriteria} \\
+                    \citet{nickel2022Multicriteria} & Non-contiguous, Demers & US, Netherlands, World & 49 - 342 & \citeyear{nickel2022Multicriteria} \\
                     \hline
 
                     % \multicolumn{1}{c|}{\textbf{Total unique papers: 51}} & 24&15&12& \multicolumn{1}{c}{}  \\
@@ -296,8 +299,8 @@ This section introduces the characteristics of various cartogram styles, describ
     }
 
 \thumbnail{dorling}{
-    Dorling cartograms as a variant of non-contiguous cartogram generally do not preserve geography and topology.
-    A Dorling cartogram is statistically accurate, regions are represented by circles and the data dimensions of interest are represented by the circle size \cite{dorling2011Area}.
+    Dorling cartograms, as a variant of non-contiguous cartograms, generally do not preserve geography and topology.
+    A Dorling cartogram is statistically accurate, regions are represented by circles and the data dimensions of interest are represented by the circle area \cite{dorling2011Area}.
     In a Demers cartogram, a variant of Dorling, squares are used instead to capture a certain level of topology, as described by \citet{cano2015Mosaic} in their related work section.
     Dorling cartograms are unable to maintain topological accuracy as circles are often repositioned to remove overlap. Here we focus on Demers cartograms as we use squares to depict regions.
     This style of cartogram offers the advantages that the comparisons between regions are intuitive and screen space utilization is more efficient.
@@ -366,7 +369,7 @@ In this paper, we introduce a new type of topological feature, a river, as a con
   \end{figure}
  }
 
-Obtaining heterogeneous data can be challenging, especially when an EHR dataset is involved, because the data comes from multiple sources \cite{wang2021EHR}. The first step is to obtain both geospatial boundaries and EHR data. The second step is to preprocess the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms. Geospatial boundaries, or shapefiles, were obtained from the sources described here.
+Processing heterogeneous data can be challenging, especially when an EHR dataset is involved, because the data comes from multiple sources \cite{wang2021EHR}. The first step is to obtain both geospatial boundaries and EHR data. The second step is to preprocess the EHR data to remove empty and erroneous values. The final step is to transform the data into a format that is suitable for cartograms. Geospatial boundaries, or shapefiles, were obtained from the sources described here.
 
 \bobgraph{Choropleth Shapefile:} Clinical Commissioning Groups (CCGs) are the primary administrative and geographic unit of the National Health Service (NHS) in the UK \cite{nhsNHS}. The number of CCGs changes over time due to NHS reorganization. The most up-to-date shapefile is available from the Open Geography Portalx \cite{opengeographyportalxOpen}. We decided to use the CCG shapefile from 2020 at the time of writing, due to the absence of published public EHR data based on the latest CCG reorganizations that took place in 2021 and 2022.
 
@@ -430,7 +433,7 @@ Each CCG has a unique ONS code, which is used to link the CCG shapefile with the
 \bobgraph{Initialization with Rivers:} We first load and (optionally) render the CCG geospatial boundaries. For each CCG we compute the centroid and represent it using a square node, $ \node $, with the initial size, $ \nodeSize $ =1 pixel. We then load the river shapefiles and render the rivers. Since the vertices of the river in the shapefiles are not in sequential order, we first render the starting vertex, followed by the next nearest vertex. We do not need the original river resolution to incorporate them into cartograms. We reduce their resolution to match that of the cartogram nodes in order to facilitate node-river intersection tests. This rendering approach enables us to adjust the river resolution as shown in \Cref{fig:river resolution}. We further apply simplification by removing vertices that are too close to each other. The initialization procedure is a one-time process that can be saved for reuse.
 
 
-\bobgraph{Node Layout and Overlap Removal:} We first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006Fast} in order to remove overlap between square nodes. We chose FNOR over other node overlap removal algorithms because FNOR is capable of minimizing spread and node movement while maintaining a good level of global shape preservation \cite{chen2020Node}. Initialized with a pixel size of unity, we gradually increase the node size by one unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \Cref{alg:TranslateNode}) and translate nodes to their new position. Nodes that cross a river, denoted $ \NxR $, are translated back to their previous position. If a node oscillates across a river, we identify this as a stalemate. One iteration of the layout ends when 1) no node overlap is present; 2) no nodes cross a river. We then increase $ \nodeSize $ by one unit and repeat the algorithm until the average cartographic error, $ \nodeCartographicError $, a measure set by the user, reaches its maximum value $ \nodeCartographicErrorMax $. The gradual size increase process provides stability to the layout, as can be seen in the accompanying video.
+\bobgraph{Node Layout and Overlap Removal:} We first apply the Fast Node Overlap Removal (FNOR) algorithm that solves the Variable Placement with Separation Constraints (VPSC) problem \cite{dwyer2006Fast} in order to remove overlap between square nodes. We chose FNOR over other node overlap removal algorithms because FNOR is capable of minimizing spread and node movement while maintaining a good level of global shape preservation \cite{chen2020Node}. Initialized with a pixel size of unity, we gradually increase the node size by one unit at a time to ensure smooth transitions. An increase in $ \nodeSize $ can cause the nodes to overlap. During overlap removal, we compute node trajectories (See \Cref{alg:TranslateNode}) and translate nodes to their new position. Nodes that cross a river, denoted $ \NxR $, are translated back to their previous position. If a node oscillates across a river, we identify this as a stalemate. One iteration of the layout ends when 1) no node overlap is present; \new{AND} 2) no nodes cross a river. We then increase $ \nodeSize $ by one unit and repeat the algorithm until the average cartographic error, $ \nodeCartographicError $, a measure set by the user, reaches its maximum value $ \nodeCartographicErrorMax $. The gradual size increase process provides stability to the layout, as can be seen in the accompanying video.
 
 \subsection{River Intersection Testing}
 \label{subsec:{River Intersection Testing}}
@@ -448,7 +451,7 @@ When a river, $ \river $, is translated by $ \vectorAvg $, this can trigger a sc
 \subsection{Process Stalemates}
 \label{subsec:{Process Stalemates}}
 
-As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path can repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \Cref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations (a user-adjustable parameter), we introduce a heuristic solution: constructing a corridor to alleviate congestion. A corridor, $ \Corridor $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelA \parallel \nodeLineNtNc $ (See \Cref{fig:corridor}C and D). All nodes enclosed by $ \Corridor $ are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \Cref{fig:corridor}E). The procedure for constructing corridors is provided by \Cref{alg:derive corridor}.
+As the FNOR always attempts to produce an optimal node layout where node distribution and translation are minimized, a node's translation path can repeatedly intersect a river due to congestion, creating a stalemate situation, as shown in \Cref{fig:stalemate}. If a node is translated between two positions, $ \node $ and $ \nodeFNOR $, for $ \stalemateMax $ iterations (a user-adjustable parameter), we introduce a heuristic solution: constructing a corridor to alleviate congestion. A corridor, $ \Corridor $, is a rectangle with a width of $ \CorridorWidth $ and a length of $ \CorridorLength $, formed by deriving two edges $ \EdgeParallelA $ and $ \EdgeParallelB $ such that $ \EdgeParallelA \parallel \EdgeParallelB \parallel \nodeLineNtNc $ (See \Cref{fig:corridor}C and D). All nodes enclosed by $ \Corridor $ are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \Cref{fig:corridor}E). The procedure for constructing corridors is provided by \Cref{alg:derive corridor}.
 
 {
     \begin{figure}[tb!]
@@ -510,7 +513,7 @@ When the algorithm terminates, the node layout is considered optimal where no no
     {
         \begin{figure*}[tb!]
             \centering
-            \includegraphics[width=0.7\textwidth,keepaspectratio]{UI.png}
+            \includegraphics[width=0.9\textwidth,keepaspectratio]{UI.png}
             \caption{A screenshot of the user interface. User options are provided to adjust the terminating conditions (size and error), color mapping, visibility of nodes and rivers. Other options include the ability to control the overlap removal behavior: rivers can be static or dynamic. See \Cref{subsec:{UserOptions}} for more on user options. In this figure, $ \nodeCartographicErrorMax $ = 1.875\%, and an $ \nodeTopologicalError $ of 9.63\% is eliminated.}
             \label{fig:overview}
         \end{figure*}
@@ -582,7 +585,7 @@ In this section we describe the user study participants, datasets, and the exper
 
 The user study is designed to be conducted online, and participants are asked to complete the tasks using their own hardware. The user study includes four parts:
 
-\textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos. The instructions are designed to help participants understand the concepts used in the tasks. Instructional videos are available at \url{https://www.youtu.be/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
+\textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos. The instructions are designed to help participants understand the concepts used in the tasks. Instructional videos are available at \url{https://www.youtube.com/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
 
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design. These tasks also serve as a quality test to see whether users are taking the study seriously. A demonstration of three sample tasks is also included in the instructional video.
 
@@ -667,7 +670,7 @@ We believe that developing a new algorithm with built-in constraint support can 
 
 Future work also includes generalizations and extensions of the algorithm, e.g., the use of other features in the cartogram layout such as additional rivers, major highways, lakes, and coastlines, etc.
 We also consider whether increasing the length of the rivers as the size of the nodes increases would be a useful option.
-We would like to explore the case of river-river intersections and testing out more geographies such as the U.S. and Europe, which have more complex rivers.
+We would like to explore the case of river-river intersections \new{(or confluence)} and testing out more geographies such as the U.S. and Europe, which have more complex rivers.
 We also considered the idea of deforming the rivers as part of the layout algorithm, however, this idea is open to future work.
 Furture work also includes adding rivers to dorling-style cartograms.
 
@@ -812,11 +815,11 @@ We then merge two layers into one layer, and export it in the TopoJSON format us
 
                 \State $ \Scale \gets \frac{\Distance}{\sqrt{\dx^2 + \dy^2}} $
 
-                \State $ \EdgeParallel.start.x \gets \Scale \cdot -\dy + \EdgeStart.x $
+                \State $ \EdgeParallel.start.x \gets \Scale \cdot (-\dy) + \EdgeStart.x $
 
                 \State $ \EdgeParallel.start.y \gets \Scale \cdot \dx + \EdgeStart.y $
 
-                \State $ \EdgeParallel.end.x \gets \Scale \cdot -\dy + \EdgeEnd.x $
+                \State $ \EdgeParallel.end.x \gets \Scale \cdot (-\dy) + \EdgeEnd.x $
 
                 \State $ \EdgeParallel.end.y \gets \Scale \cdot \dx + \EdgeEnd.y $
 

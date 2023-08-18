@@ -47,7 +47,7 @@ function readCSV() {
             for (let i = 0; i < taskList.length; i++) {
                 const time = parseInt(row[i * 2 + 1]) / 1000;
 
-                if (time >= 20) {
+                if (time >= 60) {
                     continue;
                 }
 
