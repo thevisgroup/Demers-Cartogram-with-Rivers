@@ -32,8 +32,8 @@ function readCSV() {
 
         })
         .on("end", function () {
-            // printFamiliarity();
-            // printLikert();
+            printFamiliarity();
+            printLikert();
         });
 }
 readCSV();
