@@ -231,7 +231,9 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 Among the four types of cartogram categorized in a survey by \citet{nusrat2016State} (See \Cref{sec:RelatedWork} for definitions of contiguous, non-contiguous, rectangular, and Dorling), a trade-off is made between types of accuracy (See \Cref{table:accuracy}).
 For this project, we focus on non-contiguous cartograms like Demers cartograms because they facilitate statistical comparison between regions, they can make good use of screen space, and comparison of regions is useful when studying Electronic Health Records (EHR) data.
 Demers cartograms offer the advantage in cases where the data is not directly correlated to region sizes.
-\new{Also, the comparison of magnitudes becomes an area estimation task, which is effective for a numeric data encoding} \cite{munzner2014Visualization}.
+\new{In other words, Demers cartograms are useful when a data dimension is not describing the geography of the region it represents but is tied to something else, for example the health of its population.}
+Also, the comparison of magnitudes becomes an area estimation task, which is effective for a numeric data encoding \cite{munzner2014Visualization}.
+\new{See \citea{nickel2022Multicriteria} for a more complete description of the advantages that Demers cartograms offer.}
 Building on Demers cartograms \cite{ian2002Cartogram}, we introduce and develop novel features, such as rivers, aiming to improve the readability and geographical accuracy without sacrificing statistical accuracy.
 Standard Demers cartograms are composed of square nodes that \new{representing geographic enumeration units}.
 As such, this can reduce their legibility.
