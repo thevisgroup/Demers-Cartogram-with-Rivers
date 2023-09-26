@@ -199,7 +199,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \begin{abstract}
     Cartograms serve as representations of geographical and abstract data, employing a value-by-area mapping technique.
-    \new{As a variant of} the Dorling cartogram, the Demers cartogram utilizes squares instead of circles to represent regions.
+    As a variant of the Dorling cartogram, the Demers cartogram utilizes squares instead of circles to represent regions.
     This alternative approach allows for a more intuitive comparison of regions, utilizing screen space more efficiently.
     However, a drawback of the Dorling cartogram and its variants lies in the potential displacement of regions from their original positions, ultimately compromising legibility, readability, and accuracy.
     To tackle this limitation, we propose a novel hybrid cartogram layout algorithm that incorporates topological elements, such as rivers, into Demers cartograms.
@@ -231,13 +231,13 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 Among the four types of cartogram categorized in a survey by \citet{nusrat2016State} (See \Cref{sec:RelatedWork} for definitions of contiguous, non-contiguous, rectangular, and Dorling), a trade-off is made between types of accuracy (See \Cref{table:accuracy}).
 For this project, we focus on non-contiguous cartograms like Demers cartograms because they facilitate statistical comparison between regions, they can make good use of screen space, and comparison of regions is useful when studying Electronic Health Records (EHR) data.
 Demers cartograms offer the advantage in cases where the data is not directly correlated to region sizes.
-\new{In other words, Demers cartograms are useful when a data dimension is not describing the geography of the region it represents but is tied to something else, for example the health of its population.}
+In other words, Demers cartograms are useful when a data dimension is not describing the geography of the region it represents but is tied to something else, for example the health of its population.
 Also, the comparison of magnitudes becomes an area estimation task, which is effective for a numeric data encoding \cite{munzner2014Visualization}.
-\new{See \citea{nickel2022Multicriteria} for a more complete description of the advantages that Demers cartograms offer.}
+See \citea{nickel2022Multicriteria} for a more complete description of the advantages that Demers cartograms offer.
 Building on Demers cartograms \cite{ian2002Cartogram}, we introduce and develop novel features, such as rivers, aiming to improve the readability and geographical accuracy without sacrificing statistical accuracy.
-Standard Demers cartograms are composed of square nodes that \new{representing geographic enumeration units}.
+Standard Demers cartograms are composed of square nodes that representing geographic enumeration units.
 As such, this can reduce their legibility.
-We implement a new hybrid cartographic layout algorithm that combines rivers with the placement of the nodes \new{representing geographic enumeration units, in this case, a Clinical Commissioning Group (CCG)}.
+We implement a new hybrid cartographic layout algorithm that combines rivers with the placement of the nodes representing geographic enumeration units, in this case, a Clinical Commissioning Group (CCG).
 We hypothesize that introducing rivers improves the overall legibility of a cartogram.
 By \textit{legibility} we mean readability and ability to interpret the cartogram.
 To assess this hypothesis, we designed an experimental setup where participants engaged in correspondence and location tasks as part of a user study.
@@ -257,7 +257,7 @@ Our contributions include:
 The results of the user study indicate that rivers can improve the legibility of cartograms.
 One of the major challenges involved is developing a layout algorithm that handles different shapes.
 In other words, the hybrid layout algorithm is novel because it handles different types of elements: square node representing regions and polylines representing rivers.
-Another challenge we overcome in developing the algorithm is to resolve \new{stalemate situations where nodes become congested due to constraints imposed by rivers, while ensuring error minimization.}
+Another challenge we overcome in developing the algorithm is to resolve stalemate situations where nodes become congested due to constraints imposed by rivers, while ensuring error minimization.
 
 \section{Related Work}
 \label{sec:RelatedWork}
@@ -311,7 +311,7 @@ In addition, we include the Demers as it is the focus of our work.
             \caption{Related work with non-contiguous cartogram-based visualizations.
                 \textbf{Cartogram type} is the type of cartogram used.
                 \textbf{Geographic region} is the geographic region depicted by the cartogram.
-                \textbf{Number of nodes} is the number of nodes \new{(representing geographic enumeration units)} depicted in the cartogram.
+                \textbf{Number of nodes} is the number of nodes (representing geographic enumeration units) depicted in the cartogram.
             }
             \label{table:region vs node}
         \end{table*}
@@ -371,7 +371,7 @@ In addition, we include the Demers as it is the focus of our work.
     \end{table}
 }
 
-\bobgraph{Peer-reviewed Applications: } \new{There has been a substantial amount of research done in this area, here we review some of the important work that has inspired our work}.\citet{warf2008Geography} use a Dorling cartogram to represent religious diversity in the US.
+\bobgraph{Peer-reviewed Applications: } There has been a substantial amount of research done in this area, here we review some of the important work that has inspired our work.\citet{warf2008Geography} use a Dorling cartogram to represent religious diversity in the US.
 \citet{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms.
 \citet{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China.
 \citet{tong2018Cartograms} use a Demers cartogram to visualize health-related data by CCG regions in England, the work introduces a novel technique to remove the overlap of squares based on topological features, aiming to improve both geographical and topological accuracy.
@@ -389,7 +389,7 @@ Finally, the way we evaluate the cartograms is also different.
 \citet{tong2018Cartograms} count river crossings to evaluate error (a statistical metric).
 Here our focus is on readability, and thus we include a user study.
 
-\bobgraph{Cartograms in Media: }Cartograms \new{are an engaging visual representation and therefore they are a} popular choice of representation in covering various topics by the media.
+\bobgraph{Cartograms in Media: }Cartograms are an engaging visual representation and therefore they are a popular choice of representation in covering various topics by the media.
 The Washington Post uses cartograms to visualize the US overseas economic assistance, in arm sales (Mosaic) \cite{bearak2016Everything}, the 2016 US Election (contiguous) \cite{gamio2016Election}, and the Brexit Referendum (Mosaic) \cite{taylor2016What}.
 National Geographic uses contiguous and Mosaic cartograms to analyze the 2016 US Election results \cite{miller2016Election}, the same topic is also covered by the Financial Times with a Dorling cartogram \cite{stabe2016Search}.
 \citet{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal.
@@ -515,7 +515,7 @@ An increase in $ \nodeSize $ can cause the nodes to overlap.
 During overlap removal, we compute node trajectories (See \Cref{alg:TranslateNode}) and translate nodes to their new position.
 Nodes that cross a river, denoted $ \NxR $, are translated back to their previous position.
 If a node oscillates across a river, we identify this as a stalemate.
-One iteration of the layout ends when 1) no node overlap is present; \new{AND} 2) no nodes cross a river.
+One iteration of the layout ends when 1) no node overlap is present; AND 2) no nodes cross a river.
 We then increase $ \nodeSize $ by one unit and repeat the algorithm until the average cartographic error, $ \nodeCartographicError $, a measure set by the user, reaches its maximum value $ \nodeCartographicErrorMax $.
 The gradual size increase process provides stability to the layout, as can be seen in the accompanying video.
 
@@ -597,7 +597,7 @@ We adopt the maximum cartographic error from \citet{alam2015Quantitative}, namel
 $$
 
 where $ \node_i $ and $ \node_{i_t} $ are the initial and translated regions in the cartogram, $ \nodeList $ represent the list of regions, and $ \nodeCartographicErrorMax $ is a normalized value that we express as a percentage.
-\new{For a detailed derivation of the formula, refer to the work by \citet{alam2015Quantitative}.}
+For a detailed derivation of the formula, refer to the work by \citet{alam2015Quantitative}.
 Because the algorithm processes node-river intersections, we can measure a novel kind of error, namely, topological error $ \nodeTopologicalError $.
 We maintain $ \nodeTopologicalError = 0 $, however, we can count how many nodes would have crossed a river if we did not test for this and simply let nodes cross rivers.
 We express $ \nodeTopologicalError $ in the normalized range $ \nodeTopologicalError \in [0,1] $, where $ \nodeTopologicalErrorMax $ is the case where all nodes cross a river.
@@ -645,7 +645,7 @@ Similarly, increasing the resolution of rivers, at the expense of the speed of n
 \newcommand{\pCount}{24 }
 \section{User-Centered Evaluation}\label{sec:{User-Centered Evaluation}}
 
-We conduct a user study to evaluate the effectiveness of our approach.
+We conduct a \new{within-subject} user study to evaluate the effectiveness of our approach.
 We chose this type of evaluation because legibility is a human-centred characteristic.
 Many different types of statistical error metrics have been evaluated in previous work \cite{nusrat2016State}, however, our focus is more user-centric in nature.
 
@@ -660,21 +660,21 @@ We formulate the following hypotheses to motivate our user study:
 \textbf{H1.2:} The introduction of rivers can reduce the time required to locate a target region in a cartogram.
 
 We test these hypotheses using location-based tasks.
-Given a standard choropleth on the left side of the screen and the \new{corresponding} cartogram on the right side, we ask user study participants to locate the given region in the choropleth (on the left) in the cartogram (on the right).
+Given a standard choropleth on the left side of the screen and the corresponding cartogram on the right side, we ask user study participants to locate the given region in the choropleth (on the left) in the cartogram (on the right).
 See \Cref{fig:task}.
 
 \subsection{User Study Variables}\label{subsec:{User Study Variables}}
 
 In this section, we discuss the variables of our user study.
 
-\bobgraph{Independent Variables: }The primary independent variable is the presence of rivers in the cartograms, which directly impacts the final layout of the cartogram.
-We set this parameter to render rivers or not.
+\bobgraph{Independent Variables: }The primary independent variable is the presence of rivers in the cartograms, which directly impacts the final layout of the cartogram. 
+\new{The identical set of rivers is either rendered or hidden collectively.}
 
 \bobgraph{Dependent Variables: }\textit{Accuracy:} Given a CCG location in the choropleth on the left, we ask the participant to locate the corresponding node in the cartogram.
 Accuracy as the primary dependent variable is measured by the number of correct CCGs located and chosen by the participants.
 \textit{Response time:} Another dependent variable is the time it takes the participants to complete each task.
 
-\bobgraph{Control Variables: }\textit{Choice of color map:} We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green, to depict the data in our cartograms.
+\bobgraph{Control Variables: }\textit{Choice of color map:} We use D3's built-in interpolateRdYlGn color map, a color scheme of red, yellow, and green, to depict the data in our cartograms.
 \textit{Communicating the target CCG to the user:} We inform the participant about the target CCG they need to find.
 The target CCG is shown in the form of a nonstop blinking (between its original color and black) area on the screen, each blink is given a duration of 2 seconds.
 
@@ -704,7 +704,8 @@ The study was approved by the University of Nottingham's Research Ethics Committ
 
 135 CCGs are rendered on the screen as a choropleth on the left.
 We then generated another view on the right using cartograms.
-The color of both visual designs is mapped to the dataset.
+The color of both visual designs is mapped to a data dimension.
+\new{No cartograms were used more than once per participant.}
 See \Cref{fig:task} for an example.
 
     {
@@ -723,26 +724,30 @@ See \Cref{fig:task} for an example.
 
 \subsection{Procedure}\label{subsec:{Procedure}}
 
-\new{Due to pandemic restrictions, we designed the user study to be carried out online.
-Participants are expected to use their personal hardware for the tasks.
-However, devices with small screens are not recommended because of the large size of the cartograms that are rendered.}
-The user study includes four parts:
+Due to pandemic restrictions, we designed the user study to be carried out online.
+Participants are expected to use their \new{retail} hardware for the tasks.
+However, devices with small screens are not recommended because of the large size of the cartograms that are rendered.
+The \new{within-subject} user study includes four parts:
 
 \textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos.
 The instructions are designed to help participants understand the concepts used in the tasks.
 Instructional videos are available at \url{https://www.youtube.com/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
 
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design.
+A sample task is shown in \Cref{fig:task}, and accessible at \url{https://ghr.wangqiru.com/#/P1} and included in the online materials \footnotemark{}.
+\new{The practice tasks are identital to the actual tasks, accompanied by instructions provided before the actual tasks commence.
+The results from these practice tasks are not included in the final analysis.}
 These tasks also serve as a quality test to see whether users are taking the study seriously.
 A demonstration of three sample tasks is also included in the instructional video.
 
-\textbf{P3:} The participants are asked to complete 16 location tasks that involve 4 CCGs.
+\textbf{P3:} The participants are asked to complete 16 location tasks that involve 4 targetCCGs.
+\new{See the online materials for exact locations of target CCGs \footnotemark{}.}
 Response and reaction time are recorded.
 These 4 CCGs are selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
 
-\textbf{P4:} The participants are asked to complete a questionnaire that consists of Likert Scale questions and open-ended questions.
+\textbf{P4:} The participants are asked to complete a questionnaire that consists of \new{5-Point} Likert Scale questions and open-ended questions.
 
-The materials for P1-P4 are available on the Open Science Foundation website at \url{https://osf.io/q39w7}.
+\footnotetext{The materials for P1-P4 are available on the Open Science Foundation website at \url{https://osf.io/q39w7}.}
 
 \subsection{User Study Results}
 \label{subsec:{User Study Results}}
@@ -752,7 +757,7 @@ The materials for P1-P4 are available on the Open Science Foundation website at 
     \centering
     \includegraphics[width=\columnwidth,keepaspectratio]{accuracy.png}
     \caption{In the bar chart, the y-axis shows the average accuracy rate of locating CCGs with and without rivers for user study participants.
-        The x-axis shows the target CCGs.}
+        The x-axis shows the four target CCGs, as described in Procedure P3.}
     \label{fig:task-acc}
 \end{figure}
 }
@@ -780,7 +785,7 @@ However, the average time to locate a given CCG is reduced for 3 out of the 4 CC
             \centering
             \includegraphics[width=\columnwidth,keepaspectratio]{rt.png}
             \caption{In the bar chart, the y-axis shows the average response time for locating CCGs with and without rivers for user study participants.
-                The x-axis shows the target CCGs.}
+                The x-axis shows the four target CCGs, as described in Procedure P3.}
             \label{fig:task-rt}
         \end{figure}
     }
@@ -828,17 +833,16 @@ Because this is a new concept, it opens the door for many future research direct
 
 \noindent\textbf{Overlap removal algorithm choice:} Another limitation is the algorithm (FNOR) we use.
 We believe that developing a new algorithm with built-in constraint support can significantly reduce the time required to generate cartograms with rivers.
-Currently, the runtime of our layout algorithm is approximately 30 milliseconds for each iteration. \new{ When the quantity of nodes and features increases, generating the optimal layout demands several hundred iterations.}
+Currently, the runtime of our layout algorithm is approximately 30 milliseconds for each iteration. When the quantity of nodes and features increases, generating the optimal layout demands several hundred iterations.
 
 \noindent\textbf{Generalizability:} Future work also includes generalizations and extensions of the algorithm, e.g., the use of other features in the cartogram layout such as additional rivers, major highways, lakes, and coastlines, etc.
 We also consider whether increasing the length of the rivers as the size of the nodes increases would be a useful option.
-We would like to explore the case of river-river intersections \new{(or confluence)} and testing out more geographies such as the U.S.
+We would like to explore the case of river-river intersections (or confluence) and testing out more geographies such as the U.S.
 and Europe, which have more complex rivers.
 We also considered the idea of deforming the rivers as part of the layout algorithm, however, this idea is open to future work.
 
-\noindent\textbf{Improved User Study:} \new{Due to pandemic restrictions, the user study did not take place in a controlled environment.
-In the future, we aim to execute a more structured study, ensuring a controlled environment and standardized hardware for participants.
-}
+\noindent\textbf{Improved User Study:} Due to pandemic restrictions, the user study did not take place in a controlled environment.
+In the future, we aim to execute a more controlled laboratory study, ensuring a controlled environment and standardized hardware for participants.
 
 
 \section{Conclusions}\label{sec:{Conclusions}}
