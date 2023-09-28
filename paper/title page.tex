@@ -1,0 +1,271 @@
+%% 
+%% Copyright 2007-2020 Elsevier Ltd
+%% 
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%% 
+
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+%%
+%% 
+%%
+%% $Id: elsarticle-template-num.tex 190 2020-11-23 11:12:32Z rishi $
+%%
+%%
+% \documentclass[preprint,12pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+\documentclass[5p,times]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% For including figures, graphicx.sty has been loaded in
+%% elsarticle.cls. If you prefer to use the old commands
+%% please give \usepackage{epsfig}
+\usepackage[table, dvipsnames]{xcolor}
+
+\definecolor{Mycolor1}{HTML}{4C5866} %#4C5866
+\definecolor{Mycolor2}{HTML}{A6B6D2} %#A6B6D2
+\definecolor{Mycolor3}{HTML}{67daff} %#67daff
+\definecolor{Mycolor4}{HTML}{F7F7FE} %#F7F7FE
+\definecolor{Mycolor5}{HTML}{666ad1} %#666ad1
+\definecolor{Mycolor6}{HTML}{ffbb93} %#ffbb93
+\newcommand{\mycolorbox}[2]{\begingroup\setlength{\fboxsep}{2pt}\colorbox{#1}{#2}\endgroup}
+
+% cite with author names
+\newcommand{\citea}[1]{\citeauthor{#1}~\cite{#1}}
+\newcommand{\bobgraph}[1]{\noindent\textbf{#1}}
+
+% draw a colored square
+% color, width, height
+\newcommand\coloredsquare[3][black]{\textcolor{#1}{\rule{#2}{#3}}} 
+
+% thumbnail image
+\usepackage{wrapfig}
+\newcommand{\thumbnail}[2]{
+    \begin{samepage}
+
+      \setlength{\intextsep}{3pt}
+      \setlength{\columnsep}{3pt}
+      \begin{wrapfigure}{r}{0.4\columnwidth}
+        \vspace{-15pt}
+        \begin{center}
+          \includegraphics[width=0.35\columnwidth]{"#1".png}
+        \end{center}
+      \end{wrapfigure}
+      #2
+      
+    \end{samepage}
+}
+
+
+% list with styles
+\usepackage{enumitem}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amsmath,bm}
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers.
+%% \usepackage{lineno}
+
+\usepackage{float,hhline,array,tabulary,tabularx,etoolbox,multirow,multicol}
+
+\usepackage{moreverb,url}
+
+\newcommand{\algorithmautorefname}{Algorithm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+% switch for algorithmic
+% New definitions
+\algnewcommand\algorithmicswitch{\textbf{switch}}
+\algnewcommand\algorithmiccase{\textbf{case}}
+\algnewcommand\algorithmicdefault{\textbf{default}}
+
+\algdef{SE}[SWITCH]{Switch}{EndSwitch}[1]{\algorithmicswitch\ #1\textbf{:}}{\algorithmicend\ \algorithmicswitch}%
+\algtext*{EndSwitch}%
+
+\algdef{SE}[CASE]{Case}{EndCase}[1]{\algorithmiccase\ #1\textbf{:}}{\algorithmicend\ \algorithmiccase}%
+\algtext*{EndCase}%
+
+\algdef{SE}[DEFUALT]{Default}{EndDefault}{\algorithmicdefault\textbf{:}}{\algorithmicend\ \algorithmicdefault}%
+\algtext*{EndDefault}%
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+% code listing
+\usepackage{listings}
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\lstdefinestyle{customasm}{
+  belowcaptionskip=1\baselineskip,
+  xleftmargin=\parindent,
+  language=[x86masm]Assembler,
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle=\itshape\color{purple!40!black},
+}
+
+\lstset{escapechar=@,style=customc}
+
+% bold \mathcal{}
+\DeclareMathAlphabet{\mathbcal}{OMS}{cmsy}{b}{n}
+
+% wrapper for math symbols
+\newcommand{\Vector}[1]{\protect\overrightarrow{#1}}
+\newcommand{\Line}[1]{\protect\overline{#1}}
+\newcommand{\dx}{\Delta x}
+\newcommand{\dy}{\Delta y}
+\newcommand{\Width}[1]{\lvert #1 \rvert}
+
+% UpdateNodePosition
+\newcommand{\nodeList}{\bm{L}}
+
+\newcommand{\nodeFNORLine}{\Line{\node\nodeFNOR}}
+\newcommand{\nodeSize}{s}
+\newcommand{\nodeSizeAvg}{\nodeSize_{avg}}
+\newcommand{\nodeSizeMax}{\nodeSize_{max}}
+\newcommand{\nodeError}{\epsilon}
+\newcommand{\nodeCartographicError}{\nodeError_{c}}
+\newcommand{\nodeCartographicErrorMax}{\nodeError_{c_{max}}}
+\newcommand{\nodeTopologicalError}{\nodeError_{t}}
+\newcommand{\nodeTopologicalErrorMax}{\nodeError_{t_{max}}}
+\newcommand{\stalemateMax}{w}
+\newcommand{\nodeCross}{\node.cross}
+\newcommand{\nodeListCross}{\nodeList.cross}
+\newcommand{\nodeListCrossCount}{\nodeList.count}
+
+% move position
+
+\newcommand{\node}{\bm{n}}
+\newcommand{\nodePrevious}{\node_{p}}
+\newcommand{\nodeFNOR}{\node_t}
+
+\newcommand{\nodeVectorTC}{\Vector{\nodeFNOR\node}}
+\newcommand{\nodeVectorCT}{\Vector{\node\nodeFNOR}}
+
+% check river crossing
+
+\newcommand{\river}{\bm{r}}
+\newcommand{\riverVector}{\Vector{v_{\river}}}
+\newcommand{\riverList}{\bm{R}}
+\newcommand{\nodeBoundingBox}{b_{\Line{n}}}
+\newcommand{\riverEdgeBoundingBox}{b_{\Edge}}
+\newcommand{\boundingBoxInt}{b_{int.}}
+\newcommand{\nodeEdge}{e_n}
+\newcommand{\edgeBoxInt}{e_{int.}}
+
+% derive corridor
+\newcommand{\Corridor}{c}
+\newcommand{\CorridorLength}{\Corridor_l}
+\newcommand{\CorridorWidth}{\Corridor_w}
+\newcommand{\PointP}{\node_c}
+\newcommand{\Edge}{\Line{e}}
+\newcommand{\EdgeStart}{\Edge.start}
+\newcommand{\EdgeEnd}{\Edge.end}
+\newcommand{\EdgeParallel}{\Line{e_p}}
+\newcommand{\EdgeParallelA}{\Line{e_{p^1}}}
+\newcommand{\EdgeParallelB}{\Line{e_{p^2}}}
+\newcommand{\Distance}{d}
+\newcommand{\nodeVectorNP}{\Vector{\node\PointP}}
+\newcommand{\nodeVectorNV}{\Vector{\node\nodeFNOR}}
+\newcommand{\nodeLineNV}{\Line{\node\nodeFNOR}}
+\newcommand{\nodeLinePN}{\Line{\nodePrevious\node}}
+\newcommand{\nodeVectorNtP}{\Vector{\nodeFNOR\PointP}}
+\newcommand{\nodeLineNtNc}{\Line{\nodeFNOR\PointP}}
+\newcommand{\nodeLineWidthNtP}{\Width{\nodeFNOR\PointP}}
+\newcommand{\nodeInCorridor}{\node_{in}}
+\newcommand{\nodeInCorridorT}{\node_{in_t}}
+
+
+% derive corridor point
+\newcommand{\Scale}{scale}
+
+% figure fig:corridor
+
+\newcommand{\nodeVectorNNn}{\Vector{\node\node_{t}}}
+\newcommand{\nodeVectorNinNinn}{\Vector{\nodeInCorridor\nodeInCorridorT}}
+
+
+\newcommand{\vectorAvg}{\bm{v}_{avg}}
+\newcommand{\NxR}{\node_{n_{x}r}}
+\newcommand{\RxN}{\node_{r_{x}n}}
+
+\usepackage[nameinlink]{cleveref}
+
+\newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+
+% \journal{Nuclear Physics B}
+
+\begin{document}
+
+\begin{frontmatter}
+
+    %% Title, authors and addresses
+
+    %% use the tnoteref command within \title for footnotes;
+    %% use the tnotetext command for theassociated footnote;
+    %% use the fnref command within \author or \address for footnotes;
+    %% use the fntext command for theassociated footnote;
+    %% use the corref command within \author for corresponding author footnotes;
+    %% use the cortext command for theassociated footnote;
+    %% use the ead command for the email address,
+    %% and the form \ead[url] for the home page:
+    \author[label1]{Qiru Wang}
+    \ead{qiru.wang1@nottingham.ac.uk}
+
+    \author[label1]{Robert S. Laramee}
+    \ead{robert.laramee@nottingham.ac.uk}
+
+    \affiliation[label1]{organization={Visualization and Graphics Group},
+        addressline={University of Nottingham},
+        city={University Park},
+        postcode={NG7 2RD},
+        state={Nottingham},
+        country={United Kingdom}}
+
+    \title{Demers Cartogram with Rivers}
+
+
+\end{frontmatter}
+
+\end{document}
+\endinput
+%%
+%% End of file `elsarticle-template-num.tex'.
