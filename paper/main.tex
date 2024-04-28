@@ -1,7 +1,17 @@
-\documentclass[Afour,sagev,times]{sagej}
+\documentclass[iicol,sn-basic]{sn-jnl}% Basic Springer 
+
+\usepackage{graphicx}%
+\usepackage{amsfonts}%
+\usepackage{amsthm}%
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+\usepackage{booktabs}%
+\usepackage{algorithmicx}%
+%%%%
 
 \newcommand{\new}[1]{\textcolor{blue}{#1}}
-
 
 \usepackage{moreverb,url}
 \usepackage{float,hhline,array,tabulary,tabularx,etoolbox,multirow, multicol}
@@ -9,8 +19,6 @@
 \newcommand{\algorithmautorefname}{Algorithm}
 
 \usepackage[table, dvipsnames]{xcolor}
-
-% \include{preamble/preamble.main}
 
 \definecolor{Mycolor1}{HTML}{4C5866} %#4C5866
 \definecolor{Mycolor2}{HTML}{A6B6D2} %#A6B6D2
@@ -39,7 +47,7 @@
       \begin{wrapfigure}{r}{0.4\columnwidth}
         \vspace{-15pt}
         \begin{center}
-          \includegraphics[width=0.38\columnwidth]{"#1".png}
+          \includegraphics[width=0.38\columnwidth]{figure/"#1".png}
         \end{center}
       \end{wrapfigure}
       #2
@@ -97,8 +105,7 @@
 % \include{preamble/preamble.main}
 
 % \include{preamble/preamble.math}
-\usepackage{amsmath,bm}
-\usepackage{amssymb}
+\usepackage{amsmath,amssymb,bm}
 
 % bold \mathcal{}
 \DeclareMathAlphabet{\mathbcal}{OMS}{cmsy}{b}{n}
@@ -184,20 +191,63 @@
 \newcommand{\RxN}{\node_{r_{x}n}}
 % \include{preamble/preamble.math}
 
-\usepackage[colorlinks,citecolor=red,urlcolor=red]{hyperref}
-
 \newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
 T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
+\usepackage{hyperref}
+
 \usepackage[nameinlink]{cleveref}
 
+
 \setcounter{secnumdepth}{3}
+
+%% as per the requirement new theorem styles can be included as shown below
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
+%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
+\newtheorem{proposition}[theorem]{Proposition}% 
+%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
+
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}%
+
+\raggedbottom
+%%\unnumbered% uncomment this for unnumbered level heads
 
 \begin{document}
 
 \title{Demers Cartogram with Rivers}
 
-\begin{abstract}
+%%=============================================================%%
+%% GivenName	-> \fnm{Joergen W.}
+%% Particle	-> \spfx{van der} -> surname prefix
+%% FamilyName	-> \sur{Ploeg}
+%% Suffix	-> \sfx{IV}
+%% \author*[1,2]{\fnm{Joergen W.} \spfx{van der} \sur{Ploeg} 
+%%  \sfx{IV}}\email{iauthor@gmail.com}
+%%=============================================================%%
+
+\author*[1]{\fnm{Qiru} \sur{Wang}}\email{qiru.wang1@nottingham.ac.uk}
+
+\author[1]{\fnm{Kai} \sur{Xu}}\email{kai.xu@nottingham.ac.uk}
+\equalcont{These authors contributed equally to this work.}
+
+\author[1]{\fnm{Robert} \sur{Laramee}}\email{robert.laramee@nottingham.ac.uk}
+\equalcont{These authors contributed equally to this work.}
+
+\affil[1]{\orgdiv{School of Computer Science}, \orgname{University of Nottingham}, \orgaddress{\street{University Park}, \city{Nottingham}, \postcode{NG7 2RD}, \state{England}, \country{United Kingdom}}}
+
+
+%%==================================%%
+%% Sample for unstructured abstract %%
+%%==================================%%
+
+\abstract{
     Cartograms serve as representations of geographical and abstract data, employing a value-by-area mapping technique.
     As a variant of the Dorling cartogram, the Demers cartogram utilizes squares instead of circles to represent regions.
     This alternative approach allows for a more intuitive comparison of regions, utilizing screen space more efficiently.
@@ -206,27 +256,34 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     The presence of rivers significantly impacts both the layout and visual appearance of the cartograms.
     Through a user study conducted on an Electronic Health Records (EHR) dataset, we evaluate the efficacy of the proposed hybrid layout algorithm.
     The obtained results illustrate that this approach successfully retains key aspects of the original cartogram while enhancing legibility, readability, and overall accuracy.
-\end{abstract}
+}
+
+%%================================%%
+%% Sample for structured abstract %%
+%%================================%%
+
 
 \keywords{Cartogram, Demers Cartogram, EHR Visualization, Visual Analytics}
+
+%%\pacs[JEL Classification]{D8, H51}
+
+%%\pacs[MSC Classification]{35A01, 65L10, 65L12, 65L20, 65L70}
 
 \maketitle
 
 \section{Introduction and Motivation}
 
-\begin{samepage}
 
-    Cartograms are representations of geographical and abstract data based on a value-by-area mapping combining statistical and geographical information \cite{dent2009Cartography,inoue2011New}.
-    Various styles of cartograms have been proposed and implemented for applications such as urban planning \cite{harris2018Mapping, arranz-lopez2021Enduser}, natural hazard forecasting \cite{pappenberger2019Cartograms, park2020Flood}, conservation and environmental planning \cite{galluzzi2018Mapping, rocchini2019Cartogramming}, political and social demographics \cite{breitzman2018Using, alieva2021How}, and decision-making for public health \cite{gao2020Visualising, sack2021Visualizing}.
+Cartograms are representations of geographical and abstract data based on a value-by-area mapping combining statistical and geographical information \cite{dent2009Cartography,inoue2011New}.
+Various styles of cartograms have been proposed and implemented for applications such as urban planning \cite{harris2018Mapping, arranz-lopez2021Enduser}, natural hazard forecasting \cite{pappenberger2019Cartograms, park2020Flood}, conservation and environmental planning \cite{galluzzi2018Mapping, rocchini2019Cartogramming}, political and social demographics \cite{breitzman2018Using, alieva2021How}, and decision-making for public health \cite{gao2020Visualising, sack2021Visualizing}.
 
-    \begin{figure}[b!]
-        \centering
-        \includegraphics[width=\linewidth,keepaspectratio]{cover.png}
-        \caption{The River Thames passing through a cartographic representation of the NHS CCGs in London and surrounding areas.}
-        \label{fig:cover}
-    \end{figure}
+\begin{figure}[b!]
+    \centering
+    \includegraphics[width=\linewidth,keepaspectratio]{figure/cover.png}
+    \caption{The River Thames passing through a cartographic representation of the NHS CCGs in London and surrounding areas.}
+    \label{fig:cover}
+\end{figure}
 
-\end{samepage}
 
 Among the four types of cartogram categorized in a survey by \citet{nusrat2016State} (See \Cref{sec:RelatedWork} for definitions of contiguous, non-contiguous, rectangular, and Dorling), a trade-off is made between types of accuracy (See \Cref{table:accuracy}).
 For this project, we focus on non-contiguous cartograms like Demers cartograms because they facilitate statistical comparison between regions, they can make good use of screen space, and comparison of regions is useful when studying Electronic Health Records (EHR) data.
@@ -285,7 +342,7 @@ In addition, we include the Demers as it is the focus of our work.
                     \textbf{Number of Nodes} &
                     \multicolumn{1}{c|}{\textbf{Year}} \\
                     \hline
-
+                    
                     % \citet{auber2007Geographical} & \citep{auber2007Geographical} & US & 19 & 2007 \\
                     % \hline
                     \citet{warf2008Geography} & Dorling & US & 3,142 & \citeyear{warf2008Geography} \\
@@ -302,10 +359,10 @@ In addition, we include the Demers as it is the focus of our work.
                     \hline
                     \citet{nickel2022Multicriteria} & Non-contiguous, Demers & US, Netherlands, World & 49 - 342 & \citeyear{nickel2022Multicriteria} \\
                     \hline
-
+                    
                     % \multicolumn{1}{c|}{\textbf{Total unique papers: 51}} & 24&15&12& \multicolumn{1}{c}{}  \\
                     % \hhline{~|*{3}{-}|~}
-
+                    
                 \end{tabulary}
             }
             \caption{Related work with non-contiguous cartogram-based visualizations.
@@ -402,11 +459,11 @@ The layout algorithms may displace regions far from their original position and 
 In this paper, we introduce a new type of topological feature, a river, as a constraint to compute the final layout, with the aim of improving the interpretation, readability, and accuracy of this class of cartograms.
 
 \section{Data Description}
-
+ 
  {
   \begin{figure}[b!]
       \centering
-      \includegraphics[width=0.6\columnwidth]{ccg.png}
+      \includegraphics[width=0.6\columnwidth]{figure/ccg.png}
       \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography Portalx \cite{opengeographyportalxOpen} with EPSG:4326 (WGS84 - World Geodetic System) as the Coordinate Reference System (CRS).}
       \label{fig:ccg}
   \end{figure}
@@ -473,7 +530,7 @@ Each CCG has a unique ONS code, which is used to link the CCG shapefile with the
 {
     \begin{figure*}[tb!]
         \centering
-        \includegraphics[width=0.8\textwidth,height=\textheight,keepaspectratio]{flowchart.png}
+        \includegraphics[width=0.8\textwidth,height=\textheight,keepaspectratio]{figure/flowchart.png}
         \caption{An overview of our hybrid layout algorithm incorporating rivers.
             See also \Cref{alg:UpdateLayout} in Section \ref{sec:main} for more detail.
             See \Cref{fig:flowchart-stalemate} for the logic of processing a stalemate.
@@ -485,7 +542,7 @@ Each CCG has a unique ONS code, which is used to link the CCG shapefile with the
 {
     \begin{figure}[tb!]
         \centering
-        \includegraphics[width=0.8\columnwidth,keepaspectratio]{river_resolution.png}
+        \includegraphics[width=0.8\columnwidth,keepaspectratio]{figure/river_resolution.png}
         \caption{The resolution of rivers can be dynamically adjusted by the user.
             (A) shows River Thames at its original resolution with 10,170 edges.
             (B) shows the river at a reduced resolution of 49 edges.
@@ -546,6 +603,16 @@ In practice, $ \vectorAvg $ is multiplied by a scaling factor $ \propto\vectorAv
 Thus, we can influence how far $ \river $ is translated in each iteration of the layout algorithm.
 We can use this to ensure smooth transitions between iterations.
 
+
+\begin{figure}[tb!]
+    \centering
+    \includegraphics[width=\columnwidth,keepaspectratio]{figure/flowchart stalemate.png}
+    \caption{A flowchart illustration of stalemate processing.
+    See \Cref{subsec:{Process Stalemates}}, \Cref{fig:stalemate}, and \Cref{fig:corridor} for more detail.}
+    \label{fig:flowchart-stalemate}
+\end{figure}
+
+
 \subsection{Process Stalemates}
 \label{subsec:{Process Stalemates}}
 
@@ -555,42 +622,31 @@ A corridor, $ \Corridor $, is a rectangle with a width of $ \CorridorWidth $ and
 All nodes enclosed by $ \Corridor $ are then translated by $ \nodeVectorTC $ to alleviate the congestion (See \Cref{fig:corridor}E).
 The procedure for constructing corridors is provided by \Cref{alg:derive corridor}.
 
-{
-\begin{figure}[tb!]
-    \centering
-    \includegraphics[width=\columnwidth,keepaspectratio]{flowchart stalemate.png}
-    \caption{A flowchart illustration of stalemate processing.
-    See \Cref{subsec:{Process Stalemates}}, \Cref{fig:stalemate}, and \Cref{fig:corridor} for more detail.}
-    \label{fig:flowchart-stalemate}
-\end{figure}
-}
 
-{
+
 \begin{figure}[tb!]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio]{stalemate.png}
+    \includegraphics[width=\columnwidth,keepaspectratio]{figure/stalemate.png}
     \caption{A stalemate: when a node's translation path $ \nodeVectorCT $ (iteration 1) intersects a river $ \stalemateMax $ times.
         The node is translated back to its previous position (iteration 2).
         A stalemate can occur when the area is congested and the node cannot translate to a new position without intersecting a river.}
     \label{fig:stalemate}
 \end{figure}
-}
 
-{
+
+\subsection{Terminating the Algorithm}
+\label{subsec:{Terminating the Algorithm}}
+
 \begin{figure}[tb!]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio]{corridor.png}
+    \includegraphics[width=\columnwidth,keepaspectratio]{figure/corridor.png}
     \caption{A stalemate occurs when a node's translation path $ \nodeVectorCT $ intersects a river for $ \stalemateMax $ times, as shown in (A).
         To address this, we derive a corridor (orange rectangle in (E)) based on $ \node $ and $ \nodeFNOR $.
         All nodes within the corridor are translated based on $ \nodeVectorTC $, such that $ \nodeVectorNNn = \nodeVectorNinNinn $.
         For clarity in the illustration, we place nodes sparsely in this figure.}
     \label{fig:corridor}
 \end{figure}
-}
 
-
-\subsection{Terminating the Algorithm}
-\label{subsec:{Terminating the Algorithm}}
 
 The algorithm terminates when $ \nodeCartographicError $ reaches $ \nodeCartographicErrorMax $, the error tolerance set by the user.
 We adopt the maximum cartographic error from \citet{alam2015Quantitative}, namely: $$ \nodeCartographicErrorMax = \max _{\node \in \nodeList} \frac{|\node_i-\node_{i_t}|}{\max \{\node_i, \node_{i_t}\}}
@@ -632,7 +688,7 @@ Similarly, increasing the resolution of rivers, at the expense of the speed of n
     {
         \begin{figure*}[tb!]
             \centering
-            \includegraphics[width=0.9\textwidth,keepaspectratio]{UI.png}
+            \includegraphics[width=0.9\textwidth,keepaspectratio]{figure/UI.png}
             \caption{A screenshot of the user interface.
             User options are provided to adjust the terminating conditions (size and error), color mapping, visibility of nodes and rivers.
             Other options include the ability to control the overlap removal behavior: rivers can be static or dynamic.
@@ -711,7 +767,7 @@ See \Cref{fig:task} for an example.
     {
         \begin{figure}[tb!]
             \centering
-            \includegraphics[width=\columnwidth,keepaspectratio]{task.png}
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/task.png}
             \caption{A sample location task for participants.
                 The left shows the choropleth map, and the right shows the corresponding cartogram.
                 Both images show the three longest rivers in England, and color is mapped to CCG population.
@@ -736,7 +792,7 @@ Instructional videos are available at \url{https://www.youtube.com/playlist?list
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design.
 A sample task is shown in \Cref{fig:task}, and accessible at \url{https://ghr.wangqiru.com/#/P1} and included in the online materials\footnotemark{}.
 \new{The practice tasks are identital to the actual tasks, accompanied by instructions provided before the actual tasks commence.
-The results from these practice tasks are not included in the final analysis.}
+    The results from these practice tasks are not included in the final analysis.}
 These tasks also serve as a quality test to see whether users are taking the study seriously.
 A demonstration of three sample tasks is also included in the instructional video.
 
@@ -755,7 +811,7 @@ These 4 CCGs are selected to avoid extreme cases (thus bias the result), in term
 {
 \begin{figure}[b!]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio]{accuracy.png}
+    \includegraphics[width=\columnwidth,keepaspectratio]{figure/accuracy.png}
     \caption{In the bar chart, the y-axis shows the average accuracy rate of locating CCGs with and without rivers for user study participants.
         The x-axis shows the four target CCGs, as described in Procedure P3.}
     \label{fig:task-acc}
@@ -783,7 +839,7 @@ However, the average time to locate a given CCG is reduced for 3 out of the 4 CC
     {
         \begin{figure}[t!]
             \centering
-            \includegraphics[width=\columnwidth,keepaspectratio]{rt.png}
+            \includegraphics[width=\columnwidth,keepaspectratio]{figure/rt.png}
             \caption{In the bar chart, the y-axis shows the average response time for locating CCGs with and without rivers for user study participants.
                 The x-axis shows the four target CCGs, as described in Procedure P3.}
             \label{fig:task-rt}
@@ -802,7 +858,7 @@ However, the average time to locate a given CCG is reduced for 3 out of the 4 CC
 {
 \begin{figure}[tb!]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio]{likert.png}
+    \includegraphics[width=\columnwidth,keepaspectratio]{figure/likert.png}
     \caption{The stacked bar chart shows the user study participant responses of Likert Scale questions.}
     \label{fig:likert}
 \end{figure}
@@ -817,15 +873,15 @@ In this section, we discuss some limitations of our work and future research dir
 Because this is a new concept, it opens the door for many future research directions.
 
 \noindent\textbf{Color map choice:} The first limitation is the color map that we use to depict the data in our cartograms.
-    We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green.
-    However, we believe that the choice of color map can have a significant impact on the legibility of cartograms.
-    In the user study, we carefully avoid extreme values where the location or color of the CCG makes it easier to locate the target.
-    See \Cref{fig:extreme} for an example. We plan to explore the impact of different color maps on the legibility of cartograms in future work.
+We use D3's built-in interpolateRdYlGn color map, a diverging color scheme of red, yellow, and green.
+However, we believe that the choice of color map can have a significant impact on the legibility of cartograms.
+In the user study, we carefully avoid extreme values where the location or color of the CCG makes it easier to locate the target.
+See \Cref{fig:extreme} for an example. We plan to explore the impact of different color maps on the legibility of cartograms in future work.
 
     {
         \begin{figure}[tb!]
             \centering
-            \includegraphics[width=0.8\columnwidth,keepaspectratio]{extreme.png}
+            \includegraphics[width=0.8\columnwidth,keepaspectratio]{figure/extreme.png}
             \caption{Due to color and relative location, we believe the CCGs in the black circle are easier to locate.}
             \label{fig:extreme}
         \end{figure}
@@ -852,436 +908,418 @@ We first propose a new algorithm to generate cartograms with rivers, and then we
 We evaluate our approach with a preliminary user study, and the results support our hypotheses: the introduction of rivers improves the legibility and recognizability of cartograms, although a deeper analysis is necessary to reach more confident conclusions.
 We also discuss the limitations of our work and future research directions.
 
-\urlstyle{same}
-\bibliographystyle{plainnat}
-\bibliography{references}
+\begin{appendices}
 
-\cleardoublepage
-
-\section{Appendix}
-\appendix
-
-\section{Obtaining Shapefile}
-\label{obtaining-shapefile}
-\begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via the Overpass Turbo API.}, label={overpass},captionpos=b]
-    relation(2263653);>>;
-    // River Great Ouse: 2798097
-    // River Trent: 2863468
-    out skel;
-\end{lstlisting}
-\section{Pre-processing Shapefiles}
-\label{app:pre-processing}
-Shapefiles from different sources are likely to be incompatible.
-In our case, the NHS CCG shapefile is incompatible with the river shapefiles.
-The major reason for the incompatibility is the coordinate reference system (CRS).
-The CRS of the CCG shapefile is EPSG:27700 (OSGB36 - British National Grid).
-The CRS of the river shapefiles is EPSG:4326 (WGS84 - World Geodetic System).
-Here, we provide some pre-processing steps using QGIS (version: 3.26.0-Buenos Aires) \cite{qgisWelcome} to handle the incompatibility and reduce shapefile size to improve performance.
-
-\subsection{Import Shapefiles into QGIS}
-We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, followed by the CCG shapefile \Cref{fig:import_ccgs}.
-
-{
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{import_rivers.png}
-    \caption{QGIS interface, with River Trent, River Great Ouse, and River Thames (from top to bottom) imported.}
-    \label{fig:import_rivers}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{import_ccgs.png}
-    \caption{QGIS interface, with all NHS CCGs imported.}
-    \label{fig:import_ccgs}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{unify_crs.png}
-    \caption{QGIS interface, showing the unified CRS (OSGB36) for both layers.}
-    \label{fig:unify_crs}
-\end{figure}
-}
-
-\subsection{Export Shapefiles in GeoJSON and Unify the Coordinate Reference System (CRS)}
-
-We then use QGIS to unify the CRS, and export both layers in GeoJSON format.
-See \Cref{fig:export_rivers} and \Cref{fig:export_ccgs}.
-The unified layer is shown in \Cref{fig:unify_crs}.
-
-{
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{export_rivers.png}
-    \caption{QGIS interface, exporting all rivers using the OSGB36 CRS in GeoJSON.}
-    \label{fig:export_rivers}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{export_ccgs.png}
-    \caption{QGIS interface, exporting all NHS CCGs using the OSGB36 CRS in GeoJSON.}
-    \label{fig:export_ccgs}
-\end{figure}
-
-}
-
-\subsection{Merge Shapefiles and Reduce File Size}
-
-We then merge two layers into one layer, and export it in the TopoJSON format using Mapshaper \cite{blochMapshaper}.
-Mapshaper also supports the simplification of GeoJSON shapefiles.
-See \Cref{fig:export_topojson}.
-
-{
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{export_topojson.png}
-    \caption{Mapshaper interface, merging all rivers with NHS CCGs into one layer, and export the merged layer in TopoJSON.}
-    \label{fig:export_topojson}
-\end{figure}
-}
-
-\subsection{Pre-processing Result}
-
-\Cref{table:pre-processing_result} shows the preprocessing result.
-The reduction in file size is significant and greatly reduces the initialization time of our implementation.
-
+    \section{Obtaining Shapefile}
+    \label{obtaining-shapefile}
+    \begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via the Overpass Turbo API.}, label={overpass},captionpos=b]
+        relation(2263653);>>;
+        // River Great Ouse: 2798097
+        // River Trent: 2863468
+        out skel;
+    \end{lstlisting}
+    \section{Pre-processing Shapefiles}
+    \label{app:pre-processing}
+    Shapefiles from different sources are likely to be incompatible.
+    In our case, the NHS CCG shapefile is incompatible with the river shapefiles.
+    The major reason for the incompatibility is the coordinate reference system (CRS).
+    The CRS of the CCG shapefile is EPSG:27700 (OSGB36 - British National Grid).
+    The CRS of the river shapefiles is EPSG:4326 (WGS84 - World Geodetic System).
+    Here, we provide some pre-processing steps using QGIS (version: 3.26.0-Buenos Aires) \cite{qgisWelcome} to handle the incompatibility and reduce shapefile size to improve performance.
+    
+    \subsection{Import Shapefiles into QGIS}
+    We first load all three river shapefiles into QGIS \Cref{fig:import_rivers}, followed by the CCG shapefile \Cref{fig:import_ccgs}.
+    
     {
-        \renewcommand{\arraystretch}{1.5}
-        \begin{table}[H]
-            \centering
-            \resizebox{\columnwidth}{!}{
-                \begin{tabulary}{\columnwidth}{|*{4}{l|}}
-                    \hhline{~|*{3}{-}}
-                    \multicolumn{1}{c|}{\textbf{Shapefile}} &
-                    \cellcolor{Mycolor2}\textbf{Original} &
-                    \cellcolor{Mycolor2}\textbf{GeoJSON} &
-                    \cellcolor{Mycolor2}\textbf{TopoJSON} \\
-                    \hline
-                    Rivers & 2.0 MB (GeoJSON) & 1.4 MB & -  \\
-                    \hline
-                    NHS CCGs & 46.6 MB (.shp, Esri vector shapefile) & 140.2 MB & -  \\
-                    \hline
-                    Merged & - & - & 16.3 MB \\
-                    \hline
-                \end{tabulary}
-            }
-            \caption{The file size is reduced by 88.5\% from the original size.}
-            \label{table:pre-processing_result}
-        \end{table}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\columnwidth]{figure/import_rivers.png}
+        \caption{QGIS interface, with River Trent, River Great Ouse, and River Thames (from top to bottom) imported.}
+        \label{fig:import_rivers}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\columnwidth]{figure/import_ccgs.png}
+        \caption{QGIS interface, with all NHS CCGs imported.}
+        \label{fig:import_ccgs}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\columnwidth]{figure/unify_crs.png}
+        \caption{QGIS interface, showing the unified CRS (OSGB36) for both layers.}
+        \label{fig:unify_crs}
+    \end{figure}
     }
-
-% \clearpage
-\section{Procedure: DeriveParallelEdge}
-% \begin{noindent}
-
+    
+    \subsection{Export Shapefiles in GeoJSON and Unify the Coordinate Reference System (CRS)}
+    
+    We then use QGIS to unify the CRS, and export both layers in GeoJSON format.
+    See \Cref{fig:export_rivers} and \Cref{fig:export_ccgs}.
+    The unified layer is shown in \Cref{fig:unify_crs}.
+    
+    {
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\columnwidth]{figure/export_rivers.png}
+        \caption{QGIS interface, exporting all rivers using the OSGB36 CRS in GeoJSON.}
+        \label{fig:export_rivers}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\columnwidth]{figure/export_ccgs.png}
+        \caption{QGIS interface, exporting all NHS CCGs using the OSGB36 CRS in GeoJSON.}
+        \label{fig:export_ccgs}
+    \end{figure}
+    
+    }
+    
+    \subsection{Merge Shapefiles and Reduce File Size}
+    
+    We then merge two layers into one layer, and export it in the TopoJSON format using Mapshaper \cite{blochMapshaper}.
+    Mapshaper also supports the simplification of GeoJSON shapefiles.
+    See \Cref{fig:export_topojson}.
+    
+    {
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\columnwidth]{figure/export_topojson.png}
+        \caption{Mapshaper interface, merging all rivers with NHS CCGs into one layer, and export the merged layer in TopoJSON.}
+        \label{fig:export_topojson}
+    \end{figure}
+    }
+    
+    \subsection{Pre-processing Result}
+    
+    \Cref{table:pre-processing_result} shows the preprocessing result.
+    The reduction in file size is significant and greatly reduces the initialization time of our implementation. See \Cref{table:pre-processing_result}.
+    
+    {
+    \renewcommand{\arraystretch}{1.5}
+    \begin{table}[!tb]
+        \centering
+        \resizebox{\columnwidth}{!}{
+            \begin{tabulary}{\columnwidth}{|*{4}{l|}}
+                \hhline{~|*{3}{-}}
+                \multicolumn{1}{c|}{\textbf{Shapefile}} &
+                \cellcolor{Mycolor2}\textbf{Original} &
+                \cellcolor{Mycolor2}\textbf{GeoJSON} &
+                \cellcolor{Mycolor2}\textbf{TopoJSON} \\
+                \hline
+                Rivers & 2.0 MB (GeoJSON) & 1.4 MB & -  \\
+                \hline
+                NHS CCGs & 46.6 MB (.shp, Esri vector shapefile) & 140.2 MB & -  \\
+                \hline
+                Merged & - & - & 16.3 MB \\
+                \hline
+            \end{tabulary}
+        }
+        \caption{The file size is reduced by 88.5\% from the original size.}
+        \label{table:pre-processing_result}
+    \end{table}
+    }
+    
+    
+    \section{Procedure: DeriveParallelEdge}
+    % \begin{noindent}
+    
     \begin{algorithm}[H]
         \caption{Procedure to derive an edge, $ \EdgeParallel $, that is parallel to $ \Edge $ with a distance of $ \Distance $.}\label{alg:derive corridor edge}
-
+        
         \textbf{Input:} \\
         $ \Edge \gets $ the edge used to derive the parallel edge $ \EdgeParallel $ \\
         $ \Distance \gets $ the shortest distance between $ \Edge $ and $ \EdgeParallel $ \\
-
+        
         \textbf{Output:} \\
         An edge, $ \EdgeParallel $, that is parallel to $ \Edge $ with a distance of $ \Distance $.
-\\
-
+        \\
+        
         \textbf{Local variables:} \\
         $ \dx, \dy \gets $ the differences in $ x, y $ for $ \EdgeStart $ and $ \EdgeEnd $ \\
         $ \Scale \gets $ the scale of $ \frac{\Distance}{\sqrt{\dx^2 + \dy^2}} $ \\
-
+        
         \begin{algorithmic}[1]
             \Procedure{DeriveParallelEdge}{$ \Edge $, $ \Distance $}
-                \State $ \dx \gets \EdgeStart.x - \EdgeEnd.x $
-
-                \State $ \dy \gets \EdgeStart.y - \EdgeEnd.y $
-
-                \State $ \Scale \gets \frac{\Distance}{\sqrt{\dx^2 + \dy^2}} $
-
-                \State $ \EdgeParallel.start.x \gets \Scale \cdot (-\dy) + \EdgeStart.x $
-
-                \State $ \EdgeParallel.start.y \gets \Scale \cdot \dx + \EdgeStart.y $
-
-                \State $ \EdgeParallel.end.x \gets \Scale \cdot (-\dy) + \EdgeEnd.x $
-
-                \State $ \EdgeParallel.end.y \gets \Scale \cdot \dx + \EdgeEnd.y $
-
+            \State $ \dx \gets \EdgeStart.x - \EdgeEnd.x $
+            
+            \State $ \dy \gets \EdgeStart.y - \EdgeEnd.y $
+            
+            \State $ \Scale \gets \frac{\Distance}{\sqrt{\dx^2 + \dy^2}} $
+            
+            \State $ \EdgeParallel.start.x \gets \Scale \cdot (-\dy) + \EdgeStart.x $
+            
+            \State $ \EdgeParallel.start.y \gets \Scale \cdot \dx + \EdgeStart.y $
+            
+            \State $ \EdgeParallel.end.x \gets \Scale \cdot (-\dy) + \EdgeEnd.x $
+            
+            \State $ \EdgeParallel.end.y \gets \Scale \cdot \dx + \EdgeEnd.y $
+            
             \State \Return{$ \EdgeParallel $}
-
+            
             \EndProcedure
-
+            
         \end{algorithmic}
     \end{algorithm}
-%\end{noindent}
-
-
-\section{Procedure: TranslateNode}
-
-\begin{algorithm}[H]
-    \caption{Procedure to translate node positions.}\label{alg:TranslateNode}
-
-    \textbf{Input:} \\
-    $ \nodeList \gets $ a list of $ \node $ representing regions \\
-
-    \textbf{Output:} \\
-    $ \nodeTopologicalError \gets $ the number of nodes crossing the river in the input \\
-
-    \textbf{Global variables:} \\
-    $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
-
-    \textbf{Local variables:} \\
-    $ \node \gets $ a node is an object with the following properties: \\
-    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
-    \-\hspace{1em} $ \nodeCross \gets $ the number of times that $ \node $ crosses a river  \\
-    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
-    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
-
-    \begin{algorithmic}[1]
-        \Procedure{TranslateNode}{$ \nodeList $}
-        \State $ \nodeTopologicalError \gets 0 $
-        \ForEach {$ \node \in \nodeList $}
-
-        \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
-
-        \State $ \node(x,y) \gets \nodeFNOR(x,y) $
-
-        \If{ \Call{TestIntersection}{$ \nodeFNORLine $} $ = True $}
-        \State $ \nodeCross ++ $
-        \State $ \nodeTopologicalError ++ $
-
-        \If{$ \nodeCross < \stalemateMax $}
-        \State \hskip-2em \Comment{Translate back to previous position}
-        \State $ \node(x,y) \gets \nodePrevious(x,y) $
-
-        \Else
-
-        \State \Call{ProcessStalemate}{$ \node, \nodeFNOR $}
-        \State $ \nodeCross \gets 0 $ \Comment{Reset counter}
-
-        \EndIf
-
-        \EndIf
-
-        \EndIf
-
-        \EndFor
-        \State \Return{$ \nodeTopologicalError $}
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-\vfill\eject
-
-\section{Procedure: UpdateLayout}
-
-\begin{algorithm}[H]
-    \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers.
-        See \Cref{sec:main}.}\label{alg:UpdateLayout}
-    \textbf{Global variables:} \\
-    $ \nodeList \gets $ a list of $ \node $ representing regions with the following properties: \\
-    \-\hspace{1em}  $\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river \\
-
-    $ \nodeSize \gets $ the initial size of all nodes \\
-    $ \nodeCartographicError \gets $ the average cartographic error of all nodes \\
-    $ \nodeCartographicErrorMax \gets $ the maximum cartographic error of all nodes \\
-    $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
-
-    \textbf{Local variables:} \\
-    $ \node \gets $ a node is an object with the following properties: \\
-    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
-    \-\hspace{1em} $ \nodeCross \gets $ the number of times that $ \node $ crosses a river \\
-    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
-    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
-
-    \begin{algorithmic}[1]
-        \Procedure{UpdateLayout}{}
-
-        \State $ \nodeSize \gets 1 $
-        \While{$ \nodeCartographicError < \nodeCartographicErrorMax $}
-        \State $ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}
-        \While{$ \nodeListCross > 0 $}
-
-        \State $ \nodeListCross \gets 0 $
-        \State $ \nodeList \gets $ RemoveOverlap ($ \nodeList $)
-        \State \Call{TranslateRiver}{$ \nodeList $}
-        \State $\nodeListCross \gets $ \Call{TranslateNode}{$ \nodeList $}
-
-        \EndWhile
-
-        \State $ \nodeSize ++ $
-
-        \EndWhile
-
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-\vfill\eject
-
-\section{Procedure: TranslateRiver}
-
-\begin{algorithm}[H]
-    \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
-    \textbf{Input:} \\
-    $ \nodeList \gets $ a list of $ \node $ representing regions \\
-
-    \textbf{Local variables:} \\
-    $ \riverList \gets $ a list of $ \river $ representing river features \\
-    $ \node \gets $ a node is an object with the following properties: \\
-    \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
-    \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
-    \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
-    $ \nodeTopologicalError \gets $ the number of nodes intersecting $ \river $  \\
-
-    \begin{algorithmic}[1]
-        \Procedure{TranslateRiver}{$ \nodeList $}
-        \ForEach {$ \river \in \riverList $}
-        \State $ \nodeTopologicalError \gets 0 $
-        \State $ \riverVector \gets (0,0) $ \Comment{Hold the sum of vectors $ \nodeVectorCT $}
-        \ForEach {$ \node \in \nodeList $}
-
-        \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
-        \If{ \Call{TestIntersection}{$ \nodeFNORLine $, $ \river $} $ = True $}
-        \State $ \riverVector \gets \riverVector + \nodeVectorCT$
-        \State $ \nodeTopologicalError ++ $
-        \EndIf
-
-        \EndIf
-
-        \EndFor
-
-        \State Translate river $ \river $ by the average vector $ \frac{\riverVector}{\nodeTopologicalError} $
-        \EndFor
-
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-
-
-\section{Procedure: DerivePoint}
-% \begin{noindent}
-
+    
+    \section{Procedure: TranslateNode}
+    
+    \begin{algorithm}[H]
+        \caption{Procedure to translate node positions.}\label{alg:TranslateNode}
+        
+        \textbf{Input:} \\
+        $ \nodeList \gets $ a list of $ \node $ representing regions \\
+        
+        \textbf{Output:} \\
+        $ \nodeTopologicalError \gets $ the number of nodes crossing the river in the input \\
+        
+        \textbf{Global variables:} \\
+        $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
+        
+        \textbf{Local variables:} \\
+        $ \node \gets $ a node is an object with the following properties: \\
+        \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
+        \-\hspace{1em} $ \nodeCross \gets $ the number of times that $ \node $ crosses a river  \\
+        \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
+        \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+        
+        \begin{algorithmic}[1]
+            \Procedure{TranslateNode}{$ \nodeList $}
+            \State $ \nodeTopologicalError \gets 0 $
+            \ForEach {$ \node \in \nodeList $}
+            
+            \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
+            
+            \State $ \node(x,y) \gets \nodeFNOR(x,y) $
+            
+            \If{ \Call{TestIntersection}{$ \nodeFNORLine $} $ = True $}
+            \State $ \nodeCross ++ $
+            \State $ \nodeTopologicalError ++ $
+            
+            \If{$ \nodeCross < \stalemateMax $}
+            \State \hskip-2em \Comment{Translate back to previous position}
+            \State $ \node(x,y) \gets \nodePrevious(x,y) $
+            
+            \Else
+            
+            \State \Call{ProcessStalemate}{$ \node, \nodeFNOR $}
+            \State $ \nodeCross \gets 0 $ \Comment{Reset counter}
+            
+            \EndIf
+            
+            \EndIf
+            
+            \EndIf
+            
+            \EndFor
+            \State \Return{$ \nodeTopologicalError $}
+            \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+    
+    
+    \section{Procedure: UpdateLayout}
+    
+    \begin{algorithm}[H]
+        \caption{Procedure to adjust river positions, remove node overlap and prevent nodes from crossing rivers.
+            See \Cref{sec:main}.}\label{alg:UpdateLayout}
+        \textbf{Global variables:} \\
+        $ \nodeList \gets $ a list of $ \node $ representing regions with the following properties: \\
+        \-\hspace{1em}  $\nodeListCross \gets $ the number of $ \node $ in $ \nodeList $ that crosses a river \\
+        
+        $ \nodeSize \gets $ the initial size of all nodes \\
+        $ \nodeCartographicError \gets $ the average cartographic error of all nodes \\
+        $ \nodeCartographicErrorMax \gets $ the maximum cartographic error of all nodes \\
+        $ \stalemateMax \gets $ the maximum number of iterations indicating a stalemate \\
+        
+        \textbf{Local variables:} \\
+        $ \node \gets $ a node is an object with the following properties: \\
+        \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
+        \-\hspace{1em} $ \nodeCross \gets $ the number of times that $ \node $ crosses a river \\
+        \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
+        \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+        
+        \begin{algorithmic}[1]
+            \Procedure{UpdateLayout}{}
+            
+            \State $ \nodeSize \gets 1 $
+            \While{$ \nodeCartographicError < \nodeCartographicErrorMax $}
+            \State $ \nodeListCross \gets 1 $ \Comment{Trigger the while loop}
+            \While{$ \nodeListCross > 0 $}
+            
+            \State $ \nodeListCross \gets 0 $
+            \State $ \nodeList \gets $ RemoveOverlap ($ \nodeList $)
+            \State \Call{TranslateRiver}{$ \nodeList $}
+            \State $\nodeListCross \gets $ \Call{TranslateNode}{$ \nodeList $}
+            
+            \EndWhile
+            
+            \State $ \nodeSize ++ $
+            
+            \EndWhile
+            
+            \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+    
+    \section{Procedure: TranslateRiver}
+    
+    \begin{algorithm}[H]
+        \caption{Procedure to translate rivers.}\label{alg:TranslateRiver}
+        \textbf{Input:} \\
+        $ \nodeList \gets $ a list of $ \node $ representing regions \\
+        
+        \textbf{Local variables:} \\
+        $ \riverList \gets $ a list of $ \river $ representing river features \\
+        $ \node \gets $ a node is an object with the following properties: \\
+        \-\hspace{1em} $ \node.x, \node.y, $ or $ \node(x,y) \gets $ the x and y coordinates of $ \node $ \\
+        \-\hspace{1em} $ \nodePrevious \gets $ the previous position of $ \node $ \\
+        \-\hspace{1em} $ \nodeFNOR \gets $ the translated position of $ \node $ \\
+        $ \nodeTopologicalError \gets $ the number of nodes intersecting $ \river $  \\
+        
+        \begin{algorithmic}[1]
+            \Procedure{TranslateRiver}{$ \nodeList $}
+            \ForEach {$ \river \in \riverList $}
+            \State $ \nodeTopologicalError \gets 0 $
+            \State $ \riverVector \gets (0,0) $ \Comment{Hold the sum of vectors $ \nodeVectorCT $}
+            \ForEach {$ \node \in \nodeList $}
+            
+            \If {$ \node(x,y) \neq \nodeFNOR(x,y) $}
+            \If{ \Call{TestIntersection}{$ \nodeFNORLine $, $ \river $} $ = True $}
+            \State $ \riverVector \gets \riverVector + \nodeVectorCT$
+            \State $ \nodeTopologicalError ++ $
+            \EndIf
+            
+            \EndIf
+            
+            \EndFor
+            
+            \State Translate river $ \river $ by the average vector $ \frac{\riverVector}{\nodeTopologicalError} $
+            \EndFor
+            
+            \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+    
+    \section{Procedure: DerivePoint}
+    % \begin{noindent}
+    
+    
     \begin{algorithm}[H]
         \caption{Procedure to derive a point based an edge and a distance.}\label{alg:derive corridor point}
         \textbf{Input:} \\
         $ \Edge \gets $ the edge used to derive the new point \\
         $ \Distance \gets $ the distance between $ \PointP $ and $ \EdgeStart $ \\
-
+        
         \textbf{Output:} \\
-        A point, $ \PointP $, that is distance $ \Distance $ away from $ \EdgeStart $.
-\\
-    
+        A point, $ \PointP $, that is distance $ \Distance $ away from $ \EdgeStart $. \\
+        
         \textbf{Local variables:} \\
         $ \dx, \dy \gets $ the differences in $ x, y $ for $ \EdgeStart $ and $ \EdgeEnd $ \\
-    
+        
         \begin{algorithmic}[1]
             \Procedure{DerivePoint}{$ \Edge $, $ \Distance $}
-                \State $ \dx \gets \EdgeStart.x - \EdgeEnd.x $
-    
-                \State $ \dy \gets \EdgeStart.y - \EdgeEnd.y $
-    
-                \State $ \PointP.x \gets \frac{\dx}{\sqrt{\dx^2 + \dy^2}} \cdot \Distance $
-    
-                \State $ \PointP.y \gets \frac{\dy}{\sqrt{\dx^2 + \dy^2}} \cdot \Distance $
-    
+            \State $ \dx \gets \EdgeStart.x - \EdgeEnd.x $
+            
+            \State $ \dy \gets \EdgeStart.y - \EdgeEnd.y $
+            
+            \State $ \PointP.x \gets \frac{\dx}{\sqrt{\dx^2 + \dy^2}} \cdot \Distance $
+            
+            \State $ \PointP.y \gets \frac{\dy}{\sqrt{\dx^2 + \dy^2}} \cdot \Distance $
+            
             \State \Return{$ \PointP $}
-    
+            
             \EndProcedure
-    
+            
         \end{algorithmic}
     \end{algorithm}
     
-%\end{noindent}
-% \vfill\eject
-
-
-\section{Procedure: ProcessStalemate}
-
-% \begin{noindent}
-
+    \section{Procedure: ProcessStalemate}
+    
+    % \begin{noindent}
+    
     \begin{algorithm}[H]
         \caption{Procedure to derive a corridor to resolve stalemate.
-We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \Cref{fig:stalemate}).}\label{alg:derive corridor}
-    
+            We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \Cref{fig:stalemate}).}\label{alg:derive corridor}
+        
         \textbf{Input:} \\
         $ \node \gets $ the node used to derive the corridor \\
-    
+        
         \textbf{Global variables:} \\
         $ \CorridorLength \gets $ the length of a corridor \\
         $ \CorridorWidth \gets $ the width of a corridor \\
-    
+        
         \textbf{Local variables:} \\
         $ \Corridor \gets $ the corridor \\
         $ \PointP \gets $ the point extending $ \nodeVectorTC $ such that $ \nodeLineWidthNtP = \CorridorLength $\\
         $ \EdgeParallelA, \EdgeParallelB \gets $ the edges parallel to $ \nodeLineNtNc $ \\
         $ corridor \gets $ a rectangle formed by $ \EdgeParallelA $ and $ \EdgeParallelB $ \\
-    
+        
         \begin{algorithmic}[1]
             \Procedure{ProcessStalemate}{$ \node $}
-                \State $ \node(x,y) \gets \nodePrevious(x,y) $
-    
-                \State $ \PointP \gets $ \Call{DerivePoint}{$ \nodeVectorTC $, $ \CorridorLength $}
-    
-                \State $ \EdgeParallelA \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNtP $, $ \frac{\CorridorWidth}{2} $}
-    
-                \State $ \EdgeParallelB \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNtP $, $ -\frac{\CorridorWidth}{2} $}
-    
-                \State $ \Corridor \gets
-                    \begin{bmatrix}
-                        \EdgeParallelA.start &
-                        \EdgeParallelA.end \\
-    
-                        \EdgeParallelB.start &
-                        \EdgeParallelB.end \\
-                    \end{bmatrix} $
-    
-                \ForEach{$ \nodeInCorridor $ inside $ \Corridor $}
-    
-                    \State $ \Vector{\nodeInCorridor ~\nodeInCorridorT} = \nodeVectorTC $
-    
-                    \State $ \nodeInCorridor(x,y) \gets \nodeInCorridorT(x,y) $
-    
-                \EndFor
+            \State $ \node(x,y) \gets \nodePrevious(x,y) $
+            
+            \State $ \PointP \gets $ \Call{DerivePoint}{$ \nodeVectorTC $, $ \CorridorLength $}
+            
+            \State $ \EdgeParallelA \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNtP $, $ \frac{\CorridorWidth}{2} $}
+            
+            \State $ \EdgeParallelB \gets $ \Call{DeriveParallelEdge}{$ \nodeVectorNtP $, $ -\frac{\CorridorWidth}{2} $}
+            
+            \State $ \Corridor \gets
+                \begin{bmatrix}
+                    \EdgeParallelA.start & 
+                    \EdgeParallelA.end       \\
+                    
+                    \EdgeParallelB.start & 
+                    \EdgeParallelB.end       \\
+                \end{bmatrix} $
+            
+            \ForEach{$ \nodeInCorridor $ inside $ \Corridor $}
+            
+            \State $ \Vector{\nodeInCorridor ~\nodeInCorridorT} = \nodeVectorTC $
+            
+            \State $ \nodeInCorridor(x,y) \gets \nodeInCorridorT(x,y) $
+            
+            \EndFor
             \EndProcedure
         \end{algorithmic}
     \end{algorithm}
     
-    %\end{noindent}
-% \vfill\eject
-
-\section{Procedure: TestIntersection}
-% \begin{noindent}
+    \section{Procedure: TestIntersection}
+    % \begin{noindent}
     \begin{algorithm}[H]
         \caption{Procedure to test if a node's translation path, $ \nodeLineNV $ intersects a river.}\label{alg:check river intersection}
         \textbf{Input:} \\
         $ \nodeLineNV \gets $ the node's translation path \\
         $ \river \gets $ a river feature \\
-    
+        
         \textbf{Output:} \\
-        Returns $ True $ if the node crosses a river.
-\\
-    
+        Returns $ True $ if the node crosses a river. \\
+        
         \textbf{Local variables:} \\
         $ \nodeBoundingBox, \riverEdgeBoundingBox \gets $ the bounding boxes for $ \nodeLineNV $ and $ \Edge $ \\
         $ \Edge \gets $ an edge of $ \river $ \\
-    
+        
         \begin{algorithmic}[1]
             \Procedure{TestIntersection}{$ \nodeLineNV $, $ \river $}
             
             \ForEach{$ \Edge \in \river $}
-                \State $ \nodeBoundingBox \gets $ GetBoundingBox ($ \nodeLineNV $)
-                \State $ \riverEdgeBoundingBox \gets $ GetBoundingBox ($ \Edge $)
-    
-                \If{$ \nodeBoundingBox ~intersect~ \riverEdgeBoundingBox = True $}
-                    \State \Return{$ \nodeLineNV ~intersect~ \Edge $}
-                    \EndIf
+            \State $ \nodeBoundingBox \gets $ GetBoundingBox ($ \nodeLineNV $)
+            \State $ \riverEdgeBoundingBox \gets $ GetBoundingBox ($ \Edge $)
+            
+            \If{$ \nodeBoundingBox ~intersect~ \riverEdgeBoundingBox = True $}
+            \State \Return{$ \nodeLineNV ~intersect~ \Edge $}
+            \EndIf
             \EndFor
             
             \State \Return{$ False $}
             \EndProcedure
         \end{algorithmic}
     \end{algorithm}
-    %\end{noindent}
-% \vfill\eject
+    
+\end{appendices}
 
+\bibliography{references}
 
 \end{document}
