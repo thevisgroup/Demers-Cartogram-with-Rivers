@@ -238,7 +238,7 @@ See \citea{nickel2022Multicriteria} for a more complete description of the advan
 The layout of these more abstract shapes may simultaneously reduce the map's legibility and increase error.
 See \citet{tong2018Cartograms} for a more detailed explanation.}
 Building on Demers cartograms \cite{ian2002Cartogram}, we introduce and develop novel features, such as rivers, aiming to improve the readability and geographical accuracy without sacrificing statistical accuracy.
-Standard Demers cartograms are composed of square nodes that representing geographic enumeration units.
+Standard Demers cartograms are composed of square nodes that represent geographic enumeration units.
 As such, this can reduce their legibility.
 We implement a new hybrid cartographic layout algorithm that combines rivers with the placement of the nodes representing geographic enumeration units, in this case, a Clinical Commissioning Group (CCG).
 We hypothesize that introducing rivers improves the overall legibility of a cartogram.
@@ -486,7 +486,7 @@ Each CCG has a unique ONS code, which is used to link the CCG shapefile with the
         \caption{An overview of our hybrid layout algorithm incorporating rivers.
             See also \Cref{alg:UpdateLayout} in Section \ref{sec:main} for more detail.
             See \Cref{fig:flowchart-stalemate} for the logic of processing a stalemate.
-            For illustration purposes, we show the rendered views alongside the logical views representing the actual computation. \new{All squares are the same size in this figure for illustration purposes.}}
+            For illustration purposes, we show the rendered views alongside the logical views representing the actual computation, \new{and set all squares to the same size for clarity.}}
         \label{fig:flowchart}
     \end{figure*}
 }
@@ -643,7 +643,7 @@ Similarly, increasing the resolution of rivers, at the expense of the speed of n
             \centering
             \includegraphics[width=0.9\textwidth,keepaspectratio]{UI.png}
             \caption{A screenshot of the user interface.
-            User options are provided to adjust the terminating conditions (size and error), color mapping, visibility of nodes and rivers.
+            User options are provided to adjust the terminating conditions (size and error), color mapping, and visibility of nodes and rivers.
             Other options include the ability to control the overlap removal behavior: rivers can be static or dynamic.
             See \Cref{subsec:{UserOptions}} for more on user options.
             In this figure, $ \nodeCartographicErrorMax $ = 1.875\%, and an $ \nodeTopologicalError $ of 9.63\% is eliminated.}
@@ -744,7 +744,7 @@ Instructional videos are available at \url{https://www.youtube.com/playlist?list
 
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design.
 A sample task is shown in \Cref{fig:task}, and accessible at \url{https://ghr.wangqiru.com/#/P1} and included in the online materials\footnotemark{}.
-The practice tasks are identital to the actual tasks, accompanied by instructions provided before the actual tasks commence.
+The practice tasks are identical to the actual tasks, accompanied by instructions provided before the actual tasks commence.
 The results from these practice tasks are not included in the final analysis.
 These tasks also serve as a quality test to see whether users are taking the study seriously.
 A demonstration of three sample tasks is also included in the instructional video.
@@ -846,7 +846,7 @@ Currently, the runtime of our layout algorithm is approximately 30 milliseconds 
 
 \noindent\textbf{Generalizability:} Future work also includes generalizations and extensions of the algorithm, e.g., the use of other features in the cartogram layout such as additional rivers, major highways, lakes, and coastlines, etc.
 We also consider whether increasing the length of the rivers as the size of the nodes increases would be a useful option.
-We would like to explore the case of river-river intersections (or confluence) and testing out more geographies such as the U.S.
+We would like to explore the case of river-river intersections (or confluence) and test out more geographies such as the U.S.
 and Europe, which have more complex rivers.
 We also considered the idea of deforming the rivers as part of the layout algorithm, however, this idea is open to future work.
 
