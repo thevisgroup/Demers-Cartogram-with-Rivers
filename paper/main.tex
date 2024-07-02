@@ -234,7 +234,7 @@ Demers cartograms offer the advantage in cases where the data is not directly co
 In other words, Demers cartograms are useful when a data dimension is not describing the geography of the region it represents but is tied to something else, for example the health of its population.
 Also, the comparison of magnitudes becomes an area estimation task, which is effective for a numeric data encoding \cite{munzner2014Visualization}.
 See \citea{nickel2022Multicriteria} for a more complete description of the advantages that Demers cartograms offer.
-\new{One of the drawbacks of Demers' cartograms is that they may become more difficult to read when a region becomes displaced from its geospatial origin through the node layout process.
+\new{One of the drawbacks of Demers cartograms is that they may become more difficult to read when a region becomes displaced from its geospatial origin through the node layout process.
 The layout of these more abstract shapes may simultaneously reduce the map's legibility and increase error.
 See \citet{tong2018Cartograms} for a more detailed explanation.}
 Building on Demers cartograms \cite{ian2002Cartogram}, we introduce and develop novel features, such as rivers, aiming to improve the readability and geographical accuracy without sacrificing statistical accuracy.
@@ -374,7 +374,7 @@ In addition, we include the Demers as it is the focus of our work.
     \end{table}
 }
 
-\bobgraph{Peer-reviewed Applications: } There has been a substantial amount of research done in this area, here we review some of the important work that has inspired our work.\citet{warf2008Geography} use a Dorling cartogram to represent religious diversity in the US.
+\bobgraph{Peer-reviewed Applications: } There has been a substantial amount of research done in this area, here we review some of the important work that has inspired our work. \citet{warf2008Geography} use a Dorling cartogram to represent religious diversity in the US.
 \citet{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms.
 \citet{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China.
 \citet{tong2018Cartograms} use a Demers cartogram to visualize health-related data by CCG regions in England, the work introduces a novel technique to remove the overlap of squares based on topological features, aiming to improve both geographical and topological accuracy.
@@ -389,9 +389,9 @@ By the term \textit{dynamic}, we mean that the position of the rivers is updated
 In previous work, the river is static and serves merely as a boundary.
 \new{To illustrate this more clearly, we refer to the video demonstration published by \citet{tong2018Cartograms}. Because the behavior of the layout algorithm is dynamic, a video is more appropriate to convey the motivation of dynamic features of interest.
 We can observe the cartographic layout algorithm at 1:30 and 2:40 of the video.
-During the update process, we can clearly observe nodes cross the Thames River as the size expands.
-As the size of all the nodes expand, a number of nodes are pushed south in order to make more use of screen space.
-If we want to make the most efficient use of screen space, we need to translate the Thames River further south during the layout process in order to prevent nodes from crossing it.
+During the update process, we can clearly observe nodes cross the River Thames as the size expands.
+As the size of all the nodes expands, some nodes are pushed south to make more use of screen space.
+If we want to make the most efficient use of screen space, we need to translate the River Thames further south during the layout process to prevent nodes from crossing it.
 This is one of the main motivations for introducing dynamic rivers. }
 Third, we improve the algorithm to resolve stalemates.
 Finally, the way we evaluate the cartograms is also different.
@@ -399,7 +399,7 @@ Finally, the way we evaluate the cartograms is also different.
 Here our focus is on readability, and thus we include a user study.
 
 \bobgraph{Cartograms in Media: }Cartograms are an engaging visual representation and therefore they are a popular choice of representation in covering various topics by the media.
-The Washington Post uses cartograms to visualize the US overseas economic assistance, in arm sales (Mosaic) \cite{bearak2016Everything}, the 2016 US Election (contiguous) \cite{gamio2016Election}, and the Brexit Referendum (Mosaic) \cite{taylor2016What}.
+The Washington Post uses cartograms to visualize the US overseas economic assistance, in arms sales (Mosaic) \cite{bearak2016Everything}, the 2016 US Election (contiguous) \cite{gamio2016Election}, and the Brexit Referendum (Mosaic) \cite{taylor2016What}.
 National Geographic uses contiguous and Mosaic cartograms to analyze the 2016 US Election results \cite{miller2016Election}, the same topic is also covered by the Financial Times with a Dorling cartogram \cite{stabe2016Search}.
 \citet{cruz2017Adapted} adapts a Dorling cartogram with both contiguous and non-contiguous cartograms to represent the gender pay gap in Portugal.
 \citet{sandberg2018Cartogram} reports the 2018 US midterm Election with a Mosaic cartogram, the same approach is used to cover the 2020 US Election by the New York Times \cite{thelearningnetwork2020What} and Bloomberg \cite{mccartney20202020}.
@@ -432,7 +432,7 @@ The number of CCGs changes over time due to NHS reorganization.
 The most up-to-date shapefile is available from the Open Geography Portalx \cite{opengeographyportalxOpen}.
 We decided to use the CCG shapefile from 2020 at the time of writing, due to the absence of published public EHR data based on the latest CCG reorganizations that took place in 2021 and 2022.
 
-\bobgraph{River Shapefiles:} We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for the Thames River, the Trent River, and the Great Ouse River in England.
+\bobgraph{River Shapefiles:} We used OpenStreetMap \cite{openstreetmapRelation} as our data source to obtain shapefiles for the River Thames, the Trent River, and the Great Ouse River in England.
 These rivers were chosen as they are well-known rivers, pass through regions with dense populations, and provide informative geographical and topological cues.
 Although including smaller rivers is technically feasible, it may not increase the legibility of the cartogram.
 This is an open question for future work.
@@ -448,32 +448,8 @@ See \Cref{table:pre-processing_result} on page \pageref{table:pre-processing_res
 We describe the one-time preprocessing steps in more detail in \Cref{app:pre-processing}.
 
 \bobgraph{EHR Data: }We obtained the Clinical Commissioning Group Outcomes Indicator Set (CCG OIS) from NHS Digital \cite{nhsdigitalClinical}.
+\new{See \ref{dataset} for a detailed description of the datasets used.}
 The OIS is a set of indicators that are used to measure the quality of care and the associated health outcomes in the NHS.
-Some datasets include:
-\begin{itemize}
-    \setlength\itemsep{0px}
-    \item Under 75 mortality: cardiovascular disease, respiratory disease, liver disease, and cancer
-    \item Emergency hospital admission: stroke, alcohol-specific admission and readmission, coronary heart disease, re-admissions within 30 days of discharge, children with lower respiratory tract infections
-\end{itemize}
-
-For all datasets, a spreadsheet including the following is provided:
-
-\begin{itemize}
-    \setlength\itemsep{0px}
-    \item Reporting period: Calendar year of registration
-    \item Period of coverage: Start and end date or reporting period
-    \item Breakdown: Organization type
-    \item ONS code: UK Office for National Statistics CCG code
-    \item Level: CCG Code
-    \item Level description: CCG Name
-    \item Gender
-    \item Indicator value: Directly standardized mortality rate
-    \item CI lower: lower 95\% confidence interval
-    \item CI upper: upper 95\% confidence interval
-    \item Denominator: The count of registered patients
-    \item Numerator: Number of deaths
-\end{itemize}
-
 Each CCG has a unique ONS code, which is used to link the CCG shapefile with the statistical data.
 
 \section{Demers Cartogram with Rivers}
@@ -486,7 +462,7 @@ Each CCG has a unique ONS code, which is used to link the CCG shapefile with the
         \caption{An overview of our hybrid layout algorithm incorporating rivers.
             See also \Cref{alg:UpdateLayout} in Section \ref{sec:main} for more detail.
             See \Cref{fig:flowchart-stalemate} for the logic of processing a stalemate.
-            For illustration purposes, we show the rendered views alongside the logical views representing the actual computation, \new{and set all squares to the same size for clarity.}}
+            For illustration purposes, we show the rendered views alongside the logical views representing the actual computation, \new{and use the same size for all squares for clarity.}}
         \label{fig:flowchart}
     \end{figure*}
 }
@@ -787,7 +763,7 @@ This supports our hypothesis H1.1 that the introduction of rivers increases targ
 \bobgraph{Response Time:} \Cref{fig:task-rt} shows the average time to locate a CCG measured for four CCGs.
 The chart indicates that the introduction of rivers has slightly reduced the time needed to locate CCGs.
 The two groups show no statistically significant differences according to the two-sample unequal variance $t$-test performed, $t$(356.03) = 0.87, $p$ = 0.38.
-However, the average time to locate a given CCG is reduced for 3 out of the 4 CCGs users in the study.
+However, the average time to locate a given CCG is reduced for 3 out of the 4 CCGs in the study.
 
     {
         \begin{figure}[t!]
@@ -870,7 +846,33 @@ We also discuss the limitations of our work and future research directions.
 \section{Appendix}
 \appendix
 
-\section{Obtaining Shapefile}
+\section{Dataset Description}
+\label{dataset}
+\begin{itemize}
+    \setlength\itemsep{0px}
+    \item Under 75 mortality: cardiovascular disease, respiratory disease, liver disease, and cancer
+    \item Emergency hospital admission: stroke, alcohol-specific admission and readmission, coronary heart disease, re-admissions within 30 days of discharge, children with lower respiratory tract infections
+\end{itemize}
+
+For all datasets, a spreadsheet including the following is provided:
+
+\begin{itemize}
+    \setlength\itemsep{0px}
+    \item Reporting period: Calendar year of registration
+    \item Period of coverage: Start and end date or reporting period
+    \item Breakdown: Organization type
+    \item ONS code: UK Office for National Statistics CCG code
+    \item Level: CCG Code
+    \item Level description: CCG Name
+    \item Gender
+    \item Indicator value: Directly standardized mortality rate
+    \item CI lower: lower 95\% confidence interval
+    \item CI upper: upper 95\% confidence interval
+    \item Denominator: The count of registered patients
+    \item Numerator: Number of deaths
+\end{itemize}
+
+\section{Obtaining Shapefiles}
 \label{obtaining-shapefile}
 \begin{lstlisting}[caption={The query that downloads the shapefile of River Thames from OpenStreetMap via the Overpass Turbo API.}, label={overpass},captionpos=b]
     relation(2263653);>>;
@@ -1170,7 +1172,7 @@ The reduction in file size is significant and greatly reduces the initialization
 % \begin{noindent}
 
     \begin{algorithm}[H]
-        \caption{Procedure to derive a point based an edge and a distance.}\label{alg:derive corridor point}
+        \caption{Procedure to derive a point based on an edge and a distance.}\label{alg:derive corridor point}
         \textbf{Input:} \\
         $ \Edge \gets $ the edge used to derive the new point \\
         $ \Distance \gets $ the distance between $ \PointP $ and $ \EdgeStart $ \\
@@ -1208,7 +1210,7 @@ The reduction in file size is significant and greatly reduces the initialization
 % \begin{noindent}
 
     \begin{algorithm}[H]
-        \caption{Procedure to derive a corridor to resolve stalemate.
+        \caption{Procedure to derive a corridor to resolve stalemates.
 We use an SVG canvas, where the point of origin (0,0) is located at the top left corner, with the x-axis extending to the right and the y-axis extending downwards (See \Cref{fig:stalemate}).}\label{alg:derive corridor}
     
         \textbf{Input:} \\
