@@ -234,6 +234,9 @@ Demers cartograms offer the advantage in cases where the data is not directly co
 In other words, Demers cartograms are useful when a data dimension is not describing the geography of the region it represents but is tied to something else, for example the health of its population.
 Also, the comparison of magnitudes becomes an area estimation task, which is effective for a numeric data encoding \cite{munzner2014Visualization}.
 See \citea{nickel2022Multicriteria} for a more complete description of the advantages that Demers cartograms offer.
+\new{One of the drawbacks of Demers' cartograms is that they may become more difficult to read when a region becomes displaced from its geospatial origin through the node layout process.
+The layout of these more abstract shapes may simultaneously reduce the map's legibility and increase error.
+See \citet{tong2018Cartograms} for a more detailed explanation.}
 Building on Demers cartograms \cite{ian2002Cartogram}, we introduce and develop novel features, such as rivers, aiming to improve the readability and geographical accuracy without sacrificing statistical accuracy.
 Standard Demers cartograms are composed of square nodes that representing geographic enumeration units.
 As such, this can reduce their legibility.
@@ -384,6 +387,12 @@ First, we introduce multiple features (rivers) into the layout, as opposed to a 
 Second, we make topological features dynamic and further improve legibility and geographical accuracy.
 By the term \textit{dynamic}, we mean that the position of the rivers is updated as part of the layout algorithm.
 In previous work, the river is static and serves merely as a boundary.
+\new{To illustrate this more clearly, we refer to the video demonstration published by \citet{tong2018Cartograms}. Because the behavior of the layout algorithm is dynamic, a video is more appropriate to convey the motivation of dynamic features of interest.
+We can observe the cartographic layout algorithm at 1:30 and 2:40 of the video.
+During the update process, we can clearly observe nodes cross the Thames River as the size expands.
+As the size of all the nodes expand, a number of nodes are pushed south in order to make more use of screen space.
+If we want to make the most efficient use of screen space, we need to translate the Thames River further south during the layout process in order to prevent nodes from crossing it.
+This is one of the main motivations for introducing dynamic rivers. }
 Third, we improve the algorithm to resolve stalemates.
 Finally, the way we evaluate the cartograms is also different.
 \citet{tong2018Cartograms} count river crossings to evaluate error (a statistical metric).
@@ -477,7 +486,7 @@ Each CCG has a unique ONS code, which is used to link the CCG shapefile with the
         \caption{An overview of our hybrid layout algorithm incorporating rivers.
             See also \Cref{alg:UpdateLayout} in Section \ref{sec:main} for more detail.
             See \Cref{fig:flowchart-stalemate} for the logic of processing a stalemate.
-            For illustration purposes, we show the rendered views alongside the logical views representing the actual computation.}
+            For illustration purposes, we show the rendered views alongside the logical views representing the actual computation. \new{All squares are the same size in this figure for illustration purposes.}}
         \label{fig:flowchart}
     \end{figure*}
 }
@@ -645,7 +654,7 @@ Similarly, increasing the resolution of rivers, at the expense of the speed of n
 \newcommand{\pCount}{24 }
 \section{User-Centered Evaluation}\label{sec:{User-Centered Evaluation}}
 
-We conduct a \new{within-subject} user study to evaluate the effectiveness of our approach.
+We conduct a within-subject user study to evaluate the effectiveness of our approach.
 We chose this type of evaluation because legibility is a human-centred characteristic.
 Many different types of statistical error metrics have been evaluated in previous work \cite{nusrat2016State}, however, our focus is more user-centric in nature.
 
@@ -668,7 +677,7 @@ See \Cref{fig:task}.
 In this section, we discuss the variables of our user study.
 
 \bobgraph{Independent Variables: }The primary independent variable is the presence of rivers in the cartograms, which directly impacts the final layout of the cartogram. 
-\new{The identical set of rivers is either rendered or hidden collectively.}
+The identical set of rivers is either rendered or hidden collectively.
 
 \bobgraph{Dependent Variables: }\textit{Accuracy:} Given a CCG location in the choropleth on the left, we ask the participant to locate the corresponding node in the cartogram.
 Accuracy as the primary dependent variable is measured by the number of correct CCGs located and chosen by the participants.
@@ -705,7 +714,7 @@ The study was approved by the University of Nottingham's Research Ethics Committ
 135 CCGs are rendered on the screen as a choropleth on the left.
 We then generated another view on the right using cartograms.
 The color of both visual designs is mapped to a data dimension.
-\new{No cartograms were used more than once per participant.}
+No cartograms were used more than once per participant.
 See \Cref{fig:task} for an example.
 
     {
@@ -725,9 +734,9 @@ See \Cref{fig:task} for an example.
 \subsection{Procedure}\label{subsec:{Procedure}}
 
 Due to pandemic restrictions, we designed the user study to be carried out online.
-Participants are expected to use their \new{retail} hardware for the tasks.
+Participants are expected to use their retail hardware for the tasks.
 However, devices with small screens are not recommended because of the large size of the cartograms that are rendered.
-The \new{within-subject} user study includes four parts:
+The within-subject user study includes four parts:
 
 \textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos.
 The instructions are designed to help participants understand the concepts used in the tasks.
@@ -735,17 +744,17 @@ Instructional videos are available at \url{https://www.youtube.com/playlist?list
 
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design.
 A sample task is shown in \Cref{fig:task}, and accessible at \url{https://ghr.wangqiru.com/#/P1} and included in the online materials\footnotemark{}.
-\new{The practice tasks are identital to the actual tasks, accompanied by instructions provided before the actual tasks commence.
-The results from these practice tasks are not included in the final analysis.}
+The practice tasks are identital to the actual tasks, accompanied by instructions provided before the actual tasks commence.
+The results from these practice tasks are not included in the final analysis.
 These tasks also serve as a quality test to see whether users are taking the study seriously.
 A demonstration of three sample tasks is also included in the instructional video.
 
-\textbf{P3:} The participants are asked to complete 16 location tasks that involve 4 targetCCGs.
-\new{See the online materials for exact locations of target CCGs\footnotemark[\value{footnote}].}
+\textbf{P3:} The participants are asked to complete 16 location tasks that involve 4 target CCGs.
+See the online materials for exact locations of target CCGs.
 Response and reaction time are recorded.
 These 4 CCGs are selected to avoid extreme cases (thus bias the result), in terms of size, color, and location.
 
-\textbf{P4:} The participants are asked to complete a questionnaire\footnotemark[\value{footnote}] that consists of \new{5-Point} Likert Scale questions and open-ended questions.
+\textbf{P4:} The participants are asked to complete a questionnaire that consists of 5-Point Likert Scale questions and open-ended questions.
 
 \footnotetext{The materials for P1-P4 are available on the Open Science Foundation website at \url{https://osf.io/q39w7}.}
 
