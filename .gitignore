@@ -32,3 +32,5 @@ paper/GHRVis.pdf
 paper/*.gz
 
 test.js
+
+user-study/.idea/

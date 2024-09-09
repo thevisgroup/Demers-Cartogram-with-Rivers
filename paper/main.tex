@@ -197,6 +197,12 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \title{Demers Cartogram with Rivers}
 
+\author{Qiru Wang\affilnum{1}, Kai Xu\affilnum{1} and Robert S. Laramee\affilnum{1}}
+
+\affiliation{\affilnum{1}University of Nottingham, UK}
+
+\email{qiru.wang1@nottingham.ac.uk}
+
 \begin{abstract}
     Cartograms serve as representations of geographical and abstract data, employing a value-by-area mapping technique.
     As a variant of the Dorling cartogram, the Demers cartogram utilizes squares instead of circles to represent regions.
@@ -234,9 +240,9 @@ Demers cartograms offer the advantage in cases where the data is not directly co
 In other words, Demers cartograms are useful when a data dimension is not describing the geography of the region it represents but is tied to something else, for example the health of its population.
 Also, the comparison of magnitudes becomes an area estimation task, which is effective for a numeric data encoding \cite{munzner2014Visualization}.
 See \citea{nickel2022Multicriteria} for a more complete description of the advantages that Demers cartograms offer.
-\new{One of the drawbacks of Demers cartograms is that they may become more difficult to read when a region becomes displaced from its geospatial origin through the node layout process.
+One of the drawbacks of Demers cartograms is that they may become more difficult to read when a region becomes displaced from its geospatial origin through the node layout process.
 The layout of these more abstract shapes may simultaneously reduce the map's legibility and increase error.
-See \citet{tong2018Cartograms} for a more detailed explanation.}
+See \citet{tong2018Cartograms} for a more detailed explanation.
 Building on Demers cartograms \cite{ian2002Cartogram}, we introduce and develop novel features, such as rivers, aiming to improve the readability and geographical accuracy without sacrificing statistical accuracy.
 Standard Demers cartograms are composed of square nodes that represent geographic enumeration units.
 As such, this can reduce their legibility.
@@ -341,9 +347,17 @@ In addition, we include the Demers as it is the focus of our work.
     Some variants are able to preserve topological accuracy as well.
 }
 
+\bobgraph{Peer-reviewed Applications: } There has been a substantial amount of research done in this area, here we review some of the important work that has inspired our work. \citet{warf2008Geography} use a Dorling cartogram to represent religious diversity in the US.
+\citet{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms.
+\citet{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China.
+\citet{tong2018Cartograms} use a Demers cartogram to visualize health-related data by CCG regions in England, the work introduces a novel technique to remove the overlap of squares based on topological features, aiming to improve both geographical and topological accuracy.
+\citet{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms using multiple data sets that include demographic, agriculture, and retail data in the US.
+See \Cref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
+
+
 {
     \renewcommand{\arraystretch}{1.5}
-    \begin{table}[!tb]
+    \begin{table}[!b]
         \centering
         \resizebox{\columnwidth}{!}{
             \begin{tabulary}{\columnwidth}{|*{5}{l|}}
@@ -374,12 +388,6 @@ In addition, we include the Demers as it is the focus of our work.
     \end{table}
 }
 
-\bobgraph{Peer-reviewed Applications: } There has been a substantial amount of research done in this area, here we review some of the important work that has inspired our work. \citet{warf2008Geography} use a Dorling cartogram to represent religious diversity in the US.
-\citet{sun2010Effectiveness} depict 1996 US election data and 2005 Chinese population data using Dorling, Mosaic, and contiguous cartograms.
-\citet{gao2020Visualising} present a Dorling cartogram to illustrate COVID-19 infections in China.
-\citet{tong2018Cartograms} use a Demers cartogram to visualize health-related data by CCG regions in England, the work introduces a novel technique to remove the overlap of squares based on topological features, aiming to improve both geographical and topological accuracy.
-\citet{nusrat2020Recognition} investigate the memorability of contiguous and Dorling cartograms using multiple data sets that include demographic, agriculture, and retail data in the US.
-See \Cref{table:region vs node} for a list of literature that adopts cartograms for visualization with corresponding geographical regions and node counts.
 
 Our work extends the algorithm described by \citet{tong2018Cartograms} which incorporates a static topological feature into Demers cartograms.
 Our work enhances that of \citet{tong2018Cartograms} in multiple ways.
@@ -387,12 +395,17 @@ First, we introduce multiple features (rivers) into the layout, as opposed to a 
 Second, we make topological features dynamic and further improve legibility and geographical accuracy.
 By the term \textit{dynamic}, we mean that the position of the rivers is updated as part of the layout algorithm.
 In previous work, the river is static and serves merely as a boundary.
-\new{To illustrate this more clearly, we refer to the video demonstration published by \citet{tong2018Cartograms}. Because the behavior of the layout algorithm is dynamic, a video is more appropriate to convey the motivation of dynamic features of interest.
-We can observe the cartographic layout algorithm at 1:30 and 2:40 of the video.
+To illustrate this more clearly, we refer to the video demonstration published by \citet{tong2018Cartograms}. Because the behavior of the layout algorithm is dynamic, a video is more appropriate to convey the motivation of dynamic features of interest.
+We can observe the cartographic layout algorithm at 1:30 and 2:40 of the video by \citet{tong2018Cartograms}.
 During the update process, we can clearly observe nodes cross the River Thames as the size expands.
 As the size of all the nodes expands, some nodes are pushed south to make more use of screen space.
 If we want to make the most efficient use of screen space, we need to translate the River Thames further south during the layout process to prevent nodes from crossing it.
-This is one of the main motivations for introducing dynamic rivers. }
+This is one of the main motivations for introducing dynamic rivers. 
+By introducing river translations, our implementation prevents nodes from crossing rivers, thereby improving screen space efficiency and cartogram legibility.
+For comparison, see our video demonstration (from 0:28 to 0:32 and from 1:49 to 1:56)\footnotemark{}.
+
+\footnotetext{Demonstration of our layout algorithm's implementation at \url{https://youtu.be/PRNEF3J1hl0}.}
+
 Third, we improve the algorithm to resolve stalemates.
 Finally, the way we evaluate the cartograms is also different.
 \citet{tong2018Cartograms} count river crossings to evaluate error (a statistical metric).
@@ -413,7 +426,7 @@ In this paper, we introduce a new type of topological feature, a river, as a con
 \section{Data Description}
 
  {
-  \begin{figure}[b!]
+  \begin{figure}[t!]
       \centering
       \includegraphics[width=0.6\columnwidth]{ccg.png}
       \caption{A map of 135 CCGs in England as of 2020, obtained from the Open Geography Portalx \cite{opengeographyportalxOpen} with EPSG:4326 (WGS84 - World Geodetic System) as the Coordinate Reference System (CRS).}
@@ -448,7 +461,7 @@ See \Cref{table:pre-processing_result} on page \pageref{table:pre-processing_res
 We describe the one-time preprocessing steps in more detail in \Cref{app:pre-processing}.
 
 \bobgraph{EHR Data: }We obtained the Clinical Commissioning Group Outcomes Indicator Set (CCG OIS) from NHS Digital \cite{nhsdigitalClinical}.
-\new{See \ref{dataset} for a detailed description of the datasets used.}
+See \Cref{dataset} for a detailed description of the datasets used.
 The OIS is a set of indicators that are used to measure the quality of care and the associated health outcomes in the NHS.
 Each CCG has a unique ONS code, which is used to link the CCG shapefile with the statistical data.
 
@@ -462,7 +475,7 @@ Each CCG has a unique ONS code, which is used to link the CCG shapefile with the
         \caption{An overview of our hybrid layout algorithm incorporating rivers.
             See also \Cref{alg:UpdateLayout} in Section \ref{sec:main} for more detail.
             See \Cref{fig:flowchart-stalemate} for the logic of processing a stalemate.
-            For illustration purposes, we show the rendered views alongside the logical views representing the actual computation, \new{and use the same size for all squares for clarity.}}
+            For illustration purposes, we show the rendered views alongside the logical views representing the actual computation, and use the same size for all squares for clarity.}
         \label{fig:flowchart}
     \end{figure*}
 }
@@ -545,10 +558,11 @@ The procedure for constructing corridors is provided by \Cref{alg:derive corrido
     \centering
     \includegraphics[width=\columnwidth,keepaspectratio]{flowchart stalemate.png}
     \caption{A flowchart illustration of stalemate processing.
-    See \Cref{subsec:{Process Stalemates}}, \Cref{fig:stalemate}, and \Cref{fig:corridor} for more detail.}
+    See \Cref{subsec:{Process Stalemates}}, \Cref{fig:stalemate}, and \Cref{fig:corridor} for more detail. Refer to our video demonstration (from 1:27 to 1:46)\footnotemark{} for details.}
     \label{fig:flowchart-stalemate}
 \end{figure}
 }
+\footnotetext{Demonstration for Demers Cartogram with Rivers at \url{https://www.youtube.com/watch?v=DgCwCkyfGKk}.}
 
 {
 \begin{figure}[tb!]
@@ -608,7 +622,7 @@ Nodes cannot cross rivers by default; 2) Disable river translation: this option 
 Both options are useful for generating different layouts and to observe the behavior of the hybrid layout algorithm.
 
 \bobgraph{Corridor Length:} The user can define the length of a corridor that is used to resolve stalemate situations.
-A longer corridor length allows more nodes to be translated when a stalemate occurs, but may result in a less accurate layout.
+A longer corridor length allows more nodes to translate during a stalemate.
 The default corridor length is three times the max node size.
 
 \bobgraph{River Thickness and Resolution:} Increasing the thickness of rivers may improve the recognizability of the cartogram.
@@ -628,6 +642,7 @@ Similarly, increasing the resolution of rivers, at the expense of the speed of n
     }
 
 \newcommand{\pCount}{24 }
+
 \section{User-Centered Evaluation}\label{sec:{User-Centered Evaluation}}
 
 We conduct a within-subject user study to evaluate the effectiveness of our approach.
@@ -699,7 +714,7 @@ See \Cref{fig:task} for an example.
             \includegraphics[width=\columnwidth,keepaspectratio]{task.png}
             \caption{A sample location task for participants.
                 The left shows the choropleth map, and the right shows the corresponding cartogram.
-                Both images show the three longest rivers in England, and color is mapped to CCG population.
+                Both images show the three longest rivers in England, with the size and color of nodes representing the prevalence of the selected disease.
                 The target CCG blinks on the choropleth (shown in black), and participants are asked to identify this CCG on the cartogram.
                 In this figure, $ \nodeCartographicErrorMax $ = 1.875\% , and an $ \nodeTopologicalError $ of 6.67\% is eliminated.
             }
@@ -716,7 +731,7 @@ The within-subject user study includes four parts:
 
 \textbf{P1:} The participants are asked to listen to instructions and training provided as both text and videos.
 The instructions are designed to help participants understand the concepts used in the tasks.
-Instructional videos are available at \url{https://www.youtube.com/playlist?list=PLL7sHvxLtD75fMtrUQrAdddjt3wfFkcWz}.
+Instructional videos are available at \url{https://tinyurl.com/demerscartogram}.
 
 \textbf{P2:} The participants are given three practice tasks to familiarize themselves with the user study design.
 A sample task is shown in \Cref{fig:task}, and accessible at \url{https://ghr.wangqiru.com/#/P1} and included in the online materials\footnotemark{}.
@@ -732,7 +747,7 @@ These 4 CCGs are selected to avoid extreme cases (thus bias the result), in term
 
 \textbf{P4:} The participants are asked to complete a questionnaire that consists of 5-Point Likert Scale questions and open-ended questions.
 
-\footnotetext{The materials for P1-P4 are available on the Open Science Foundation website at \url{https://osf.io/q39w7}.}
+\footnotetext{The materials for P1-P4 are available on the Open Science Foundation website at \url{https://osf.io/q39w7} and \url{https://github.com/thevisgroup/Demers-Cartogram-with-Rivers}.}
 
 \subsection{User Study Results}
 \label{subsec:{User Study Results}}
@@ -836,6 +851,9 @@ In this paper, we present a novel hybrid layout approach to generate non-contigu
 We first propose a new algorithm to generate cartograms with rivers, and then we present a prototype to support the exploration of cartograms with rivers.
 We evaluate our approach with a preliminary user study, and the results support our hypotheses: the introduction of rivers improves the legibility and recognizability of cartograms, although a deeper analysis is necessary to reach more confident conclusions.
 We also discuss the limitations of our work and future research directions.
+
+\section{Acknowledgments}
+This work is funded by the grant EP/S010238/2 from the Engineering and Physical Sciences Research Council (EPSRC). EPSRC is a British Research Council that provides government funding for grants to undertake research and postgraduate degrees in engineering and the physical sciences.
 
 \urlstyle{same}
 \bibliographystyle{plainnat}
