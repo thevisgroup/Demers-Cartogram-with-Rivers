@@ -36,7 +36,7 @@
     "root": true
   },
   "dependencies": {
-    "bootstrap": "4.6.0",
+    "bootstrap": "5.0.0",
     "bootstrap-vue": "2.22.0",
     "core-js": "3.23.1",
     "d3": "6.7.0",
