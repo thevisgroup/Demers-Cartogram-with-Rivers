@@ -40,7 +40,7 @@
     "bootstrap-vue": "2.22.0",
     "core-js": "3.23.1",
     "d3": "6.7.0",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "path-data-polyfill": "1.0.3",
     "path-intersection": "2.2.1",
     "point-in-svg-polygon": "1.0.25",
